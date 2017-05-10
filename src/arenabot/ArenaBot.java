@@ -27,6 +27,7 @@ public class ArenaBot extends TelegramLongPollingCommandBot {
         register(new CmdReg());
         register(new CmdUnreg());
         register(new CmdDrop());
+        register(new CmdNick());
         register(new CmdStat());
         register(new CmdXstat());
         register(new CmdEq());

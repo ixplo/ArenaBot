@@ -59,21 +59,24 @@ public abstract class ArenaUser {
     private int status;
 
 
-/****** constructor ******/
+    /****** constructor ******/
     public ArenaUser(int userId) {
         this.userId = userId;
     }
 
-/****** abstract ******/
+    /****** abstract ******/
     public abstract void setClassFeatures();
+
     public abstract void getClassFeatures();
+
     public abstract void appendClassXstatMsg(StringBuilder out);
+
     public abstract void putOnClassFeatures(Item item);
 
-/****** static ******/
-    public static ArenaUser create(Integer userId, String userClassId){
+    /****** static ******/
+    public static ArenaUser create(Integer userId, String userClassId) {
         ArenaUser hero;
-        switch (userClassId){
+        switch (userClassId) {
             case "w":
                 hero = new Warrior(userId);
                 break;
@@ -90,16 +93,20 @@ public abstract class ArenaUser {
                 throw new RuntimeException("Unknown userClass: " + userClassId);
         }
         return hero;
-}
+    }
+
     public static void setDb(DatabaseManager dbManager) {
         db = dbManager;
     }
+
     public static boolean doesUserExists(Integer userId) {
         return db.doesUserExists(userId);
     }
-    public static int getStatus(int userId){
-        return db.getIntFrom(Config.USERS, userId,"status");
+
+    public static int getStatus(int userId) {
+        return db.getIntFrom(Config.USERS, userId, "status");
     }
+
     public static void dropUser(Integer userId) {
         if (!db.doesUserExists(userId)) {
             throw new RuntimeException("No such user in database: " + userId);
@@ -108,11 +115,12 @@ public abstract class ArenaUser {
         //todo drop spells/skills
         db.dropUser(userId);
     }
+
     public static void setNewUser(int userId, String name, String userClass, String race) {
-        ArenaUser arenaUser = ArenaUser.create(userId,userClass);
+        ArenaUser arenaUser = ArenaUser.create(userId, userClass);
         arenaUser.name = name;
         arenaUser.userClass = userClass;
-        db.addUser(userId,name,userClass);
+        db.addUser(userId, name, userClass);
         arenaUser.race = race;
         arenaUser.nativeStr = db.getIntFrom(Config.CLASSES, userClass, "str_start") +
                 db.getIntFrom(Config.RACES, race, "str_bonus");
@@ -135,8 +143,8 @@ public abstract class ArenaUser {
         arenaUser.curHitPoints = arenaUser.maxHitPoints;
         arenaUser.money = db.getIntFrom(Config.CLASSES, userClass, "money_start");
         arenaUser.level = 1;
-        arenaUser.minHit = (double)(arenaUser.curStr - 3) / 4;
-        arenaUser.maxHit = (double)(arenaUser.curStr - 3) / 4;
+        arenaUser.minHit = (double) (arenaUser.curStr - 3) / 4;
+        arenaUser.maxHit = (double) (arenaUser.curStr - 3) / 4;
         arenaUser.attack = roundDouble(0.91 * arenaUser.curDex + 0.39 * arenaUser.curStr);
         arenaUser.protect = roundDouble(0.4 * arenaUser.curDex + 0.6 * arenaUser.curCon);
         arenaUser.heal = roundDouble(0.06 * arenaUser.curWis + 0.04 * arenaUser.curInt);
@@ -148,10 +156,11 @@ public abstract class ArenaUser {
     }
 
     public static double roundDouble(double d) {
-        return roundDouble(d,2);
+        return roundDouble(d, 2);
     }
+
     public static double roundDouble(double d, int precise) {
-        precise = pow(10,precise);
+        precise = pow(10, precise);
         d *= precise;
         int i = (int) Math.round(d);
         return (double) i / precise;
@@ -162,8 +171,9 @@ public abstract class ArenaUser {
         arenaUser.getClassFeatures();
         return arenaUser;
     }
+
     //todo save user to db public static void setUser(Integer userId){common + abstract}
-    public static List<ArenaUser> getUsers(List<Integer> usersId){
+    public static List<ArenaUser> getUsers(List<Integer> usersId) {
         List<ArenaUser> users = new ArrayList<>();
         int count = usersId.size();
         for (int i = 0; i < count; i++) {
@@ -171,44 +181,56 @@ public abstract class ArenaUser {
         }
         return users;
     }
+
     public static String getUserName(Integer userId) {
-        return db.getStringFrom(Config.USERS, userId,"name");
+        return db.getStringFrom(Config.USERS, userId, "name");
     }
+
     public static String getUserTeam(Integer userId) {
         return db.getStringFrom(Config.USERS, userId, "team");
     }
-    public static String getClassName(String  classId) {
-        return db.getStringFrom(Config.CLASSES, classId,"name");
+
+    public static String getClassName(String classId) {
+        return db.getStringFrom(Config.CLASSES, classId, "name");
     }
+
     public static String getClassName(Integer userId) {
-        return db.getStringFrom(Config.CLASSES, ArenaUser.getUser(userId).userClass,"name");
+        return db.getStringFrom(Config.CLASSES, ArenaUser.getUser(userId).userClass, "name");
     }
+
     public static String getRaceName(String raceId) {
-        return db.getStringFrom(Config.RACES, raceId,"name");
+        return db.getStringFrom(Config.RACES, raceId, "name");
     }
+
     public static String getRaceName(Integer userId) {
-        return db.getStringFrom(Config.RACES, ArenaUser.getUser(userId).race,"name");
+        return db.getStringFrom(Config.RACES, ArenaUser.getUser(userId).race, "name");
     }
+
     public static List<String> getRacesName() {
         return db.getColumn(Config.RACES, "name");
     }
+
     public static List<String> getRacesId() {
         return db.getColumn(Config.RACES, "id");
     }
+
     public static List<String> getClassesName() {
         return db.getColumn(Config.CLASSES, "name");
     }
+
     public static List<String> getClassesId() {
         return db.getColumn(Config.CLASSES, "id");
     }
+
     public static List<String> getRacesDescr() {
         return db.getColumn(Config.RACES, "descr");
     }
+
     public static List<String> getClassesDescr() {
         return db.getColumn(Config.CLASSES, "descr");
     }
 
-/****** Add ******/
+    /****** Add ******/
     public void addCurHitPoints(double hitPointsChange) {
         this.curHitPoints = ArenaUser.roundDouble(this.curHitPoints + hitPointsChange);
     }
@@ -219,25 +241,25 @@ public abstract class ArenaUser {
 
     public void addExperience(int experience) {
         this.experience += experience;
-        db.setIntTo(Config.USERS,userId,"exp",this.experience);
+        db.setIntTo(Config.USERS, userId, "exp", this.experience);
     }
 
     public void addUserGames() {
-        db.setIntTo(Config.USERS,userId,"games",++this.userGames);
+        db.setIntTo(Config.USERS, userId, "games", ++this.userGames);
     }
 
     public void addUserWins() {
-        db.setIntTo(Config.USERS,userId,"wins",++this.userWins);
+        db.setIntTo(Config.USERS, userId, "wins", ++this.userWins);
     }
 
     public void addMoney(int money) {
         this.money += money;
-        db.setIntTo(Config.USERS,userId,"money",this.money);
+        db.setIntTo(Config.USERS, userId, "money", this.money);
     }
 
-/****** set ******/
+    /****** set ******/
     public void setLastGame() {
-        db.setLongTo(Config.USERS,userId,"last_game",System.currentTimeMillis());
+        db.setLongTo(Config.USERS, userId, "last_game", System.currentTimeMillis());
     }
 
     public void setCurHitPoints(double curHitPoints) {
@@ -246,6 +268,7 @@ public abstract class ArenaUser {
 
     public void setName(String name) {
         this.name = name;
+        db.setStringTo(Config.USERS, userId, "name", name);
     }
 
     public void setUserTitle(String userTitle) {
@@ -385,8 +408,7 @@ public abstract class ArenaUser {
     }
 
 
-
-/****** get ******/
+    /****** get ******/
     public String getUserTitle() {
         return userTitle;
     }
@@ -530,6 +552,7 @@ public abstract class ArenaUser {
     public int getUserId() {
         return userId;
     }
+
     public boolean doesUserExists() {
         return db.doesUserExists(userId);
     }
@@ -540,7 +563,7 @@ public abstract class ArenaUser {
 
     public void setStatus(int status) {
         this.status = status;
-        db.setIntTo(Config.USERS,userId,"status",status);
+        db.setIntTo(Config.USERS, userId, "status", status);
     }
 
     public String getName() {
@@ -548,11 +571,11 @@ public abstract class ArenaUser {
     }
 
     public String getClassName() {
-        return db.getStringFrom(Config.CLASSES,userClass,"name");
+        return db.getStringFrom(Config.CLASSES, userClass, "name");
     }
 
     public String getRaceName() {
-        return db.getStringFrom(Config.RACES, race,"name");
+        return db.getStringFrom(Config.RACES, race, "name");
     }
 
     public String getTeam() {

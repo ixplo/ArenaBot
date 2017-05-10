@@ -85,6 +85,7 @@ public class Messages {
     public static SendMessage getUserStatMsg(Long chatId, Integer userId) {
         ArenaUser arenaUser = ArenaUser.getUser(userId);
         StringBuilder out = new StringBuilder();
+        out.append("<b>").append(arenaUser.getName()).append("</b> \n");
         out.append("Ваши характеристики: \n");
         out.append(arenaUser.getClassName()).append("/");
         out.append(arenaUser.getRaceName()).append("\n");
@@ -588,6 +589,18 @@ public class Messages {
                 .append(ArenaUser.getUser(user.getId()).getLevel()).append(")")
                 .append(" вошел в команду ").append(ArenaBot.registration.getMemberTeam(user.getId()));
         sendToAllMembers(ArenaBot.registration.getMembers(),messageText.toString());
+    }
+
+    public static void sendMessage(AbsSender absSender, Long chatId, String messageText) {
+        SendMessage msg = new SendMessage();
+        msg.enableHtml(true);
+        msg.setText(messageText);
+        try {
+            msg.setChatId(chatId);
+            absSender.sendMessage(msg);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void sendChooseClassMsg(AbsSender absSender, Long chatId) {
