@@ -99,10 +99,10 @@ public class Item {
         arenaUser.setCurWis(arenaUser.getCurWis() + item.getWisBonus());
         arenaUser.setCurInt(arenaUser.getCurInt() + item.getIntBonus());
         arenaUser.setCurCon(arenaUser.getCurCon() + item.getConBonus());
-        arenaUser.setMinHit(arenaUser.getMinHit() + (item.getMinHit() + (item.getStrBonus() - 3) / 4));
-        arenaUser.setMaxHit(arenaUser.getMaxHit() + (item.getMaxHit() + (item.getStrBonus() - 3) / 4));
-        arenaUser.setAttack(arenaUser.getAttack() + (item.getAttack() + roundDouble(0.91 * item.getDexBonus() + 0.39 * item.getStrBonus())));
-        arenaUser.setProtect(arenaUser.getProtect() + (item.getProtect() + roundDouble(0.4 * item.getDexBonus() + 0.6 * item.getConBonus())));
+        arenaUser.setMinHit(arenaUser.getMinHit() + item.getMinHit() + item.getStrBonus() / 4);
+        arenaUser.setMaxHit(arenaUser.getMaxHit() + item.getMaxHit() + item.getStrBonus() / 4);
+        arenaUser.setAttack(arenaUser.getAttack() + item.getAttack() + roundDouble(0.91 * item.getDexBonus() + 0.39 * item.getStrBonus()));
+        arenaUser.setProtect(arenaUser.getProtect() + item.getProtect() + roundDouble(0.4 * item.getDexBonus() + 0.6 * item.getConBonus()));
         arenaUser.setMaxHitPoints(arenaUser.getMaxHitPoints() + roundDouble(1.3333333 * item.getConBonus()));//todo переделать, иначе выскочит нецелое число
         if (arenaUser.getStatus() != 2) {
             arenaUser.setCurHitPoints(arenaUser.getMaxHitPoints()); // not in battle

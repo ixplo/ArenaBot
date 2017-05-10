@@ -16,9 +16,9 @@ import static arenabot.Messages.fillWithSpaces;
 public class Mage extends ArenaUser implements SpellCaster {
     ArrayList<Spell> spells;
     private double maxMana;
+    private double curMana;
     private int spellPoints;
     private double magicAttack;
-    private double curMana;
 
     public Mage(Integer userId) {
         super(userId);
@@ -31,15 +31,15 @@ public class Mage extends ArenaUser implements SpellCaster {
         setMaxMana(1.5 * getCurWis());
         setCurMana(maxMana);
         setMagicAttack(roundDouble(0.6 * getCurWis() + 0.4 * getCurInt()));
-        setSpell("1ma",1);
+        setSpell("1ma", 1);
     }
 
     @Override
     public void getClassFeatures() {
-        maxMana = db.getDoubleFrom(Config.USERS,getUserId(),"mana");
-        spellPoints = db.getIntFrom(Config.USERS,getUserId(),"s_points");
-        magicAttack = db.getDoubleFrom(Config.USERS,getUserId(),"m_attack");
-        curMana = db.getDoubleFrom(Config.USERS,getUserId(),"cur_mana");
+        maxMana = db.getDoubleFrom(Config.USERS, getUserId(), "mana");
+        curMana = db.getDoubleFrom(Config.USERS, getUserId(), "cur_mana");
+        spellPoints = db.getIntFrom(Config.USERS, getUserId(), "s_points");
+        magicAttack = db.getDoubleFrom(Config.USERS, getUserId(), "m_attack");
     }
 
     @Override
@@ -51,16 +51,32 @@ public class Mage extends ArenaUser implements SpellCaster {
     @Override
     public void putOnClassFeatures(Item item) {
         setMaxMana(getMaxMana() + item.getWisBonus() * 1.5);
-        if (getStatus() != 2) setCurMana(getMaxMana()); // not in battle
+        if (getStatus() != 2) { // not in battle
+            setCurMana(getMaxMana());
+        }
         setMagicAttack(getMagicAttack() + roundDouble(0.6 * item.getWisBonus() + 0.4 * item.getIntBonus()));
     }
 
-    private void setSpell(String spellId, int spellGrade) {
-        db.addSpell(getUserId(),spellId,spellGrade);
+    @Override
+    public void addHarkClassFeatures(String harkToUpId, int numberOfPoints) {
+        if (harkToUpId.equals("nativeWis")) {
+            setMaxMana(getMaxMana() + numberOfPoints * 1.5);
+            if (getStatus() != 2) { // not in battle
+                setCurMana(getMaxMana());
+            }
+            setMagicAttack(getMagicAttack() + roundDouble(0.6 * numberOfPoints));
+        }
+        if (harkToUpId.equals("nativeInt")) {
+            setMagicAttack(getMagicAttack() + roundDouble(0.4 * numberOfPoints));
+        }
     }
 
-    static int countReceivedSpellPoints(int curExp, int exp){
-        return (exp+curExp)/120 - exp/120;//not equals curExp/120 because int cuts fraction
+    private void setSpell(String spellId, int spellGrade) {
+        db.addSpell(getUserId(), spellId, spellGrade);
+    }
+
+    static int countReceivedSpellPoints(int curExp, int exp) {
+        return (exp + curExp) / 120 - exp / 120;//not equals curExp/120 because int cuts fraction
     }
 
     @Override

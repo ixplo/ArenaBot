@@ -51,8 +51,24 @@ public class Priest extends ArenaUser implements SpellCaster{
     @Override
     public void putOnClassFeatures(Item item) {
         setMaxMana(getMaxMana() + item.getWisBonus() * 1.5);
-        if (getStatus() != 2) setCurMana(getMaxMana()); // not in battle
+        if (getStatus() != 2) { // not in battle
+            setCurMana(getMaxMana());
+        }
         setMagicAttack(getMagicAttack() + roundDouble(0.6 * item.getWisBonus() + 0.4 * item.getIntBonus()));
+    }
+
+    @Override
+    public void addHarkClassFeatures(String harkToUpId, int numberOfPoints) {
+        if (harkToUpId.equals("nativeWis")) {
+            setMaxMana(getMaxMana() + numberOfPoints * 1.5);
+            if (getStatus() != 2) { // not in battle
+                setCurMana(getMaxMana());
+            }
+            setMagicAttack(getMagicAttack() + roundDouble(0.6 * numberOfPoints));
+        }
+        if (harkToUpId.equals("nativeInt")) {
+            setMagicAttack(getMagicAttack() + roundDouble(0.4 * numberOfPoints));
+        }
     }
 
     @Override

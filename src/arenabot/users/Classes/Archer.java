@@ -26,11 +26,9 @@ public class Archer extends ArenaUser implements SkillApplicant {
 
     @Override
     public void setClassFeatures() {
-        int maxArcherTargets = (int) roundDouble((0.7 * getCurWis() + 0.3 * getCurDex()) / 4, 0);
-        setMaxTarget(maxArcherTargets < 1 ? 1 : maxArcherTargets);
-        setMinHit((getCurInt() - 3) / 4);
-        setMaxHit((getCurInt() - 3) / 4);
-        setAttack(roundDouble(0.91 * getCurDex() + 0.39 * getCurInt()));
+        refreshMaxTargets();
+        undoStrBonus(getCurStr());
+        doIntBonus(getCurInt());
     }
 
     @Override
@@ -45,18 +43,37 @@ public class Archer extends ArenaUser implements SkillApplicant {
 
     @Override
     public void putOnClassFeatures(Item item) {
-        unDoCommonBonus(item);
-        int maxArcherTargets = (int) roundDouble((0.7 * getCurWis() + 0.3 * getCurDex()) / 4, 0);
-        setMaxTarget(maxArcherTargets < 1 ? 1 : maxArcherTargets);
-        setMinHit(getMinHit() + (item.getMinHit() + (item.getIntBonus() - 3) / 4));
-        setMaxHit(getMaxHit() + (item.getMaxHit() + (item.getIntBonus() - 3) / 4));
-        setAttack(getAttack() + (item.getAttack() + roundDouble(0.91 * item.getDexBonus() + 0.39 * item.getIntBonus())));
+        refreshMaxTargets();
+        undoStrBonus(item.getStrBonus());
+        doIntBonus(item.getIntBonus());
     }
 
-    private void unDoCommonBonus(Item item) {
-        setMinHit(getMinHit() - (item.getMinHit() + (item.getStrBonus() - 3) / 4));
-        setMaxHit(getMaxHit() - (item.getMaxHit() + (item.getStrBonus() - 3) / 4));
-        setAttack(getAttack() - (item.getAttack() + roundDouble(0.91 * item.getDexBonus() + 0.39 * item.getStrBonus())));
+    @Override
+    public void addHarkClassFeatures(String harkToUpId, int numberOfPoints) {
+        refreshMaxTargets();
+        if(harkToUpId.equals("nativeStr")){
+            undoStrBonus(numberOfPoints);
+        }
+        if(harkToUpId.equals("nativeInt")){
+            doIntBonus(numberOfPoints);
+        }
+    }
+
+    private void refreshMaxTargets(){
+        int maxArcherTargets = (int) roundDouble((0.7 * getCurWis() + 0.3 * getCurDex()) / 4, 0);
+        setMaxTarget(maxArcherTargets < 1 ? 1 : maxArcherTargets);
+    }
+
+    private void doIntBonus(int numberOfPoints) {
+        setMinHit(roundDouble(getMinHit() + (double)numberOfPoints / 4));
+        setMaxHit(roundDouble(getMaxHit() + (double)numberOfPoints / 4));
+        setAttack(roundDouble(getAttack() + 0.39 * numberOfPoints));
+    }
+
+    private void undoStrBonus(int numberOfPoints) {
+        setMinHit(roundDouble(getMinHit() - (double)numberOfPoints / 4));
+        setMaxHit(roundDouble(getMaxHit() - (double)numberOfPoints / 4));
+        setAttack(roundDouble(getAttack() - 0.39 * numberOfPoints));
     }
 
     @Override
@@ -90,11 +107,5 @@ public class Archer extends ArenaUser implements SkillApplicant {
     public int getMaxTarget() {
         return maxTarget;
     }
-
-    private void putOn() {
-        int maxArcherTargets = (int) roundDouble((0.7 * getCurWis() + 0.3 * getCurDex()) / 4, 0);
-        setMaxTarget(maxArcherTargets < 1 ? 1 : maxArcherTargets);
-    }
-
 
 }

@@ -40,6 +40,11 @@ public class Warrior extends ArenaUser implements SkillApplicant{
     }
 
     @Override
+    public void addHarkClassFeatures(String harkToUpId, int numberOfPoints) {
+
+    }
+
+    @Override
     public void skillApply(String skillId) {
 
     }

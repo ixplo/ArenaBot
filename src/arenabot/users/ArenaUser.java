@@ -73,6 +73,8 @@ public abstract class ArenaUser {
 
     public abstract void putOnClassFeatures(Item item);
 
+    public abstract void addHarkClassFeatures(String harkToUpId, int numberOfPoints);
+
     /****** static ******/
     public static ArenaUser create(Integer userId, String userClassId) {
         ArenaUser hero;
@@ -233,6 +235,43 @@ public abstract class ArenaUser {
     /****** Add ******/
     public void addCurHitPoints(double hitPointsChange) {
         this.curHitPoints = ArenaUser.roundDouble(this.curHitPoints + hitPointsChange);
+    }
+
+    public void addHark(String harkId, int numberOfPoints) {
+        if (harkId.equals("nativeStr")) {
+            nativeStr += numberOfPoints;
+            curStr += numberOfPoints;
+            minHit += roundDouble((double) numberOfPoints / 4);
+            maxHit += roundDouble((double) numberOfPoints / 4);
+            attack += roundDouble(0.39 * numberOfPoints);
+        }
+        if (harkId.equals("nativeDex")) {
+            nativeDex += numberOfPoints;
+            curDex += numberOfPoints;
+            attack += roundDouble(0.91 * numberOfPoints);
+            protect += roundDouble(0.4 * numberOfPoints);
+        }
+        if (harkId.equals("nativeWis")) {
+            nativeWis += numberOfPoints;
+            curWis += numberOfPoints;
+            heal += roundDouble(0.06 * numberOfPoints);
+            magicProtect += roundDouble(0.6 * numberOfPoints);
+        }
+        if (harkId.equals("nativeInt")) {
+            nativeInt += numberOfPoints;
+            curInt += numberOfPoints;
+            heal += roundDouble(0.04 * numberOfPoints);
+            magicProtect += roundDouble(0.4 * numberOfPoints);
+        }
+        if (harkId.equals("nativeCon")) {
+            nativeCon += numberOfPoints;
+            curCon += numberOfPoints;
+            maxHitPoints += roundDouble(1.3333333 * numberOfPoints);
+            protect += roundDouble(0.6 * numberOfPoints);
+        }
+        addHarkClassFeatures(harkId, numberOfPoints);
+        setFreePoints(getFreePoints() - numberOfPoints);
+        db.setUser(this);
     }
 
     public void addCurExp(int exp) {
