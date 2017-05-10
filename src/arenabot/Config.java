@@ -11,8 +11,8 @@ public class Config {
     static final String BOT_CHANNEL_NAME = "#Arena";
     final String rules = "rules.html";      //mc(rules)/todo it
     public static final long CHANNEL_ID = -161929436;//arena -202049243
-    public static final Integer IS_ADMIN = 362812407;
-    static final String BOT_TOKEN = "298781231:AAHDBJLNCjRpxmT7aazDhh5Hr7t6xNLCwr0";
+    public static final Integer IS_ADMIN = *****;
+    static final String BOT_TOKEN = "****";
     public static final String DB_CONTROLLER = "org.sqlite.JDBC";
     public static final String DB_LINK = "jdbc:sqlite:ArenaDb.sqlite";
     static final String BOT_LINK = "https://telegram.me/ArenaMBot?start=regUser";
