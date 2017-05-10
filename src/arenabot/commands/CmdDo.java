@@ -19,13 +19,14 @@ public class CmdDo extends BotCommand {
     public static final String LOGTAG = "EXCOMMAND";
 
     public CmdDo() {
-        super("do", "&lt a,p &gt &ltномер&gt &lt%&gt - Напасть или защитить цель под указанным номером");
+        super("do", "&lt a,p,h,m &gt &ltномер&gt &lt%&gt - действовать на цель под указанным номером");
     }
 
     @Override
     public void execute(AbsSender absSender, User user, Chat chat, String[] strings) {
 
         int percent;
+        String spellId ="";
         if (!chat.isUserChat()) {
             return;
         }
@@ -56,10 +57,20 @@ public class CmdDo extends BotCommand {
         if (!isValid(absSender, user, chat.getId(), strings)) {
             return;
         }
-
+        if (strings[0].equals("m") && strings[3] != null){
+            if(ArenaUser.getUser(user.getId()).getUserClass().equals("l") ||
+                    ArenaUser.getUser(user.getId()).getUserClass().equals("w")){//todo убрать эту срань
+                Messages.sendMessage(absSender,chat.getId(),"Доступно только магам и жрецам");
+                return;
+            }
+            spellId = strings[3];
+        }else if(strings[0].equals("m")){
+            Messages.sendMessage(absSender,chat.getId(),"Неверный формат заклинания");
+            return;
+        }
         Messages.sendDoMsg(absSender, chat.getId(), strings, percent);//todo перенести в takeAction
         Battle.battle.interrupt();
-        Round.round.takeAction(user.getId(), strings[0], Integer.parseInt(strings[1]), percent);
+        Round.round.takeAction(user.getId(), strings[0], Integer.parseInt(strings[1]), percent, spellId);
     }
 //todo проверки выделить в отдельные методы и кидать исключения
     //todo вторая часть кода выделяется в другой метод и выполняется, если прошли проверку в первых методах
@@ -88,7 +99,6 @@ public class CmdDo extends BotCommand {
             }
             return false;
         }
-
         return true;
     }
 }

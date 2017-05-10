@@ -59,6 +59,11 @@ public class Archer extends ArenaUser implements SkillApplicant {
         }
     }
 
+    @Override
+    public String doCast(ArenaUser target, int percent, String castId) {
+        return null;
+    }
+
     private void refreshMaxTargets(){
         int maxArcherTargets = (int) roundDouble((0.7 * getCurWis() + 0.3 * getCurDex()) / 4, 0);
         setMaxTarget(maxArcherTargets < 1 ? 1 : maxArcherTargets);

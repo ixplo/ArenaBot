@@ -86,9 +86,9 @@ public class Round {
         return true;
     }
 
-    public void takeAction(int userId, String actionId, int target, int percent) {
+    public void takeAction(int userId, String actionId, int target, int percent, String spellId) {
         int index = getIndex(orders, userId);
-        orders.get(index).addAction(Action.create(userId, actionId, members.get(target - 1).getUserId(), percent));
+        orders.get(index).addAction(Action.create(userId, actionId, members.get(target - 1).getUserId(), percent, spellId));
     }
 
     private int getIndex(List<Order> orders, Integer userId) {

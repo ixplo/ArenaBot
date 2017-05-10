@@ -561,6 +561,9 @@ public class Messages {
             case "h":
                 out.append("Лечить игрока ");
                 break;
+            case "m":
+                out.append("Вы пробуете творить заклинание ");
+                break;
             default:
                 out.append("Нет пока такого действия. Пожалуйтесь разработчикам!");
                 msg.setText(out.toString());

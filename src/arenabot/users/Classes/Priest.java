@@ -72,6 +72,11 @@ public class Priest extends ArenaUser implements SpellCaster{
     }
 
     @Override
+    public String doCast(ArenaUser target, int percent, String castId) {
+        return null;
+    }
+
+    @Override
     public void castSpell(String spellId) {
 
     }

@@ -38,7 +38,7 @@ public abstract class Action {
         this.percent = percent;
     }
 
-    public static Action create(int userId, String actionId, int targetId, int percent){
+    public static Action create(int userId, String actionId, int targetId, int percent, String spellId){
         Action action;
         switch (actionId){
             case "a":
@@ -51,7 +51,7 @@ public abstract class Action {
                 action = new Heal(userId, targetId, percent);
                 break;
             case "m":
-                action = new CastSpell(userId, targetId, percent);
+                action = new CastSpell(userId, targetId, percent, spellId);
                 break;
             default:
                 throw new RuntimeException("Unknown action type: " + actionId);

@@ -23,7 +23,8 @@ public class Config {
     public static final String CLASSES = "classes";
     public static final String RACES = "races";
     public static final String EQIP = "inventory";
-    public static final String SPELLS = "available_spells";
+    public static final String AVAILABLE_SPELLS = "available_spells";
+    public static final String SPELLS = "spells";
     public static final String TEAMS = "teams";
     public static final String USER_ID = "user_Id";
     static final int BOT_PHOTO_WIDTH = 280;

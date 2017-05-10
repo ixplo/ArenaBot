@@ -6,8 +6,10 @@ import arenabot.users.Inventory.Item;
 import arenabot.users.Spells.Spell;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import static arenabot.Messages.fillWithSpaces;
+import static arenabot.users.Spells.Spell.getSpell;
 
 /**
  * ixplo
@@ -71,6 +73,32 @@ public class Mage extends ArenaUser implements SpellCaster {
         }
     }
 
+    @Override
+    public String doCast(ArenaUser target, int percent, String castId) {
+        String message = "";
+        Spell spell = getSpell(castId);
+        Random rnd = new Random();
+        int chance = rnd.nextInt(100);
+        if(chance>(int)(spell.getProbability() * (Math.log(getMagicAttack()/target.getMagicProtect() + 4.6)/7) * percent / 100)){
+            return message = "<code>" + getName() + " пытался создать заклинание [" + spell.getName() + "] на " +
+                    target.getName() + ", но заклинание провалилось.</code>";
+        }
+        if(spell.getEffect().equals("a")){//todo change to normal word
+            if(spell.getManaCost() > curMana){
+                return message = "<code>" + getName() + " пытался создать заклинание [" + spell.getName() + "] на " +
+                        target.getName() + ", но у него не хватило маны.</code>";
+            }
+            target.addCurHitPoints(-spell.getDamage());
+            addCurMana(-spell.getManaCost());
+            addCurExp(spell.getDamage()*spell.getExpBonus());
+            message = "<pre>" + getName() + " запустил заклинанием [" + spell.getName() + "] в " +
+                    target.getName() + " и ранил его на " + spell.getDamage() +
+                    "\n(жизни:-" + spell.getDamage() + "/" + target.getCurHitPoints() +
+                    " \\\\ опыт:+" + spell.getDamage()*spell.getExpBonus() + "/" + getCurExp() + ")</pre>";
+        }
+        return message;
+    }
+
     private void setSpell(String spellId, int spellGrade) {
         db.addSpell(getUserId(), spellId, spellGrade);
     }
@@ -111,6 +139,11 @@ public class Mage extends ArenaUser implements SpellCaster {
 
     public void setCurMana(double curMana) {
         this.curMana = curMana;
+        db.setDoubleTo(Config.USERS, getUserId(), "cur_mana", curMana);
+    }
+
+    public void addCurMana(double manaChange) {
+        this.curMana += manaChange;
         db.setDoubleTo(Config.USERS, getUserId(), "cur_mana", curMana);
     }
 

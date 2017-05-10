@@ -45,6 +45,11 @@ public class Warrior extends ArenaUser implements SkillApplicant{
     }
 
     @Override
+    public String doCast(ArenaUser target, int percent, String castId) {
+        return null;
+    }
+
+    @Override
     public void skillApply(String skillId) {
 
     }

@@ -75,6 +75,8 @@ public abstract class ArenaUser {
 
     public abstract void addHarkClassFeatures(String harkToUpId, int numberOfPoints);
 
+    public abstract String doCast(ArenaUser target, int percent, String castId);
+
     /****** static ******/
     public static ArenaUser create(Integer userId, String userClassId) {
         ArenaUser hero;
