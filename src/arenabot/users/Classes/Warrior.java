@@ -29,6 +29,11 @@ public class Warrior extends ArenaUser implements SkillApplicant{
     }
 
     @Override
+    public void appendXstatMsg(StringBuilder out) {
+
+    }
+
+    @Override
     public void skillApply(String skillId) {
 
     }

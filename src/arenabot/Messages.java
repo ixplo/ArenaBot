@@ -90,7 +90,12 @@ public class Messages {
         out.append(arenaUser.getClassName()).append("/");
         out.append(arenaUser.getRaceName()).append("\n");
         out.append("Победы: ").append(arenaUser.getUserWins()).append(" Игры: ").append(arenaUser.getUserGames()).append("\n");
-        String stringDate = new SimpleDateFormat().format(new Date(arenaUser.getLastGame()));
+        String stringDate;
+        if(arenaUser.getLastGame() == 0){
+            stringDate = "еще нет";
+        }else{
+            stringDate = new SimpleDateFormat().format(new Date(arenaUser.getLastGame()));
+        }
         out.append("Был в бою: ").append(stringDate).append("\n\n");
         out.append(fillWithSpaces("<code>Опыт:", arenaUser.getExperience() + "</code>\n", Config.WIDTH));
         out.append(fillWithSpaces("<code>Жизни:", arenaUser.getCurHitPoints() + "</code>\n", Config.WIDTH));
@@ -116,7 +121,8 @@ public class Messages {
         out.append(fillWithSpaces("<code>Атака:", arenaUser.getAttack() + "</code>\n", Config.WIDTH));
         out.append(fillWithSpaces("<code>Защита:", arenaUser.getProtect() + "</code>\n", Config.WIDTH));
         out.append(fillWithSpaces("<code>Лечение:", arenaUser.getHeal() + "</code>\n", Config.WIDTH));
-        out.append(fillWithSpaces("<code>Защ. от магии:", arenaUser.getMagicProtect() + "</code>\n", Config.WIDTH));
+        out.append(fillWithSpaces("<code>Защ. от магии:", arenaUser.getMagicProtect() + "</code>", Config.WIDTH));
+        arenaUser.appendXstatMsg(out);
         SendMessage msg = new SendMessage();
         msg.setChatId(chatId);
         msg.enableHtml(true);
@@ -370,16 +376,7 @@ public class Messages {
         }
     }
 
-    private static boolean isNumeric(String s) {
-        try {
-            Integer.parseInt(s);
-            return true;
-        } catch (NumberFormatException e) {
-            return false;
-        }
-    }
-
-    private static String fillWithSpaces(String first, String second, int width) {
+    public static String fillWithSpaces(String first, String second, int width) {
         String s1 = first.replaceAll("<.*?>", "");
         String s2 = second.replaceAll("<.*?>", "");
         int neededSpaces = width - s1.length() - s2.length();
@@ -393,6 +390,17 @@ public class Messages {
         }
         return first + spaces + second;
     }
+
+    private static boolean isNumeric(String s) {
+        try {
+            Integer.parseInt(s);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+
 
     public static void sendDropMsg(AbsSender absSender, Chat chat) {
         try {

@@ -6,6 +6,9 @@ import arenabot.users.Spells.Skill;
 
 import java.util.ArrayList;
 
+import static arenabot.Messages.fillWithSpaces;
+
+
 /**
  * ixplo
  * 28.04.2017.
@@ -32,6 +35,11 @@ public class Archer extends ArenaUser implements SkillApplicant {
     @Override
     public void getClassFeatures() {
         db.getIntFrom(Config.USERS, getUserId(), "max_target");
+    }
+
+    @Override
+    public void appendXstatMsg(StringBuilder out) {
+        out.append(fillWithSpaces("\n<code>Кол. целей:", getMaxTarget() + "</code>\n", Config.WIDTH));
     }
 
     @Override
@@ -64,12 +72,6 @@ public class Archer extends ArenaUser implements SkillApplicant {
 
     public int getMaxTarget() {
         return maxTarget;
-    }
-
-    public String getXstatMsg() {
-        StringBuilder out = new StringBuilder();
-        //out.append(fillWithSpaces("<code>Кол. целей:", (Archer)(arenaUser).getMaxTarget() + "</code>\n", Config.WIDTH));
-        return out.toString();
     }
 
     private void putOn() {

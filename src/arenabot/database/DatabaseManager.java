@@ -181,7 +181,6 @@ public class DatabaseManager {
                             "const," +
                             "free_points," +
                             "hp," +
-                            "s_points," +
                             "money," +
                             "exp," +
                             "level," +

@@ -110,8 +110,8 @@ public class ArenaBot extends TelegramLongPollingCommandBot {
                 String userClass = callbackEntry.substring(1, 2);
                 ArenaUser.setNewUser(userId, userName, userClass, userRace);
 
-                userClass = ArenaUser.getClassName(userId);
-                userRace = ArenaUser.getRaceName(userId);
+                userClass = ArenaUser.getClassName(userClass);
+                userRace = ArenaUser.getRaceName(userRace);
                 Messages.sendCreateUser(callbackQuery, userClass, userRace);
                 break;
             case "del":

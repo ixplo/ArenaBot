@@ -6,6 +6,8 @@ import arenabot.users.Spells.Spell;
 
 import java.util.ArrayList;
 
+import static arenabot.Messages.fillWithSpaces;
+
 /**
  * ixplo
  * 28.04.2017.
@@ -39,6 +41,12 @@ public class Mage extends ArenaUser implements SpellCaster {
         curMana = db.getDoubleFrom(Config.USERS,getUserId(),"cur_mana");
     }
 
+    @Override
+    public void appendXstatMsg(StringBuilder out) {
+        out.append(fillWithSpaces("<code>Мана:", getCurMana() + "</code>\n", Config.WIDTH));
+        out.append(fillWithSpaces("<code>Очки магии:", getSpellPoints() + "</code>\n", Config.WIDTH));
+    }
+
     private void setSpell(String spellId, int spellGrade) {
         db.setSpell(getUserId(),spellId,spellGrade);
     }
@@ -46,14 +54,6 @@ public class Mage extends ArenaUser implements SpellCaster {
     static int countReceivedSpellPoints(int curExp, int exp){
         return (exp+curExp)/120 - exp/120;//not equals curExp/120 because int cuts fraction
     }
-
-//    public void sendXstatMsg(){
-//        if (arenaUser.getUserClass().equals("m") || arenaUser.getUserClass().equals("p")) {//todo убрать после выделения магов и жрецов в отдельные классы
-//            out.append(fillWithSpaces("<code>Мана:", arenaUser.getCurMana() + "</code>\n", Config.WIDTH));
-//            out.append(fillWithSpaces("<code>Очки магии:", arenaUser.getSpellPoints() + "</code>\n", Config.WIDTH));
-//        }
-//    }
-
 
     @Override
     public void castSpell(String spellId) {

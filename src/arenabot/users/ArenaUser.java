@@ -67,6 +67,7 @@ public abstract class ArenaUser {
 /****** abstract ******/
     public abstract void setClassFeatures();
     public abstract void getClassFeatures();
+    public abstract void appendXstatMsg(StringBuilder out);
 
 /****** static ******/
     public static ArenaUser create(Integer userId, String userClassId){
@@ -131,8 +132,8 @@ public abstract class ArenaUser {
         arenaUser.curHitPoints = arenaUser.maxHitPoints;
         arenaUser.money = db.getIntFrom(Config.CLASSES, userClass, "money_start");
         arenaUser.level = 1;
-        arenaUser.minHit = (arenaUser.curStr - 3) / 4;
-        arenaUser.maxHit = (arenaUser.curStr - 3) / 4;
+        arenaUser.minHit = (double)(arenaUser.curStr - 3) / 4;
+        arenaUser.maxHit = (double)(arenaUser.curStr - 3) / 4;
         arenaUser.attack = roundDouble(0.91 * arenaUser.curDex + 0.39 * arenaUser.curStr);
         arenaUser.protect = roundDouble(0.4 * arenaUser.curDex + 0.6 * arenaUser.curCon);
         arenaUser.heal = roundDouble(0.06 * arenaUser.curWis + 0.04 * arenaUser.curInt);
@@ -553,4 +554,6 @@ public abstract class ArenaUser {
     public String getTeam() {
         return team;
     }
+
+
 }

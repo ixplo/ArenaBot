@@ -6,6 +6,8 @@ import arenabot.users.Spells.Spell;
 
 import java.util.ArrayList;
 
+import static arenabot.Messages.fillWithSpaces;
+
 /**
  * ixplo
  * 28.04.2017.
@@ -37,6 +39,12 @@ public class Priest extends ArenaUser implements SpellCaster{
         spellPoints = db.getIntFrom(Config.USERS,getUserId(),"s_points");
         magicAttack = db.getDoubleFrom(Config.USERS,getUserId(),"m_attack");
         curMana = db.getDoubleFrom(Config.USERS,getUserId(),"cur_mana");
+    }
+
+    @Override
+    public void appendXstatMsg(StringBuilder out) {
+        out.append(fillWithSpaces("<code>Мана:", getCurMana() + "</code>\n", Config.WIDTH));
+        out.append(fillWithSpaces("<code>Очки магии:", getSpellPoints() + "</code>\n", Config.WIDTH));
     }
 
     @Override
