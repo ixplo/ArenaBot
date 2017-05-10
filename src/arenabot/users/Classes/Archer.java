@@ -2,6 +2,7 @@ package arenabot.users.Classes;
 
 import arenabot.Config;
 import arenabot.users.ArenaUser;
+import arenabot.users.Inventory.Item;
 import arenabot.users.Spells.Skill;
 
 import java.util.ArrayList;
@@ -34,12 +35,28 @@ public class Archer extends ArenaUser implements SkillApplicant {
 
     @Override
     public void getClassFeatures() {
-        db.getIntFrom(Config.USERS, getUserId(), "max_target");
+        maxTarget = db.getIntFrom(Config.USERS, getUserId(), "max_target");
     }
 
     @Override
-    public void appendXstatMsg(StringBuilder out) {
+    public void appendClassXstatMsg(StringBuilder out) {
         out.append(fillWithSpaces("\n<code>Кол. целей:", getMaxTarget() + "</code>\n", Config.WIDTH));
+    }
+
+    @Override
+    public void putOnClassFeatures(Item item) {
+        unDoCommonBonus(item);
+        int maxArcherTargets = (int) roundDouble((0.7 * getCurWis() + 0.3 * getCurDex()) / 4, 0);
+        setMaxTarget(maxArcherTargets < 1 ? 1 : maxArcherTargets);
+        setMinHit(getMinHit() + (item.getMinHit() + (item.getIntBonus() - 3) / 4));
+        setMaxHit(getMaxHit() + (item.getMaxHit() + (item.getIntBonus() - 3) / 4));
+        setAttack(getAttack() + (item.getAttack() + roundDouble(0.91 * item.getDexBonus() + 0.39 * item.getIntBonus())));
+    }
+
+    private void unDoCommonBonus(Item item) {
+        setMinHit(getMinHit() - (item.getMinHit() + (item.getStrBonus() - 3) / 4));
+        setMaxHit(getMaxHit() - (item.getMaxHit() + (item.getStrBonus() - 3) / 4));
+        setAttack(getAttack() - (item.getAttack() + roundDouble(0.91 * item.getDexBonus() + 0.39 * item.getStrBonus())));
     }
 
     @Override
@@ -62,7 +79,7 @@ public class Archer extends ArenaUser implements SkillApplicant {
     @Override
     public void setAttack(double attack) {
         super.setAttack(attack);
-        db.setDoubleTo(Config.USERS,getUserId(),"attack",attack);
+        db.setDoubleTo(Config.USERS, getUserId(), "attack", attack);
     }
 
     public void setMaxTarget(int maxTarget) {

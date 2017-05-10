@@ -91,8 +91,6 @@ public class Item {
         if (isItemInSlot(arenaUser.getUserId(),eqipIndex)) {
             return;
         }
-
-
         Item item = getItem(getItemId(arenaUser.getUserId(),eqipIndex));
         //todo проверка на соответствие требованиям (другие вещи тоже надо проверить, на случай если харки уменьшатся)
         //*** изменение характеристик перса
@@ -101,29 +99,24 @@ public class Item {
         arenaUser.setCurWis(arenaUser.getCurWis() + item.getWisBonus());
         arenaUser.setCurInt(arenaUser.getCurInt() + item.getIntBonus());
         arenaUser.setCurCon(arenaUser.getCurCon() + item.getConBonus());
-        arenaUser.setMinHit(arenaUser.getMinHit() + (item.getMinHit() + (arenaUser.getUserClass().equals("l") ? (item.getIntBonus() - 3) / 4 : (item.getStrBonus() - 3) / 4)));
-        arenaUser.setMaxHit(arenaUser.getMaxHit() + (item.getMaxHit() + (arenaUser.getUserClass().equals("l") ? (item.getIntBonus() - 3) / 4 : (item.getStrBonus() - 3) / 4)));
-        arenaUser.setAttack(arenaUser.getAttack() + (item.getAttack() + roundDouble(0.91 * item.getDexBonus() + 0.39 * (arenaUser.getUserClass().equals("l") ?
-                item.getIntBonus() : item.getStrBonus())))); //int for archer
+        arenaUser.setMinHit(arenaUser.getMinHit() + (item.getMinHit() + (item.getStrBonus() - 3) / 4));
+        arenaUser.setMaxHit(arenaUser.getMaxHit() + (item.getMaxHit() + (item.getStrBonus() - 3) / 4));
+        arenaUser.setAttack(arenaUser.getAttack() + (item.getAttack() + roundDouble(0.91 * item.getDexBonus() + 0.39 * item.getStrBonus())));
         arenaUser.setProtect(arenaUser.getProtect() + (item.getProtect() + roundDouble(0.4 * item.getDexBonus() + 0.6 * item.getConBonus())));
         arenaUser.setMaxHitPoints(arenaUser.getMaxHitPoints() + roundDouble(1.3333333 * item.getConBonus()));//todo переделать, иначе выскочит нецелое число
-        if (arenaUser.getStatus() != 2) arenaUser.setCurHitPoints(arenaUser.getMaxHitPoints()); // not in battle
-
+        if (arenaUser.getStatus() != 2) {
+            arenaUser.setCurHitPoints(arenaUser.getMaxHitPoints()); // not in battle
+        }
         arenaUser.setMagicProtect(arenaUser.getMagicProtect() + roundDouble(0.6 * item.getWisBonus() + 0.4 * item.getIntBonus()));
         arenaUser.setHeal(arenaUser.getHeal() + roundDouble(0.06 * item.getWisBonus() + 0.04 * item.getIntBonus()));
         if (item.isWeapon()) arenaUser.setCurWeapon(eqipIndex);
         //*** заносим in_slot
         item.putInSlot(arenaUser.getUserId(), eqipIndex);
+        arenaUser.putOnClassFeatures(item);
+        db.setUser(arenaUser);
         //todo сделать putOff вещи, которая тут раньше была надета, сделать ли это до надевания вещи?
         //todo снова изменить характеристики из-за предыдущего пункта
     }
-
-//    public putOnForMage(String itemId){
-//        arenaUser.setMaxMana(arenaUser.getMaxMana() + item.getWisBonus() * 1.5);
-//        if (arenaUser.getStatus() != 2) arenaUser.setCurMana(arenaUser.getMaxMana()); // not in battle
-//
-//        arenaUser.setMagicAttack(arenaUser.getMagicAttack() + roundDouble(0.6 * item.getWisBonus() + 0.4 * item.getIntBonus()));
-//    }
 
     public static double roundDouble(double d) {
         return roundDouble(d,2);

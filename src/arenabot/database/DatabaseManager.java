@@ -161,83 +161,82 @@ public class DatabaseManager {
         int updatedRows = 0;
         try {
             final PreparedStatement preparedStatement =
-                    connection.getPreparedStatement("INSERT OR REPLACE INTO users " +
-                            "(id," +
-                            "name," +
-                            "title," +
-                            "post_Title," +
-                            "team," +
-                            "team_Rank," +
-                            "race," +
-                            "class," +
-                            "descr," +
-                            "sex," +
-                            "games," +
-                            "wins," +
-                            "strangth," +
-                            "dexterity," +
-                            "wisdom," +
-                            "intellect," +
-                            "const," +
-                            "free_points," +
-                            "hp," +
-                            "money," +
-                            "exp," +
-                            "level," +
-                            "cur_str," +
-                            "cur_dex," +
-                            "cur_wis," +
-                            "cur_int," +
-                            "cur_con," +
-                            "min_hit," +
-                            "max_hit," +
-                            "attack," +
-                            "protect," +
-                            "heal," +
-                            "m_protect," +
-                            "cur_hp," +
-                            "cur_exp," +
-                            "last_game," +
-                            "cur_weapon," +
-                            "status) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);");
-            preparedStatement.setInt(1, arenaUser.getUserId());
-            preparedStatement.setString(2, arenaUser.getName());
-            preparedStatement.setString(3, arenaUser.getUserTitle());
-            preparedStatement.setString(4, arenaUser.getUserPostTitle());
-            preparedStatement.setString(5, arenaUser.getTeam());
-            preparedStatement.setString(6, arenaUser.getTeamRank());
-            preparedStatement.setString(7, arenaUser.getRace());
-            preparedStatement.setString(8, arenaUser.getUserClass());
-            preparedStatement.setString(9, arenaUser.getDescr());
-            preparedStatement.setInt(10, arenaUser.getSex());
-            preparedStatement.setInt(11, arenaUser.getUserGames());
-            preparedStatement.setInt(12, arenaUser.getUserWins());
-            preparedStatement.setInt(13, arenaUser.getNativeStr());
-            preparedStatement.setInt(14, arenaUser.getNativeDex());
-            preparedStatement.setInt(15, arenaUser.getNativeWis());
-            preparedStatement.setInt(16, arenaUser.getNativeInt());
-            preparedStatement.setInt(17, arenaUser.getNativeCon());
-            preparedStatement.setInt(18, arenaUser.getFreePoints());
-            preparedStatement.setDouble(19, arenaUser.getMaxHitPoints());
-            preparedStatement.setInt(20, arenaUser.getMoney());
-            preparedStatement.setInt(21, arenaUser.getExperience());
-            preparedStatement.setInt(22, arenaUser.getLevel());
-            preparedStatement.setInt(23, arenaUser.getCurStr());
-            preparedStatement.setInt(24, arenaUser.getCurDex());
-            preparedStatement.setInt(25, arenaUser.getCurWis());
-            preparedStatement.setInt(26, arenaUser.getCurInt());
-            preparedStatement.setInt(27, arenaUser.getCurCon());
-            preparedStatement.setDouble(28, arenaUser.getMinHit());
-            preparedStatement.setDouble(29, arenaUser.getMaxHit());
-            preparedStatement.setDouble(30, arenaUser.getAttack());
-            preparedStatement.setDouble(31, arenaUser.getProtect());
-            preparedStatement.setDouble(32, arenaUser.getHeal());
-            preparedStatement.setDouble(33, arenaUser.getMagicProtect());
-            preparedStatement.setDouble(34, arenaUser.getCurHitPoints());
-            preparedStatement.setInt(35, arenaUser.getCurExp());
-            preparedStatement.setLong(36, arenaUser.getLastGame());
-            preparedStatement.setInt(37, arenaUser.getCurWeapon());
-            preparedStatement.setInt(38, arenaUser.getStatus());
+                    connection.getPreparedStatement("UPDATE users SET " +
+                            "name=?," +
+                            "title=?," +
+                            "post_Title=?," +
+                            "team=?," +
+                            "team_Rank=?," +
+                            "race=?," +
+                            "class=?," +
+                            "descr=?," +
+                            "sex=?," +
+                            "games=?," +
+                            "wins=?," +
+                            "strangth=?," +
+                            "dexterity=?," +
+                            "wisdom=?," +
+                            "intellect=?," +
+                            "const=?," +
+                            "free_points=?," +
+                            "hp=?," +
+                            "money=?," +
+                            "exp=?," +
+                            "level=?," +
+                            "cur_str=?," +
+                            "cur_dex=?," +
+                            "cur_wis=?," +
+                            "cur_int=?," +
+                            "cur_con=?," +
+                            "min_hit=?," +
+                            "max_hit=?," +
+                            "attack=?," +
+                            "protect=?," +
+                            "heal=?," +
+                            "m_protect=?," +
+                            "cur_hp=?," +
+                            "cur_exp=?," +
+                            "last_game=?," +
+                            "cur_weapon=?," +
+                            "status=? WHERE id=?;");
+            preparedStatement.setInt(38, arenaUser.getUserId());
+            preparedStatement.setString(1, arenaUser.getName());
+            preparedStatement.setString(2, arenaUser.getUserTitle());
+            preparedStatement.setString(3, arenaUser.getUserPostTitle());
+            preparedStatement.setString(4, arenaUser.getTeam());
+            preparedStatement.setString(5, arenaUser.getTeamRank());
+            preparedStatement.setString(6, arenaUser.getRace());
+            preparedStatement.setString(7, arenaUser.getUserClass());
+            preparedStatement.setString(8, arenaUser.getDescr());
+            preparedStatement.setInt(9, arenaUser.getSex());
+            preparedStatement.setInt(10, arenaUser.getUserGames());
+            preparedStatement.setInt(11, arenaUser.getUserWins());
+            preparedStatement.setInt(12, arenaUser.getNativeStr());
+            preparedStatement.setInt(13, arenaUser.getNativeDex());
+            preparedStatement.setInt(14, arenaUser.getNativeWis());
+            preparedStatement.setInt(15, arenaUser.getNativeInt());
+            preparedStatement.setInt(16, arenaUser.getNativeCon());
+            preparedStatement.setInt(17, arenaUser.getFreePoints());
+            preparedStatement.setDouble(18, arenaUser.getMaxHitPoints());
+            preparedStatement.setInt(19, arenaUser.getMoney());
+            preparedStatement.setInt(20, arenaUser.getExperience());
+            preparedStatement.setInt(21, arenaUser.getLevel());
+            preparedStatement.setInt(22, arenaUser.getCurStr());
+            preparedStatement.setInt(23, arenaUser.getCurDex());
+            preparedStatement.setInt(24, arenaUser.getCurWis());
+            preparedStatement.setInt(25, arenaUser.getCurInt());
+            preparedStatement.setInt(26, arenaUser.getCurCon());
+            preparedStatement.setDouble(27, arenaUser.getMinHit());
+            preparedStatement.setDouble(28, arenaUser.getMaxHit());
+            preparedStatement.setDouble(29, arenaUser.getAttack());
+            preparedStatement.setDouble(30, arenaUser.getProtect());
+            preparedStatement.setDouble(31, arenaUser.getHeal());
+            preparedStatement.setDouble(32, arenaUser.getMagicProtect());
+            preparedStatement.setDouble(33, arenaUser.getCurHitPoints());
+            preparedStatement.setInt(34, arenaUser.getCurExp());
+            preparedStatement.setLong(35, arenaUser.getLastGame());
+            preparedStatement.setInt(36, arenaUser.getCurWeapon());
+            preparedStatement.setInt(37, arenaUser.getStatus());
 
             updatedRows = preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -263,13 +262,56 @@ public class DatabaseManager {
         return resultString;
     }
 
-    public boolean setSpell(Integer userId, String spellId, int spellGrade) {
+    public boolean addUser(int userId, String name, String classId) {
+        int updatedRows = 0;
+        try {
+            String queryText = "INSERT OR REPLACE INTO users(id,name,class) VALUES (?,?,?);";
+            final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText);
+            preparedStatement.setInt(1, userId);
+            preparedStatement.setString(2, name);
+            preparedStatement.setString(3, classId);
+            updatedRows = preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return updatedRows > 0;
+    }
+
+    public boolean addInt(String tableName, String column, int record) {
+        int updatedRows = 0;
+        try {
+            String queryText = "INSERT OR REPLACE INTO " + tableName + " (?) VALUES (?);";
+            final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText);
+            preparedStatement.setString(1, column);
+            preparedStatement.setInt(2, record);
+            updatedRows = preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return updatedRows > 0;
+    }
+
+    public boolean addString(String tableName, String column, String record) {
+        int updatedRows = 0;
+        try {
+            String queryText = "INSERT OR REPLACE INTO " + tableName + " (?) VALUES (?);";
+            final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText);
+            preparedStatement.setString(1, column);
+            preparedStatement.setString(2, record);
+            updatedRows = preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return updatedRows > 0;
+    }
+
+    public boolean addSpell(Integer userId, String spellId, int spellGrade) {
         int updatedRows = 0;
         try {
             final PreparedStatement preparedStatement =
                     connection.getPreparedStatement("INSERT OR REPLACE INTO available_spells " +
                             "(id," +
-                            "user_id" +
+                            "user_id," +
                             "spell_grade) VALUES(?,?,?);");
             preparedStatement.setString(1, spellId);
             preparedStatement.setInt(2, userId);
@@ -282,7 +324,7 @@ public class DatabaseManager {
         return updatedRows > 0;
     }
 
-    public boolean setItem(Integer userId, String itemId) {
+    public boolean addItem(Integer userId, String itemId) {
         int updatedRows = 0;
         try {
             final PreparedStatement preparedStatement =

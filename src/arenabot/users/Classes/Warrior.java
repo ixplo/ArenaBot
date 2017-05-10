@@ -1,6 +1,7 @@
 package arenabot.users.Classes;
 
 import arenabot.users.ArenaUser;
+import arenabot.users.Inventory.Item;
 import arenabot.users.Spells.Skill;
 
 import java.util.ArrayList;
@@ -29,7 +30,12 @@ public class Warrior extends ArenaUser implements SkillApplicant{
     }
 
     @Override
-    public void appendXstatMsg(StringBuilder out) {
+    public void appendClassXstatMsg(StringBuilder out) {
+
+    }
+
+    @Override
+    public void putOnClassFeatures(Item item) {
 
     }
 

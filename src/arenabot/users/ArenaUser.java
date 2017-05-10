@@ -67,7 +67,8 @@ public abstract class ArenaUser {
 /****** abstract ******/
     public abstract void setClassFeatures();
     public abstract void getClassFeatures();
-    public abstract void appendXstatMsg(StringBuilder out);
+    public abstract void appendClassXstatMsg(StringBuilder out);
+    public abstract void putOnClassFeatures(Item item);
 
 /****** static ******/
     public static ArenaUser create(Integer userId, String userClassId){
@@ -104,12 +105,14 @@ public abstract class ArenaUser {
             throw new RuntimeException("No such user in database: " + userId);
         }
         db.dropItems(userId);
+        //todo drop spells/skills
         db.dropUser(userId);
     }
     public static void setNewUser(int userId, String name, String userClass, String race) {
         ArenaUser arenaUser = ArenaUser.create(userId,userClass);
         arenaUser.name = name;
         arenaUser.userClass = userClass;
+        db.addUser(userId,name,userClass);
         arenaUser.race = race;
         arenaUser.nativeStr = db.getIntFrom(Config.CLASSES, userClass, "str_start") +
                 db.getIntFrom(Config.RACES, race, "str_bonus");
@@ -127,8 +130,8 @@ public abstract class ArenaUser {
         arenaUser.curWis = arenaUser.nativeWis;
         arenaUser.curInt = arenaUser.nativeInt;
         arenaUser.curCon = arenaUser.nativeCon;
-        arenaUser.maxHitPoints = roundDouble(1.3333333 * (arenaUser.curCon
-                + db.getIntFrom(Config.CLASSES, userClass, "hp_bonus")));
+        arenaUser.maxHitPoints = roundDouble(1.3333333 * arenaUser.curCon
+                + db.getIntFrom(Config.CLASSES, userClass, "hp_bonus"));
         arenaUser.curHitPoints = arenaUser.maxHitPoints;
         arenaUser.money = db.getIntFrom(Config.CLASSES, userClass, "money_start");
         arenaUser.level = 1;
@@ -138,10 +141,10 @@ public abstract class ArenaUser {
         arenaUser.protect = roundDouble(0.4 * arenaUser.curDex + 0.6 * arenaUser.curCon);
         arenaUser.heal = roundDouble(0.06 * arenaUser.curWis + 0.04 * arenaUser.curInt);
         arenaUser.magicProtect = roundDouble(0.6 * arenaUser.curWis + 0.4 * arenaUser.curInt);
-        db.setItem(userId, "waa");
+        arenaUser.setClassFeatures();
+        db.addItem(userId, "waa");
         Item.putOn(arenaUser, 1);
         db.setUser(arenaUser);
-        arenaUser.setClassFeatures();
     }
 
     public static double roundDouble(double d) {
@@ -159,6 +162,7 @@ public abstract class ArenaUser {
         arenaUser.getClassFeatures();
         return arenaUser;
     }
+    //todo save user to db public static void setUser(Integer userId){common + abstract}
     public static List<ArenaUser> getUsers(List<Integer> usersId){
         List<ArenaUser> users = new ArrayList<>();
         int count = usersId.size();
@@ -554,6 +558,5 @@ public abstract class ArenaUser {
     public String getTeam() {
         return team;
     }
-
 
 }

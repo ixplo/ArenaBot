@@ -2,6 +2,7 @@ package arenabot.users.Classes;
 
 import arenabot.Config;
 import arenabot.users.ArenaUser;
+import arenabot.users.Inventory.Item;
 import arenabot.users.Spells.Spell;
 
 import java.util.ArrayList;
@@ -42,13 +43,20 @@ public class Mage extends ArenaUser implements SpellCaster {
     }
 
     @Override
-    public void appendXstatMsg(StringBuilder out) {
-        out.append(fillWithSpaces("<code>Мана:", getCurMana() + "</code>\n", Config.WIDTH));
-        out.append(fillWithSpaces("<code>Очки магии:", getSpellPoints() + "</code>\n", Config.WIDTH));
+    public void appendClassXstatMsg(StringBuilder out) {
+        out.append(fillWithSpaces("\n<code>Мана:", getCurMana() + "</code>", Config.WIDTH));
+        out.append(fillWithSpaces("\n<code>Очки магии:", getSpellPoints() + "</code>\n", Config.WIDTH));
+    }
+
+    @Override
+    public void putOnClassFeatures(Item item) {
+        setMaxMana(getMaxMana() + item.getWisBonus() * 1.5);
+        if (getStatus() != 2) setCurMana(getMaxMana()); // not in battle
+        setMagicAttack(getMagicAttack() + roundDouble(0.6 * item.getWisBonus() + 0.4 * item.getIntBonus()));
     }
 
     private void setSpell(String spellId, int spellGrade) {
-        db.setSpell(getUserId(),spellId,spellGrade);
+        db.addSpell(getUserId(),spellId,spellGrade);
     }
 
     static int countReceivedSpellPoints(int curExp, int exp){

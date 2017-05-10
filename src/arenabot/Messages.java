@@ -2,7 +2,6 @@ package arenabot;
 
 import arenabot.battle.*;
 import arenabot.users.ArenaUser;
-import arenabot.users.Classes.Archer;
 import arenabot.users.Inventory.Item;
 import org.telegram.telegrambots.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.api.methods.AnswerInlineQuery;
@@ -122,7 +121,7 @@ public class Messages {
         out.append(fillWithSpaces("<code>Защита:", arenaUser.getProtect() + "</code>\n", Config.WIDTH));
         out.append(fillWithSpaces("<code>Лечение:", arenaUser.getHeal() + "</code>\n", Config.WIDTH));
         out.append(fillWithSpaces("<code>Защ. от магии:", arenaUser.getMagicProtect() + "</code>", Config.WIDTH));
-        arenaUser.appendXstatMsg(out);
+        arenaUser.appendClassXstatMsg(out);
         SendMessage msg = new SendMessage();
         msg.setChatId(chatId);
         msg.enableHtml(true);
