@@ -78,8 +78,8 @@ public class Mage extends ArenaUser implements SpellCaster {
         String message = "";
         Spell spell = getSpell(castId);
         Random rnd = new Random();
-        int chance = rnd.nextInt(100);
-        if(chance>(int)(spell.getProbability() * (Math.log(getMagicAttack()/target.getMagicProtect() + 4.6)/7) * percent / 100)){
+        int chance = rnd.nextInt(99) + 1;
+        if(chance>(int)(spell.getProbability() * percent / 100)){//(Math.log(getMagicAttack()/target.getMagicProtect() + 4.6)/7)
             return message = "<code>" + getName() + " пытался создать заклинание [" + spell.getName() + "] на " +
                     target.getName() + ", но заклинание провалилось.</code>";
         }

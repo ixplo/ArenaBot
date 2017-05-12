@@ -15,7 +15,7 @@ public class Attack extends Action {
     Attack(int userId, int targetId, int percent) {
         super(userId, targetId, percent);
         hit = roundDouble(randomDouble(user.getMinHit(), user.getMaxHit()) * percent / 100);
-        experience = (int) (9 * hit * percent/100);
+        experience = (int) (9 * hit);
     }
 
     @Override

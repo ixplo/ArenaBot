@@ -19,7 +19,7 @@ public class Heal extends Action {
         if (target.getCurHitPoints() + heal > target.getMaxHitPoints()) {
             heal = roundDouble(target.getMaxHitPoints() - target.getCurHitPoints());
         }
-        experience = (int) (20 * heal * getPercent() / 100);
+        experience = (int) (20 * heal);
         target.addCurHitPoints(heal);
         user.addCurExp(experience);
         message = "<pre>" + user.getName() + " вылечил " + target.getName() +
