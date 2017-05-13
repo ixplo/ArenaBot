@@ -46,7 +46,7 @@ public class Battle extends Thread {//состоит из Rounds, в конце 
             round.startRound();
         }
         BattleResult battleResult = new BattleResult();
-        battleResult.printResults(curMembersId, curTeamsId, members, teams);//todo может все делать в конструкторе?
+        battleResult.resultBattle(curMembersId, curTeamsId, members, teams);//todo может все делать в конструкторе?
     }
 
     private boolean isAlone() {

@@ -623,4 +623,5 @@ public abstract class ArenaUser {
         return team;
     }
 
+    public abstract void endBattle();
 }

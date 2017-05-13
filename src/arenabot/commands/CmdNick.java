@@ -31,6 +31,10 @@ public class CmdNick extends BotCommand {
         if (!chat.isUserChat()) {
             return;
         }
+        if(ArenaUser.getStatus(user.getId())!=0){
+            Messages.sendMessage(absSender, chat.getId(),"Можно сменить, если вы не зарегистрированы в бой");
+            return;
+        }
         if (strings.length == 0) {
             Messages.sendMessage(absSender, chat.getId(),"Формат: /nick НовыйНик");
             return;

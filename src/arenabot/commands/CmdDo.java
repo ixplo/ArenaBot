@@ -91,7 +91,7 @@ public class CmdDo extends BotCommand {
         }
         if (target > Round.getCurMembersId().size()) {
             msg.setText("Цель по номером " + Integer.parseInt(strings[1]) +
-                    " не найдена. Всего есть " + Round.getCurMembersId().size() + " целей.");
+                    " не найдена. Всего есть целей: " + Round.getCurMembersId().size());
             try {
                 absSender.sendMessage(msg);
             } catch (TelegramApiException e) {

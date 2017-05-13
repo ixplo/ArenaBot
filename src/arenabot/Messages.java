@@ -60,7 +60,7 @@ public class Messages {
         for (int i = 0; i < size; i++) {
             int count = i + 1;
             out.append(count);
-            if (Item.isItemInSlot(count,userId)) {
+            if (Item.isItemInSlot(count, userId)) {
                 out.append(".<b>").append(items.get(i).getName()).append("</b>, ");
             } else {
                 out.append(".").append(items.get(i).getName()).append(", ");
@@ -70,9 +70,9 @@ public class Messages {
         if (arenaUser.getCurWeapon() == 0) {
             out.append("без оружия</b>");
         } else {
-            out.append(Item.getItem(Item.getItemId(arenaUser.getUserId(),arenaUser.getCurWeapon())).getName());
+            out.append(Item.getItem(Item.getItemId(arenaUser.getUserId(), arenaUser.getCurWeapon())).getName());
             out.append("</b>(");
-            out.append(Item.getItem(Item.getItemId(arenaUser.getUserId(),arenaUser.getCurWeapon())).getPrice());
+            out.append(Item.getItem(Item.getItemId(arenaUser.getUserId(), arenaUser.getCurWeapon())).getPrice());
             out.append(")");
         }
         SendMessage msg = new SendMessage();
@@ -91,9 +91,9 @@ public class Messages {
         out.append(arenaUser.getRaceName()).append("\n");
         out.append("Победы: ").append(arenaUser.getUserWins()).append(" Игры: ").append(arenaUser.getUserGames()).append("\n");
         String stringDate;
-        if(arenaUser.getLastGame() == 0){
+        if (arenaUser.getLastGame() == 0) {
             stringDate = "еще нет";
-        }else{
+        } else {
             stringDate = new SimpleDateFormat().format(new Date(arenaUser.getLastGame()));
         }
         out.append("Был в бою: ").append(stringDate).append("\n\n");
@@ -153,24 +153,16 @@ public class Messages {
         SendMessage msg = new SendMessage();
         msg.setChatId(chatId);
         msg.enableHtml(true);
-        StringBuilder msgText = new StringBuilder();
         int membersCount = ArenaBot.registration.getMembersCount();
+        if(!Registration.isOn){
+            msg.setText("Бой уже идет");
+            return msg;
+        }
         if (membersCount == 0) {
             msg.setText("Еще никто не зарегистрировался");
             return msg;
         }
-        int teamsCount = ArenaBot.registration.getTeamsCount();
-        msgText.append("Команды: ");
-        List<String> teams = ArenaBot.registration.getTeamsName();
-        for (int i = 0; i < teamsCount; i++) {
-            msgText.append(i + 1).append(".[").append(teams.get(i)).append("] ");
-            List<String> teamMembers = Team.getTeam(teams.get(i)).getRegisteredMembersName();
-            int teamMembersCount = teamMembers.size();
-            for (int j = 0; j < teamMembersCount; j++) {
-                msgText.append(teamMembers.get(j)).append(", ");
-            }
-        }
-        msg.setText(msgText.toString());
+        msg.setText(ArenaBot.registration.getList());
         return msg;
     }
 
@@ -319,7 +311,7 @@ public class Messages {
             }
             return;
         }
-        Item item = Item.getItem(Item.getItemId(arenaUser.getUserId(),eqipIndex));
+        Item item = Item.getItem(Item.getItemId(arenaUser.getUserId(), eqipIndex));
         StringBuilder out = new StringBuilder();
         out.append("Вещь: <b>").append(item.getName()).append("</b> \nЦена [").append(item.getPrice());
         out.append("]\n\n").append(item.getDescr()).append("\n\n");
@@ -365,7 +357,7 @@ public class Messages {
             out.append(fillWithSpaces("<code>Только для расы:", item.getRace() + "</code>\n", Config.WIDTH));
         }
         out.append(fillWithSpaces("<code>Слот:", Item.getSlotName(item.getSlot()) + "</code>\n", Config.WIDTH));
-        String isInSlot = Item.isItemInSlot(eqipIndex,userId) ? "Надето" : "Не надето";
+        String isInSlot = Item.isItemInSlot(eqipIndex, userId) ? "Надето" : "Не надето";
         out.append(fillWithSpaces("<code>Состояние:",
                 isInSlot + "</code>\n", Config.WIDTH));
         msg.setText(out.toString());
@@ -401,7 +393,6 @@ public class Messages {
     }
 
 
-
     public static void sendDropMsg(AbsSender absSender, Chat chat) {
         try {
             absSender.sendMessage(getInlineKeyboardMsg(chat.getId(),
@@ -421,6 +412,40 @@ public class Messages {
         ArenaBot arenaBot = new ArenaBot();
         try {
             arenaBot.sendMessage(msg);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+    }
+    public static int sendChannelMsgReturnId(Long chatId, String msgText) {
+        int id=0;
+        SendMessage msg = new SendMessage();
+        msg.setChatId(chatId);
+        msg.enableHtml(true);
+        msg.setText(msgText);
+        ArenaBot arenaBot = new ArenaBot();
+        try {
+            id = arenaBot.sendMessage(msg).getMessageId();
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+        return id;
+    }
+
+    public static void editChannelMsg(long chatId, int msgId, String msgText) {
+//        SendMessage msg = new SendMessage();
+//        msg.setChatId(chatId);
+//        msg.enableHtml(true);
+//        msg.setText(msgText);
+//        EditMessageReplyMarkup edit = new EditMessageReplyMarkup();
+//        edit.setChatId(chatId);
+//        edit.setMessageId(msgId);
+        EditMessageText editText = new EditMessageText();
+        editText.setChatId(chatId);
+        editText.setMessageId(msgId);
+        editText.setText(msgText);
+        ArenaBot arenaBot = new ArenaBot();
+        try {
+            arenaBot.editMessageText(editText);
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
@@ -591,7 +616,7 @@ public class Messages {
                 .append(ArenaUser.getUser(user.getId()).getRaceName()).append(" уровень:")
                 .append(ArenaUser.getUser(user.getId()).getLevel()).append(")")
                 .append(" вошел в команду ").append(ArenaBot.registration.getMemberTeam(user.getId()));
-        sendToAllMembers(ArenaBot.registration.getMembers(),messageText.toString());
+        sendToAllMembers(ArenaBot.registration.getMembers(), messageText.toString());
     }
 
     public static void sendMessage(AbsSender absSender, Long chatId, String messageText) {
@@ -601,6 +626,19 @@ public class Messages {
         try {
             msg.setChatId(chatId);
             absSender.sendMessage(msg);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void sendMessage(Long chatId, String messageText) {
+        SendMessage msg = new SendMessage();
+        msg.enableHtml(true);
+        msg.setText(messageText);
+        ArenaBot arenaBot = new ArenaBot();
+        try {
+            msg.setChatId(chatId);
+            arenaBot.sendMessage(msg);
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }

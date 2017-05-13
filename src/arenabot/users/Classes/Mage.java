@@ -1,6 +1,7 @@
 package arenabot.users.Classes;
 
 import arenabot.Config;
+import arenabot.Messages;
 import arenabot.users.ArenaUser;
 import arenabot.users.Inventory.Item;
 import arenabot.users.Spells.Spell;
@@ -99,6 +100,16 @@ public class Mage extends ArenaUser implements SpellCaster {
         return message;
     }
 
+    @Override
+    public void endBattle() {
+        setCurMana(getMaxMana());
+        int newSpellPoints = countReceivedSpellPoints(getCurExp(),getExperience());
+        if (newSpellPoints>0){
+            addSpellPoints(newSpellPoints);
+            Messages.sendMessage((long)getUserId(),"Вы получили магические бонусы: " + newSpellPoints);
+        }
+    }
+
     private void setSpell(String spellId, int spellGrade) {
         db.addSpell(getUserId(), spellId, spellGrade);
     }
@@ -127,8 +138,8 @@ public class Mage extends ArenaUser implements SpellCaster {
         db.setDoubleTo(Config.USERS, getUserId(), "mana", maxMana);
     }
 
-    public void setSpellPoints(int spellPoints) {
-        this.spellPoints = spellPoints;
+    public void addSpellPoints(int spellPoints) {
+        this.spellPoints += spellPoints;
         db.setIntTo(Config.USERS, getUserId(), "s_points", spellPoints);
     }
 
@@ -148,10 +159,12 @@ public class Mage extends ArenaUser implements SpellCaster {
     }
 
     public double getMaxMana() {
+        maxMana = db.getDoubleFrom(Config.USERS, getUserId(), "mana");
         return maxMana;
     }
 
     public int getSpellPoints() {
+        spellPoints = db.getIntFrom(Config.USERS,getUserId(),"s_points");
         return spellPoints;
     }
 

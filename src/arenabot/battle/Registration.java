@@ -14,8 +14,9 @@ import java.util.List;
  */
 public class Registration {
     public static boolean isOn;
-    List<Member> members;
-    List<Team> teams;
+    private Timer regTimer;
+    private List<Member> members;
+    private List<Team> teams;
 
     static DatabaseManager db;
 
@@ -29,7 +30,7 @@ public class Registration {
         teams = new ArrayList<>();
     }
 
-    public static void dropStatus(){
+    public static void dropStatus() {
         db.dropStatus();
     }
 
@@ -58,14 +59,20 @@ public class Registration {
         }
         Member.addMember(userId, teamId);
         if (getTeamsCount() > 1) {
-            Timer timer = new Timer();
-            RegTimer regTimer = new RegTimer(this, Config.DELAY);
-            timer.schedule(regTimer, Config.DELAY);
+            if (regTimer != null) {
+                regTimer.cancel();
+            }
+            regTimer = new Timer();
+            RegTimerTask regTimerTask = new RegTimerTask(this, regTimer, Config.DELAY);
+            regTimer.schedule(regTimerTask, 0, 1000);
         }
     }
 
     public void unregMember(Integer id) {
         Member.removeMember(id);
+        if (regTimer != null) {
+            regTimer.cancel();
+        }
     }
 
     private String regIfTeamRegistered(Integer userId) {
@@ -105,6 +112,22 @@ public class Registration {
             members.add(getMember(membersId.get(i)));
         }
         return members;
+    }
+
+    public String getList(){
+        StringBuilder msgText = new StringBuilder();
+        int teamsCount = getTeamsCount();
+        msgText.append("Команды:");
+        List<String> teams = getTeamsName();
+        for (int i = 0; i < teamsCount; i++) {
+            msgText.append("\n").append(i + 1).append(".[").append(teams.get(i)).append("] ");
+            List<String> teamMembers = Team.getTeam(teams.get(i)).getRegisteredMembersName();
+            int teamMembersCount = teamMembers.size();
+            for (int j = 0; j < teamMembersCount; j++) {
+                msgText.append(teamMembers.get(j)).append(", ");
+            }
+        }
+        return msgText.toString();
     }
 
     private List<Integer> getMembersId() {

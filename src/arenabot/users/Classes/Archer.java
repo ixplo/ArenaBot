@@ -104,6 +104,11 @@ public class Archer extends ArenaUser implements SkillApplicant {
         db.setDoubleTo(Config.USERS, getUserId(), "attack", attack);
     }
 
+    @Override
+    public void endBattle() {
+
+    }
+
     public void setMaxTarget(int maxTarget) {
         this.maxTarget = maxTarget;
         db.setIntTo(Config.USERS, getUserId(), "max_target", maxTarget);

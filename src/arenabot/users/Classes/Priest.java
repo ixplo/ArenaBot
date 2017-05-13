@@ -1,6 +1,7 @@
 package arenabot.users.Classes;
 
 import arenabot.Config;
+import arenabot.Messages;
 import arenabot.users.ArenaUser;
 import arenabot.users.Inventory.Item;
 import arenabot.users.Spells.Spell;
@@ -13,7 +14,7 @@ import static arenabot.Messages.fillWithSpaces;
  * ixplo
  * 28.04.2017.
  */
-public class Priest extends ArenaUser implements SpellCaster{
+public class Priest extends ArenaUser implements SpellCaster {
     ArrayList<Spell> spells;
 
     private double maxMana;
@@ -36,10 +37,10 @@ public class Priest extends ArenaUser implements SpellCaster{
 
     @Override
     public void getClassFeatures() {
-        maxMana = db.getDoubleFrom(Config.USERS,getUserId(),"mana");
-        spellPoints = db.getIntFrom(Config.USERS,getUserId(),"s_points");
-        magicAttack = db.getDoubleFrom(Config.USERS,getUserId(),"m_attack");
-        curMana = db.getDoubleFrom(Config.USERS,getUserId(),"cur_mana");
+        maxMana = db.getDoubleFrom(Config.USERS, getUserId(), "mana");
+        spellPoints = db.getIntFrom(Config.USERS, getUserId(), "s_points");
+        magicAttack = db.getDoubleFrom(Config.USERS, getUserId(), "m_attack");
+        curMana = db.getDoubleFrom(Config.USERS, getUserId(), "cur_mana");
     }
 
     @Override
@@ -77,6 +78,16 @@ public class Priest extends ArenaUser implements SpellCaster{
     }
 
     @Override
+    public void endBattle() {
+        setCurMana(getMaxMana());
+        int newSpellPoints = countReceivedSpellPoints(getCurExp(),getExperience());
+        if (newSpellPoints>0){
+            addSpellPoints(newSpellPoints);
+            Messages.sendMessage((long)getUserId(),"Вы получили магические бонусы: " + newSpellPoints);
+        }
+    }
+
+    @Override
     public void castSpell(String spellId) {
 
     }
@@ -91,23 +102,36 @@ public class Priest extends ArenaUser implements SpellCaster{
 
     }
 
+    static int countReceivedSpellPoints(int curExp, int exp) {
+        return (exp + curExp) / 120 - exp / 120;//not equals curExp/120 because int cuts fraction
+    }
+
     public void setMaxMana(double maxMana) {
         this.maxMana = maxMana;
     }
 
-    public void setSpellPoints(int spellPoints) {
-        this.spellPoints = spellPoints;
+    public void addSpellPoints(int spellPoints) {
+        this.spellPoints += spellPoints;
+        db.setIntTo(Config.USERS, getUserId(), "s_points", spellPoints);
     }
 
     public void setMagicAttack(double magicAttack) {
         this.magicAttack = magicAttack;
+        this.magicAttack = magicAttack;
+        db.setDoubleTo(Config.USERS, getUserId(), "m_attack", magicAttack);
     }
 
     public void setCurMana(double curMana) {
         this.curMana = curMana;
+        db.setDoubleTo(Config.USERS, getUserId(), "cur_mana", curMana);
+    }
+    public void addCurMana(double curMana) {
+        this.curMana += curMana;
+        db.setDoubleTo(Config.USERS, getUserId(), "cur_mana", curMana);
     }
 
     public double getMaxMana() {
+        maxMana = db.getDoubleFrom(Config.USERS, getUserId(), "max_mana");
         return maxMana;
     }
 
