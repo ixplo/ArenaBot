@@ -48,7 +48,7 @@ public class Mage extends ArenaUser implements SpellCaster {
     @Override
     public void appendClassXstatMsg(StringBuilder out) {
         out.append(fillWithSpaces("\n<code>Мана:", getCurMana() + "</code>", Config.WIDTH));
-        out.append(fillWithSpaces("\n<code>Очки магии:", getSpellPoints() + "</code>\n", Config.WIDTH));
+        out.append(fillWithSpaces("\n<code>Магич. бонусы:", getSpellPoints() + "</code>\n", Config.WIDTH));
     }
 
     @Override

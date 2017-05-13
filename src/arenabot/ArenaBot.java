@@ -19,7 +19,7 @@ import org.telegram.telegrambots.logging.BotLogger;
 public class ArenaBot extends TelegramLongPollingCommandBot {
 
     private static final String LOGTAG = "ARENABOT";
-    public static Registration registration;
+    public static volatile Registration registration;
 
     ArenaBot() {
 

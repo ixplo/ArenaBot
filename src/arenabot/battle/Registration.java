@@ -1,5 +1,6 @@
 package arenabot.battle;
 
+import arenabot.Messages;
 import arenabot.users.ArenaUser;
 import arenabot.Config;
 import arenabot.database.DatabaseManager;
@@ -14,7 +15,8 @@ import java.util.List;
  */
 public class Registration {
     public static boolean isOn;
-    private Timer regTimer;
+    private static Timer regTimer;
+    private static RegTimerTask regTimerTask;
     private List<Member> members;
     private List<Team> teams;
 
@@ -63,7 +65,7 @@ public class Registration {
                 regTimer.cancel();
             }
             regTimer = new Timer();
-            RegTimerTask regTimerTask = new RegTimerTask(this, regTimer, Config.DELAY);
+            regTimerTask = new RegTimerTask(this, regTimer, Config.DELAY);
             regTimer.schedule(regTimerTask, 0, 1000);
         }
     }
@@ -71,6 +73,7 @@ public class Registration {
     public void unregMember(Integer id) {
         Member.removeMember(id);
         if (regTimer != null) {
+            Messages.editChannelMsg(Config.CHANNEL_ID,regTimerTask.getMessageId(),"Таймер остановлен");
             regTimer.cancel();
         }
     }

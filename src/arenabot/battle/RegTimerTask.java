@@ -27,7 +27,7 @@ public class RegTimerTask extends TimerTask {
     @Override
     public void run() {
         long passedTime = System.currentTimeMillis() - startTime;
-        if (passedTime == 0) {
+        if (passedTime < 1000) {
             messageId = Messages.sendChannelMsgReturnId(Config.CHANNEL_ID, registration.getList() +
                     "\nДо начала боя осталось: " + leftToReg + " сек");
             return;
@@ -43,5 +43,9 @@ public class RegTimerTask extends TimerTask {
 
     public void setLeftToReg(int leftToReg) {
         this.leftToReg = leftToReg;
+    }
+
+    public int getMessageId() {
+        return messageId;
     }
 }
