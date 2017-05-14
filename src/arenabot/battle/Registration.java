@@ -57,7 +57,7 @@ public class Registration {
         if (Team.isRegisteredTeam(ArenaUser.getUserTeam(userId))) {
             teamId = regIfTeamRegistered(userId);
         } else {
-            teamId = nextUnregistered();
+            teamId = addNextUnregistered();
         }
         Member.addMember(userId, teamId);
         if (getTeamsCount() > 1) {
@@ -70,10 +70,14 @@ public class Registration {
         }
     }
 
-    public void unregMember(Integer id) {
-        Member.removeMember(id);
+    public void unregMember(Integer userId) {
+        Member.removeMember(userId);
+        if (!Team.isRegisteredTeam(ArenaUser.getUserTeam(userId))) {
+            ArenaUser.getUser(userId).setTeam("");
+        }
+        //todo remove empty team
         if (regTimer != null) {
-            Messages.editChannelMsg(Config.CHANNEL_ID,regTimerTask.getMessageId(),"Таймер остановлен");
+            Messages.editChannelMsg(Config.CHANNEL_ID, regTimerTask.getMessageId(), "Таймер остановлен");
             regTimer.cancel();
         }
     }
@@ -85,14 +89,22 @@ public class Registration {
         return ArenaUser.getUserTeam(userId);
     }
 
-    private String nextUnregistered() {
-        String nextId = "ком." + (getTeamsCount() + 1);
+    private String addNextUnregistered() {
+        String nextId;
+        int i = 0;
+        do {
+            nextId = "ком." + (getTeamsCount() + ++i);
+        } while (getTeamsName().contains(nextId));
         Team.addTeam(nextId);
         return nextId;
     }
 
     public int getTeamsCount() {
         return db.getCountDistinct(Config.USERS, "team", "status", Config.REG);
+    }
+
+    public List<String> getTeamsName() {
+        return db.getStrings(Config.USERS, "status", Config.REG, "team");
     }
 
     public int getMembersCount() {
@@ -117,7 +129,7 @@ public class Registration {
         return members;
     }
 
-    public String getList(){
+    public String getList() {
         StringBuilder msgText = new StringBuilder();
         int teamsCount = getTeamsCount();
         msgText.append("Команды:");
@@ -127,14 +139,15 @@ public class Registration {
             List<String> teamMembers = Team.getTeam(teams.get(i)).getRegisteredMembersName();
             int teamMembersCount = teamMembers.size();
             for (int j = 0; j < teamMembersCount; j++) {
-                msgText.append(teamMembers.get(j)).append(", ");
+                msgText.append(j == 0 ? "" : ", ")
+                        .append(teamMembers.get(j));
             }
         }
         return msgText.toString();
     }
 
     private List<Integer> getMembersId() {
-        return db.getInts(Config.USERS, "status", 1, "id");
+        return db.getInts(Config.USERS, "status", Config.REG, "id");
     }
 
     public Member getLastMember() {
@@ -147,11 +160,7 @@ public class Registration {
     }
 
     public List<String> getMembersName() {
-        return db.getStrings(Config.USERS, "status", 1, "name");
-    }
-
-    public List<String> getTeamsName() {
-        return db.getStrings(Config.USERS, "status", 1, "team");
+        return db.getStrings(Config.USERS, "status", Config.REG, "name");
     }
 
     public Team getTeam(String id) {

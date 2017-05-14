@@ -19,7 +19,7 @@ import org.telegram.telegrambots.logging.BotLogger;
 public class ArenaBot extends TelegramLongPollingCommandBot {
 
     private static final String LOGTAG = "ARENABOT";
-    public static volatile Registration registration;
+    public static Registration registration;
 
     ArenaBot() {
 
@@ -125,6 +125,9 @@ public class ArenaBot extends TelegramLongPollingCommandBot {
                     Messages.sendAfterDelete(callbackQuery);
                     break;
                 }
+            case "target":
+                Messages.sendAskActionId(callbackQuery,Integer.parseInt(callbackEntry));
+                break;
             default: {
                 throw new RuntimeException("Unknown callbackQuery: " + callbackQuery.getData());
             }

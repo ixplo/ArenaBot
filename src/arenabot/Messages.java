@@ -455,6 +455,8 @@ public class Messages {
         SendMessage msg = new SendMessage();
         StringBuilder msgText = new StringBuilder();
         List<Integer> membersId = new ArrayList<>();
+        List<String> buttonsName = new ArrayList<>();
+        List<String> callbackDatas = new ArrayList<>();
         msgText.append("Список: ");
         int count = 0;
         for (Team team : teams) {
@@ -463,6 +465,8 @@ public class Messages {
                 msgText.append(++count).append(" ");
                 msgText.append(user.getName()).append(" ");
                 membersId.add(user.getUserId());
+                buttonsName.add(user.getName());
+                callbackDatas.add("target_" + user.getUserId());
             }
             msgText.append("]");
         }
@@ -473,6 +477,7 @@ public class Messages {
             for (Integer id : membersId) {
                 msg.setChatId((long) id);
                 arenaBot.sendMessage(msg);
+                arenaBot.sendMessage(getInlineKeyboardMsg((long)id,"Выберите цель:",buttonsName,callbackDatas));
             }
         } catch (TelegramApiException e) {
             e.printStackTrace();
@@ -691,5 +696,22 @@ public class Messages {
         answer.setChatId(chatId);
         answer.setText(messageBuilder.toString());
         return answer;
+    }
+
+    public static void sendAskActionId(CallbackQuery callbackQuery, int targetId) {
+        String queryId = callbackQuery.getId();
+        Long chatId = callbackQuery.getMessage().getChatId();
+        int userId = callbackQuery.getFrom().getId();
+        AnswerCallbackQuery query = new AnswerCallbackQuery();
+        query.setText("Вы выбрали цель: " + ArenaUser.getUserName(targetId));
+        query.setCallbackQueryId(queryId);
+        ArenaBot arenaBot = new ArenaBot();
+        try {
+            arenaBot.sendMessage(Messages.getInlineKeyboardMsg(chatId,"Выберите действие:",
+                    ArenaUser.getUser(userId).getActionsName(), ArenaUser.getUser(userId).getActionsId()));
+            arenaBot.answerCallbackQuery(query);
+        } catch (TelegramApiException e) {
+            BotLogger.error(LOGTAG, e);
+        }
     }
 }

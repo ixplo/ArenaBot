@@ -6,6 +6,8 @@ import arenabot.users.Inventory.Item;
 import arenabot.users.Spells.Skill;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import static arenabot.Messages.fillWithSpaces;
 
@@ -15,6 +17,7 @@ import static arenabot.Messages.fillWithSpaces;
  * 28.04.2017.
  */
 public class Archer extends ArenaUser implements SkillApplicant {
+    public static final List<String> actionsName = Arrays.asList("Атака","Защита","Лечение");
     ArrayList<Skill> skills;
     private int maxTarget;
     int energy;
@@ -105,7 +108,7 @@ public class Archer extends ArenaUser implements SkillApplicant {
     }
 
     @Override
-    public void endBattle() {
+    public void endBattleClassFeatures() {
 
     }
 

@@ -1,5 +1,8 @@
 package arenabot;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * ixplo
  * 25.04.2017.
@@ -31,10 +34,11 @@ public class Config {
     static final int BOT_PHOTO_WIDTH = 280;
     static final int BOT_PHOTO_HEIGHT = 178;
     static final boolean DO_NOT_COMMAND_UPDATE = false;
-    public static final int WIDTH = 28;
+    public static final int WIDTH = 27;
     public static final int UNREG=0;
     public static final int REG=1;
     public static final int IN_BATTLE=2;
     public static final int DELAY = 15;
     public static final int ROUND_DELAY = 1;
+
 }

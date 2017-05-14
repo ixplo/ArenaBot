@@ -7,6 +7,8 @@ import arenabot.users.Inventory.Item;
 import arenabot.users.Spells.Spell;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 import static arenabot.Messages.fillWithSpaces;
@@ -31,6 +33,7 @@ public class Mage extends ArenaUser implements SpellCaster {
 
     @Override
     public void setClassFeatures() {
+        actionsName = Arrays.asList("Атака","Защита","Лечение", "Магия");
         setMaxMana(1.5 * getCurWis());
         setCurMana(maxMana);
         setMagicAttack(roundDouble(0.6 * getCurWis() + 0.4 * getCurInt()));
@@ -101,7 +104,7 @@ public class Mage extends ArenaUser implements SpellCaster {
     }
 
     @Override
-    public void endBattle() {
+    public void endBattleClassFeatures() {
         setCurMana(getMaxMana());
         int newSpellPoints = countReceivedSpellPoints(getCurExp(),getExperience());
         if (newSpellPoints>0){

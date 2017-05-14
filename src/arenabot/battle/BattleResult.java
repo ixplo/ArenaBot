@@ -29,7 +29,7 @@ public class BattleResult {
         for (int i = 0; i < count; i++) {
             ArenaUser user = members.get(i);
             user.setStatus(Config.UNREG);
-            user.endBattle();
+            user.endBattleClassFeatures();
             user.setCurHitPoints(user.getMaxHitPoints());
             user.addExperience(user.getCurExp());
             user.addCurExp(-user.getCurExp());

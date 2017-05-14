@@ -50,7 +50,7 @@ public class Warrior extends ArenaUser implements SkillApplicant{
     }
 
     @Override
-    public void endBattle() {
+    public void endBattleClassFeatures() {
 
     }
 

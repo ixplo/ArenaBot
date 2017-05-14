@@ -26,6 +26,7 @@ public class RegTimerTask extends TimerTask {
 
     @Override
     public void run() {
+        System.out.println(Thread.currentThread().getName());
         long passedTime = System.currentTimeMillis() - startTime;
         if (passedTime < 1000) {
             messageId = Messages.sendChannelMsgReturnId(Config.CHANNEL_ID, registration.getList() +

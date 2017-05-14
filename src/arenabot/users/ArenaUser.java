@@ -9,6 +9,7 @@ import arenabot.users.Classes.Warrior;
 import arenabot.users.Inventory.Item;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static com.google.common.math.IntMath.pow;
@@ -19,6 +20,7 @@ import static com.google.common.math.IntMath.pow;
  */
 public abstract class ArenaUser {
     public static DatabaseManager db;
+    public List<String> actionsName = Arrays.asList("Атака","Защита","Лечение");
     private int userId;
     private String name;
     private String userTitle;
@@ -59,6 +61,7 @@ public abstract class ArenaUser {
     private int status;
 
 
+
     /****** constructor ******/
     public ArenaUser(int userId) {
         this.userId = userId;
@@ -76,6 +79,8 @@ public abstract class ArenaUser {
     public abstract void addHarkClassFeatures(String harkToUpId, int numberOfPoints);
 
     public abstract String doCast(ArenaUser target, int percent, String castId);
+
+    public abstract void endBattleClassFeatures();
 
     /****** static ******/
     public static ArenaUser create(Integer userId, String userClassId) {
@@ -322,6 +327,7 @@ public abstract class ArenaUser {
 
     public void setTeam(String team) {
         this.team = team;
+        db.setStringTo(Config.USERS, userId, "team", team);
     }
 
     public void setTeamRank(String teamRank) {
@@ -623,5 +629,15 @@ public abstract class ArenaUser {
         return team;
     }
 
-    public abstract void endBattle();
+    public List<String> getActionsName() {
+        return actionsName;
+    }
+
+    public List<String> getActionsId() {
+        List<String> actionsId = new ArrayList<>();
+        for (String actionId:actionsName) {
+            actionsId.add("action_" + actionId);
+        }
+        return actionsId;
+    }
 }

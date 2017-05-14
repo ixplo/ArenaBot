@@ -134,8 +134,8 @@ public class Team {
         return Registration.db.setTeam(this);
     }
 
-    public static boolean isRegisteredTeam(String id) {
-        return Registration.db.getIntFrom(Config.TEAMS, id, "registered") > 0;
+    public static boolean isRegisteredTeam(String teamId) {
+        return Registration.db.getIntFrom(Config.TEAMS, teamId, "registered") > 0;
     }
 
     public List<String> getRegisteredMembersName() {//работает только для регистрации
