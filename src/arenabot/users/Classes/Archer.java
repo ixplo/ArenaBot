@@ -1,9 +1,16 @@
 package arenabot.users.Classes;
 
 import arenabot.Config;
+import arenabot.Messages;
+import arenabot.battle.Battle;
+import arenabot.battle.Round;
 import arenabot.users.ArenaUser;
 import arenabot.users.Inventory.Item;
 import arenabot.users.Spells.Skill;
+import org.telegram.telegrambots.api.methods.send.SendMessage;
+import org.telegram.telegrambots.api.objects.User;
+import org.telegram.telegrambots.bots.AbsSender;
+import org.telegram.telegrambots.exceptions.TelegramApiException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,7 +30,7 @@ public class Archer extends ArenaUser implements SkillApplicant {
     int energy;
 
     public Archer() {
-        setUserClass("l");
+        setUserClass("ARCHER");//todo is it necessary?
     }
 
     @Override
@@ -59,6 +66,11 @@ public class Archer extends ArenaUser implements SkillApplicant {
         if(harkToUpId.equals("nativeInt")){
             doIntBonus(numberOfPoints);
         }
+    }
+
+    @Override
+    public void doAction(String[] command) {
+
     }
 
     @Override

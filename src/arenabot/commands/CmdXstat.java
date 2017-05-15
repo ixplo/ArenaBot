@@ -8,10 +8,6 @@ import org.telegram.telegrambots.bots.AbsSender;
 import org.telegram.telegrambots.bots.commands.BotCommand;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
 
-/**
- * ixplo
- * 26.04.2017.
- */
 public class CmdXstat extends BotCommand{
     public static final String LOGTAG = "XSTATCOMMAND";
 

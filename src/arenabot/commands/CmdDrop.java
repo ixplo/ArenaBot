@@ -7,10 +7,6 @@ import org.telegram.telegrambots.api.objects.User;
 import org.telegram.telegrambots.bots.AbsSender;
 import org.telegram.telegrambots.bots.commands.BotCommand;
 
-/**
- * ixplo
- * 25.04.2017.
- */
 public class CmdDrop extends BotCommand {
 
     public static final String LOGTAG = "DROPCOMMAND";
@@ -21,6 +17,7 @@ public class CmdDrop extends BotCommand {
 
     @Override
     public void execute(AbsSender absSender, User user, Chat chat, String[] strings) {
+
         if (!chat.isUserChat()) {
             return;
         }

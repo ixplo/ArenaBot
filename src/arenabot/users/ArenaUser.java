@@ -1,12 +1,20 @@
 package arenabot.users;
 
 import arenabot.Config;
+import arenabot.Messages;
+import arenabot.battle.Battle;
+import arenabot.battle.Round;
 import arenabot.database.DatabaseManager;
 import arenabot.users.Classes.Archer;
 import arenabot.users.Classes.Mage;
 import arenabot.users.Classes.Priest;
 import arenabot.users.Classes.Warrior;
 import arenabot.users.Inventory.Item;
+import org.telegram.telegrambots.api.methods.send.SendMessage;
+import org.telegram.telegrambots.api.objects.Chat;
+import org.telegram.telegrambots.api.objects.User;
+import org.telegram.telegrambots.bots.AbsSender;
+import org.telegram.telegrambots.exceptions.TelegramApiException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,8 +28,10 @@ import static com.google.common.math.IntMath.pow;
  */
 public abstract class ArenaUser {
     public static DatabaseManager db;
+
     public enum UserClass {ARCHER, MAGE, PRIEST, WARRIOR}
-    public List<String> actionsName = Arrays.asList("Атака","Защита","Лечение");
+
+    public List<String> actionsName = Arrays.asList("Атака", "Защита", "Лечение");
     private int userId;
     private String name;
     private String userTitle;
@@ -60,7 +70,6 @@ public abstract class ArenaUser {
     private int curExp;
     private long lastGame;
     private int status;
-
 
 
     /****** constructor ******/
@@ -165,6 +174,7 @@ public abstract class ArenaUser {
         Item.putOn(arenaUser, 1);
         db.setUser(arenaUser);
     }
+    //todo save user to db public static void setUser(Integer userId){common + abstract}
 
     public static double roundDouble(double d) {
         return roundDouble(d, 2);
@@ -183,7 +193,71 @@ public abstract class ArenaUser {
         return arenaUser;
     }
 
-    //todo save user to db public static void setUser(Integer userId){common + abstract}
+    public static void doHandler(AbsSender absSender, int userId, long chatId, String[] strings) {
+
+        int target;
+        int percent;
+        String spellId;
+
+        if (strings.length < 4) {
+            spellId = "";
+        } else {
+            spellId = strings[3];
+        }
+        if (strings.length < 3) {
+            percent = 100;
+        } else {
+            percent = Integer.parseInt(strings[2]);
+        }
+        if (strings.length < 2) {
+            target = Round.round.getIndex(userId);
+        } else {
+            target = Integer.parseInt(strings[1]) - 1;
+        }
+        if (percent > 100) {
+            SendMessage msg = new SendMessage();
+            msg.setChatId(chatId);
+            msg.enableHtml(true);
+            msg.setText("Больше 100% быть не может. Инфа 146%!");
+            try {
+                absSender.sendMessage(msg);
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
+            return;
+        }
+        if (strings.length == 0) {
+            SendMessage msg = new SendMessage();
+            msg.setChatId(chatId);
+            msg.enableHtml(true);
+            msg.setText("Формат: <i>/do a 1 100</i> - атаковать цель под номером 1 на 100%");
+            try {
+                absSender.sendMessage(msg);
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
+            return;
+        }
+        if (target > Round.getCurMembersId().size() - 1) {
+            SendMessage msg = new SendMessage();
+            msg.setChatId(chatId);
+            msg.enableHtml(true);
+            msg.setText("Цель по номером " + Integer.parseInt(strings[1]) +
+                    " не найдена. Всего есть целей: " + Round.getCurMembersId().size());
+            try {
+                absSender.sendMessage(msg);
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
+            return;
+        }
+
+        Messages.sendDoMsg(absSender, chatId, strings[0], target, percent);//todo перенести в takeAction
+        Battle.battle.interrupt();
+        Round.round.takeAction(userId, strings[0], target, percent, spellId);
+        getUser(userId).doAction(strings);
+    }
+
     public static List<ArenaUser> getUsers(List<Integer> usersId) {
         List<ArenaUser> users = new ArrayList<>();
         int count = usersId.size();
@@ -641,7 +715,7 @@ public abstract class ArenaUser {
 
     public List<String> getActionsId() {
         List<String> actionsId = new ArrayList<>();
-        for (String actionId:actionsName) {
+        for (String actionId : actionsName) {
             actionsId.add("action_" + actionId);
         }
         return actionsId;

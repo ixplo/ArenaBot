@@ -574,12 +574,10 @@ public class Messages {
         }
     }
 
-    public static void sendDoMsg(AbsSender absSender, Long chatId, String[] strings, int percent) {
+    public static void sendDoMsg(AbsSender absSender, Long chatId, String action, int target, int percent) {
         SendMessage msg = new SendMessage();
-        int target = Integer.parseInt(strings[1]);
         msg.setChatId(chatId);
         msg.enableHtml(true);
-        String action = strings[0];
         StringBuilder out = new StringBuilder();
         switch (action) {//todo from db
             case "a"://todo msg from class
@@ -592,7 +590,7 @@ public class Messages {
                 out.append("Лечить игрока ");
                 break;
             case "m":
-                out.append("Вы пробуете творить заклинание ");
+                out.append("Вы пробуете творить заклинание на игрока ");
                 break;
             default:
                 out.append("Нет пока такого действия. Пожалуйтесь разработчикам!");
@@ -604,7 +602,7 @@ public class Messages {
                 }
                 return;
         }
-        out.append("<b>").append(ArenaUser.getUserName(Round.getCurMembersId().get(target - 1)))
+        out.append("<b>").append(ArenaUser.getUserName(Round.getCurMembersId().get(target)))
                 .append("</b> на ").append(percent).append(" процентов");
         msg.setText(out.toString());
         try {

@@ -37,23 +37,56 @@ public class CmdHark extends BotCommand {
                     "\nРасширенные характеристики зависят от основных, а также могут быть улучшены с помощью надетых вещей.");
             return;
         }
-        if (Integer.parseInt(strings[1]) > ArenaUser.getUser(user.getId()).getFreePoints()){
-            Messages.sendMessage(absSender,chat.getId(), "Недостаточно свободных очков");
+        if (Integer.parseInt(strings[1]) > ArenaUser.getUser(user.getId()).getFreePoints()) {
+            Messages.sendMessage(absSender, chat.getId(), "Недостаточно свободных очков");
             return;
         }
-        if (Integer.parseInt(strings[1]) < 0){
-            Messages.sendMessage(absSender,chat.getId(), "Что, правда уменьшить хотите?");
+        if (Integer.parseInt(strings[1]) < 0) {
+            Messages.sendMessage(absSender, chat.getId(), "Что, правда уменьшить хотите?");
             return;
         }
-        switch (strings[0]) {
+        harkToUpId = getHarkId(strings[0]);
+        if(harkToUpId.equals("")){
+            Messages.sendMessage(absSender, chat.getId(), "Формат: /hark названиеХарактеристики количествоОчков " +
+                    "\nнапример, /hark сила 2 \nПовышаются только основные характеристики: сила, ловкость, мудрость, интеллект, телосложение" +
+                    "\nРасширенные характеристики зависят от основных, а также могут быть улучшены с помощью надетых вещей.");
+            return;
+        }
+        harkName = getHarkName(harkToUpId);
+        ArenaUser.getUser(user.getId()).addHark(harkToUpId, Integer.parseInt(strings[1]));
+        Messages.sendMessage(absSender, chat.getId(), "Вы подняли " + harkName + " на: <b>" + strings[1] + "</b>");
+        try {
+            absSender.sendMessage(Messages.getUserStatMsg(chat.getId(), user.getId()));
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private String getHarkName(String harkToUpId) {
+        switch (harkToUpId) {
+            case "nativeStr":
+                return "Силу";
+            case "nativeDex":
+                return "Ловкость";
+            case "nativeWis":
+                return "Мудрость";
+            case "nativeInt":
+                return "Интеллект";
+            case "nativeCon":
+                return "Телосложение";
+            default:
+                throw new RuntimeException("Invalid harkToUpId: " + harkToUpId);
+        }
+    }
+
+    private String getHarkId(String hark) {
+        switch (hark) {
             case "Cила":
             case "сила":
             case "с":
             case "str":
             case "s":
-                harkToUpId = "nativeStr";
-                harkName = "Силу";
-                break;
+                return "nativeStr";
             case "Ловкость":
             case "ловкость":
             case "лов":
@@ -61,9 +94,7 @@ public class CmdHark extends BotCommand {
             case "l":
             case "dex":
             case "d":
-                harkToUpId = "nativeDex";
-                harkName = "Ловкость";
-                break;
+                return "nativeDex";
             case "Мудрость":
             case "мудрость":
             case "муд":
@@ -71,18 +102,14 @@ public class CmdHark extends BotCommand {
             case "m":
             case "wis":
             case "w":
-                harkToUpId = "nativeWis";
-                harkName = "Мудрость";
-                break;
+                return "nativeWis";
             case "Интеллект":
             case "интеллект":
             case "инт":
             case "и":
             case "int":
             case "i":
-                harkToUpId = "nativeInt";
-                harkName = "Интеллект";
-                break;
+                return "nativeInt";
             case "Телосложение":
             case "телосложение":
             case "тело":
@@ -90,21 +117,9 @@ public class CmdHark extends BotCommand {
             case "t":
             case "con":
             case "c":
-                harkToUpId = "nativeCon";
-                harkName = "Телосложение";
-                break;
+                return "nativeCon";
             default:
-                Messages.sendMessage(absSender, chat.getId(), "Формат: /hark названиеХарактеристики количествоОчков " +
-                        "\nнапример, /hark сила 2 \nПовышаются только основные характеристики: сила, ловкость, мудрость, интеллект, телосложение" +
-                        "\nРасширенные характеристики зависят от основных, а также могут быть улучшены с помощью надетых вещей.");
-                return;
-        }
-        ArenaUser.getUser(user.getId()).addHark(harkToUpId, Integer.parseInt(strings[1]));
-        Messages.sendMessage(absSender, chat.getId(), "Вы подняли " + harkName + " на: <b>" + strings[1] + "</b>");
-        try {
-            absSender.sendMessage(Messages.getUserStatMsg(chat.getId(), user.getId()));
-        } catch (TelegramApiException e) {
-            e.printStackTrace();
+                return "";
         }
     }
 

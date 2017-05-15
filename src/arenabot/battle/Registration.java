@@ -75,7 +75,6 @@ public class Registration {
         if (!Team.isRegisteredTeam(ArenaUser.getUserTeam(userId))) {
             ArenaUser.getUser(userId).setTeam("");
         }
-        //todo remove empty team
         if (regTimer != null) {
             Messages.editChannelMsg(Config.CHANNEL_ID, regTimerTask.getMessageId(), "Таймер остановлен");
             regTimer.cancel();

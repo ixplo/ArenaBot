@@ -15,7 +15,7 @@ public class Warrior extends ArenaUser implements SkillApplicant{
     int energy;
 
     public Warrior() {
-        setUserClass("w");
+        setUserClass("WARRIOR");
     }
 
     @Override
@@ -40,6 +40,11 @@ public class Warrior extends ArenaUser implements SkillApplicant{
 
     @Override
     public void addHarkClassFeatures(String harkToUpId, int numberOfPoints) {
+
+    }
+
+    @Override
+    public void doAction(String[] command) {
 
     }
 

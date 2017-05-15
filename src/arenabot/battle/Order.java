@@ -19,6 +19,10 @@ public class Order {
         return commonPercent;
     }
 
+    public void setZeroCommonPercent() {
+        this.commonPercent = 0;
+    }
+
     Order(Integer userId, Round round) {
         this.userId = userId;
         actions = new ArrayList<>();

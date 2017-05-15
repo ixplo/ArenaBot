@@ -7,6 +7,7 @@ import arenabot.battle.actions.Action;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -26,8 +27,12 @@ public class Round {
         return curMembersId;
     }
 
-    //todo убрать лишние параметры!!!
-    //todo не изменять передаваемые параметры!!!
+    public List<ArenaUser> getMembers() {
+        return members;
+    }
+
+    //todo убрать лишние параметры
+    //todo не изменять передаваемые параметры
     Round(List<Integer> curMembersId, List<String> curTeamsId, List<ArenaUser> members, List<Team> teams, Battle battle) {
         this.members = members;
         this.teams = teams;
@@ -39,19 +44,23 @@ public class Round {
     }
 
     void startRound() {
+        Timer timer = new Timer();
+        timer.schedule(new EndRound(this), Config.ROUND_TIME);
+        timer.schedule(new EndRoundReminder(this), Config.ROUND_REMIND);
         Messages.sendListToAll(teams);
         for (ArenaUser member : members) {
             orders.add(new Order(member.getUserId(), round));
         }
-        while (!isOrdersDone()) {//todo доделать конец раунда по delay
+        while (!isOrdersDone()) {
             try {
-                TimeUnit.SECONDS.sleep(Config.ROUND_DELAY);
+                Thread.sleep(Config.ROUND_TIME);
             } catch (InterruptedException e) {
                 System.out.println("Получен заказ");
             }
         }
+        timer.cancel();
         Messages.sendToAll(members, "<b>Результаты раунда:</b>");
-        for (Order order : orders) {
+        for (Order order : orders) {//todo queue with priority 1.attack 2.protect 3.magic 4.heal
             for (Action action : order.getActions()) {
                 action.doAction();
             }
@@ -88,7 +97,7 @@ public class Round {
 
     public void takeAction(int userId, String actionId, int target, int percent, String spellId) {
         int index = getIndex(orders, userId);
-        orders.get(index).addAction(Action.create(userId, actionId, members.get(target - 1).getUserId(), percent, spellId));
+        orders.get(index).addAction(Action.create(userId, actionId, members.get(target).getUserId(), percent, spellId));
     }
 
     private int getIndex(List<Order> orders, Integer userId) {
@@ -121,6 +130,16 @@ public class Round {
         throw new RuntimeException("Invalid teamId: " + teamId);
     }
 
+    public int getIndex(int userId) {
+        int size = members.size();
+        for (int i = 0; i < size; i++) {
+            if (members.get(i).getUserId() == userId) {
+                return i;
+            }
+        }
+        throw new RuntimeException("Invalid userId: " + userId);
+    }
+
     public ArenaUser getMember(Integer userId) {
         for (ArenaUser member : members) {
             if (member.getUserId() == userId) {
@@ -140,5 +159,9 @@ public class Round {
             }
         }
         return result;
+    }
+
+    public List<Order> getOrders() {
+        return orders;
     }
 }

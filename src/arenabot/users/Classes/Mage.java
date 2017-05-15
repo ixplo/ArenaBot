@@ -26,7 +26,7 @@ public class Mage extends ArenaUser implements SpellCaster {
     private double magicAttack;
 
     public Mage() {
-        setUserClass("m");
+        setUserClass("MAGE");
     }
 
     @Override
@@ -73,6 +73,11 @@ public class Mage extends ArenaUser implements SpellCaster {
         if (harkToUpId.equals("nativeInt")) {
             setMagicAttack(getMagicAttack() + roundDouble(0.4 * numberOfPoints));
         }
+    }
+
+    @Override
+    public void doAction(String[] command) {
+
     }
 
     @Override
