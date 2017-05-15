@@ -254,7 +254,7 @@ public abstract class ArenaUser {
 
         Messages.sendDoMsg(absSender, chatId, strings[0], target, percent);//todo перенести в takeAction
         Battle.battle.interrupt();
-        Round.round.takeAction(userId, strings[0], target, percent, spellId);
+        Round.round.takeAction(userId, strings[0], Round.round.getMembers().get(target).userId, percent, spellId);
         getUser(userId).doAction(strings);
     }
 

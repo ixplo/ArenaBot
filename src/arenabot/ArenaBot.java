@@ -1,5 +1,7 @@
 package arenabot;
 
+import arenabot.battle.Round;
+import arenabot.battle.actions.Action;
 import arenabot.commands.*;
 import arenabot.battle.Registration;
 import arenabot.database.DatabaseManager;
@@ -63,6 +65,7 @@ public class ArenaBot extends TelegramLongPollingCommandBot {
         ArenaUser.setDb(db);
         Item.setDb(db);
         Registration.setDb(db);
+        Action.setDb(db);
     }
 
     @Override
@@ -126,10 +129,21 @@ public class ArenaBot extends TelegramLongPollingCommandBot {
                     break;
                 }
             case "target":
+                Action.addAction(callbackQuery.getFrom().getId());
+                Action.setTargetId(callbackQuery.getFrom().getId(), Integer.parseInt(callbackEntry));
                 Messages.sendAskActionId(callbackQuery, Integer.parseInt(callbackEntry));
                 break;
             case "action":
+                Action.setActionId(callbackQuery.getFrom().getId(),callbackEntry);
                 Messages.sendAskPercent(callbackQuery, callbackEntry);
+                break;
+            case "percent":
+                Action.setPercent(callbackQuery.getFrom().getId(),Integer.parseInt(callbackEntry));
+                Round.round.takeAction(callbackQuery.getFrom().getId(),
+                        Action.getActionId(callbackQuery.getFrom().getId(),1),
+                        Action.getTargetId(callbackQuery.getFrom().getId(),1),
+                        Action.getPercent(callbackQuery.getFrom().getId(),1),
+                        Action.getSpellId(callbackQuery.getFrom().getId(),1));
                 break;
             default: {
                 throw new RuntimeException("Unknown callbackQuery: " + callbackQuery.getData());

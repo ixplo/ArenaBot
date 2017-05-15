@@ -325,6 +325,24 @@ public class DatabaseManager {
         return updatedRows > 0;
     }
 
+    public boolean addAction(Integer userId) {
+        int updatedRows = 0;
+        try {
+            final PreparedStatement preparedStatement =
+                    connection.getPreparedStatement("INSERT OR REPLACE INTO ROUND_ACTIONS " +
+                            "(id," +
+                            "counter) VALUES(?,?);");
+            preparedStatement.setInt(1, userId);
+            int count = getCount("ROUND_ACTIONS", "id", userId) + 1;
+            preparedStatement.setInt(2, count);
+
+            updatedRows = preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return updatedRows > 0;
+    }
+
     public boolean addItem(Integer userId, String itemId) {
         int updatedRows = 0;
         try {
@@ -464,6 +482,22 @@ public class DatabaseManager {
         return resultInt;
     }
 
+    public int getIntBy(String tableName, String findByColumn, Integer id, String selectedColumn) {
+        int resultInt = -1;
+        try {
+            String queryText = "Select " + selectedColumn + " FROM " + tableName + " WHERE " + findByColumn + "=?;";
+            final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText);
+            preparedStatement.setInt(1, id);
+            final ResultSet result = preparedStatement.executeQuery();
+            if (result.next()) {
+                resultInt = result.getInt(selectedColumn);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return resultInt;
+    }
+
     public double getDoubleFrom(String tableName, Integer id, String columnName) {
         double resultDouble = -1;
         try {
@@ -550,6 +584,23 @@ public class DatabaseManager {
             String queryText = "Select " + columnName + " FROM " + tableName + " WHERE " + firstColumn + "=? AND " + secondColumn + "=?;";
             final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText);
             preparedStatement.setString(1, firstId);
+            preparedStatement.setInt(2, secondId);
+            final ResultSet result = preparedStatement.executeQuery();
+            if(result.next()) {
+                resultInt = result.getInt(columnName);
+            }else throw new RuntimeException("No such int: " + queryText);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return resultInt;
+    }
+
+    public int getIntByBy(String tableName, String columnName, String firstColumn, int firstId, String secondColumn, int secondId) {
+        int resultInt = -1;
+        try {//SELECT counter FROM inventory WHERE id='waa' AND userId='362812407';
+            String queryText = "Select " + columnName + " FROM " + tableName + " WHERE " + firstColumn + "=? AND " + secondColumn + "=?;";
+            final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText);
+            preparedStatement.setInt(1, firstId);
             preparedStatement.setInt(2, secondId);
             final ResultSet result = preparedStatement.executeQuery();
             if(result.next()) {

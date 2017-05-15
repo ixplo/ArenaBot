@@ -27,6 +27,7 @@ public class Config {
     public static final String CLASSES = "classes";
     public static final String RACES = "races";
     public static final String EQIP = "inventory";
+    public static final String ROUND_ACTIONS = "ROUND_ACTIONS";
     public static final String AVAILABLE_SPELLS = "available_spells";
     public static final String SPELLS = "spells";
     public static final String TEAMS = "teams";

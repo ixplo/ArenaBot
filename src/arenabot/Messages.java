@@ -714,6 +714,29 @@ public class Messages {
         }
     }
 
-    public static void sendAskPercent(CallbackQuery callbackQuery, String callbackEntry) {
+    public static void sendAskPercent(CallbackQuery callbackQuery, String actionName) {
+        String queryId = callbackQuery.getId();
+        Long chatId = callbackQuery.getMessage().getChatId();
+        AnswerCallbackQuery query = new AnswerCallbackQuery();
+        query.setText("Вы выбрали: " + actionName);
+        query.setCallbackQueryId(queryId);
+        ArenaBot arenaBot = new ArenaBot();
+        List<String> buttonText = new ArrayList<>();
+        List<String> buttonData = new ArrayList<>();
+        buttonText.add("100");
+        buttonText.add("70");
+        buttonText.add("50");
+        buttonText.add("30");
+        buttonData.add("percent_100");
+        buttonData.add("percent_70");
+        buttonData.add("percent_50");
+        buttonData.add("percent_30");
+        try {
+            arenaBot.sendMessage(Messages.getInlineKeyboardMsg(chatId, "На сколько очков действия из 100:",
+                    buttonText, buttonData));
+            arenaBot.answerCallbackQuery(query);
+        } catch (TelegramApiException e) {
+            BotLogger.error(LOGTAG, e);
+        }
     }
 }
