@@ -57,14 +57,14 @@ public class CmdDo extends BotCommand {
         if (!isValid(absSender, user, chat.getId(), strings)) {
             return;
         }
-        if (strings[0].equals("m") && strings[3] != null){
-            if(ArenaUser.getUser(user.getId()).getUserClass().equals("l") ||
-                    ArenaUser.getUser(user.getId()).getUserClass().equals("w")){//todo убрать эту срань
+        if (strings[0].equals(ArenaUser.UserClass.MAGE.toString()) && strings[3] != null){
+            if(ArenaUser.getUser(user.getId()).getUserClass().equals(ArenaUser.UserClass.ARCHER.toString()) ||
+                    ArenaUser.getUser(user.getId()).getUserClass().equals(ArenaUser.UserClass.WARRIOR.toString())){//todo убрать эту срань
                 Messages.sendMessage(absSender,chat.getId(),"Доступно только магам и жрецам");
                 return;
             }
             spellId = strings[3];
-        }else if(strings[0].equals("m")){
+        }else if(strings[0].equals(ArenaUser.UserClass.MAGE.toString())){
             Messages.sendMessage(absSender,chat.getId(),"Неверный формат заклинания");
             return;
         }

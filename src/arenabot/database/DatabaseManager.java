@@ -112,7 +112,7 @@ public class DatabaseManager {
             preparedStatement.setInt(1, userId);
             final ResultSet result = preparedStatement.executeQuery();
             if (result.next()) {
-                arenaUser = ArenaUser.create(result.getString("class"));
+                arenaUser = ArenaUser.create(ArenaUser.UserClass.valueOf(result.getString("class")));
                 arenaUser.setUserId(result.getInt("id"));
                 arenaUser.setUserClass(result.getString("class"));
                 arenaUser.setName(result.getString("name"));

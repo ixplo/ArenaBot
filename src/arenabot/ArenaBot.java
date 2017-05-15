@@ -109,8 +109,8 @@ public class ArenaBot extends TelegramLongPollingCommandBot {
                         callbackQuery.getFrom().getLastName() :
                         callbackQuery.getFrom().getFirstName();
                 String userRace = callbackEntry.substring(0, 1);
-                String userClass = callbackEntry.substring(1, 2);
-                ArenaUser.setNewUser(userId, userName, userClass, userRace);
+                String userClass = callbackEntry.substring(1);
+                ArenaUser.setNewUser(userId, userName, ArenaUser.UserClass.valueOf(userClass), userRace);
 
                 userClass = ArenaUser.getClassName(userClass);
                 userRace = ArenaUser.getRaceName(userRace);

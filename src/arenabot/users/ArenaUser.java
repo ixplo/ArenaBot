@@ -20,6 +20,7 @@ import static com.google.common.math.IntMath.pow;
  */
 public abstract class ArenaUser {
     public static DatabaseManager db;
+    public enum UserClass {ARCHER, MAGE, PRIEST, WARRIOR}
     public List<String> actionsName = Arrays.asList("Атака","Защита","Лечение");
     private int userId;
     private String name;
@@ -63,7 +64,7 @@ public abstract class ArenaUser {
 
 
     /****** constructor ******/
-    //use ArenaUser.create(String userClassId);
+    //use ArenaUser.create
 
     /****** abstract ******/
     public abstract void setClassFeatures();
@@ -76,24 +77,26 @@ public abstract class ArenaUser {
 
     public abstract void addHarkClassFeatures(String harkToUpId, int numberOfPoints);
 
+    public abstract void doAction(String[] command);
+
     public abstract String doCast(ArenaUser target, int percent, String castId);
 
     public abstract void endBattleClassFeatures();
 
     /****** static ******/
-    public static ArenaUser create(String userClassId) {
+    public static ArenaUser create(UserClass userClassId) {
         ArenaUser hero;
         switch (userClassId) {
-            case "w":
+            case WARRIOR:
                 hero = new Warrior();
                 break;
-            case "l":
+            case ARCHER:
                 hero = new Archer();
                 break;
-            case "m":
+            case MAGE:
                 hero = new Mage();
                 break;
-            case "p":
+            case PRIEST:
                 hero = new Priest();
                 break;
             default:
@@ -123,33 +126,33 @@ public abstract class ArenaUser {
         db.dropUser(userId);
     }
 
-    public static void setNewUser(int userId, String name, String userClass, String race) {
+    public static void setNewUser(int userId, String name, UserClass userClass, String race) {
         ArenaUser arenaUser = ArenaUser.create(userClass);
         arenaUser.userId = userId;
         arenaUser.name = name;
-        arenaUser.userClass = userClass;
-        db.addUser(userId, name, userClass);
+        arenaUser.userClass = userClass.toString();
+        db.addUser(userId, name, userClass.toString());
         arenaUser.race = race;
-        arenaUser.nativeStr = db.getIntFrom(Config.CLASSES, userClass, "str_start") +
+        arenaUser.nativeStr = db.getIntFrom(Config.CLASSES, userClass.toString(), "str_start") +
                 db.getIntFrom(Config.RACES, race, "str_bonus");
-        arenaUser.nativeDex = db.getIntFrom(Config.CLASSES, userClass, "dex_start") +
+        arenaUser.nativeDex = db.getIntFrom(Config.CLASSES, userClass.toString(), "dex_start") +
                 db.getIntFrom(Config.RACES, race, "dex_bonus");
-        arenaUser.nativeWis = db.getIntFrom(Config.CLASSES, userClass, "wis_start") +
+        arenaUser.nativeWis = db.getIntFrom(Config.CLASSES, userClass.toString(), "wis_start") +
                 db.getIntFrom(Config.RACES, race, "wis_bonus");
-        arenaUser.nativeInt = db.getIntFrom(Config.CLASSES, userClass, "int_start") +
+        arenaUser.nativeInt = db.getIntFrom(Config.CLASSES, userClass.toString(), "int_start") +
                 db.getIntFrom(Config.RACES, race, "int_bonus");
-        arenaUser.nativeCon = db.getIntFrom(Config.CLASSES, userClass, "con_start") +
+        arenaUser.nativeCon = db.getIntFrom(Config.CLASSES, userClass.toString(), "con_start") +
                 db.getIntFrom(Config.RACES, race, "con_bonus");
-        arenaUser.freePoints = db.getIntFrom(Config.CLASSES, userClass, "free_bonus");
+        arenaUser.freePoints = db.getIntFrom(Config.CLASSES, userClass.toString(), "free_bonus");
         arenaUser.curStr = arenaUser.nativeStr;
         arenaUser.curDex = arenaUser.nativeDex;
         arenaUser.curWis = arenaUser.nativeWis;
         arenaUser.curInt = arenaUser.nativeInt;
         arenaUser.curCon = arenaUser.nativeCon;
         arenaUser.maxHitPoints = roundDouble(1.3333333 * arenaUser.curCon
-                + db.getIntFrom(Config.CLASSES, userClass, "hp_bonus"));
+                + db.getIntFrom(Config.CLASSES, userClass.toString(), "hp_bonus"));
         arenaUser.curHitPoints = arenaUser.maxHitPoints;
-        arenaUser.money = db.getIntFrom(Config.CLASSES, userClass, "money_start");
+        arenaUser.money = db.getIntFrom(Config.CLASSES, userClass.toString(), "money_start");
         arenaUser.level = 1;
         arenaUser.minHit = (double) (arenaUser.curStr - 3) / 4;
         arenaUser.maxHit = (double) (arenaUser.curStr - 3) / 4;
