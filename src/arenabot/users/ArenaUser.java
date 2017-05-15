@@ -63,9 +63,7 @@ public abstract class ArenaUser {
 
 
     /****** constructor ******/
-    public ArenaUser(int userId) {
-        this.userId = userId;
-    }
+    //use ArenaUser.create(String userClassId);
 
     /****** abstract ******/
     public abstract void setClassFeatures();
@@ -83,20 +81,20 @@ public abstract class ArenaUser {
     public abstract void endBattleClassFeatures();
 
     /****** static ******/
-    public static ArenaUser create(Integer userId, String userClassId) {
+    public static ArenaUser create(String userClassId) {
         ArenaUser hero;
         switch (userClassId) {
             case "w":
-                hero = new Warrior(userId);
+                hero = new Warrior();
                 break;
             case "l":
-                hero = new Archer(userId);
+                hero = new Archer();
                 break;
             case "m":
-                hero = new Mage(userId);
+                hero = new Mage();
                 break;
             case "p":
-                hero = new Priest(userId);
+                hero = new Priest();
                 break;
             default:
                 throw new RuntimeException("Unknown userClass: " + userClassId);
@@ -126,7 +124,8 @@ public abstract class ArenaUser {
     }
 
     public static void setNewUser(int userId, String name, String userClass, String race) {
-        ArenaUser arenaUser = ArenaUser.create(userId, userClass);
+        ArenaUser arenaUser = ArenaUser.create(userClass);
+        arenaUser.userId = userId;
         arenaUser.name = name;
         arenaUser.userClass = userClass;
         db.addUser(userId, name, userClass);
@@ -310,6 +309,10 @@ public abstract class ArenaUser {
 
     public void setCurHitPoints(double curHitPoints) {
         this.curHitPoints = curHitPoints;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public void setName(String name) {
@@ -640,4 +643,6 @@ public abstract class ArenaUser {
         }
         return actionsId;
     }
+
+
 }

@@ -25,10 +25,8 @@ public class Mage extends ArenaUser implements SpellCaster {
     private int spellPoints;
     private double magicAttack;
 
-    public Mage(Integer userId) {
-        super(userId);
+    public Mage() {
         setUserClass("m");
-
     }
 
     @Override

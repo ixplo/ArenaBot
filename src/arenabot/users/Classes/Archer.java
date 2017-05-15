@@ -22,8 +22,7 @@ public class Archer extends ArenaUser implements SkillApplicant {
     private int maxTarget;
     int energy;
 
-    public Archer(Integer userId) {
-        super(userId);
+    public Archer() {
         setUserClass("l");
     }
 

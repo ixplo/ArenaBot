@@ -14,8 +14,7 @@ public class Warrior extends ArenaUser implements SkillApplicant{
     ArrayList<Skill> skills;
     int energy;
 
-    public Warrior(Integer userId) {
-        super(userId);
+    public Warrior() {
         setUserClass("w");
     }
 

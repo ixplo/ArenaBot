@@ -23,8 +23,7 @@ public class Priest extends ArenaUser implements SpellCaster {
     private double magicAttack;
     private double curMana;
 
-    public Priest(Integer userId) {
-        super(userId);
+    public Priest() {
         setUserClass("p");
     }
 
