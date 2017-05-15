@@ -697,7 +697,7 @@ public class Messages {
         return answer;
     }
 
-    public static void sendAskActionId(CallbackQuery callbackQuery, int targetId) {
+    static void sendAskActionId(CallbackQuery callbackQuery, int targetId) {
         String queryId = callbackQuery.getId();
         Long chatId = callbackQuery.getMessage().getChatId();
         int userId = callbackQuery.getFrom().getId();
@@ -714,7 +714,7 @@ public class Messages {
         }
     }
 
-    public static void sendAskPercent(CallbackQuery callbackQuery, String actionName) {
+    static void sendAskPercent(CallbackQuery callbackQuery, String actionName) {
         String queryId = callbackQuery.getId();
         Long chatId = callbackQuery.getMessage().getChatId();
         AnswerCallbackQuery query = new AnswerCallbackQuery();
@@ -734,6 +734,38 @@ public class Messages {
         try {
             arenaBot.sendMessage(Messages.getInlineKeyboardMsg(chatId, "На сколько очков действия из 100:",
                     buttonText, buttonData));
+            arenaBot.answerCallbackQuery(query);
+        } catch (TelegramApiException e) {
+            BotLogger.error(LOGTAG, e);
+        }
+    }
+
+    static void sendActionTaken(CallbackQuery callbackQuery) {
+        String queryId = callbackQuery.getId();
+        Long chatId = callbackQuery.getMessage().getChatId();
+        AnswerCallbackQuery query = new AnswerCallbackQuery();
+        //query.setText("Вы выбрали: " + actionName);
+        query.setCallbackQueryId(queryId);
+        ArenaBot arenaBot = new ArenaBot();
+        Messages.sendMessage(chatId,"Заказ принят");
+        try {
+            arenaBot.answerCallbackQuery(query);
+        } catch (TelegramApiException e) {
+            BotLogger.error(LOGTAG, e);
+        }
+    }
+
+    static void sendAskSpell(CallbackQuery callbackQuery) {
+        String queryId = callbackQuery.getId();
+        Long chatId = callbackQuery.getMessage().getChatId();
+        int userId = callbackQuery.getFrom().getId();
+        AnswerCallbackQuery query = new AnswerCallbackQuery();
+        query.setText("Вы выбрали магию");
+        query.setCallbackQueryId(queryId);
+        ArenaBot arenaBot = new ArenaBot();
+        try {
+            arenaBot.sendMessage(Messages.getInlineKeyboardMsg(chatId, "Выберите заклинание:",
+                    ArenaUser.getUser(userId).getCastsName(), ArenaUser.getUser(userId).getCastsId()));
             arenaBot.answerCallbackQuery(query);
         } catch (TelegramApiException e) {
             BotLogger.error(LOGTAG, e);

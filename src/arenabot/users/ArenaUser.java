@@ -27,6 +27,7 @@ import static com.google.common.math.IntMath.pow;
  * 24.04.2017.
  */
 public abstract class ArenaUser {
+
     public static DatabaseManager db;
 
     public enum UserClass {ARCHER, MAGE, PRIEST, WARRIOR}
@@ -91,6 +92,12 @@ public abstract class ArenaUser {
     public abstract String doCast(ArenaUser target, int percent, String castId);
 
     public abstract void endBattleClassFeatures();
+
+    public abstract String getClassActionId(String actionId);
+
+    public abstract List<String> getCastsName();
+
+    public abstract List<String> getCastsId();
 
     /****** static ******/
     public static ArenaUser create(UserClass userClassId) {
@@ -716,7 +723,7 @@ public abstract class ArenaUser {
     public List<String> getActionsId() {
         List<String> actionsId = new ArrayList<>();
         for (String actionId : actionsName) {
-            actionsId.add("action_" + actionId);
+            actionsId.add(getClassActionId("action_" + actionId));
         }
         return actionsId;
     }

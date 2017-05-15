@@ -13,10 +13,8 @@ public class CastSpell extends Action {
 
     public CastSpell(int userId, int targetId, int percent, String spellId) {
         super(userId, targetId, percent);
-        if (spellId.equals("1a")) {
-            this.spellId = spellId.concat("m");
-            experience = Spell.getSpell(this.spellId).getExpBonus() * Spell.getSpell(this.spellId).getDamage();
-        }
+        this.spellId = spellId;
+        experience = Spell.getSpell(this.spellId).getExpBonus() * Spell.getSpell(this.spellId).getDamage();
     }
 
     @Override

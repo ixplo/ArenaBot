@@ -1,5 +1,6 @@
 package arenabot;
 
+import arenabot.battle.Battle;
 import arenabot.battle.Round;
 import arenabot.battle.actions.Action;
 import arenabot.commands.*;
@@ -133,17 +134,29 @@ public class ArenaBot extends TelegramLongPollingCommandBot {
                 Action.setTargetId(callbackQuery.getFrom().getId(), Integer.parseInt(callbackEntry));
                 Messages.sendAskActionId(callbackQuery, Integer.parseInt(callbackEntry));
                 break;
+            case "spell":
+                if(callbackEntry.equals("spell")){
+                    Messages.sendAskSpell(callbackQuery);
+                    break;
+                }
+                Action.setCastId(callbackQuery.getFrom().getId(), callbackEntry);
+                Action.setActionId(callbackQuery.getFrom().getId(),"Магия");
+                Messages.sendAskPercent(callbackQuery, "Магия");
+                break;
             case "action":
                 Action.setActionId(callbackQuery.getFrom().getId(),callbackEntry);
                 Messages.sendAskPercent(callbackQuery, callbackEntry);
                 break;
             case "percent":
                 Action.setPercent(callbackQuery.getFrom().getId(),Integer.parseInt(callbackEntry));
+                Battle.battle.interrupt();
                 Round.round.takeAction(callbackQuery.getFrom().getId(),
                         Action.getActionId(callbackQuery.getFrom().getId(),1),
                         Action.getTargetId(callbackQuery.getFrom().getId(),1),
                         Action.getPercent(callbackQuery.getFrom().getId(),1),
                         Action.getSpellId(callbackQuery.getFrom().getId(),1));
+                Messages.sendActionTaken(callbackQuery);
+                Action.clearActions(callbackQuery.getFrom().getId());
                 break;
             default: {
                 throw new RuntimeException("Unknown callbackQuery: " + callbackQuery.getData());

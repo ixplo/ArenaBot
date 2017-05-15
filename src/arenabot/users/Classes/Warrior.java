@@ -5,6 +5,7 @@ import arenabot.users.Inventory.Item;
 import arenabot.users.Spells.Skill;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * ixplo
@@ -56,6 +57,21 @@ public class Warrior extends ArenaUser implements SkillApplicant{
     @Override
     public void endBattleClassFeatures() {
 
+    }
+
+    @Override
+    public String getClassActionId(String actionId) {
+        return actionId;
+    }
+
+    @Override
+    public List<String> getCastsName() {
+        return new ArrayList<>();
+    }
+
+    @Override
+    public List<String> getCastsId() {
+        return new ArrayList<>();
     }
 
     @Override

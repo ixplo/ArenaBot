@@ -56,6 +56,10 @@ public abstract class Action {
         db.setStringTo(Config.ROUND_ACTIONS, userId, "action_type", action);
     }
 
+    public static void setCastId(int userId, String castId) {
+        db.setStringTo(Config.ROUND_ACTIONS, userId, "cast_id", castId);
+    }
+
     public static String getActionId(int userId, int counter) {
         return db.getStringByBy(Config.ROUND_ACTIONS,
                 "action_type",
@@ -83,6 +87,7 @@ public abstract class Action {
                 "id", userId,
                 "counter", counter);
     }
+
 
     public String getMessage() {
         return message;
@@ -141,5 +146,9 @@ public abstract class Action {
 
     public abstract void doAction();
 
+
+    public static void clearActions(int userId) {
+        db.dropActions(userId);
+    }
 
 }

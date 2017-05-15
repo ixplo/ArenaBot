@@ -8,6 +8,7 @@ import arenabot.users.Spells.Spell;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import static arenabot.Messages.fillWithSpaces;
 
@@ -91,6 +92,21 @@ public class Priest extends ArenaUser implements SpellCaster {
             addSpellPoints(newSpellPoints);
             Messages.sendMessage((long)getUserId(),"Вы получили магические бонусы: " + newSpellPoints);
         }
+    }
+
+    @Override
+    public String getClassActionId(String actionId) {
+        return actionId;
+    }
+
+    @Override
+    public List<String> getCastsName() {
+        return new ArrayList<>();
+    }
+
+    @Override
+    public List<String> getCastsId() {
+        return new ArrayList<>();
     }
 
     @Override

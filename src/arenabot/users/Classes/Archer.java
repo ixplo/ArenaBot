@@ -78,6 +78,7 @@ public class Archer extends ArenaUser implements SkillApplicant {
         return null;
     }
 
+
     private void refreshMaxTargets(){
         int maxArcherTargets = (int) roundDouble((0.7 * getCurWis() + 0.3 * getCurDex()) / 4, 0);
         setMaxTarget(maxArcherTargets < 1 ? 1 : maxArcherTargets);
@@ -121,6 +122,21 @@ public class Archer extends ArenaUser implements SkillApplicant {
     @Override
     public void endBattleClassFeatures() {
 
+    }
+
+    @Override
+    public String getClassActionId(String actionId) {
+        return actionId;
+    }
+
+    @Override
+    public List<String> getCastsName() {
+        return new ArrayList<>();
+    }
+
+    @Override
+    public List<String> getCastsId() {
+        return new ArrayList<>();
     }
 
     public void setMaxTarget(int maxTarget) {

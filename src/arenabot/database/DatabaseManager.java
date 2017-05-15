@@ -4,6 +4,7 @@ import arenabot.users.ArenaUser;
 import arenabot.Config;
 import arenabot.users.Inventory.Item;
 import arenabot.battle.Team;
+import arenabot.users.Spells.Spell;
 import org.telegram.telegrambots.logging.BotLogger;
 
 import java.sql.PreparedStatement;
@@ -98,6 +99,18 @@ public class DatabaseManager {
             final PreparedStatement preparedStatement = connection.getPreparedStatement("DELETE FROM inventory WHERE user_Id=?;");
             preparedStatement.setInt(1, userId);
 
+            deletedRows = preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return deletedRows > 0;
+    }
+
+    public boolean dropActions(Integer userId) {
+        int deletedRows = 0;
+        try {
+            final PreparedStatement preparedStatement = connection.getPreparedStatement("DELETE FROM round_actions WHERE id=?;");
+            preparedStatement.setInt(1, userId);
             deletedRows = preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -869,4 +882,5 @@ public class DatabaseManager {
         }
         return column;
     }
+
 }

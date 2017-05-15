@@ -19,7 +19,7 @@ import static arenabot.users.Spells.Spell.getSpell;
  * 28.04.2017.
  */
 public class Mage extends ArenaUser implements SpellCaster {
-    ArrayList<Spell> spells;
+    List<Spell> spells;
     private double maxMana;
     private double curMana;
     private int spellPoints;
@@ -29,22 +29,27 @@ public class Mage extends ArenaUser implements SpellCaster {
         setUserClass("MAGE");
     }
 
+    public static List<String> getAllSpellsName() {
+        return db.getStrings(Config.SPELLS, "class", UserClass.MAGE.toString(), "name");
+    }
+
     @Override
     public void setClassFeatures() {
-        actionsName = Arrays.asList("Атака","Защита","Лечение", "Магия");
+        actionsName = Arrays.asList("Атака", "Защита", "Лечение", "Магия");
         setMaxMana(1.5 * getCurWis());
         setCurMana(maxMana);
         setMagicAttack(roundDouble(0.6 * getCurWis() + 0.4 * getCurInt()));
-        setSpell("1ma", 1);
+        setSpell("1am", 1);
     }
 
     @Override
     public void getClassFeatures() {
-        actionsName = Arrays.asList("Атака","Защита","Лечение", "Магия");
+        actionsName = Arrays.asList("Атака", "Защита", "Лечение", "Магия");
         maxMana = db.getDoubleFrom(Config.USERS, getUserId(), "mana");
         curMana = db.getDoubleFrom(Config.USERS, getUserId(), "cur_mana");
         spellPoints = db.getIntFrom(Config.USERS, getUserId(), "s_points");
         magicAttack = db.getDoubleFrom(Config.USERS, getUserId(), "m_attack");
+        spells = getSpells();
     }
 
     @Override
@@ -87,22 +92,22 @@ public class Mage extends ArenaUser implements SpellCaster {
         Spell spell = getSpell(castId);
         Random rnd = new Random();
         int chance = rnd.nextInt(99) + 1;
-        if(chance>(int)(spell.getProbability() * percent / 100)){//(Math.log(getMagicAttack()/target.getMagicProtect() + 4.6)/7)
+        if (chance > (int) (spell.getProbability() * percent / 100)) {//(Math.log(getMagicAttack()/target.getMagicProtect() + 4.6)/7)
             return message = "<code>" + getName() + " пытался создать заклинание [" + spell.getName() + "] на " +
                     target.getName() + ", но заклинание провалилось.</code>";
         }
-        if(spell.getEffect().equals("a")){//todo change to normal word
-            if(spell.getManaCost() > curMana){
+        if (spell.getEffect().equals("a")) {//todo change to normal word
+            if (spell.getManaCost() > curMana) {
                 return message = "<code>" + getName() + " пытался создать заклинание [" + spell.getName() + "] на " +
                         target.getName() + ", но у него не хватило маны.</code>";
             }
             target.addCurHitPoints(-spell.getDamage());
             addCurMana(-spell.getManaCost());
-            addCurExp(spell.getDamage()*spell.getExpBonus());
+            addCurExp(spell.getDamage() * spell.getExpBonus());
             message = "<pre>" + getName() + " запустил заклинанием [" + spell.getName() + "] в " +
                     target.getName() + " и ранил его на " + spell.getDamage() +
                     "\n(жизни:-" + spell.getDamage() + "/" + target.getCurHitPoints() +
-                    " \\\\ опыт:+" + spell.getDamage()*spell.getExpBonus() + "/" + getCurExp() + ")</pre>";
+                    " \\\\ опыт:+" + spell.getDamage() * spell.getExpBonus() + "/" + getCurExp() + ")</pre>";
         }
         return message;
     }
@@ -110,11 +115,33 @@ public class Mage extends ArenaUser implements SpellCaster {
     @Override
     public void endBattleClassFeatures() {
         setCurMana(getMaxMana());
-        int newSpellPoints = countReceivedSpellPoints(getCurExp(),getExperience());
-        if (newSpellPoints>0){
+        int newSpellPoints = countReceivedSpellPoints(getCurExp(), getExperience());
+        if (newSpellPoints > 0) {
             addSpellPoints(newSpellPoints);
-            Messages.sendMessage((long)getUserId(),"Вы получили магические бонусы: " + newSpellPoints);
+            Messages.sendMessage((long) getUserId(), "Вы получили магические бонусы: " + newSpellPoints);
         }
+    }
+
+    @Override
+    public String getClassActionId(String actionId) {
+        if (actionId.equals("action_Магия")) {
+            return "spell_spell";
+        }
+        return actionId;
+    }
+
+    @Override
+    public List<String> getCastsName() {
+        return getSpellsName();
+    }
+
+    @Override
+    public List<String> getCastsId() {
+        List<String> castsId = new ArrayList<>();
+        for (String spellId : getSpellsId()) {
+            castsId.add("spell_" + spellId);
+        }
+        return castsId;
     }
 
     private void setSpell(String spellId, int spellGrade) {
@@ -140,14 +167,23 @@ public class Mage extends ArenaUser implements SpellCaster {
 
     }
 
+    public List<Spell> getSpells() {
+        List<Spell> spells = new ArrayList<>();
+        List<String> spellsId = getSpellsId();
+        for (String spellId : spellsId) {
+            spells.add(Spell.getSpell(spellId));
+        }
+        return spells;
+    }
+
     public void setMaxMana(double maxMana) {
         this.maxMana = maxMana;
         db.setDoubleTo(Config.USERS, getUserId(), "mana", maxMana);
     }
 
     public void addSpellPoints(int spellPoints) {
-        this.spellPoints += spellPoints;
-        db.setIntTo(Config.USERS, getUserId(), "s_points", spellPoints);
+
+        db.setIntTo(Config.USERS, getUserId(), "s_points", getSpellPoints() + spellPoints);
     }
 
     public void setMagicAttack(double magicAttack) {
@@ -171,7 +207,7 @@ public class Mage extends ArenaUser implements SpellCaster {
     }
 
     public int getSpellPoints() {
-        spellPoints = db.getIntFrom(Config.USERS,getUserId(),"s_points");
+        spellPoints = db.getIntFrom(Config.USERS, getUserId(), "s_points");
         return spellPoints;
     }
 
@@ -183,5 +219,18 @@ public class Mage extends ArenaUser implements SpellCaster {
         return curMana;
     }
 
+
+    public List<String> getSpellsName() {
+        List<String> spellsName = new ArrayList<>();
+        List<String> spellsId = getSpellsId();
+        for (String spell : spellsId) {
+            spellsName.add(db.getStringFrom(Config.SPELLS, spell, "name"));
+        }
+        return spellsName;
+    }
+
+    public List<String> getSpellsId() {
+        return db.getStrings(Config.AVAILABLE_SPELLS, "user_id", getUserId(), "id");
+    }
 
 }
