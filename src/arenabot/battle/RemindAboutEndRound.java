@@ -4,9 +4,9 @@ import arenabot.Messages;
 
 import java.util.TimerTask;
 
-public class EndRoundReminder extends TimerTask {
+public class RemindAboutEndRound extends TimerTask {
     Round round;
-    EndRoundReminder(Round round) {
+    RemindAboutEndRound(Round round) {
         this.round = round;
     }
 

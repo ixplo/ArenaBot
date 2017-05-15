@@ -126,7 +126,10 @@ public class ArenaBot extends TelegramLongPollingCommandBot {
                     break;
                 }
             case "target":
-                Messages.sendAskActionId(callbackQuery,Integer.parseInt(callbackEntry));
+                Messages.sendAskActionId(callbackQuery, Integer.parseInt(callbackEntry));
+                break;
+            case "action":
+
                 break;
             default: {
                 throw new RuntimeException("Unknown callbackQuery: " + callbackQuery.getData());

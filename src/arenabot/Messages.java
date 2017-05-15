@@ -154,7 +154,7 @@ public class Messages {
         msg.setChatId(chatId);
         msg.enableHtml(true);
         int membersCount = ArenaBot.registration.getMembersCount();
-        if(!Registration.isOn){
+        if (!Registration.isOn) {
             msg.setText("Бой уже идет");
             return msg;
         }
@@ -416,8 +416,9 @@ public class Messages {
             e.printStackTrace();
         }
     }
+
     public static int sendChannelMsgReturnId(Long chatId, String msgText) {
-        int id=0;
+        int id = 0;
         SendMessage msg = new SendMessage();
         msg.setChatId(chatId);
         msg.enableHtml(true);
@@ -477,7 +478,7 @@ public class Messages {
             for (Integer id : membersId) {
                 msg.setChatId((long) id);
                 arenaBot.sendMessage(msg);
-                arenaBot.sendMessage(getInlineKeyboardMsg((long)id,"Выберите цель:",buttonsName,callbackDatas));
+                arenaBot.sendMessage(getInlineKeyboardMsg((long) id, "Выберите цель:", buttonsName, callbackDatas));
             }
         } catch (TelegramApiException e) {
             e.printStackTrace();
@@ -705,7 +706,7 @@ public class Messages {
         query.setCallbackQueryId(queryId);
         ArenaBot arenaBot = new ArenaBot();
         try {
-            arenaBot.sendMessage(Messages.getInlineKeyboardMsg(chatId,"Выберите действие:",
+            arenaBot.sendMessage(Messages.getInlineKeyboardMsg(chatId, "Выберите действие:",
                     ArenaUser.getUser(userId).getActionsName(), ArenaUser.getUser(userId).getActionsId()));
             arenaBot.answerCallbackQuery(query);
         } catch (TelegramApiException e) {

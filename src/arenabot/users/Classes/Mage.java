@@ -40,6 +40,7 @@ public class Mage extends ArenaUser implements SpellCaster {
 
     @Override
     public void getClassFeatures() {
+        actionsName = Arrays.asList("Атака","Защита","Лечение", "Магия");
         maxMana = db.getDoubleFrom(Config.USERS, getUserId(), "mana");
         curMana = db.getDoubleFrom(Config.USERS, getUserId(), "cur_mana");
         spellPoints = db.getIntFrom(Config.USERS, getUserId(), "s_points");

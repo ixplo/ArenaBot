@@ -8,7 +8,6 @@ import arenabot.battle.actions.Action;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
-import java.util.concurrent.TimeUnit;
 
 /**
  * ixplo
@@ -46,7 +45,7 @@ public class Round {
     void startRound() {
         Timer timer = new Timer();
         timer.schedule(new EndRound(this), Config.ROUND_TIME);
-        timer.schedule(new EndRoundReminder(this), Config.ROUND_REMIND);
+        timer.schedule(new RemindAboutEndRound(this), Config.ROUND_REMIND);
         Messages.sendListToAll(teams);
         for (ArenaUser member : members) {
             orders.add(new Order(member.getUserId(), round));
