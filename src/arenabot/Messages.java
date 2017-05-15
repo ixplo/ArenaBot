@@ -713,4 +713,7 @@ public class Messages {
             BotLogger.error(LOGTAG, e);
         }
     }
+
+    public static void sendAskPercent(CallbackQuery callbackQuery, String callbackEntry) {
+    }
 }

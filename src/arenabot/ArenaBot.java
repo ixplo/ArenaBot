@@ -129,7 +129,7 @@ public class ArenaBot extends TelegramLongPollingCommandBot {
                 Messages.sendAskActionId(callbackQuery, Integer.parseInt(callbackEntry));
                 break;
             case "action":
-
+                Messages.sendAskPercent(callbackQuery, callbackEntry);
                 break;
             default: {
                 throw new RuntimeException("Unknown callbackQuery: " + callbackQuery.getData());
