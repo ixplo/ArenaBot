@@ -193,6 +193,28 @@ public class Messages {
         return msg;
     }
 
+    public static InlineKeyboardMarkup gerInlineKeyboardMarkup(List<String> buttonsText, List<String> buttonsCallbackData){
+        InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
+        List<List<InlineKeyboardButton>> rows = new LinkedList<>();
+        int buttonsAmount = buttonsText.size();
+        int rowsAmount = buttonsAmount / 4 + (buttonsAmount % 4 == 0 ? 0 : 1);
+        int buttonsCounter = 0;
+        for (int i = 0; i < rowsAmount; i++) {
+            List<InlineKeyboardButton> row = new LinkedList<>();
+            for (int j = 0; j < 4; j++) {
+                if (buttonsCounter >= buttonsAmount) break;
+                InlineKeyboardButton button = new InlineKeyboardButton();
+                button.setText(buttonsText.get(buttonsCounter));
+                button.setCallbackData(buttonsCallbackData.get(buttonsCounter));
+                row.add(button);
+                buttonsCounter++;
+            }
+            rows.add(row);
+        }
+        markup.setKeyboard(rows);
+        return markup;
+    }
+
     public static AnswerInlineQuery getAnswerForInlineQuery(InlineQuery inlineQuery) {
         AnswerInlineQuery query = new AnswerInlineQuery();
         InlineQueryResultArticle article = new InlineQueryResultArticle();
@@ -335,7 +357,11 @@ public class Messages {
         if (item.getConBonus() != 0) {
             out.append(fillWithSpaces("<code>Бонус к Телосложению:", item.getConBonus() + "</code>\n", Config.WIDTH));
         }
-        if (item.getStrNeeded() != 0 || item.getDexNeeded() != 0 || item.getWisNeeded() != 0 || item.getIntNeeded() != 0 || item.getConNeeded() != 0) {
+        if (item.getStrNeeded() != 0 ||
+                item.getDexNeeded() != 0 ||
+                item.getWisNeeded() != 0 ||
+                item.getIntNeeded() != 0 ||
+                item.getConNeeded() != 0) {
             out.append("\n\nТребования к характеристикам:\n");
         }
         if (item.getStrNeeded() != 0) {
@@ -433,13 +459,7 @@ public class Messages {
     }
 
     public static void editChannelMsg(long chatId, int msgId, String msgText) {
-//        SendMessage msg = new SendMessage();
-//        msg.setChatId(chatId);
-//        msg.enableHtml(true);
-//        msg.setText(msgText);
-//        EditMessageReplyMarkup edit = new EditMessageReplyMarkup();
-//        edit.setChatId(chatId);
-//        edit.setMessageId(msgId);
+
         EditMessageText editText = new EditMessageText();
         editText.setChatId(chatId);
         editText.setMessageId(msgId);
@@ -728,11 +748,16 @@ public class Messages {
 
     static void sendAskPercent(CallbackQuery callbackQuery, String actionName) {
         String queryId = callbackQuery.getId();
-        Long chatId = callbackQuery.getMessage().getChatId();
         AnswerCallbackQuery query = new AnswerCallbackQuery();
         query.setText("Вы выбрали: " + actionName);
         query.setCallbackQueryId(queryId);
-        ArenaBot arenaBot = new ArenaBot();
+        EditMessageText editText = new EditMessageText();
+        editText.setChatId(callbackQuery.getMessage().getChatId());
+        editText.setMessageId(callbackQuery.getMessage().getMessageId());
+        editText.setText("Очки действия из 100:");
+        EditMessageReplyMarkup markup = new EditMessageReplyMarkup();
+        markup.setChatId(callbackQuery.getMessage().getChatId());
+        markup.setMessageId(callbackQuery.getMessage().getMessageId());
         List<String> buttonText = new ArrayList<>();
         List<String> buttonData = new ArrayList<>();
         buttonText.add("100");
@@ -743,9 +768,11 @@ public class Messages {
         buttonData.add("percent_70");
         buttonData.add("percent_50");
         buttonData.add("percent_30");
+        markup.setReplyMarkup(gerInlineKeyboardMarkup(buttonText, buttonData));
+        ArenaBot arenaBot = new ArenaBot();
         try {
-            arenaBot.sendMessage(Messages.getInlineKeyboardMsg(chatId, "На сколько очков действия из 100:",
-                    buttonText, buttonData));
+            arenaBot.editMessageText(editText);
+            arenaBot.editMessageReplyMarkup(markup);
             arenaBot.answerCallbackQuery(query);
         } catch (TelegramApiException e) {
             BotLogger.error(LOGTAG, e);
@@ -756,11 +783,18 @@ public class Messages {
         String queryId = callbackQuery.getId();
         Long chatId = callbackQuery.getMessage().getChatId();
         AnswerCallbackQuery query = new AnswerCallbackQuery();
-        //query.setText("Вы выбрали: " + actionName);
         query.setCallbackQueryId(queryId);
+        EditMessageText editText = new EditMessageText();
+        editText.setChatId(callbackQuery.getMessage().getChatId());
+        editText.setMessageId(callbackQuery.getMessage().getMessageId());
+        editText.setText("Заказ принят:");
+        EditMessageReplyMarkup markup = new EditMessageReplyMarkup();
+        markup.setChatId(callbackQuery.getMessage().getChatId());
+        markup.setMessageId(callbackQuery.getMessage().getMessageId());
         ArenaBot arenaBot = new ArenaBot();
-        Messages.sendMessage(chatId,"Заказ принят");
         try {
+            arenaBot.editMessageText(editText);
+            arenaBot.editMessageReplyMarkup(markup);
             arenaBot.answerCallbackQuery(query);
         } catch (TelegramApiException e) {
             BotLogger.error(LOGTAG, e);
@@ -769,24 +803,30 @@ public class Messages {
 
     static void sendAskSpell(CallbackQuery callbackQuery) {
         String queryId = callbackQuery.getId();
-        Long chatId = callbackQuery.getMessage().getChatId();
         int userId = callbackQuery.getFrom().getId();
         AnswerCallbackQuery query = new AnswerCallbackQuery();
         query.setText("Вы выбрали магию");
         query.setCallbackQueryId(queryId);
+        EditMessageText editText = new EditMessageText();
+        editText.setChatId(callbackQuery.getMessage().getChatId());
+        editText.setMessageId(callbackQuery.getMessage().getMessageId());
+        editText.setText("Выберите заклинание:");
+        EditMessageReplyMarkup markup = new EditMessageReplyMarkup();
+        markup.setChatId(callbackQuery.getMessage().getChatId());
+        markup.setMessageId(callbackQuery.getMessage().getMessageId());
+        markup.setReplyMarkup(gerInlineKeyboardMarkup(ArenaUser.getUser(userId).getCastsName(), ArenaUser.getUser(userId).getCastsId()));
         ArenaBot arenaBot = new ArenaBot();
         try {
-            arenaBot.sendMessage(Messages.getInlineKeyboardMsg(chatId, "Выберите заклинание:",
-                    ArenaUser.getUser(userId).getCastsName(), ArenaUser.getUser(userId).getCastsId()));
+            arenaBot.editMessageText(editText);
+            arenaBot.editMessageReplyMarkup(markup);
             arenaBot.answerCallbackQuery(query);
         } catch (TelegramApiException e) {
             BotLogger.error(LOGTAG, e);
         }
     }
+
     static void sendEmptyAnswerQuery(CallbackQuery callbackQuery) {
         String queryId = callbackQuery.getId();
-        Long chatId = callbackQuery.getMessage().getChatId();
-        int userId = callbackQuery.getFrom().getId();
         AnswerCallbackQuery query = new AnswerCallbackQuery();
         query.setCallbackQueryId(queryId);
         ArenaBot arenaBot = new ArenaBot();
@@ -796,4 +836,22 @@ public class Messages {
             BotLogger.error(LOGTAG, e);
         }
     }
+
+    static void deleteMessage(CallbackQuery callbackQuery){
+        EditMessageReplyMarkup edit = new EditMessageReplyMarkup();
+        edit.setChatId((long)callbackQuery.getFrom().getId());
+        edit.setMessageId(callbackQuery.getMessage().getMessageId());
+        EditMessageText editText = new EditMessageText();
+        editText.setChatId((long)callbackQuery.getFrom().getId());
+        editText.setMessageId(callbackQuery.getMessage().getMessageId());
+        editText.setText("");
+        ArenaBot arenaBot = new ArenaBot();
+        try {
+            arenaBot.editMessageReplyMarkup(edit);
+            arenaBot.editMessageText(editText);
+        } catch (TelegramApiException e) {
+            BotLogger.error(LOGTAG, e);
+        }
+    }
+
 }
