@@ -15,9 +15,13 @@ import org.telegram.telegrambots.api.objects.inlinequery.InlineQuery;
 import org.telegram.telegrambots.api.objects.inlinequery.inputmessagecontent.InputTextMessageContent;
 import org.telegram.telegrambots.api.objects.inlinequery.result.InlineQueryResultArticle;
 import org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup;
+import org.telegram.telegrambots.api.objects.replykeyboard.ReplyKeyboard;
+import org.telegram.telegrambots.api.objects.replykeyboard.ReplyKeyboardMarkup;
+import org.telegram.telegrambots.api.objects.replykeyboard.ReplyKeyboardRemove;
 import org.telegram.telegrambots.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.bots.AbsSender;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
+import org.telegram.telegrambots.exceptions.TelegramApiValidationException;
 import org.telegram.telegrambots.logging.BotLogger;
 
 import java.text.SimpleDateFormat;
@@ -30,17 +34,27 @@ import java.util.*;
 public class Messages {
     public static final String LOGTAG = "MESSAGES";
 
+    /***** no instance for this class *****/
+    private Messages() {
+        throw new AssertionError();
+    }
+
+    private static ArenaBot arenaBot;
+    static {
+        arenaBot = new ArenaBot();
+    }
+
     public static void sendToRegisteredUserMsg(AbsSender absSender, Long chatId, Integer userId) {
+
         SendMessage greetings = new SendMessage();
         greetings.enableHtml(true);
         greetings.setChatId(chatId);
-        StringBuilder msgText = new StringBuilder();
-        msgText.append("Добро пожаловать, ").append(ArenaUser.getUserName(userId)).append("\n");
-        msgText.append("Список доступных команд: /help");
+        String msgText = "Добро пожаловать, " + ArenaUser.getUserName(userId) + "\n" +
+                "Список доступных команд: /help";
         SendMessage statMsg = Messages.getUserStatMsg(chatId, userId);
         SendMessage xStatMsg = Messages.getUserXStatMsg(chatId, userId);
         SendMessage eqMsg = Messages.getEqipMsg(chatId, userId);
-        greetings.setText(msgText.toString());
+        greetings.setText(msgText);
         try {
             absSender.sendMessage(greetings);
             absSender.sendMessage(statMsg);
@@ -52,6 +66,7 @@ public class Messages {
     }
 
     public static SendMessage getEqipMsg(Long chatId, Integer userId) {
+
         ArenaUser arenaUser = ArenaUser.getUser(userId);
         List<Item> items = Item.getItems(userId);
         StringBuilder out = new StringBuilder();
@@ -83,6 +98,7 @@ public class Messages {
     }
 
     public static SendMessage getUserStatMsg(Long chatId, Integer userId) {
+
         ArenaUser arenaUser = ArenaUser.getUser(userId);
         StringBuilder out = new StringBuilder();
         out.append("<b>").append(arenaUser.getName()).append("</b> \n");
@@ -114,6 +130,7 @@ public class Messages {
     }
 
     public static SendMessage getUserXStatMsg(Long chatId, Integer userId) {
+
         ArenaUser arenaUser = ArenaUser.getUser(userId);
         StringBuilder out = new StringBuilder();
         out.append("Ваши расширенные характеристики:\n\n");
@@ -131,6 +148,7 @@ public class Messages {
     }
 
     private static SendMessage getChooseRaceMsg(Long chatId, String userClass) {
+
         StringBuilder msgText = new StringBuilder();
         msgText.append("<b>Доступные расы:</b>\n\n");
         List<String> descr = ArenaUser.getRacesDescr();
@@ -150,6 +168,7 @@ public class Messages {
     }
 
     public static SendMessage getListMsg(Long chatId) {
+
         SendMessage msg = new SendMessage();
         msg.setChatId(chatId);
         msg.enableHtml(true);
@@ -167,6 +186,7 @@ public class Messages {
     }
 
     public static SendMessage getInlineKeyboardMsg(Long chatId, String messageText, List<String> buttonsText, List<String> buttonsCallbackData) {
+
         InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rows = new LinkedList<>();
         int buttonsAmount = buttonsText.size();
@@ -193,7 +213,8 @@ public class Messages {
         return msg;
     }
 
-    public static InlineKeyboardMarkup gerInlineKeyboardMarkup(List<String> buttonsText, List<String> buttonsCallbackData){
+    private static InlineKeyboardMarkup gerInlineKeyboardMarkup(List<String> buttonsText, List<String> buttonsCallbackData){
+
         InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rows = new LinkedList<>();
         int buttonsAmount = buttonsText.size();
@@ -215,7 +236,8 @@ public class Messages {
         return markup;
     }
 
-    public static AnswerInlineQuery getAnswerForInlineQuery(InlineQuery inlineQuery) {
+    static AnswerInlineQuery getAnswerForInlineQuery(InlineQuery inlineQuery) {
+
         AnswerInlineQuery query = new AnswerInlineQuery();
         InlineQueryResultArticle article = new InlineQueryResultArticle();
         article.setId(inlineQuery.getId());
@@ -227,7 +249,8 @@ public class Messages {
         return query;
     }
 
-    public static void sendCreateUser(CallbackQuery callbackQuery, String userClass, String userRace) {
+    static void sendCreateUser(CallbackQuery callbackQuery, String userClass, String userRace) {
+
         Long chatId = callbackQuery.getMessage().getChatId();
         Integer userId = callbackQuery.getFrom().getId();
         String queryId = callbackQuery.getId();
@@ -239,7 +262,6 @@ public class Messages {
                 userClass + "/" +
                 userRace + " создан!");
         query.setCallbackQueryId(queryId);
-        ArenaBot arenaBot = new ArenaBot();
         try {
             arenaBot.sendMessage(statMsg);
             arenaBot.sendMessage(xStatMsg);
@@ -250,13 +272,13 @@ public class Messages {
         }
     }
 
-    public static void sendAskRace(CallbackQuery callbackQuery, String userClass) {
+    static void sendAskRace(CallbackQuery callbackQuery, String userClass) {
+
         String queryId = callbackQuery.getId();
         Long chatId = callbackQuery.getMessage().getChatId();
         AnswerCallbackQuery query = new AnswerCallbackQuery();
         query.setText("Вы выбрали класс: " + ArenaUser.getClassName(userClass));
         query.setCallbackQueryId(queryId);
-        ArenaBot arenaBot = new ArenaBot();
         try {
             arenaBot.sendMessage(Messages.getChooseRaceMsg(chatId, userClass));
             arenaBot.answerCallbackQuery(query);
@@ -265,7 +287,8 @@ public class Messages {
         }
     }
 
-    public static void sendCancelDelete(CallbackQuery callbackQuery) {
+    static void sendCancelDelete(CallbackQuery callbackQuery) {
+
         String queryId = callbackQuery.getId();
         Long chatId = callbackQuery.getMessage().getChatId();
         Integer msgId = callbackQuery.getMessage().getMessageId();
@@ -275,7 +298,6 @@ public class Messages {
         EditMessageReplyMarkup edit = new EditMessageReplyMarkup();
         edit.setChatId(chatId);
         edit.setMessageId(msgId);
-        ArenaBot arenaBot = new ArenaBot();
         try {
             arenaBot.editMessageReplyMarkup(edit);
             arenaBot.answerCallbackQuery(query);
@@ -284,7 +306,8 @@ public class Messages {
         }
     }
 
-    public static void sendAfterDelete(CallbackQuery callbackQuery) {
+    static void sendAfterDelete(CallbackQuery callbackQuery) {
+
         String queryId = callbackQuery.getId();
         Long chatId = callbackQuery.getMessage().getChatId();
         Integer msgId = callbackQuery.getMessage().getMessageId();
@@ -298,7 +321,6 @@ public class Messages {
         editText.setChatId(chatId);
         editText.setMessageId(msgId);
         editText.setText("Персонаж удален");
-        ArenaBot arenaBot = new ArenaBot();
         try {
             arenaBot.editMessageReplyMarkup(edit);
             arenaBot.editMessageText(editText);
@@ -309,7 +331,7 @@ public class Messages {
     }
 
     public static void sendExMsg(AbsSender absSender, Long chatId, String[] strings, Integer userId) {
-        ArenaUser arenaUser = ArenaUser.getUser(userId);
+
         SendMessage msg = new SendMessage();
         msg.setChatId(chatId);
         msg.enableHtml(true);
@@ -333,7 +355,7 @@ public class Messages {
             }
             return;
         }
-        Item item = Item.getItem(Item.getItemId(arenaUser.getUserId(), eqipIndex));
+        Item item = Item.getItem(Item.getItemId(userId, eqipIndex));
         StringBuilder out = new StringBuilder();
         out.append("Вещь: <b>").append(item.getName()).append("</b> \nЦена [").append(item.getPrice());
         out.append("]\n\n").append(item.getDescr()).append("\n\n");
@@ -395,6 +417,7 @@ public class Messages {
     }
 
     public static String fillWithSpaces(String first, String second, int width) {
+
         String s1 = first.replaceAll("<.*?>", "");
         String s2 = second.replaceAll("<.*?>", "");
         int neededSpaces = width - s1.length() - s2.length();
@@ -418,8 +441,8 @@ public class Messages {
         }
     }
 
-
     public static void sendDropMsg(AbsSender absSender, Chat chat) {
+
         try {
             absSender.sendMessage(getInlineKeyboardMsg(chat.getId(),
                     "<b>Удалить</b> персонажа без возможности восстановления?",
@@ -431,11 +454,11 @@ public class Messages {
     }
 
     public static void sendChannelMsg(Long chatId, String msgText) {
+
         SendMessage msg = new SendMessage();
         msg.setChatId(chatId);
         msg.enableHtml(true);
         msg.setText(msgText);
-        ArenaBot arenaBot = new ArenaBot();
         try {
             arenaBot.sendMessage(msg);
         } catch (TelegramApiException e) {
@@ -444,12 +467,12 @@ public class Messages {
     }
 
     public static int sendChannelMsgReturnId(Long chatId, String msgText) {
+
         int id = 0;
         SendMessage msg = new SendMessage();
         msg.setChatId(chatId);
         msg.enableHtml(true);
         msg.setText(msgText);
-        ArenaBot arenaBot = new ArenaBot();
         try {
             id = arenaBot.sendMessage(msg).getMessageId();
         } catch (TelegramApiException e) {
@@ -464,7 +487,6 @@ public class Messages {
         editText.setChatId(chatId);
         editText.setMessageId(msgId);
         editText.setText(msgText);
-        ArenaBot arenaBot = new ArenaBot();
         try {
             arenaBot.editMessageText(editText);
         } catch (TelegramApiException e) {
@@ -473,6 +495,7 @@ public class Messages {
     }
 
     public static void sendListToAll(List<Team> teams) {
+
         SendMessage msg = new SendMessage();
         StringBuilder msgText = new StringBuilder();
         List<Integer> membersId = new ArrayList<>();
@@ -493,7 +516,6 @@ public class Messages {
         }
         msg.enableHtml(true);
         msg.setText(msgText.toString());
-        ArenaBot arenaBot = new ArenaBot();
         try {
             for (Integer id : membersId) {
                 msg.setChatId((long) id);
@@ -506,6 +528,7 @@ public class Messages {
     }
 
     public static void sendListTo(Long chatId, List<Team> teams) {
+
         SendMessage msg = new SendMessage();
         StringBuilder msgText = new StringBuilder();
         msgText.append("Список: ");
@@ -520,7 +543,6 @@ public class Messages {
         }
         msg.enableHtml(true);
         msg.setText(msgText.toString());
-        ArenaBot arenaBot = new ArenaBot();
         try {
             msg.setChatId(chatId);
             arenaBot.sendMessage(msg);
@@ -530,6 +552,7 @@ public class Messages {
     }
 
     public static void sendResultToAll(List<Team> teams, List<ArenaUser> members, List<Integer> membersLive) {
+
         SendMessage msg = new SendMessage();
         StringBuilder msgText = new StringBuilder();
         List<Integer> membersId = new ArrayList<>();
@@ -554,7 +577,6 @@ public class Messages {
         }
         msg.enableHtml(true);
         msg.setText(msgText.toString());
-        ArenaBot arenaBot = new ArenaBot();
         try {
             for (Integer id : membersId) {
                 msg.setChatId((long) id);
@@ -566,10 +588,10 @@ public class Messages {
     }
 
     public static void sendToAll(List<ArenaUser> members, String msgText) {
+
         SendMessage msg = new SendMessage();
         msg.enableHtml(true);
         msg.setText(msgText);
-        ArenaBot arenaBot = new ArenaBot();
         try {
             for (ArenaUser user : members) {
                 msg.setChatId((long) user.getUserId());
@@ -581,7 +603,7 @@ public class Messages {
     }
 
     public static void sendToAll(List<ArenaUser> members, SendMessage msg) {
-        ArenaBot arenaBot = new ArenaBot();
+
         try {
             for (ArenaUser user : members) {
                 msg.setChatId((long) user.getUserId());
@@ -593,10 +615,10 @@ public class Messages {
     }
 
     public static void sendToAllMembers(List<Member> members, String msgText) {
+
         SendMessage msg = new SendMessage();
         msg.enableHtml(true);
         msg.setText(msgText);
-        ArenaBot arenaBot = new ArenaBot();
         try {
             for (Member user : members) {
                 msg.setChatId((long) user.getUserId());
@@ -608,6 +630,7 @@ public class Messages {
     }
 
     public static void sendDoMsg(AbsSender absSender, Long chatId, String action, int target, int percent) {
+
         SendMessage msg = new SendMessage();
         msg.setChatId(chatId);
         msg.enableHtml(true);
@@ -646,6 +669,12 @@ public class Messages {
     }
 
     public static void sendRegMsg(int userId) {
+
+        SendMessage msg = new SendMessage();
+        ReplyKeyboardRemove remove = new ReplyKeyboardRemove();
+        msg.setReplyMarkup(remove);
+        msg.setText("проверка");
+        msg.setChatId((long)userId);
         StringBuilder messageText = new StringBuilder();
         messageText.append("<b>").append(ArenaUser.getUserName(userId)).append("</b> (")
                 .append(ArenaUser.getUser(userId).getClassName()).append("/")
@@ -653,14 +682,20 @@ public class Messages {
                 .append(ArenaUser.getUser(userId).getLevel()).append(")")
                 .append(" вошел в команду ").append(ArenaBot.registration.getMemberTeam(userId));
         sendToAllMembers(ArenaBot.registration.getMembers(), messageText.toString());
+        try {
+            arenaBot.sendMessage(msg);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void sendMessage(AbsSender absSender, Long chatId, String messageText) {
+
         SendMessage msg = new SendMessage();
         msg.enableHtml(true);
         msg.setText(messageText);
+        msg.setChatId(chatId);
         try {
-            msg.setChatId(chatId);
             absSender.sendMessage(msg);
         } catch (TelegramApiException e) {
             e.printStackTrace();
@@ -668,12 +703,12 @@ public class Messages {
     }
 
     public static void sendMessage(Long chatId, String messageText) {
+
         SendMessage msg = new SendMessage();
         msg.enableHtml(true);
         msg.setText(messageText);
-        ArenaBot arenaBot = new ArenaBot();
+        msg.setChatId(chatId);
         try {
-            msg.setChatId(chatId);
             arenaBot.sendMessage(msg);
         } catch (TelegramApiException e) {
             e.printStackTrace();
@@ -681,6 +716,7 @@ public class Messages {
     }
 
     public static void sendChooseClassMsg(AbsSender absSender, Long chatId) {
+
         StringBuilder msgText = new StringBuilder();
         msgText.append("<b>Доступные классы:</b>\n\n");
         List<String> descr = ArenaUser.getClassesDescr();
@@ -702,6 +738,7 @@ public class Messages {
     }
 
     public static SendMessage toOpenPrivateWithBotMsg(Long chatId, User user) {
+
         SendMessage answer = new SendMessage();
         StringBuilder messageBuilder = new StringBuilder();
         String userName;
@@ -730,13 +767,13 @@ public class Messages {
     }
 
     static void sendAskActionId(CallbackQuery callbackQuery, int targetId) {
+
         String queryId = callbackQuery.getId();
         Long chatId = callbackQuery.getMessage().getChatId();
         int userId = callbackQuery.getFrom().getId();
         AnswerCallbackQuery query = new AnswerCallbackQuery();
         query.setText("Вы выбрали цель: " + ArenaUser.getUserName(targetId));
         query.setCallbackQueryId(queryId);
-        ArenaBot arenaBot = new ArenaBot();
         try {
             arenaBot.sendMessage(Messages.getInlineKeyboardMsg(chatId, "Выберите действие:",
                     ArenaUser.getUser(userId).getActionsName(), ArenaUser.getUser(userId).getActionsId()));
@@ -747,6 +784,7 @@ public class Messages {
     }
 
     static void sendAskPercent(CallbackQuery callbackQuery, String actionName) {
+
         String queryId = callbackQuery.getId();
         AnswerCallbackQuery query = new AnswerCallbackQuery();
         query.setText("Вы выбрали: " + actionName);
@@ -769,7 +807,6 @@ public class Messages {
         buttonData.add("percent_50");
         buttonData.add("percent_30");
         markup.setReplyMarkup(gerInlineKeyboardMarkup(buttonText, buttonData));
-        ArenaBot arenaBot = new ArenaBot();
         try {
             arenaBot.editMessageText(editText);
             arenaBot.editMessageReplyMarkup(markup);
@@ -780,18 +817,18 @@ public class Messages {
     }
 
     static void sendActionTaken(CallbackQuery callbackQuery) {
+
         String queryId = callbackQuery.getId();
         Long chatId = callbackQuery.getMessage().getChatId();
         AnswerCallbackQuery query = new AnswerCallbackQuery();
         query.setCallbackQueryId(queryId);
         EditMessageText editText = new EditMessageText();
-        editText.setChatId(callbackQuery.getMessage().getChatId());
+        editText.setChatId(chatId);
         editText.setMessageId(callbackQuery.getMessage().getMessageId());
         editText.setText("Заказ принят:");
         EditMessageReplyMarkup markup = new EditMessageReplyMarkup();
-        markup.setChatId(callbackQuery.getMessage().getChatId());
+        markup.setChatId(chatId);
         markup.setMessageId(callbackQuery.getMessage().getMessageId());
-        ArenaBot arenaBot = new ArenaBot();
         try {
             arenaBot.editMessageText(editText);
             arenaBot.editMessageReplyMarkup(markup);
@@ -802,6 +839,7 @@ public class Messages {
     }
 
     static void sendAskSpell(CallbackQuery callbackQuery) {
+
         String queryId = callbackQuery.getId();
         int userId = callbackQuery.getFrom().getId();
         AnswerCallbackQuery query = new AnswerCallbackQuery();
@@ -815,7 +853,6 @@ public class Messages {
         markup.setChatId(callbackQuery.getMessage().getChatId());
         markup.setMessageId(callbackQuery.getMessage().getMessageId());
         markup.setReplyMarkup(gerInlineKeyboardMarkup(ArenaUser.getUser(userId).getCastsName(), ArenaUser.getUser(userId).getCastsId()));
-        ArenaBot arenaBot = new ArenaBot();
         try {
             arenaBot.editMessageText(editText);
             arenaBot.editMessageReplyMarkup(markup);
@@ -826,10 +863,10 @@ public class Messages {
     }
 
     static void sendEmptyAnswerQuery(CallbackQuery callbackQuery) {
+
         String queryId = callbackQuery.getId();
         AnswerCallbackQuery query = new AnswerCallbackQuery();
         query.setCallbackQueryId(queryId);
-        ArenaBot arenaBot = new ArenaBot();
         try {
             arenaBot.answerCallbackQuery(query);
         } catch (TelegramApiException e) {
@@ -838,6 +875,7 @@ public class Messages {
     }
 
     static void deleteMessage(CallbackQuery callbackQuery){
+
         EditMessageReplyMarkup edit = new EditMessageReplyMarkup();
         edit.setChatId((long)callbackQuery.getFrom().getId());
         edit.setMessageId(callbackQuery.getMessage().getMessageId());
@@ -845,7 +883,6 @@ public class Messages {
         editText.setChatId((long)callbackQuery.getFrom().getId());
         editText.setMessageId(callbackQuery.getMessage().getMessageId());
         editText.setText("");
-        ArenaBot arenaBot = new ArenaBot();
         try {
             arenaBot.editMessageReplyMarkup(edit);
             arenaBot.editMessageText(editText);

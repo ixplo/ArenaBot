@@ -323,6 +323,7 @@ public abstract class ArenaUser {
     }
 
     /****** Add ******/
+
     public void addCurHitPoints(double hitPointsChange) {
         this.curHitPoints = ArenaUser.roundDouble(this.curHitPoints + hitPointsChange);
     }
