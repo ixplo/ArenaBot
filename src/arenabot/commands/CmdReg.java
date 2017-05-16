@@ -31,6 +31,6 @@ public class CmdReg extends BotCommand {
             return;
         }
         ArenaBot.registration.regMember(user.getId());
-        Messages.sendRegMsg(user);
+        Messages.sendRegMsg(user.getId());
     }
 }

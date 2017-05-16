@@ -166,7 +166,7 @@ public class Messages {
         return msg;
     }
 
-    private static SendMessage getInlineKeyboardMsg(Long chatId, String messageText, List<String> buttonsText, List<String> buttonsCallbackData) {
+    public static SendMessage getInlineKeyboardMsg(Long chatId, String messageText, List<String> buttonsText, List<String> buttonsCallbackData) {
         InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rows = new LinkedList<>();
         int buttonsAmount = buttonsText.size();
@@ -560,6 +560,18 @@ public class Messages {
         }
     }
 
+    public static void sendToAll(List<ArenaUser> members, SendMessage msg) {
+        ArenaBot arenaBot = new ArenaBot();
+        try {
+            for (ArenaUser user : members) {
+                msg.setChatId((long) user.getUserId());
+                arenaBot.sendMessage(msg);
+            }
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void sendToAllMembers(List<Member> members, String msgText) {
         SendMessage msg = new SendMessage();
         msg.enableHtml(true);
@@ -613,13 +625,13 @@ public class Messages {
         }
     }
 
-    public static void sendRegMsg(User user) {
+    public static void sendRegMsg(int userId) {
         StringBuilder messageText = new StringBuilder();
-        messageText.append("<b>").append(ArenaUser.getUserName(user.getId())).append("</b> (")
-                .append(ArenaUser.getUser(user.getId()).getClassName()).append("/")
-                .append(ArenaUser.getUser(user.getId()).getRaceName()).append(" уровень:")
-                .append(ArenaUser.getUser(user.getId()).getLevel()).append(")")
-                .append(" вошел в команду ").append(ArenaBot.registration.getMemberTeam(user.getId()));
+        messageText.append("<b>").append(ArenaUser.getUserName(userId)).append("</b> (")
+                .append(ArenaUser.getUser(userId).getClassName()).append("/")
+                .append(ArenaUser.getUser(userId).getRaceName()).append(" уровень:")
+                .append(ArenaUser.getUser(userId).getLevel()).append(")")
+                .append(" вошел в команду ").append(ArenaBot.registration.getMemberTeam(userId));
         sendToAllMembers(ArenaBot.registration.getMembers(), messageText.toString());
     }
 
@@ -766,6 +778,19 @@ public class Messages {
         try {
             arenaBot.sendMessage(Messages.getInlineKeyboardMsg(chatId, "Выберите заклинание:",
                     ArenaUser.getUser(userId).getCastsName(), ArenaUser.getUser(userId).getCastsId()));
+            arenaBot.answerCallbackQuery(query);
+        } catch (TelegramApiException e) {
+            BotLogger.error(LOGTAG, e);
+        }
+    }
+    static void sendEmptyAnswerQuery(CallbackQuery callbackQuery) {
+        String queryId = callbackQuery.getId();
+        Long chatId = callbackQuery.getMessage().getChatId();
+        int userId = callbackQuery.getFrom().getId();
+        AnswerCallbackQuery query = new AnswerCallbackQuery();
+        query.setCallbackQueryId(queryId);
+        ArenaBot arenaBot = new ArenaBot();
+        try {
             arenaBot.answerCallbackQuery(query);
         } catch (TelegramApiException e) {
             BotLogger.error(LOGTAG, e);

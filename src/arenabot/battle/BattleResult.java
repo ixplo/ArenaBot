@@ -5,6 +5,8 @@ import arenabot.Config;
 import arenabot.Messages;
 
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -14,7 +16,7 @@ import java.util.List;
 public class BattleResult {
 
     public void resultBattle(List<Integer> membersLive, List<String> teamWinner, List<ArenaUser> members, List<Team> teams) {
-        //todo метод не больше одного экрана!!!
+
         if (membersLive.size() == 0) {
             Messages.sendToAll(members, "Победителей нет");
         } else {
@@ -36,5 +38,7 @@ public class BattleResult {
             user.addUserGames();
             user.setLastGame();
         }
+        Messages.sendToAll(members,Messages.getInlineKeyboardMsg(Config.CHANNEL_ID,"Регистрация началась:",
+                Collections.singletonList("Сыграть снова"),Collections.singletonList("reg_user")));
     }
 }

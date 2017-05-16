@@ -129,6 +129,11 @@ public class ArenaBot extends TelegramLongPollingCommandBot {
                     Messages.sendAfterDelete(callbackQuery);
                     break;
                 }
+            case "reg":
+                registration.regMember(callbackQuery.getFrom().getId());
+                Messages.sendEmptyAnswerQuery(callbackQuery);
+                Messages.sendRegMsg(callbackQuery.getFrom().getId());
+                break;
             case "target":
                 Action.addAction(callbackQuery.getFrom().getId());
                 Action.setTargetId(callbackQuery.getFrom().getId(), Integer.parseInt(callbackEntry));
