@@ -34,7 +34,9 @@ public class Attack extends Action {
     }
 
     private double randomDouble(double min, double max) {
-        if (min - max == 0) return min;
+        if (min - max == 0) {
+            return min;
+        }
         Random rnd = new Random();
         return (rnd.nextInt((int) (max - min) * 100) + min * 100) / 100;
     }

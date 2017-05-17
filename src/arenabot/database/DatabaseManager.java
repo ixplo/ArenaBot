@@ -118,6 +118,18 @@ public class DatabaseManager {
         return deletedRows > 0;
     }
 
+    public boolean dropSpells(int userId) {
+        int deletedRows = 0;
+        try {
+            final PreparedStatement preparedStatement = connection.getPreparedStatement("DELETE FROM available_spells WHERE user_id=?;");
+            preparedStatement.setInt(1, userId);
+            deletedRows = preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return deletedRows > 0;
+    }
+
     public ArenaUser getUser(Integer userId) {
         ArenaUser arenaUser = null;
         try {

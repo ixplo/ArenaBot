@@ -40,6 +40,7 @@ public class Messages {
     }
 
     private static ArenaBot arenaBot;
+
     static {
         arenaBot = new ArenaBot();
     }
@@ -213,7 +214,7 @@ public class Messages {
         return msg;
     }
 
-    private static InlineKeyboardMarkup gerInlineKeyboardMarkup(List<String> buttonsText, List<String> buttonsCallbackData){
+    private static InlineKeyboardMarkup gerInlineKeyboardMarkup(List<String> buttonsText, List<String> buttonsCallbackData) {
 
         InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rows = new LinkedList<>();
@@ -500,7 +501,7 @@ public class Messages {
         StringBuilder msgText = new StringBuilder();
         List<Integer> membersId = new ArrayList<>();
         List<String> buttonsName = new ArrayList<>();
-        List<String> callbackDatas = new ArrayList<>();
+        List<String> callbacksData = new ArrayList<>();
         msgText.append("Список: ");
         int count = 0;
         for (Team team : teams) {
@@ -510,7 +511,7 @@ public class Messages {
                 msgText.append(user.getName()).append(" ");
                 membersId.add(user.getUserId());
                 buttonsName.add(user.getName());
-                callbackDatas.add("target_" + user.getUserId());
+                callbacksData.add("target_" + user.getUserId());
             }
             msgText.append("]");
         }
@@ -520,7 +521,7 @@ public class Messages {
             for (Integer id : membersId) {
                 msg.setChatId((long) id);
                 arenaBot.sendMessage(msg);
-                arenaBot.sendMessage(getInlineKeyboardMsg((long) id, "Выберите цель:", buttonsName, callbackDatas));
+                arenaBot.sendMessage(getInlineKeyboardMsg((long) id, "Выберите цель:", buttonsName, callbacksData));
             }
         } catch (TelegramApiException e) {
             e.printStackTrace();
@@ -674,7 +675,7 @@ public class Messages {
         ReplyKeyboardRemove remove = new ReplyKeyboardRemove();
         msg.setReplyMarkup(remove);
         msg.setText("проверка");
-        msg.setChatId((long)userId);
+        msg.setChatId((long) userId);
         StringBuilder messageText = new StringBuilder();
         messageText.append("<b>").append(ArenaUser.getUserName(userId)).append("</b> (")
                 .append(ArenaUser.getUser(userId).getClassName()).append("/")
@@ -874,13 +875,13 @@ public class Messages {
         }
     }
 
-    static void deleteMessage(CallbackQuery callbackQuery){
+    static void deleteMessage(CallbackQuery callbackQuery) {
 
         EditMessageReplyMarkup edit = new EditMessageReplyMarkup();
-        edit.setChatId((long)callbackQuery.getFrom().getId());
+        edit.setChatId((long) callbackQuery.getFrom().getId());
         edit.setMessageId(callbackQuery.getMessage().getMessageId());
         EditMessageText editText = new EditMessageText();
-        editText.setChatId((long)callbackQuery.getFrom().getId());
+        editText.setChatId((long) callbackQuery.getFrom().getId());
         editText.setMessageId(callbackQuery.getMessage().getMessageId());
         editText.setText("");
         try {

@@ -14,6 +14,7 @@ import org.telegram.telegrambots.logging.BotLogger;
  * 26.04.2017.
  */
 public class CmdEq extends BotCommand {
+
     public static final String LOGTAG = "EQCOMMAND";
 
     public CmdEq() {

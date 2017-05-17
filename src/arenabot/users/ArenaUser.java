@@ -138,7 +138,7 @@ public abstract class ArenaUser {
             throw new RuntimeException("No such user in database: " + userId);
         }
         db.dropItems(userId);
-        //todo drop spells/skills
+        db.dropSpells(userId);
         db.dropUser(userId);
     }
 
