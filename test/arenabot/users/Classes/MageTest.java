@@ -22,9 +22,9 @@ public class MageTest {
     @Test
     public void countReceivedSpellPoints() throws Exception {
         assertEquals(0,Mage.countReceivedSpellPoints(1,98));
-        assertEquals(1,Mage.countReceivedSpellPoints(2,98));
-        assertEquals(2,Mage.countReceivedSpellPoints(102,99));
-        assertEquals(3,Mage.countReceivedSpellPoints(300,0));
+        assertEquals(1,Mage.countReceivedSpellPoints(2,118));
+        assertEquals(2,Mage.countReceivedSpellPoints(142,99));
+        assertEquals(2,Mage.countReceivedSpellPoints(300,0));
     }
 
 }

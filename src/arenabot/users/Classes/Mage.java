@@ -93,13 +93,13 @@ public class Mage extends ArenaUser implements SpellCaster {
         Random rnd = new Random();
         int chance = rnd.nextInt(99) + 1;
         if (chance > (int) (spell.getProbability() * percent / 100)) {//(Math.log(getMagicAttack()/target.getMagicProtect() + 4.6)/7)
-            return message = "<code>" + getName() + " пытался создать заклинание [" + spell.getName() + "] на " +
-                    target.getName() + ", но заклинание провалилось.</code>";
+            return message = "<code>" + getName() + " пытался создать заклинание [" + spell.getName() + "] на "
+                    + target.getName() + ", но заклинание провалилось.</code>";
         }
         if (spell.getEffect().equals("a")) {//todo change to normal word
             if (spell.getManaCost() > curMana) {
-                return message = "<code>" + getName() + " пытался создать заклинание [" + spell.getName() + "] на " +
-                        target.getName() + ", но у него не хватило маны.</code>";
+                return message = "<code>" + getName() + " пытался создать заклинание [" + spell.getName() + "] на "
+                        + target.getName() + ", но у него не хватило маны.</code>";
             }
             target.addCurHitPoints(-spell.getDamage());
             addCurMana(-spell.getManaCost());
@@ -119,6 +119,7 @@ public class Mage extends ArenaUser implements SpellCaster {
         if (newSpellPoints > 0) {
             addSpellPoints(newSpellPoints);
             Messages.sendMessage((long) getUserId(), "Вы получили магические бонусы: " + newSpellPoints);
+            //todo Immediately output a button learn
         }
     }
 

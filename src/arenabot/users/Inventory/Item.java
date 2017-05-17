@@ -128,7 +128,7 @@ public class Item {
         return (double) i / precise;
     }
 
-    public void putOff(String itemId) {//todo перенести в item
+    public void putOff(String itemId) {
 
         //todo проверка на наличие в инвентаре
         //todo проверка а надета ли она вообще?

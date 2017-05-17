@@ -11,12 +11,10 @@ import static org.junit.Assert.*;
  * 01.05.2017.
  */
 public class ArenaUserTest {
-    private ArenaUser arenaUser = null;
     private ArenaUser warrior = ArenaUser.create(ArenaUser.UserClass.WARRIOR);
 
     @Before
     public void setUp() throws Exception {
-        ArenaBot arenaBot = new ArenaBot();
     }
 
 //    @After
@@ -54,7 +52,7 @@ public class ArenaUserTest {
 
     @Test
     public void getUserName() throws Exception {
-        assertEquals(ArenaUser.getUserName(362812407),"Андрей");
+        assertEquals(ArenaUser.getUserName(362812407),"ixplo");
         assertNull(warrior.getName());
     }
 
@@ -63,7 +61,7 @@ public class ArenaUserTest {
 //    }
 //
 //    @Test
-//    public void setNewUser() throws Exception {
+//    public void create() throws Exception {
 //    }
 //
 //    @Test

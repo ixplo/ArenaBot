@@ -30,7 +30,7 @@ public abstract class ArenaUser {
 
     public static DatabaseManager db;
 
-    public enum UserClass {ARCHER, MAGE, PRIEST, WARRIOR}
+    public enum UserClass { ARCHER, MAGE, PRIEST, WARRIOR }
 
     public List<String> actionsName = Arrays.asList("Атака", "Защита", "Лечение");
     private int userId;
@@ -121,33 +121,12 @@ public abstract class ArenaUser {
         return hero;
     }
 
-    public static void setDb(DatabaseManager dbManager) {
-        db = dbManager;
-    }
-
-    public static boolean doesUserExists(Integer userId) {
-        return db.doesUserExists(userId);
-    }
-
-    public static int getStatus(int userId) {
-        return db.getIntFrom(Config.USERS, userId, "status");
-    }
-
-    public static void dropUser(Integer userId) {
-        if (!db.doesUserExists(userId)) {
-            throw new RuntimeException("No such user in database: " + userId);
-        }
-        db.dropItems(userId);
-        db.dropSpells(userId);
-        db.dropUser(userId);
-    }
-
-    public static void setNewUser(int userId, String name, UserClass userClass, String race) {
+    public static ArenaUser create(int userId, String name, UserClass userClass, String race) {
         ArenaUser arenaUser = ArenaUser.create(userClass);
         arenaUser.userId = userId;
         arenaUser.name = name;
         arenaUser.userClass = userClass.toString();
-        db.addUser(userId, name, userClass.toString());
+        db.addUser(userId, name, arenaUser.getUserClass());
         arenaUser.race = race;
         arenaUser.nativeStr = db.getIntFrom(Config.CLASSES, userClass.toString(), "str_start") +
                 db.getIntFrom(Config.RACES, race, "str_bonus");
@@ -180,8 +159,31 @@ public abstract class ArenaUser {
         db.addItem(userId, "waa");
         Item.putOn(arenaUser, 1);
         db.setUser(arenaUser);
+        return arenaUser;
     }
+
     //todo save user to db public static void setUser(Integer userId){common + abstract}
+
+    public static void setDb(DatabaseManager dbManager) {
+        db = dbManager;
+    }
+
+    public static boolean doesUserExists(Integer userId) {
+        return db.doesUserExists(userId);
+    }
+
+    public static int getStatus(int userId) {
+        return db.getIntFrom(Config.USERS, userId, "status");
+    }
+
+    public static void dropUser(int userId) {
+        if (!db.doesUserExists(userId)) {
+            throw new RuntimeException("No such user in database: " + userId);
+        }
+        db.dropItems(userId);
+        db.dropSpells(userId);
+        db.dropUser(userId);
+    }
 
     public static double roundDouble(double d) {
         return roundDouble(d, 2);
