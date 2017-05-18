@@ -30,6 +30,8 @@ public abstract class ArenaUser {
 
     public static DatabaseManager db;
 
+
+
     public enum UserClass { ARCHER, MAGE, PRIEST, WARRIOR }
 
     public List<String> actionsName = Arrays.asList("Атака", "Защита", "Лечение");
@@ -98,6 +100,8 @@ public abstract class ArenaUser {
     public abstract List<String> getCastsName();
 
     public abstract List<String> getCastsId();
+
+    public abstract void learn(int level);
 
     /****** static ******/
     public static ArenaUser create(UserClass userClassId) {
@@ -261,7 +265,7 @@ public abstract class ArenaUser {
             return;
         }
 
-        Messages.sendDoMsg(absSender, chatId, strings[0], target, percent);//todo перенести в takeAction
+        Messages.sendDoMsg(absSender, chatId, strings[0], target, percent); //todo перенести в takeAction
         Battle.battle.interrupt();
         Round.round.takeAction(userId, strings[0], Round.round.getMembers().get(target).userId, percent, spellId);
         getUser(userId).doAction(strings);

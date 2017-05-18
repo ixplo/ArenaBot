@@ -70,7 +70,7 @@ public class Item {
     }
 
     public static int getEqipIndex(Integer userId, String itemId) {
-        return db.getIntByBy(Config.EQIP, "counter", "id",itemId,Config.USER_ID,userId);
+        return db.getIntByBy(Config.EQIP, "counter", "id", itemId, Config.USER_ID, userId);
     }
 
     public static boolean isItemInSlot(int userId, int eqipIndex) {
@@ -78,7 +78,7 @@ public class Item {
     }
 
     public static String getItemId(int userId, Integer eqipIndex) {
-        return db.getStringByBy(Config.EQIP, "id","counter", eqipIndex, Config.USER_ID,userId);
+        return db.getStringByBy(Config.EQIP, "id", "counter", eqipIndex, Config.USER_ID, userId);
     }
 
     public static void putOn(ArenaUser arenaUser, Integer eqipIndex) {
@@ -88,10 +88,10 @@ public class Item {
             throw new RuntimeException("Invalid eqip index: " + eqipIndex);
         }
         //*** проверка, а не надета ли уже она
-        if (isItemInSlot(arenaUser.getUserId(),eqipIndex)) {
+        if (isItemInSlot(arenaUser.getUserId(), eqipIndex)) {
             return;
         }
-        Item item = getItem(getItemId(arenaUser.getUserId(),eqipIndex));
+        Item item = getItem(getItemId(arenaUser.getUserId(), eqipIndex));
         //todo проверка на соответствие требованиям (другие вещи тоже надо проверить, на случай если харки уменьшатся)
         //*** изменение характеристик перса
         arenaUser.setCurStr(arenaUser.getCurStr() + item.getStrBonus());
@@ -119,10 +119,11 @@ public class Item {
     }
 
     public static double roundDouble(double d) {
-        return roundDouble(d,2);
+        return roundDouble(d, 2);
     }
+
     public static double roundDouble(double d, int precise) {
-        precise = pow(10,precise);
+        precise = pow(10, precise);
         d *= precise;
         int i = (int) Math.round(d);
         return (double) i / precise;
@@ -143,23 +144,23 @@ public class Item {
     }
 */
 
-    public static String getItemName(Integer userId, Integer eqipIndex){
-        return db.getItem(Item.getItemId(userId,eqipIndex)).name;
+    public static String getItemName(Integer userId, Integer eqipIndex) {
+        return db.getItem(Item.getItemId(userId, eqipIndex)).name;
     }
 
-    public static Item getItem(Integer userId, Integer eqipIndex){
-        return db.getItem(Item.getItemId(userId,eqipIndex));
+    public static Item getItem(Integer userId, Integer eqipIndex) {
+        return db.getItem(Item.getItemId(userId, eqipIndex));
     }
 
-    public static Item getItem(String itemId){
+    public static Item getItem(String itemId) {
         return db.getItem(itemId);
     }
 
-    public static String getSlotName(String slot){
-        return db.getStringFrom("SLOTS",slot,"name");
+    public static String getSlotName(String slot) {
+        return db.getStringFrom("SLOTS", slot, "name");
     }
 
-    public boolean putInSlot(Integer userId, Integer eqipIndex){
+    public boolean putInSlot(Integer userId, Integer eqipIndex) {
         return db.setStringTo(Config.EQIP, itemId, "in_slot", slot);
     }
 

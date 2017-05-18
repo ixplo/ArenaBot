@@ -30,7 +30,7 @@ public class Archer extends ArenaUser implements SkillApplicant {
     int energy;
 
     public Archer() {
-        setUserClass("ARCHER");//todo is it necessary?
+        setUserClass("ARCHER"); //todo is it necessary?
     }
 
     @Override
@@ -137,6 +137,11 @@ public class Archer extends ArenaUser implements SkillApplicant {
     @Override
     public List<String> getCastsId() {
         return new ArrayList<>();
+    }
+
+    @Override
+    public void learn(int level) {
+
     }
 
     public void setMaxTarget(int maxTarget) {

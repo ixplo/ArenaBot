@@ -14,6 +14,7 @@ public class Attack extends Action {
 
     Attack(int userId, int targetId, int percent) {
         super(userId, targetId, percent);
+        actionId = "a";
         hit = roundDouble(randomDouble(user.getMinHit(), user.getMaxHit()) * percent / 100);
         experience = (int) (9 * hit);
     }
@@ -30,7 +31,7 @@ public class Attack extends Action {
     public void unDo(){
         target.addCurHitPoints(hit);
         user.addCurExp(-experience);
-        message = null;
+        message = "";
     }
 
     private double randomDouble(double min, double max) {
@@ -41,7 +42,8 @@ public class Attack extends Action {
         return (rnd.nextInt((int) (max - min) * 100) + min * 100) / 100;
     }
 
-    double getHit() {
+    public double getHit() {
         return hit;
     }
+
 }

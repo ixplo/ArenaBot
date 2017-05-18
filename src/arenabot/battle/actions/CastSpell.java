@@ -13,6 +13,7 @@ public class CastSpell extends Action {
 
     public CastSpell(int userId, int targetId, int percent, String spellId) {
         super(userId, targetId, percent);
+        actionId = "m";
         this.spellId = spellId;
         experience = Spell.getSpell(this.spellId).getExpBonus() * Spell.getSpell(this.spellId).getDamage();
     }

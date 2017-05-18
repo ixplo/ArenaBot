@@ -20,13 +20,13 @@ public class BattleResult {
         if (membersLive.size() == 0) {
             Messages.sendToAll(members, "Победителей нет");
         } else {
-            int moneyBonus = members.size() * 10 - 10;
-            Messages.sendToAll(members, "<b>Битва окончена</b>, победила команда: " +
-                    teamWinner.get(0) + ":" + ArenaUser.getUserName(membersLive.get(0)));
+            int moneyBonus = members.size() * Config.GOLD_FOR_MEMBER - Config.GOLD_FOR_MEMBER;
+            Messages.sendToAll(members, "<b>Битва окончена</b>, победила команда: "
+                    + teamWinner.get(0) + ":" + ArenaUser.getUserName(membersLive.get(0)));
             ArenaUser.getUser(membersLive.get(0)).addUserWins();
             ArenaUser.getUser(membersLive.get(0)).addMoney(moneyBonus);
         }
-        Messages.sendResultToAll(teams, members,membersLive);
+        Messages.sendResultToAll(teams, members, membersLive);
         int count = members.size();
         for (int i = 0; i < count; i++) {
             ArenaUser user = members.get(i);
@@ -38,7 +38,7 @@ public class BattleResult {
             user.addUserGames();
             user.setLastGame();
         }
-        Messages.sendToAll(members,Messages.getInlineKeyboardMsg(Config.CHANNEL_ID,"Регистрация началась:",
-                Collections.singletonList("Сыграть снова"),Collections.singletonList("reg_user")));
+        Messages.sendToAll(members, Messages.getInlineKeyboardMsg(Config.CHANNEL_ID, "Регистрация началась:",
+                Collections.singletonList("Сыграть снова"), Collections.singletonList("reg_user")));
     }
 }

@@ -133,6 +133,10 @@ public class ArenaBot extends TelegramLongPollingCommandBot {
                 Messages.sendEmptyAnswerQuery(callbackQuery);
                 Messages.sendRegMsg(callbackQuery.getFrom().getId());
                 break;
+            case "learnSpell":
+                Messages.sendEmptyAnswerQuery(callbackQuery);
+                ArenaUser.getUser(callbackQuery.getFrom().getId()).learn(Integer.parseInt(callbackEntry));
+                break;
             case "target":
                 Action.addAction(callbackQuery.getFrom().getId());
                 Action.setTargetId(callbackQuery.getFrom().getId(), Integer.parseInt(callbackEntry));

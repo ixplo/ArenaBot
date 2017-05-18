@@ -75,6 +75,11 @@ public class Warrior extends ArenaUser implements SkillApplicant{
     }
 
     @Override
+    public void learn(int level) {
+
+    }
+
+    @Override
     public void skillApply(String skillId) {
 
     }

@@ -2,14 +2,14 @@ package arenabot.users.Classes;
 
 import arenabot.Config;
 import arenabot.Messages;
+import arenabot.battle.Round;
+import arenabot.battle.actions.Action;
+import arenabot.battle.actions.Attack;
 import arenabot.users.ArenaUser;
 import arenabot.users.Inventory.Item;
 import arenabot.users.Spells.Spell;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 import static arenabot.Messages.fillWithSpaces;
 import static arenabot.users.Spells.Spell.getSpell;
@@ -19,6 +19,7 @@ import static arenabot.users.Spells.Spell.getSpell;
  * 28.04.2017.
  */
 public class Mage extends ArenaUser implements SpellCaster {
+
     List<Spell> spells;
     private double maxMana;
     private double curMana;
@@ -39,7 +40,7 @@ public class Mage extends ArenaUser implements SpellCaster {
         setMaxMana(1.5 * getCurWis());
         setCurMana(maxMana);
         setMagicAttack(roundDouble(0.6 * getCurWis() + 0.4 * getCurInt()));
-        setSpell("1am", 1);
+        setSpell("1am");
     }
 
     @Override
@@ -87,27 +88,65 @@ public class Mage extends ArenaUser implements SpellCaster {
     }
 
     @Override
-    public String doCast(ArenaUser target, int percent, String castId) {
+    public String doCast(ArenaUser target, int percent, String spellId) {
         String message = "";
-        Spell spell = getSpell(castId);
-        Random rnd = new Random();
-        int chance = rnd.nextInt(99) + 1;
-        if (chance > (int) (spell.getProbability() * percent / 100)) {//(Math.log(getMagicAttack()/target.getMagicProtect() + 4.6)/7)
+        Spell spell = getSpell(spellId);
+        if (!isHappened(spell.getProbability() * percent / 100)) { //(Math.log(getMagicAttack()/target.getMagicProtect() + 4.6)/7)
             return message = "<code>" + getName() + " пытался создать заклинание [" + spell.getName() + "] на "
                     + target.getName() + ", но заклинание провалилось.</code>";
         }
-        if (spell.getEffect().equals("a")) {//todo change to normal word
-            if (spell.getManaCost() > curMana) {
-                return message = "<code>" + getName() + " пытался создать заклинание [" + spell.getName() + "] на "
-                        + target.getName() + ", но у него не хватило маны.</code>";
-            }
-            target.addCurHitPoints(-spell.getDamage());
+        if (spell.getManaCost() > curMana) {
+            return message = "<code>" + getName() + " пытался создать заклинание [" + spell.getName() + "] на "
+                    + target.getName() + ", но у него не хватило маны.</code>";
+        }
+        double bonus;
+        if (Spell.getSpellGrade(getUserId(), spellId) == 1) {
+            bonus = spell.getGradeOneBonus();
+        } else if (Spell.getSpellGrade(getUserId(), spellId) == 2) {
+            bonus = spell.getGradeTwoBonus();
+        } else {
+            bonus = spell.getGradeThreeBonus();
+        }
+        double damage = roundDouble(spell.getDamage() + bonus);
+        if (spell.getEffect().equals("DAMAGE")) {
+            target.addCurHitPoints(-damage);
             addCurMana(-spell.getManaCost());
-            addCurExp(spell.getDamage() * spell.getExpBonus());
+            addCurExp((int) (damage * spell.getExpBonus()));
             message = "<pre>" + getName() + " запустил заклинанием [" + spell.getName() + "] в " +
-                    target.getName() + " и ранил его на " + spell.getDamage() +
-                    "\n(жизни:-" + spell.getDamage() + "/" + target.getCurHitPoints() +
-                    " \\\\ опыт:+" + spell.getDamage() * spell.getExpBonus() + "/" + getCurExp() + ")</pre>";
+                    target.getName() + " и ранил его на " + damage +
+                    "\n(жизни:-" + damage + "/" + target.getCurHitPoints() +
+                    " \\\\ опыт:+" + damage * spell.getExpBonus() + "/" + getCurExp() + ")</pre>";
+        } else if (spell.getEffect().equals("HEAL")) {
+            if (target.getMaxHitPoints() - target.getCurHitPoints() < damage) {
+                damage = roundDouble(target.getMaxHitPoints() - target.getCurHitPoints());
+            }
+            target.addCurHitPoints(damage);
+            addCurMana(-spell.getManaCost());
+            addCurExp((int) (damage * spell.getExpBonus()));
+            message = "<pre>" + getName() + " Магией [" + spell.getName() + "] поднял здоровье у " +
+                    target.getName() + " на " + damage +
+                    "\n(жизни:" + damage + "/" + target.getCurHitPoints() +
+                    " \\\\ опыт:+" + damage * spell.getExpBonus() + "/" + getCurExp() + ")</pre>";
+        } else if (spell.getEffect().equals("ARMOR")) {
+            double armor = roundDouble(spell.getArmor() + bonus);
+            List<Action> attackOnTargetList = Round.round.getAttackOnTargetList(target.getUserId());
+            if (attackOnTargetList.size() == 0) {
+                return "<pre>" + getName() + " использовал заклинание [" + spell.getName() + "] на " +
+                        target.getName() + " и поднял защиту на " + armor +
+                        "\n(опыт:+" + spell.getExpBonus() + "/" + getCurExp() + ")</pre>";
+            }
+            for (Action attackAction : attackOnTargetList) {
+                double attack = attackAction.getUser().getAttack() * attackAction.getPercent() / 100;
+                if (attack > armor) {
+                    break;
+                }
+                int experience = (int) (4 * ((Attack) attackAction).getHit());
+                addCurExp(experience);
+                ((Attack) attackAction).unDo();
+                attackAction.setMessage("<pre>" + attackAction.getUser().getName() + " пытался ударить " + target.getName() +
+                        " оружием [" + Item.getItemName(attackAction.getUser().getUserId(), attackAction.getUser().getCurWeapon()) + "], но ему не удалось " +
+                        "\n(" + getName() + "[опыт:+" + experience + "/" + getCurExp() + ")</pre>");
+            }
         }
         return message;
     }
@@ -119,7 +158,7 @@ public class Mage extends ArenaUser implements SpellCaster {
         if (newSpellPoints > 0) {
             addSpellPoints(newSpellPoints);
             Messages.sendMessage((long) getUserId(), "Вы получили магические бонусы: " + newSpellPoints);
-            //todo Immediately output a button learn
+            showLearnButton();
         }
     }
 
@@ -145,12 +184,62 @@ public class Mage extends ArenaUser implements SpellCaster {
         return castsId;
     }
 
-    private void setSpell(String spellId, int spellGrade) {
-        db.addSpell(getUserId(), spellId, spellGrade);
+    @Override
+    public void learn(int spellLevel) {
+
+        if (spellLevel > getLevel()) {
+            Messages.sendMessage((long) getUserId(), "Вы не достигли нужного уровня, " +
+                    "ваш текущий уровень: " + getLevel());
+            return;
+        }
+        if (spellLevel > getSpellPoints()) {
+            Messages.sendMessage((long) getUserId(), "Не хватает магических бонусов, " +
+                    "доступно: " + getSpellPoints());
+            return;
+        }
+        int probability = (getLevel() - spellLevel + 2) * 25;
+        if (isHappened(probability)) {
+            String spellId = getSpellToLearn(spellLevel);
+            setSpell(spellId);
+            int spellGrade = Spell.getSpellGrade(getUserId(), spellId);
+            if (spellGrade == 1) {
+                Messages.sendMessage((long) getUserId(), "Вы выучили заклинание: "
+                        + Spell.getSpell(spellId).getName());
+            } else {
+                Messages.sendMessage((long) getUserId(), "Уровень заклинания "
+                        + Spell.getSpell(spellId).getName()
+                        + " поднялся до " + spellGrade);
+            }
+        } else {
+            Messages.sendMessage((long) getUserId(), "Вы всю ночь потели над книжками, "
+                    + "пытаясь выучить новое заклинание, но так ничему и не научились.");
+        }
+        addSpellPoints(-spellLevel);
+        showLearnButton();
+    }
+
+    private void setSpell(String spellId) {
+
+        db.addSpell(getUserId(), spellId, Spell.getSpellGrade(getUserId(), spellId) + 1);
     }
 
     static int countReceivedSpellPoints(int curExp, int exp) {
-        return (exp + curExp) / 120 - exp / 120;//not equals curExp/120 because int cuts fraction
+        return (exp + curExp) / 120 - exp / 120; //not equals curExp/120 because int cuts fraction
+    }
+
+    private void showLearnButton() {
+
+        Messages.sendMessage(Messages.getInlineKeyboardMsg(
+                (long) getUserId(),
+                "Всего бонусов: " + getSpellPoints(),
+                Collections.singletonList("Выучить заклинание"),
+                Collections.singletonList("learnSpell_1"))); //first level spell
+    }
+
+    private boolean isHappened(int probability) {
+        Random rnd = new Random();
+        int chance = rnd.nextInt(99) + 1;
+        return chance <= probability;
     }
 
     @Override
@@ -161,6 +250,13 @@ public class Mage extends ArenaUser implements SpellCaster {
     @Override
     public void learnSpell(int spellLevel) {
 
+
+    }
+
+    private String getSpellToLearn(int spellLevel) {
+        List<String> spellsId = db.getSpellsIdToLearn(getUserId(), spellLevel);
+        Random rnd = new Random();
+        return spellsId.get(rnd.nextInt(spellsId.size()));
     }
 
     @Override

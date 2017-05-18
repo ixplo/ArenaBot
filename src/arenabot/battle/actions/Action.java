@@ -14,6 +14,7 @@ import static com.google.common.math.IntMath.pow;
 public abstract class Action {
     ArenaUser user;
     ArenaUser target;
+    String actionId;
     private int percent;    //from 1 to 100
     int experience;
     String message;
@@ -51,7 +52,7 @@ public abstract class Action {
                 action = "m";
                 break;
             default:
-                throw new RuntimeException("Unknown action type: " + callbackEntry);
+                throw new RuntimeException("Unknown action actionId: " + callbackEntry);
         }
         db.setStringTo(Config.ROUND_ACTIONS, userId, "action_type", action);
     }
@@ -88,9 +89,16 @@ public abstract class Action {
                 "counter", counter);
     }
 
+    public String getActionId() {
+        return actionId;
+    }
 
     public String getMessage() {
         return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     public ArenaUser getTarget() {
@@ -127,7 +135,7 @@ public abstract class Action {
                 action = new CastSpell(userId, targetId, percent, spellId);
                 break;
             default:
-                throw new RuntimeException("Unknown action type: " + actionId);
+                throw new RuntimeException("Unknown action actionId: " + actionId);
         }
         return action;
     }
@@ -143,6 +151,9 @@ public abstract class Action {
         return (double) i / precise;
     }
 
+    public ArenaUser getUser() {
+        return user;
+    }
 
     public abstract void doAction();
 

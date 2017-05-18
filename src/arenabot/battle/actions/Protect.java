@@ -15,8 +15,9 @@ public class Protect extends Action {
 
     Protect(int userId, int targetId, int percent) {
         super(userId, targetId, percent);
+        actionId = "p";
         protect = user.getProtect() * percent / 100;
-        attackOnTargetList = Round.round.getActionsByTarget(targetId);
+        attackOnTargetList = Round.round.getAttackOnTargetList(targetId);
     }
 
     @Override

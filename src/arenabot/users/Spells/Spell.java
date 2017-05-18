@@ -16,8 +16,12 @@ public class Spell { //todo add implements Durable в потомка - клас�
     private int duration;
     private String effect;
     private int damage;
+    private int armor;
     private int expBonus;
     private int probability;
+    private double gradeOneBonus;
+    private double gradeTwoBonus;
+    private double gradeThreeBonus;
 
     public static Spell getSpell(String id) {
         Spell spell = new Spell();
@@ -28,9 +32,20 @@ public class Spell { //todo add implements Durable в потомка - клас�
         spell.level = db.getIntFrom(Config.SPELLS, id, "level");
         spell.duration = db.getIntFrom(Config.SPELLS, id, "duration");
         spell.damage = db.getIntFrom(Config.SPELLS, id, "hit");
+        spell.armor = db.getIntFrom(Config.SPELLS, id, "armor");
         spell.expBonus = db.getIntFrom(Config.SPELLS, id, "exp_bonus");
         spell.probability = db.getIntFrom(Config.SPELLS, id, "probability");
+        spell.gradeOneBonus = db.getDoubleFrom(Config.SPELLS, id, "bonus_g1");
+        spell.gradeTwoBonus = db.getDoubleFrom(Config.SPELLS, id, "bonus_g2");
+        spell.gradeThreeBonus = db.getDoubleFrom(Config.SPELLS, id, "bonus_g3");
         return spell;
+    }
+
+    public static int getSpellGrade(int userId, String spellId){
+        return db.getIntByBy(Config.AVAILABLE_SPELLS,
+                "spell_grade",
+                "id", spellId,
+                "user_id", userId);
     }
 
     public int getProbability() {
@@ -103,5 +118,21 @@ public class Spell { //todo add implements Durable в потомка - клас�
 
     public void setExpBonus(int expBonus) {
         this.expBonus = expBonus;
+    }
+
+    public double getGradeOneBonus() {
+        return gradeOneBonus;
+    }
+
+    public double getGradeTwoBonus() {
+        return gradeTwoBonus;
+    }
+
+    public double getGradeThreeBonus() {
+        return gradeThreeBonus;
+    }
+
+    public int getArmor() {
+        return armor;
     }
 }

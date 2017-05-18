@@ -11,6 +11,7 @@ public class Heal extends Action {
 
     Heal(int userId, int targetId, int percent) {
         super(userId, targetId, percent);
+        actionId = "h";
         heal = roundDouble(user.getHeal() * percent / 100);
     }
 

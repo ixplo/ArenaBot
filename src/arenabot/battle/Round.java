@@ -59,7 +59,7 @@ public class Round {
         }
         timer.cancel();
         Messages.sendToAll(members, "<b>Результаты раунда:</b>");
-        for (Order order : orders) {//todo queue with priority 1.attack 2.protect 3.magic 4.heal
+        for (Order order : orders) { //todo queue with priority 1.attack 2.protect 3.magic 4.heal
             for (Action action : order.getActions()) {
                 action.doAction();
             }
@@ -159,6 +159,17 @@ public class Round {
             }
         }
         return result;
+    }
+
+    public List<Action> getAttackOnTargetList(int targetId){
+        List<Action> attackOnTarget = new ArrayList<>();
+        List<Action> OnTargetList = getActionsByTarget(targetId);
+        for (Action action : OnTargetList) {
+            if(action.getActionId().equals("a")){
+                attackOnTarget.add(action);
+            }
+        }
+        return attackOnTarget;
     }
 
     public List<Order> getOrders() {

@@ -110,6 +110,11 @@ public class Priest extends ArenaUser implements SpellCaster {
     }
 
     @Override
+    public void learn(int level) {
+
+    }
+
+    @Override
     public void castSpell(String spellId) {
 
     }

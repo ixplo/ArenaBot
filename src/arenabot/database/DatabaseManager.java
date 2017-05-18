@@ -475,6 +475,27 @@ public class DatabaseManager {
         return team;
     }
 
+    public List<String> getSpellsIdToLearn(int userId, int spellLevel){
+        ArrayList<String> resultStringArr = new ArrayList<>();
+        try {
+            final PreparedStatement preparedStatement =
+                    connection.getPreparedStatement("SELECT s1.id FROM spells s1 " +
+                            "LEFT JOIN (SELECT id FROM available_spells " +
+                            "WHERE user_id=? AND spell_grade >2) s2 " +
+                            "ON s1.id=s2.id WHERE class=(SELECT class FROM users WHERE id=362812407) " +
+                            "AND level=? AND s2.id IS NULL;");
+            preparedStatement.setInt(1, userId);
+            preparedStatement.setInt(2, spellLevel);
+            final ResultSet result = preparedStatement.executeQuery();
+            while (result.next()) {
+                resultStringArr.add(result.getString("id"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return resultStringArr;
+    }
+
     public int getIntFrom(String tableName, Integer id, String columnName) {
         int resultInt = -1;
         try {
@@ -529,6 +550,22 @@ public class DatabaseManager {
             String queryText = "Select " + columnName + " FROM " + tableName + " WHERE id=?;";
             final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText);
             preparedStatement.setInt(1, id);
+            final ResultSet result = preparedStatement.executeQuery();
+            if (result.next()) {
+                resultDouble = result.getDouble(columnName);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return resultDouble;
+    }
+
+    public double getDoubleFrom(String tableName, String id, String columnName) {
+        double resultDouble = -1;
+        try {
+            String queryText = "Select " + columnName + " FROM " + tableName + " WHERE id=?;";
+            final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText);
+            preparedStatement.setString(1, id);
             final ResultSet result = preparedStatement.executeQuery();
             if (result.next()) {
                 resultDouble = result.getDouble(columnName);
@@ -604,8 +641,8 @@ public class DatabaseManager {
     }
 
     public int getIntByBy(String tableName, String columnName, String firstColumn, String firstId, String secondColumn, Integer secondId) {
-        int resultInt = -1;
-        try {//SELECT counter FROM inventory WHERE id='waa' AND userId='362812407';
+        int resultInt = 0;
+        try { //SELECT counter FROM inventory WHERE id='waa' AND userId='362812407';
             String queryText = "Select " + columnName + " FROM " + tableName + " WHERE " + firstColumn + "=? AND " + secondColumn + "=?;";
             final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText);
             preparedStatement.setString(1, firstId);
@@ -613,7 +650,7 @@ public class DatabaseManager {
             final ResultSet result = preparedStatement.executeQuery();
             if(result.next()) {
                 resultInt = result.getInt(columnName);
-            }else throw new RuntimeException("No such int: " + queryText);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
