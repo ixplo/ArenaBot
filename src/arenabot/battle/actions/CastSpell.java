@@ -11,8 +11,7 @@ import arenabot.users.Spells.Spell;
 public class CastSpell extends Action {
     String spellId;
 
-    public CastSpell(int userId, int targetId, int percent, String spellId) {
-        super(userId, targetId, percent);
+    public CastSpell(String spellId) {
         actionId = "m";
         this.spellId = spellId;
         experience = Spell.getSpell(this.spellId).getExpBonus() * Spell.getSpell(this.spellId).getDamage();

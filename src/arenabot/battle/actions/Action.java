@@ -20,6 +20,35 @@ public abstract class Action {
     String message;
     private static DatabaseManager db;
 
+    /******* constructor **********
+     * use Action create
+     ******************************/
+    Action() {}
+
+    public static Action create(int userId, String actionId, int targetId, int percent, String spellId) {
+        Action action;
+        switch (actionId) {
+            case "a":
+                action = new Attack();
+                break;
+            case "p":
+                action = new Protect();
+                break;
+            case "h":
+                action = new Heal();
+                break;
+            case "m":
+                action = new CastSpell(spellId);
+                break;
+            default:
+                throw new RuntimeException("Unknown action actionId: " + actionId);
+        }
+        action.user = Round.round.getMember(userId);
+        action.target = Round.round.getMember(targetId);
+        action.percent = percent;
+        return action;
+    }
+
     public static void setDb(DatabaseManager databaseManager) {
         db = databaseManager;
     }
@@ -113,32 +142,7 @@ public abstract class Action {
         this.percent = percent;
     }
 
-    Action(int userId, int targetId, int percent) {
-        user = Round.round.getMember(userId);
-        target = Round.round.getMember(targetId);
-        this.percent = percent;
-    }
 
-    public static Action create(int userId, String actionId, int targetId, int percent, String spellId) {
-        Action action;
-        switch (actionId) {
-            case "a":
-                action = new Attack(userId, targetId, percent);
-                break;
-            case "p":
-                action = new Protect(userId, targetId, percent);
-                break;
-            case "h":
-                action = new Heal(userId, targetId, percent);
-                break;
-            case "m":
-                action = new CastSpell(userId, targetId, percent, spellId);
-                break;
-            default:
-                throw new RuntimeException("Unknown action actionId: " + actionId);
-        }
-        return action;
-    }
 
     static double roundDouble(double d) {
         return roundDouble(d, 2);

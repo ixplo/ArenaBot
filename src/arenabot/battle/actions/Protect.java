@@ -13,11 +13,10 @@ public class Protect extends Action {
     private double protect;
     private List<Action> attackOnTargetList;
 
-    Protect(int userId, int targetId, int percent) {
-        super(userId, targetId, percent);
+    Protect() {
         actionId = "p";
-        protect = user.getProtect() * percent / 100;
-        attackOnTargetList = Round.round.getAttackOnTargetList(targetId);
+        protect = user.getProtect() * getPercent() / 100;
+        attackOnTargetList = Round.round.getAttackOnTargetList(getTarget().getUserId());
     }
 
     @Override

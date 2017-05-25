@@ -9,10 +9,9 @@ import arenabot.users.ArenaUser;
 public class Heal extends Action {
     private double heal;
 
-    Heal(int userId, int targetId, int percent) {
-        super(userId, targetId, percent);
+    Heal() {
         actionId = "h";
-        heal = roundDouble(user.getHeal() * percent / 100);
+        heal = roundDouble(user.getHeal() * getPercent() / 100);
     }
 
     @Override
@@ -27,6 +26,7 @@ public class Heal extends Action {
                 " на " + heal + "\n(жизни:+" + heal + "/" + target.getCurHitPoints() +
                 " \\\\ опыт:+" + experience + "/" + user.getCurExp() + ")</pre>";
     }
+
     public void unDo(){
         target.addCurHitPoints(-heal);
         user.addCurExp(-experience);

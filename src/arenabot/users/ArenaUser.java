@@ -30,8 +30,6 @@ public abstract class ArenaUser {
 
     public static DatabaseManager db;
 
-
-
     public enum UserClass { ARCHER, MAGE, PRIEST, WARRIOR }
 
     public List<String> actionsName = Arrays.asList("Атака", "Защита", "Лечение");
@@ -75,8 +73,10 @@ public abstract class ArenaUser {
     private int status;
 
 
-    /****** constructor ******/
-    //use ArenaUser.create
+    /****** constructor ******
+     * use ArenaUser.create
+     *************************/
+    public ArenaUser(){}
 
     /****** abstract ******/
     public abstract void setClassFeatures();

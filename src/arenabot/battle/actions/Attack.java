@@ -12,10 +12,9 @@ import java.util.Random;
 public class Attack extends Action {
     private double hit;
 
-    Attack(int userId, int targetId, int percent) {
-        super(userId, targetId, percent);
+    Attack() {
         actionId = "a";
-        hit = roundDouble(randomDouble(user.getMinHit(), user.getMaxHit()) * percent / 100);
+        hit = roundDouble(randomDouble(user.getMinHit(), user.getMaxHit()) * getPercent() / 100);
         experience = (int) (9 * hit);
     }
 
