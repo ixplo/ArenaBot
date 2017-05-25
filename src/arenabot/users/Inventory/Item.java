@@ -53,7 +53,7 @@ public class Item {
     }
 
     public static int getEqipAmount(Integer userId) {
-        return db.getCount(Config.EQIP, Config.USER_ID, userId); //количество вещей в eq
+        return db.getCount(Config.EQIP, Config.USER_ID, userId); //items count in eq
     }
 
     private static List<String> getItemsId(int userId) {
