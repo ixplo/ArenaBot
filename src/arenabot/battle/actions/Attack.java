@@ -14,12 +14,12 @@ public class Attack extends Action {
 
     Attack() {
         actionId = "a";
-        hit = roundDouble(randomDouble(user.getMinHit(), user.getMaxHit()) * getPercent() / 100);
-        experience = (int) (9 * hit);
     }
 
     @Override
     public void doAction() {
+        hit = roundDouble(randomDouble(user.getMinHit(), user.getMaxHit()) * getPercent() / 100);
+        experience = (int) (9 * hit);
         target.addCurHitPoints(-hit);
         user.addCurExp(experience);
         message = "<pre>" + user.getName() + " напал на " + target.getName() +

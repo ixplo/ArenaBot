@@ -15,12 +15,12 @@ public class Protect extends Action {
 
     Protect() {
         actionId = "p";
-        protect = user.getProtect() * getPercent() / 100;
-        attackOnTargetList = Round.round.getAttackOnTargetList(getTarget().getUserId());
     }
 
     @Override
     public void doAction() {
+        protect = user.getProtect() * getPercent() / 100;
+        attackOnTargetList = Round.round.getAttackOnTargetList(getTarget().getUserId());
         if (attackOnTargetList.size() == 0) {
             return;
         }

@@ -11,11 +11,11 @@ public class Heal extends Action {
 
     Heal() {
         actionId = "h";
-        heal = roundDouble(user.getHeal() * getPercent() / 100);
     }
 
     @Override
     public void doAction() {
+        heal = roundDouble(user.getHeal() * getPercent() / 100);
         if (target.getCurHitPoints() + heal > target.getMaxHitPoints()) {
             heal = roundDouble(target.getMaxHitPoints() - target.getCurHitPoints());
         }

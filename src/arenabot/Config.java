@@ -13,8 +13,8 @@ public class Config {
     static final String VERSION = "0.3";
     static final String BOT_CHANNEL_NAME = "#Arena";
     final String rules = "rules.html";      //mc(rules)
-    public static final long CHANNEL_ID = -161929436;//arena
-//    public static final long CHANNEL_ID = -202049243;//#arena
+//    public static final long CHANNEL_ID = -161929436;//arena
+    public static final long CHANNEL_ID = -202049243;//#arena
     public static final Integer IS_ADMIN = 362812407;
     static final String BOT_TOKEN = "298781231:AAHDBJLNCjRpxmT7aazDhh5Hr7t6xNLCwr0";
     public static final String DB_CONTROLLER = "org.sqlite.JDBC";

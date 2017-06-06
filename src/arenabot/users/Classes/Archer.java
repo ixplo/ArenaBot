@@ -24,7 +24,7 @@ import static arenabot.Messages.fillWithSpaces;
  * 28.04.2017.
  */
 public class Archer extends ArenaUser implements SkillApplicant {
-    public static final List<String> actionsName = Arrays.asList("Атака","Защита","Лечение");
+    public static final List<String> actionsName = Arrays.asList("Атака", "Защита", "Лечение");
     ArrayList<Skill> skills;
     private int maxTarget;
     int energy;
@@ -60,10 +60,10 @@ public class Archer extends ArenaUser implements SkillApplicant {
     @Override
     public void addHarkClassFeatures(String harkToUpId, int numberOfPoints) {
         refreshMaxTargets();
-        if(harkToUpId.equals("nativeStr")){
+        if (harkToUpId.equals("nativeStr")) {
             undoStrBonus(numberOfPoints);
         }
-        if(harkToUpId.equals("nativeInt")){
+        if (harkToUpId.equals("nativeInt")) {
             doIntBonus(numberOfPoints);
         }
     }
@@ -79,20 +79,20 @@ public class Archer extends ArenaUser implements SkillApplicant {
     }
 
 
-    private void refreshMaxTargets(){
+    private void refreshMaxTargets() {
         int maxArcherTargets = (int) roundDouble((0.7 * getCurWis() + 0.3 * getCurDex()) / 4, 0);
         setMaxTarget(maxArcherTargets < 1 ? 1 : maxArcherTargets);
     }
 
     private void doIntBonus(int numberOfPoints) {
-        setMinHit(roundDouble(getMinHit() + (double)numberOfPoints / 4));
-        setMaxHit(roundDouble(getMaxHit() + (double)numberOfPoints / 4));
+        setMinHit(roundDouble(getMinHit() + (double) numberOfPoints / 4));
+        setMaxHit(roundDouble(getMaxHit() + (double) numberOfPoints / 4));
         setAttack(roundDouble(getAttack() + 0.39 * numberOfPoints));
     }
 
     private void undoStrBonus(int numberOfPoints) {
-        setMinHit(roundDouble(getMinHit() - (double)numberOfPoints / 4));
-        setMaxHit(roundDouble(getMaxHit() - (double)numberOfPoints / 4));
+        setMinHit(roundDouble(getMinHit() - (double) numberOfPoints / 4));
+        setMaxHit(roundDouble(getMaxHit() - (double) numberOfPoints / 4));
         setAttack(roundDouble(getAttack() - 0.39 * numberOfPoints));
     }
 
