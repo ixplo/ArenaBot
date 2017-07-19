@@ -161,7 +161,7 @@ public abstract class ArenaUser {
         arenaUser.magicProtect = roundDouble(0.6 * arenaUser.curWis + 0.4 * arenaUser.curInt);
         arenaUser.setClassFeatures();
         db.addItem(userId, "waa");
-        Item.putOn(arenaUser, 1);
+        arenaUser.putOn(1);
         db.setUser(arenaUser);
         return arenaUser;
     }
@@ -326,6 +326,12 @@ public abstract class ArenaUser {
 
     public static List<String> getClassesDescr() {
         return db.getColumn(Config.CLASSES, "descr");
+    }
+
+    /****** Common stuff ******/
+
+    public void putOn(int eqipIndex) {
+        Item.putOn(this, eqipIndex);
     }
 
     /****** Add ******/
@@ -548,6 +554,10 @@ public abstract class ArenaUser {
         this.lastGame = lastGame;
     }
 
+    public void setStatus(int status) {
+        this.status = status;
+        db.setIntTo(Config.USERS, userId, "status", status);
+    }
 
     /****** get ******/
     public String getUserTitle() {
@@ -700,11 +710,6 @@ public abstract class ArenaUser {
 
     public int getStatus() {
         return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
-        db.setIntTo(Config.USERS, userId, "status", status);
     }
 
     public String getName() {

@@ -81,7 +81,7 @@ public class Item {
         return db.getStringByBy(Config.EQIP, "id", "counter", eqipIndex, Config.USER_ID, userId);
     }
 
-    public static void putOn(ArenaUser arenaUser, Integer eqipIndex) {
+    public static void putOn(ArenaUser arenaUser, Integer eqipIndex) { // refactor to instance instead static
 
         //*** проверка на наличие в инвентаре
         if (eqipIndex > getEqipAmount(arenaUser.getUserId())) {
