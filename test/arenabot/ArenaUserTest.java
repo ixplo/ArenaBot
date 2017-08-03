@@ -1,8 +1,14 @@
 package arenabot;
 
+import arenabot.database.ConnectionDB;
+import arenabot.database.DatabaseManager;
 import arenabot.users.ArenaUser;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
 import static org.junit.Assert.*;
 
@@ -11,6 +17,14 @@ import static org.junit.Assert.*;
  * 01.05.2017.
  */
 public class ArenaUserTest {
+    public static final String DB_LINK = "jdbc:sqlite:TestArenaDb.sqlite";
+
+    DatabaseManager db = DatabaseManager.getInstance();
+    {
+        DatabaseManager.setConnection(new ConnectionDB(DB_LINK));
+        ArenaBot arenaBot = new ArenaBot();
+        arenaBot.setDb(db);
+    }
     private ArenaUser warrior = ArenaUser.create(ArenaUser.UserClass.WARRIOR);
 
     @Before
@@ -48,6 +62,7 @@ public class ArenaUserTest {
     public void doesUserExists() throws Exception {
        assertTrue(ArenaUser.doesUserExists(362812407));
        assertFalse(ArenaUser.doesUserExists(1));
+       assertFalse(ArenaUser.doesUserExists(-1));
     }
 
     @Test
@@ -56,13 +71,12 @@ public class ArenaUserTest {
         assertNull(warrior.getName());
     }
 
-//    @Test
-//    public void doesUserExists1() throws Exception {
-//    }
-//
-//    @Test
-//    public void create() throws Exception {
-//    }
+
+    @Test
+    public void create() throws Exception {
+        ArenaUser newUser = ArenaUser.create(ArenaUser.UserClass.WARRIOR);
+        assertNotNull(newUser);
+    }
 //
 //    @Test
 //    public void dropUser() throws Exception {

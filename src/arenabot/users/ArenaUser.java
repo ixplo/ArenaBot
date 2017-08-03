@@ -160,7 +160,7 @@ public abstract class ArenaUser {
         arenaUser.heal = roundDouble(0.06 * arenaUser.curWis + 0.04 * arenaUser.curInt);
         arenaUser.magicProtect = roundDouble(0.6 * arenaUser.curWis + 0.4 * arenaUser.curInt);
         arenaUser.setClassFeatures();
-        db.addItem(userId, "waa");
+        db.addItem(userId, "waa"); //todo arenaUser.addItem(new Item("waa"));
         arenaUser.putOn(1);
         db.setUser(arenaUser);
         return arenaUser;

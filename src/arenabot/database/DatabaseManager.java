@@ -6,6 +6,7 @@ import arenabot.users.Inventory.Item;
 import arenabot.battle.Team;
 import org.telegram.telegrambots.logging.BotLogger;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -50,6 +51,10 @@ public class DatabaseManager {
             currentInstance = instance;
         }
         return currentInstance;
+    }
+
+    public static void setConnection(ConnectionDB conn) {
+        connection = conn;
     }
 
     public boolean doesUserExists(Integer userId) {

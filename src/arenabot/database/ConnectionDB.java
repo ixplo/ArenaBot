@@ -14,14 +14,17 @@ public class ConnectionDB {
     private Connection currentConnection;
 
     public ConnectionDB() {
-        this.currentConnection = openConnection();
+        this.currentConnection = openConnection(Config.DB_LINK);
+    }
+    public ConnectionDB(String dbLink) {
+        currentConnection = openConnection(dbLink);
     }
 
-    private Connection openConnection() {
+    private Connection openConnection(String dbLink) {
         Connection connection = null;
         try {
             Class.forName(Config.DB_CONTROLLER).newInstance();
-            connection = DriverManager.getConnection(Config.DB_LINK);
+            connection = DriverManager.getConnection(dbLink);
         } catch (SQLException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
             BotLogger.error(LOGTAG, e);
         }

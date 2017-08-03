@@ -62,7 +62,7 @@ public class ArenaBot extends TelegramLongPollingCommandBot {
         registration = new Registration();
     }
 
-    private void setDb(DatabaseManager db) {
+    public void setDb(DatabaseManager db) {
         ArenaUser.setDb(db);
         Item.setDb(db);
         Registration.setDb(db);
