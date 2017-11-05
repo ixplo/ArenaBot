@@ -1,9 +1,9 @@
-package arenabot.user.Classes;
+package arenabot.user.classes;
 
 import arenabot.Config;
 import arenabot.user.ArenaUser;
-import arenabot.user.Inventory.Item;
-import arenabot.user.Spells.Skill;
+import arenabot.user.inventory.Item;
+import arenabot.user.spells.Skill;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -48,6 +48,11 @@ public class Archer extends ArenaUser implements SkillApplicant {
         refreshMaxTargets();
         undoStrBonus(item.getStrBonus());
         doIntBonus(item.getIntBonus());
+    }
+
+    @Override
+    public void putOffClassFeatures(Item item) {
+        //todo
     }
 
     @Override

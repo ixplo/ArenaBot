@@ -1,6 +1,6 @@
 package arenabot.battle.actions;
 
-import arenabot.user.Spells.Spell;
+import arenabot.user.spells.Spell;
 
 /**
  * ixplo

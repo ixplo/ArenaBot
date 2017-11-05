@@ -19,11 +19,12 @@ public class Config {
     public static final String BOT_TOKEN = "298781231:AAHDBJLNCjRpxmT7aazDhh5Hr7t6xNLCwr0";
     public static final String DB_CONTROLLER = "org.sqlite.JDBC";
     public static final String DB_LINK = "jdbc:sqlite:ArenaDb.sqlite";
+    public static final String TEST_DB_LINK = "jdbc:sqlite:TestArenaDb.sqlite";
     public static final String BOT_LINK = "https://telegram.me/ArenaMBot?start=regUser";
     public static final String BOT_PRIVATE = "https://telegram.me/ArenaMBot";
     public static final String BOT_PHOTO_LINK = "http://www.wallpapermint.com/wp-content/uploads/2014/02/Fantasy-World-Pack3-21-280x158.jpg";
     public static final String BOT_TUMB_PHOTO_LINK = "http://pixs.ru/showimage/tumbjpg_5168201_25993141.jpg";
-    public static final String USERS = "user";
+    public static final String USERS = "users";
     public static final String CLASSES = "classes";
     public static final String RACES = "races";
     public static final String EQIP = "inventory";

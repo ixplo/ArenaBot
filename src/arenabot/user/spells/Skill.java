@@ -1,4 +1,4 @@
-package arenabot.user.Spells;
+package arenabot.user.spells;
 
 /**
  * ixplo

@@ -1,4 +1,4 @@
-package arenabot.user.Inventory;
+package arenabot.user.inventory;
 
 import arenabot.Config;
 import arenabot.database.DatabaseManager;
@@ -114,7 +114,7 @@ public class Item {
         arenaUser.setHeal(arenaUser.getHeal() + roundDouble(0.06 * item.getWisBonus() + 0.04 * item.getIntBonus()));
         if (item.isWeapon()) arenaUser.setCurWeapon(eqipIndex);
         //*** заносим in_slot
-        item.putInSlot(arenaUser.getUserId(), eqipIndex);
+        item.markAsPuttedOn(arenaUser.getUserId(), eqipIndex);
         arenaUser.putOnClassFeatures(item);
         db.setUser(arenaUser);
         //todo снова изменить характеристики из-за предыдущего пункта
@@ -128,6 +128,45 @@ public class Item {
         //todo изменение характеристик перса (если изменяет основные харки, это потянет за собой изменение зависящих от них
         //todo проверка на соответствие требованиям (другие вещи могут перестать соответствовать)
         //todo обнулить in_slot - снова изменить из-за этого характеристики
+    }
+
+    public static void putOff(ArenaUser arenaUser, int eqipIndex) {
+
+        //*** проверка на наличие в инвентаре
+        if (eqipIndex > getEqipAmount(arenaUser.getUserId())) {
+            throw new RuntimeException("Invalid eqip index: " + eqipIndex);
+        }
+        //*** проверка, а надета ли она
+        if (!isItemInSlot(arenaUser.getUserId(), eqipIndex)) {
+            //todo throw
+            return;
+        }
+        //todo проверка на соответствие требованиям (другие вещи тоже надо проверить, на случай если харки уменьшатся)
+
+        Item item = getItem(getItemId(arenaUser.getUserId(), eqipIndex));
+
+        //*** изменение характеристик перса
+        arenaUser.setCurStr(arenaUser.getCurStr() - item.getStrBonus());
+        arenaUser.setCurDex(arenaUser.getCurDex() - item.getDexBonus());
+        arenaUser.setCurWis(arenaUser.getCurWis() - item.getWisBonus());
+        arenaUser.setCurInt(arenaUser.getCurInt() - item.getIntBonus());
+        arenaUser.setCurCon(arenaUser.getCurCon() - item.getConBonus());
+        arenaUser.setMinHit(arenaUser.getMinHit() - item.getMinHit() - item.getStrBonus() / 4);
+        arenaUser.setMaxHit(arenaUser.getMaxHit() - item.getMaxHit() - item.getStrBonus() / 4);
+        arenaUser.setAttack(arenaUser.getAttack() - item.getAttack() - roundDouble(0.91 * item.getDexBonus() + 0.39 * item.getStrBonus()));
+        arenaUser.setProtect(arenaUser.getProtect() - item.getProtect() - roundDouble(0.4 * item.getDexBonus() + 0.6 * item.getConBonus()));
+        arenaUser.setMaxHitPoints(arenaUser.getMaxHitPoints() - roundDouble(1.3333333 * item.getConBonus()));//todo переделать на BigDecimal, иначе выскочит нецелое число
+        if (arenaUser.getStatus() != 2) { //todo поменять цифры на константы
+            arenaUser.setCurHitPoints(arenaUser.getMaxHitPoints()); // not in battle
+        }
+        arenaUser.setMagicProtect(arenaUser.getMagicProtect() - roundDouble(0.6 * item.getWisBonus() + 0.4 * item.getIntBonus()));
+        arenaUser.setHeal(arenaUser.getHeal() - roundDouble(0.06 * item.getWisBonus() + 0.04 * item.getIntBonus()));
+        if (item.isWeapon()) arenaUser.setCurWeapon(0); //надеваем Ладошку
+        //*** заносим in_slot
+        item.markAsPuttedOff(arenaUser.getUserId(), eqipIndex);
+        arenaUser.putOffClassFeatures(item);
+        db.setUser(arenaUser);
+        //todo снова изменить характеристики из-за предыдущего пункта
     }
 
 /*todo
@@ -152,8 +191,12 @@ public class Item {
         return db.getStringFrom("SLOTS", slot, "name");
     }
 
-    public boolean putInSlot(Integer userId, Integer eqipIndex) {
+    public boolean markAsPuttedOn(Integer userId, Integer eqipIndex) {
         return db.setStringTo(Config.EQIP, itemId, "in_slot", slot);
+    }
+
+    public boolean markAsPuttedOff(Integer userId, Integer eqipIndex) {
+        return db.setStringTo(Config.EQIP, itemId, "in_slot", null);
     }
 
     private static double roundDouble(double d) {
@@ -350,4 +393,5 @@ public class Item {
     public void setItemsSet(String itemsSet) {
         this.itemsSet = itemsSet;
     }
+
 }

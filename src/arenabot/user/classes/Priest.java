@@ -1,10 +1,10 @@
-package arenabot.user.Classes;
+package arenabot.user.classes;
 
 import arenabot.Config;
 import arenabot.messages.Messages;
 import arenabot.user.ArenaUser;
-import arenabot.user.Inventory.Item;
-import arenabot.user.Spells.Spell;
+import arenabot.user.inventory.Item;
+import arenabot.user.spells.Spell;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -58,6 +58,11 @@ public class Priest extends ArenaUser implements SpellCaster {
             setCurMana(getMaxMana());
         }
         setMagicAttack(getMagicAttack() + roundDouble(0.6 * item.getWisBonus() + 0.4 * item.getIntBonus()));
+    }
+
+    @Override
+    public void putOffClassFeatures(Item item) {
+        //todo
     }
 
     @Override

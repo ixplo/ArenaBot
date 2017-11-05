@@ -8,7 +8,7 @@ import arenabot.battle.Registration;
 import arenabot.database.DatabaseManager;
 import arenabot.messages.Messages;
 import arenabot.user.ArenaUser;
-import arenabot.user.Inventory.Item;
+import arenabot.user.inventory.Item;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.*;
 import org.telegram.telegrambots.api.objects.inlinequery.InlineQuery;

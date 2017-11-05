@@ -1,8 +1,8 @@
-package arenabot.user.Classes;
+package arenabot.user.classes;
 
 import arenabot.user.ArenaUser;
-import arenabot.user.Inventory.Item;
-import arenabot.user.Spells.Skill;
+import arenabot.user.inventory.Item;
+import arenabot.user.spells.Skill;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +37,11 @@ public class Warrior extends ArenaUser implements SkillApplicant{
     @Override
     public void putOnClassFeatures(Item item) {
 
+    }
+
+    @Override
+    public void putOffClassFeatures(Item item) {
+        //todo
     }
 
     @Override

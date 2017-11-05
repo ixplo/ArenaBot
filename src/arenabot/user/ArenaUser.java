@@ -5,11 +5,11 @@ import arenabot.messages.Messages;
 import arenabot.battle.Battle;
 import arenabot.battle.Round;
 import arenabot.database.DatabaseManager;
-import arenabot.user.Classes.Archer;
-import arenabot.user.Classes.Mage;
-import arenabot.user.Classes.Priest;
-import arenabot.user.Classes.Warrior;
-import arenabot.user.Inventory.Item;
+import arenabot.user.classes.Archer;
+import arenabot.user.classes.Mage;
+import arenabot.user.classes.Priest;
+import arenabot.user.classes.Warrior;
+import arenabot.user.inventory.Item;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.bots.AbsSender;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
@@ -28,7 +28,21 @@ public abstract class ArenaUser {
 
     public static DatabaseManager db;
 
+
     public enum UserClass { ARCHER, MAGE, PRIEST, WARRIOR }
+
+    public enum UserRace {
+        ELF,
+        HUMAN,
+        GNOME,
+        GIANT,
+        NAZGUL,
+        GOBLIN,
+        HOBBIT,
+        TROLL,
+        ORC,
+        KOBOLD,
+    }
 
     public List<String> actionsName = Arrays.asList("Атака", "Защита", "Лечение");
     private int userId;
@@ -85,6 +99,8 @@ public abstract class ArenaUser {
 
     public abstract void putOnClassFeatures(Item item);
 
+    public abstract void putOffClassFeatures(Item item);
+
     public abstract void addHarkClassFeatures(String harkToUpId, int numberOfPoints);
 
     public abstract void doAction(String[] command);
@@ -102,29 +118,6 @@ public abstract class ArenaUser {
     public abstract void learn(int level);
 
     /****** static ******/
-    public static ArenaUser create(UserClass userClassId) {
-        if (userClassId == null) {
-            throw new IllegalArgumentException("userClassId is invalid: " + userClassId);
-        }
-        ArenaUser hero;
-        switch (userClassId) {
-            case WARRIOR:
-                hero = new Warrior();
-                break;
-            case ARCHER:
-                hero = new Archer();
-                break;
-            case MAGE:
-                hero = new Mage();
-                break;
-            case PRIEST:
-                hero = new Priest();
-                break;
-            default:
-                throw new RuntimeException("Unknown userClass: " + userClassId);
-        }
-        return hero;
-    }
 
     public static ArenaUser create(int userId, String name, UserClass userClass, String race) {
         ArenaUser arenaUser = ArenaUser.create(userClass);
@@ -165,6 +158,30 @@ public abstract class ArenaUser {
         arenaUser.putOn(1); //todo overloaded method putOn("waa")
         db.setUser(arenaUser);
         return arenaUser;
+    }
+
+    public static ArenaUser create(UserClass userClassId) {
+        if (userClassId == null) {
+            throw new IllegalArgumentException("userClassId is invalid: " + userClassId);
+        }
+        ArenaUser hero;
+        switch (userClassId) {
+            case WARRIOR:
+                hero = new Warrior();
+                break;
+            case ARCHER:
+                hero = new Archer();
+                break;
+            case MAGE:
+                hero = new Mage();
+                break;
+            case PRIEST:
+                hero = new Priest();
+                break;
+            default:
+                throw new RuntimeException("Unknown userClass: " + userClassId);
+        }
+        return hero;
     }
 
     //todo save user to db public static void setUser(Integer userId){common + abstract}
@@ -333,6 +350,10 @@ public abstract class ArenaUser {
 
     public void putOn(int eqipIndex) {
         Item.putOn(this, eqipIndex);
+    }
+
+    public void putOff(int eqipIndex) {
+        Item.putOff(this, eqipIndex);
     }
 
     /****** Add ******/

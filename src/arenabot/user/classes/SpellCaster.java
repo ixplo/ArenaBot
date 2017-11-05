@@ -1,4 +1,4 @@
-package arenabot.user.Classes;
+package arenabot.user.classes;
 
 /**
  * ixplo

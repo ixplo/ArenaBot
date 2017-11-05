@@ -3,9 +3,11 @@ package arenabot;
 import arenabot.database.ConnectionDB;
 import arenabot.database.DatabaseManager;
 import arenabot.user.ArenaUser;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import static arenabot.Config.TEST_DB_LINK;
 import static org.junit.Assert.*;
 
 /**
@@ -14,25 +16,30 @@ import static org.junit.Assert.*;
  */
 public class ArenaUserTest {
 
-    public static final String TEST_DB_LINK = "jdbc:sqlite:TestArenaDb.sqlite";
-    DatabaseManager db = DatabaseManager.getInstance();
-    {
-        DatabaseManager.setConnection(new ConnectionDB(TEST_DB_LINK));
-        ArenaBot arenaBot = new ArenaBot();
-        arenaBot.setDb(db);
-    }
-    private ArenaUser warrior = ArenaUser.create(ArenaUser.UserClass.WARRIOR);
+    private DatabaseManager db;
+    private ArenaUser warrior;
 
     @Before
     public void setUp() throws Exception {
+        DatabaseManager.setConnection(new ConnectionDB(TEST_DB_LINK));
+        db = DatabaseManager.getInstance();
+        ArenaBot arenaBot = new ArenaBot();
+        arenaBot.setDb(db);
+//        warrior = ArenaUser.create(ArenaUser.UserClass.WARRIOR);
+//        warrior.setUserId(-1);
+//        warrior.setName("test_warrior");
+        warrior = ArenaUser.create(-1,"test_warrior", ArenaUser.UserClass.WARRIOR, "o");
+        db.setUser(warrior);
     }
 
-//    @After
-//    public void tearDown() throws Exception {
-//    }
+    @After
+    public void tearDown() throws Exception {
+        DatabaseManager.getConnection().closeConnection();
+    }
 
     @Test
     public void addHark() throws Exception {
+
         warrior.setNativeStr(3);
         warrior.setCurStr(3);
         warrior.setNativeDex(3);
@@ -68,12 +75,12 @@ public class ArenaUserTest {
     }
 
 
-    @Test (expected = IllegalArgumentException.class)
+    @Test //(expected = IllegalArgumentException.class)
     public void create() throws Exception {
-        ArenaUser newUser = ArenaUser.create(ArenaUser.UserClass.WARRIOR);
+        ArenaUser newUser = ArenaUser.create(-500, "test_notNull", ArenaUser.UserClass.WARRIOR, "o");
         assertNotNull(newUser);
-        assertEquals(ArenaUser.UserClass.MAGE.toString(), ArenaUser.create(ArenaUser.UserClass.MAGE).getUserClass());
-        newUser = ArenaUser.create(null);
+        assertEquals(ArenaUser.UserClass.MAGE.toString(),
+                ArenaUser.create(-501, "test_Mage", ArenaUser.UserClass.MAGE, "o").getUserClass());
     }
 //
 //    @Test

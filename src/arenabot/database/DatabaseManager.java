@@ -2,7 +2,7 @@ package arenabot.database;
 
 import arenabot.user.ArenaUser;
 import arenabot.Config;
-import arenabot.user.Inventory.Item;
+import arenabot.user.inventory.Item;
 import arenabot.battle.Team;
 import org.telegram.telegrambots.logging.BotLogger;
 
@@ -56,9 +56,12 @@ public class DatabaseManager {
         connection = conn;
     }
 
+    public static ConnectionDB getConnection() {
+        return connection;
+    }
     public boolean doesUserExists(Integer userId) {
         int status = -1;
-        String queryText = "Select id FROM user WHERE Id=?";
+        String queryText = "Select id FROM users WHERE Id=?";
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setInt(1, userId);
             final ResultSet result = preparedStatement.executeQuery();
@@ -73,7 +76,7 @@ public class DatabaseManager {
 
     public boolean dropStatus() {
         int updatedRows = 0;
-        String queryText = "UPDATE user SET status='0';";
+        String queryText = "UPDATE users SET status='0';";
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             updatedRows = preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -84,7 +87,7 @@ public class DatabaseManager {
 
     public boolean dropUser(Integer userId) {
         int deletedRows = 0;
-        String queryText = "DELETE FROM user WHERE Id=?;";
+        String queryText = "DELETE FROM users WHERE Id=?;";
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setInt(1, userId);
             deletedRows = preparedStatement.executeUpdate();
@@ -132,7 +135,7 @@ public class DatabaseManager {
 
     public ArenaUser getUser(Integer userId) {
         ArenaUser arenaUser = null;
-        String queryText = "Select * FROM user WHERE Id=?";
+        String queryText = "Select * FROM users WHERE Id=?";
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setInt(1, userId);
             final ResultSet result = preparedStatement.executeQuery();
@@ -185,7 +188,7 @@ public class DatabaseManager {
 
     public boolean setUser(ArenaUser arenaUser) {
         int updatedRows = 0;
-        String queryText = "UPDATE user SET " +
+        String queryText = "UPDATE users SET " +
                 "name=?," +
                 "title=?," +
                 "post_Title=?," +
@@ -288,7 +291,7 @@ public class DatabaseManager {
 
     public boolean addUser(int userId, String name, String classId) {
         int updatedRows = 0;
-        String queryText = "INSERT OR REPLACE INTO user(id,name,class) VALUES (?,?,?);";
+        String queryText = "INSERT OR REPLACE INTO users(id,name,class) VALUES (?,?,?);";
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setInt(1, userId);
             preparedStatement.setString(2, name);
@@ -361,7 +364,7 @@ public class DatabaseManager {
 
     public boolean addItem(Integer userId, String itemId) {
         int updatedRows = 0;
-        String queryText = "INSERT OR REPLACE INTO Inventory " +
+        String queryText = "INSERT OR REPLACE INTO inventory " +
                 "(id," +
                 "user_Id," +
                 "counter) VALUES(?,?,?);";
@@ -467,7 +470,7 @@ public class DatabaseManager {
                 "LEFT JOIN (SELECT id FROM available_spells " +
                 "WHERE user_id=? AND spell_grade >2) s2 " +
                 "ON s1.id=s2.id " +
-                "WHERE class=(SELECT class FROM user WHERE id=362812407) " +
+                "WHERE class=(SELECT class FROM users WHERE id=362812407) " + //todo что за дерьмо?
                 "AND level=? " +
                 "AND s2.id IS NULL;";
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
@@ -559,7 +562,7 @@ public class DatabaseManager {
     }
 
     /***
-     * SELECT id FROM user WHERE status='1';
+     * SELECT id FROM users WHERE status='1';
      ***/
     public ArrayList<Integer> getInts(String tableName, String columnId, Integer id, String columnName) {
         ArrayList<Integer> resultIntArr = new ArrayList<>();
@@ -719,7 +722,7 @@ public class DatabaseManager {
     }
 
     /***
-     * SELECT name FROM user WHERE status='1' AND team='findById';
+     * SELECT name FROM users WHERE status='1' AND team='findById';
      ***/
     public ArrayList<String> getStringsBy(String tableName, String columnName,
                                           String firstColumn, String firstId, String secondColumn, Integer secondId) {
@@ -742,7 +745,7 @@ public class DatabaseManager {
     }
 
     /***
-     * SELECT name FROM user WHERE status='1' AND team='findById';
+     * SELECT name FROM users WHERE status='1' AND team='findById';
      ***/
     public ArrayList<String> getStringsBy(String tableName, String columnName,
                                           String firstColumn, int firstId, String secondColumn, Integer secondId) {
@@ -765,7 +768,7 @@ public class DatabaseManager {
     }
 
     /***
-     * SELECT name FROM user WHERE status='1' AND team='findById';
+     * SELECT name FROM users WHERE status='1' AND team='findById';
      ***/
     public ArrayList<Integer> getIntsBy(String tableName, String columnName,
                                         String firstColumn, String firstId, String secondColumn, Integer secondId) {
@@ -788,7 +791,7 @@ public class DatabaseManager {
     }
 
     /***
-     * "UPDATE user SET ?=? WHERE id=?;"
+     * "UPDATE users SET ?=? WHERE id=?;"
      ***/
     public boolean setLongTo(String tableName, Integer id, String recordColumn, long recordValue) {
         int updatedRows = 0;
@@ -804,7 +807,7 @@ public class DatabaseManager {
     }
 
     /***
-     * "UPDATE user SET ?=? WHERE id=?;"
+     * "UPDATE users SET ?=? WHERE id=?;"
      ***/
     public boolean setDoubleTo(String tableName, Integer id, String recordColumn, double recordValue) {
         int updatedRows = 0;
@@ -820,7 +823,7 @@ public class DatabaseManager {
     }
 
     /***
-     * "UPDATE user SET ?=? WHERE id=?;"
+     * "UPDATE users SET ?=? WHERE id=?;"
      ***/
     public boolean setIntTo(String tableName, Integer id, String recordColumn, Integer recordValue) {
         int updatedRows = 0;
@@ -836,7 +839,7 @@ public class DatabaseManager {
     }
 
     /***
-     * "UPDATE user SET ?=? WHERE id=?;"
+     * "UPDATE users SET ?=? WHERE id=?;"
      ***/
     public boolean setIntTo(String tableName, String id, String recordColumn, Integer recordValue) {//overload
         int updatedRows = 0;
@@ -852,7 +855,7 @@ public class DatabaseManager {
     }
 
     /***
-     * "UPDATE user SET ?=? WHERE id=?;"
+     * "UPDATE users SET ?=? WHERE id=?;"
      ***/
     public boolean setStringTo(String tableName, Integer id, String recordColumn, String recordValue) {
         int updatedRows = 0;
@@ -868,7 +871,7 @@ public class DatabaseManager {
     }
 
     /***
-     * "UPDATE user SET ?=? WHERE id=?;"
+     * "UPDATE users SET ?=? WHERE id=?;"
      ***/
     public boolean setStringTo(String tableName, String id, String recordColumn, String recordValue) {
         int updatedRows = 0;

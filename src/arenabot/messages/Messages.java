@@ -4,7 +4,7 @@ import arenabot.ArenaBot;
 import arenabot.Config;
 import arenabot.battle.*;
 import arenabot.user.ArenaUser;
-import arenabot.user.Inventory.Item;
+import arenabot.user.inventory.Item;
 import org.telegram.telegrambots.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.api.methods.AnswerInlineQuery;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
@@ -783,11 +783,11 @@ public final class Messages {
         String queryId = callbackQuery.getId();
         AnswerCallbackQuery query = new AnswerCallbackQuery();
         query.setText("Вы выбрали: " + actionName)
-            .setCallbackQueryId(queryId);
+                .setCallbackQueryId(queryId);
         EditMessageText editText = new EditMessageText();
         editText.setChatId(callbackQuery.getMessage().getChatId())
-            .setMessageId(callbackQuery.getMessage().getMessageId())
-            .setText("Очки действия из 100:");
+                .setMessageId(callbackQuery.getMessage().getMessageId())
+                .setText("Очки действия из 100:");
         List<String> buttonText = new ArrayList<>();
         List<String> buttonData = new ArrayList<>();
         buttonText.add("100");
@@ -800,8 +800,8 @@ public final class Messages {
         buttonData.add("percent_30");
         EditMessageReplyMarkup markup = new EditMessageReplyMarkup();
         markup.setChatId(callbackQuery.getMessage().getChatId())
-            .setMessageId(callbackQuery.getMessage().getMessageId())
-            .setReplyMarkup(getInlineKeyboardMarkup(buttonText, buttonData));
+                .setMessageId(callbackQuery.getMessage().getMessageId())
+                .setReplyMarkup(getInlineKeyboardMarkup(buttonText, buttonData));
         try {
             arenaBot.editMessageText(editText);
             arenaBot.editMessageReplyMarkup(markup);
