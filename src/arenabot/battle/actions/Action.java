@@ -2,7 +2,7 @@ package arenabot.battle.actions;
 
 import arenabot.Config;
 import arenabot.database.DatabaseManager;
-import arenabot.users.ArenaUser;
+import arenabot.user.ArenaUser;
 import arenabot.battle.Round;
 
 import static com.google.common.math.IntMath.pow;

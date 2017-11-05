@@ -1,8 +1,6 @@
 package arenabot.battle.actions;
 
-import arenabot.users.ArenaUser;
-import arenabot.users.Classes.Mage;
-import arenabot.users.Spells.Spell;
+import arenabot.user.Spells.Spell;
 
 /**
  * ixplo

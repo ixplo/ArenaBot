@@ -1,7 +1,6 @@
 package arenabot.battle.actions;
 
-import arenabot.users.ArenaUser;
-import arenabot.users.Inventory.Item;
+import arenabot.user.Inventory.Item;
 
 import java.util.Random;
 

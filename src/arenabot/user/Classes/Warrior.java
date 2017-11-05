@@ -1,8 +1,8 @@
-package arenabot.users.Classes;
+package arenabot.user.Classes;
 
-import arenabot.users.ArenaUser;
-import arenabot.users.Inventory.Item;
-import arenabot.users.Spells.Skill;
+import arenabot.user.ArenaUser;
+import arenabot.user.Inventory.Item;
+import arenabot.user.Spells.Skill;
 
 import java.util.ArrayList;
 import java.util.List;

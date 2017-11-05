@@ -1,8 +1,8 @@
-package arenabot.users.Inventory;
+package arenabot.user.Inventory;
 
 import arenabot.Config;
 import arenabot.database.DatabaseManager;
-import arenabot.users.ArenaUser;
+import arenabot.user.ArenaUser;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -92,6 +92,9 @@ public class Item {
             return;
         }
         Item item = getItem(getItemId(arenaUser.getUserId(), eqipIndex));
+        //*** проверка, а не надета ли в этот слот другая вещь
+        //todo сделать проверку, пустой ли слот
+        //todo сделать putOff вещи, которая тут раньше была надета
         //todo проверка на соответствие требованиям (другие вещи тоже надо проверить, на случай если харки уменьшатся)
         //*** изменение характеристик перса
         arenaUser.setCurStr(arenaUser.getCurStr() + item.getStrBonus());
@@ -114,20 +117,9 @@ public class Item {
         item.putInSlot(arenaUser.getUserId(), eqipIndex);
         arenaUser.putOnClassFeatures(item);
         db.setUser(arenaUser);
-        //todo сделать putOff вещи, которая тут раньше была надета, сделать ли это до надевания вещи?
         //todo снова изменить характеристики из-за предыдущего пункта
     }
 
-    public static double roundDouble(double d) {
-        return roundDouble(d, 2);
-    }
-
-    public static double roundDouble(double d, int precise) {
-        precise = pow(10, precise);
-        d *= precise;
-        int i = (int) Math.round(d);
-        return (double) i / precise;
-    }
 
     public void putOff(String itemId) {
 
@@ -162,6 +154,17 @@ public class Item {
 
     public boolean putInSlot(Integer userId, Integer eqipIndex) {
         return db.setStringTo(Config.EQIP, itemId, "in_slot", slot);
+    }
+
+    private static double roundDouble(double d) {
+        return roundDouble(d, 2);
+    }
+
+    private static double roundDouble(double d, int precise) {
+        precise = pow(10, precise);
+        d *= precise;
+        int i = (int) Math.round(d);
+        return (double) i / precise;
     }
 
     public String getItemId() {

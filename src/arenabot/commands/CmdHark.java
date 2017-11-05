@@ -5,8 +5,8 @@ package arenabot.commands;
  * 25.04.2017.
  */
 
-import arenabot.Messages;
-import arenabot.users.ArenaUser;
+import arenabot.messages.Messages;
+import arenabot.user.ArenaUser;
 import org.telegram.telegrambots.api.objects.Chat;
 import org.telegram.telegrambots.api.objects.User;
 import org.telegram.telegrambots.bots.AbsSender;

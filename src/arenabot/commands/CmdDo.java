@@ -1,6 +1,6 @@
 package arenabot.commands;
 
-import arenabot.users.ArenaUser;
+import arenabot.user.ArenaUser;
 import org.telegram.telegrambots.api.objects.Chat;
 import org.telegram.telegrambots.api.objects.User;
 import org.telegram.telegrambots.bots.AbsSender;

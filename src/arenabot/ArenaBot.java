@@ -6,8 +6,9 @@ import arenabot.battle.actions.Action;
 import arenabot.commands.*;
 import arenabot.battle.Registration;
 import arenabot.database.DatabaseManager;
-import arenabot.users.ArenaUser;
-import arenabot.users.Inventory.Item;
+import arenabot.messages.Messages;
+import arenabot.user.ArenaUser;
+import arenabot.user.Inventory.Item;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.*;
 import org.telegram.telegrambots.api.objects.inlinequery.InlineQuery;
@@ -60,6 +61,7 @@ public class ArenaBot extends TelegramLongPollingCommandBot {
     private void initBot() {
         setDb(DatabaseManager.getInstance());
         registration = new Registration();
+        Messages.setArenaBot(this);
     }
 
     public void setDb(DatabaseManager db) {

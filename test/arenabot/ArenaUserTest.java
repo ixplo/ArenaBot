@@ -2,13 +2,9 @@ package arenabot;
 
 import arenabot.database.ConnectionDB;
 import arenabot.database.DatabaseManager;
-import arenabot.users.ArenaUser;
+import arenabot.user.ArenaUser;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 
 import static org.junit.Assert.*;
 
@@ -17,11 +13,11 @@ import static org.junit.Assert.*;
  * 01.05.2017.
  */
 public class ArenaUserTest {
-    public static final String DB_LINK = "jdbc:sqlite:TestArenaDb.sqlite";
 
+    public static final String TEST_DB_LINK = "jdbc:sqlite:TestArenaDb.sqlite";
     DatabaseManager db = DatabaseManager.getInstance();
     {
-        DatabaseManager.setConnection(new ConnectionDB(DB_LINK));
+        DatabaseManager.setConnection(new ConnectionDB(TEST_DB_LINK));
         ArenaBot arenaBot = new ArenaBot();
         arenaBot.setDb(db);
     }
@@ -72,10 +68,12 @@ public class ArenaUserTest {
     }
 
 
-    @Test
+    @Test (expected = IllegalArgumentException.class)
     public void create() throws Exception {
         ArenaUser newUser = ArenaUser.create(ArenaUser.UserClass.WARRIOR);
         assertNotNull(newUser);
+        assertEquals(ArenaUser.UserClass.MAGE.toString(), ArenaUser.create(ArenaUser.UserClass.MAGE).getUserClass());
+        newUser = ArenaUser.create(null);
     }
 //
 //    @Test

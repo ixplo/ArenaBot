@@ -1,16 +1,16 @@
-package arenabot.users.Classes;
+package arenabot.user.Classes;
 
 import arenabot.Config;
-import arenabot.Messages;
-import arenabot.users.ArenaUser;
-import arenabot.users.Inventory.Item;
-import arenabot.users.Spells.Spell;
+import arenabot.messages.Messages;
+import arenabot.user.ArenaUser;
+import arenabot.user.Inventory.Item;
+import arenabot.user.Spells.Spell;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static arenabot.Messages.fillWithSpaces;
+import static arenabot.messages.Messages.fillWithSpaces;
 
 /**
  * ixplo

@@ -1,18 +1,16 @@
-package arenabot.users;
+package arenabot.user;
 
 import arenabot.Config;
-import arenabot.Messages;
+import arenabot.messages.Messages;
 import arenabot.battle.Battle;
 import arenabot.battle.Round;
 import arenabot.database.DatabaseManager;
-import arenabot.users.Classes.Archer;
-import arenabot.users.Classes.Mage;
-import arenabot.users.Classes.Priest;
-import arenabot.users.Classes.Warrior;
-import arenabot.users.Inventory.Item;
+import arenabot.user.Classes.Archer;
+import arenabot.user.Classes.Mage;
+import arenabot.user.Classes.Priest;
+import arenabot.user.Classes.Warrior;
+import arenabot.user.Inventory.Item;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
-import org.telegram.telegrambots.api.objects.Chat;
-import org.telegram.telegrambots.api.objects.User;
 import org.telegram.telegrambots.bots.AbsSender;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
 
@@ -105,6 +103,9 @@ public abstract class ArenaUser {
 
     /****** static ******/
     public static ArenaUser create(UserClass userClassId) {
+        if (userClassId == null) {
+            throw new IllegalArgumentException("userClassId is invalid: " + userClassId);
+        }
         ArenaUser hero;
         switch (userClassId) {
             case WARRIOR:
@@ -161,7 +162,7 @@ public abstract class ArenaUser {
         arenaUser.magicProtect = roundDouble(0.6 * arenaUser.curWis + 0.4 * arenaUser.curInt);
         arenaUser.setClassFeatures();
         db.addItem(userId, "waa"); //todo arenaUser.addItem(new Item("waa"));
-        arenaUser.putOn(1);
+        arenaUser.putOn(1); //todo overloaded method putOn("waa")
         db.setUser(arenaUser);
         return arenaUser;
     }

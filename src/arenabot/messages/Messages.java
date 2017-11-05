@@ -1,8 +1,10 @@
-package arenabot;
+package arenabot.messages;
 
+import arenabot.ArenaBot;
+import arenabot.Config;
 import arenabot.battle.*;
-import arenabot.users.ArenaUser;
-import arenabot.users.Inventory.Item;
+import arenabot.user.ArenaUser;
+import arenabot.user.Inventory.Item;
 import org.telegram.telegrambots.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.api.methods.AnswerInlineQuery;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
@@ -15,7 +17,6 @@ import org.telegram.telegrambots.api.objects.inlinequery.InlineQuery;
 import org.telegram.telegrambots.api.objects.inlinequery.inputmessagecontent.InputTextMessageContent;
 import org.telegram.telegrambots.api.objects.inlinequery.result.InlineQueryResultArticle;
 import org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup;
-import org.telegram.telegrambots.api.objects.replykeyboard.ReplyKeyboardRemove;
 import org.telegram.telegrambots.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.bots.AbsSender;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
@@ -40,9 +41,11 @@ public final class Messages {
     /***** uses for send messages ******/
     private static ArenaBot arenaBot;
 
-    static {
-        arenaBot = new ArenaBot();
+    /***** DI *****/
+    public static void setArenaBot(ArenaBot arenaBot) {
+        Messages.arenaBot = arenaBot;
     }
+
 
     public static void sendToRegisteredUserMsg(AbsSender absSender, Long chatId, Integer userId) {
 
@@ -236,7 +239,7 @@ public final class Messages {
         return markup;
     }
 
-    static AnswerInlineQuery getAnswerForInlineQuery(InlineQuery inlineQuery) {
+    public static AnswerInlineQuery getAnswerForInlineQuery(InlineQuery inlineQuery) {
 
         AnswerInlineQuery query = new AnswerInlineQuery();
         InlineQueryResultArticle article = new InlineQueryResultArticle();
@@ -249,7 +252,7 @@ public final class Messages {
         return query;
     }
 
-    static void sendCreateUser(CallbackQuery callbackQuery, String userClass, String userRace) {
+    public static void sendCreateUser(CallbackQuery callbackQuery, String userClass, String userRace) {
 
         Long chatId = callbackQuery.getMessage().getChatId();
         Integer userId = callbackQuery.getFrom().getId();
@@ -272,7 +275,7 @@ public final class Messages {
         }
     }
 
-    static void sendAskRace(CallbackQuery callbackQuery, String userClass) {
+    public static void sendAskRace(CallbackQuery callbackQuery, String userClass) {
 
         String queryId = callbackQuery.getId();
         Long chatId = callbackQuery.getMessage().getChatId();
@@ -287,7 +290,7 @@ public final class Messages {
         }
     }
 
-    static void sendCancelDelete(CallbackQuery callbackQuery) {
+    public static void sendCancelDelete(CallbackQuery callbackQuery) {
 
         String queryId = callbackQuery.getId();
         Long chatId = callbackQuery.getMessage().getChatId();
@@ -306,7 +309,7 @@ public final class Messages {
         }
     }
 
-    static void sendAfterDelete(CallbackQuery callbackQuery) {
+    public static void sendAfterDelete(CallbackQuery callbackQuery) {
 
         String queryId = callbackQuery.getId();
         Long chatId = callbackQuery.getMessage().getChatId();
@@ -430,15 +433,6 @@ public final class Messages {
             }
         }
         return first + spaces + second;
-    }
-
-    private static boolean isNumeric(String s) {
-        try {
-            Integer.parseInt(s);
-            return true;
-        } catch (NumberFormatException e) {
-            return false;
-        }
     }
 
     public static void sendDropMsg(AbsSender absSender, Chat chat) {
@@ -767,7 +761,7 @@ public final class Messages {
         return answer;
     }
 
-    static void sendAskActionId(CallbackQuery callbackQuery, int targetId) {
+    public static void sendAskActionId(CallbackQuery callbackQuery, int targetId) {
 
         String queryId = callbackQuery.getId();
         Long chatId = callbackQuery.getMessage().getChatId();
@@ -784,7 +778,7 @@ public final class Messages {
         }
     }
 
-    static void sendAskPercent(CallbackQuery callbackQuery, String actionName) {
+    public static void sendAskPercent(CallbackQuery callbackQuery, String actionName) {
 
         String queryId = callbackQuery.getId();
         AnswerCallbackQuery query = new AnswerCallbackQuery();
@@ -817,7 +811,7 @@ public final class Messages {
         }
     }
 
-    static void sendActionTaken(CallbackQuery callbackQuery) {
+    public static void sendActionTaken(CallbackQuery callbackQuery) {
 
         String queryId = callbackQuery.getId();
         Long chatId = callbackQuery.getMessage().getChatId();
@@ -835,7 +829,7 @@ public final class Messages {
         }
     }
 
-    static void sendAskSpell(CallbackQuery callbackQuery) {
+    public static void sendAskSpell(CallbackQuery callbackQuery) {
 
         String queryId = callbackQuery.getId();
         int userId = callbackQuery.getFrom().getId();
@@ -885,6 +879,15 @@ public final class Messages {
             arenaBot.editMessageText(editText);
         } catch (TelegramApiException e) {
             BotLogger.error(LOGTAG, e);
+        }
+    }
+
+    private static boolean isNumeric(String s) {
+        try {
+            Integer.parseInt(s);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
         }
     }
 

@@ -1,8 +1,8 @@
-package arenabot.users.Spells;
+package arenabot.user.Spells;
 
 import arenabot.Config;
 
-import static arenabot.users.ArenaUser.db;
+import static arenabot.user.ArenaUser.db;
 
 /**
  * ixplo

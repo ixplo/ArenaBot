@@ -1,7 +1,7 @@
 package arenabot.battle;
 
 import arenabot.*;
-import arenabot.users.ArenaUser;
+import arenabot.user.ArenaUser;
 
 /**
  * ixplo

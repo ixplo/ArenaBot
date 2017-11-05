@@ -2,9 +2,9 @@ package arenabot.commands;
 
 import arenabot.ArenaBot;
 import arenabot.Config;
-import arenabot.Messages;
+import arenabot.messages.Messages;
 import arenabot.battle.Registration;
-import arenabot.users.ArenaUser;
+import arenabot.user.ArenaUser;
 import org.telegram.telegrambots.api.objects.Chat;
 import org.telegram.telegrambots.api.objects.User;
 import org.telegram.telegrambots.bots.AbsSender;

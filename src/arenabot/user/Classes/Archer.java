@@ -1,22 +1,15 @@
-package arenabot.users.Classes;
+package arenabot.user.Classes;
 
 import arenabot.Config;
-import arenabot.Messages;
-import arenabot.battle.Battle;
-import arenabot.battle.Round;
-import arenabot.users.ArenaUser;
-import arenabot.users.Inventory.Item;
-import arenabot.users.Spells.Skill;
-import org.telegram.telegrambots.api.methods.send.SendMessage;
-import org.telegram.telegrambots.api.objects.User;
-import org.telegram.telegrambots.bots.AbsSender;
-import org.telegram.telegrambots.exceptions.TelegramApiException;
+import arenabot.user.ArenaUser;
+import arenabot.user.Inventory.Item;
+import arenabot.user.Spells.Skill;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static arenabot.Messages.fillWithSpaces;
+import static arenabot.messages.Messages.fillWithSpaces;
 
 
 /**

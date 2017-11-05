@@ -1,7 +1,5 @@
 package arenabot.battle.actions;
 
-import arenabot.users.ArenaUser;
-
 /**
  * ixplo
  * 08.05.2017.

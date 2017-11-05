@@ -1,6 +1,6 @@
 package arenabot.battle.actions;
 
-import arenabot.users.Inventory.Item;
+import arenabot.user.Inventory.Item;
 import arenabot.battle.Round;
 
 import java.util.List;

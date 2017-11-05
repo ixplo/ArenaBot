@@ -1,7 +1,7 @@
 package arenabot.battle;
 
-import arenabot.Messages;
-import arenabot.users.ArenaUser;
+import arenabot.messages.Messages;
+import arenabot.user.ArenaUser;
 import arenabot.Config;
 import arenabot.database.DatabaseManager;
 

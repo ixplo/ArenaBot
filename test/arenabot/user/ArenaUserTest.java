@@ -1,10 +1,6 @@
-package arenabot.users;
+package arenabot.user;
 
 import org.junit.Test;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
 
 import static org.junit.Assert.*;
 

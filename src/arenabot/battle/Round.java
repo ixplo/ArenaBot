@@ -1,8 +1,8 @@
 package arenabot.battle;
 
-import arenabot.users.ArenaUser;
+import arenabot.user.ArenaUser;
 import arenabot.Config;
-import arenabot.Messages;
+import arenabot.messages.Messages;
 import arenabot.battle.actions.Action;
 
 import java.util.ArrayList;

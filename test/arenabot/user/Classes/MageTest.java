@@ -1,4 +1,4 @@
-package arenabot.users.Classes;
+package arenabot.user.Classes;
 
 import org.junit.After;
 import org.junit.Before;
