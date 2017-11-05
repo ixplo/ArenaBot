@@ -60,18 +60,18 @@ public class DatabaseManager {
         return connection;
     }
     public boolean doesUserExists(Integer userId) {
-        int status = -1;
+        Boolean isExists = false;
         String queryText = "Select id FROM users WHERE Id=?";
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setInt(1, userId);
             final ResultSet result = preparedStatement.executeQuery();
             if (result.next()) {
-                status = result.getInt("id");
+                isExists = true;
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return status > 0;
+        return isExists;
     }
 
     public boolean dropStatus() {

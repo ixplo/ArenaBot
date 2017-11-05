@@ -199,6 +199,9 @@ public abstract class ArenaUser {
         return db.getIntFrom(Config.USERS, userId, "status");
     }
 
+    public void dropUser() {
+        dropUser(userId);
+    }
     public static void dropUser(int userId) {
         if (!db.doesUserExists(userId)) {
             throw new RuntimeException("No such user in database: " + userId);
@@ -785,8 +788,23 @@ public abstract class ArenaUser {
                 ", money=" + money +
                 ", experience=" + experience +
                 ", level=" + level +
+                ", curStr=" + curStr +
+                ", curDex=" + curDex +
+                ", curWis=" + curWis +
+                ", curInt=" + curInt +
+                ", curCon=" + curCon +
+                ", curWeapon=" + curWeapon +
+                ", minHit=" + minHit +
+                ", maxHit=" + maxHit +
+                ", attack=" + attack +
+                ", protect=" + protect +
+                ", heal=" + heal +
+                ", magicProtect=" + magicProtect +
+                ", curHitPoints=" + curHitPoints +
+                ", curExp=" + curExp +
                 ", lastGame=" + lastGame +
                 ", status=" + status +
+                ", items=" + items +
                 '}';
     }
 

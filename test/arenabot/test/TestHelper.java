@@ -9,7 +9,7 @@ import static arenabot.Config.TEST_DB_LINK;
 
 public class TestHelper {
 
-    private DatabaseManager db;
+    public DatabaseManager db;
     public static ArenaUser WARRIOR;
 
     public TestHelper() {

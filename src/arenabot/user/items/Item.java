@@ -96,8 +96,16 @@ public class Item {
         }
         Item item = getItem(getItemId(arenaUser.getUserId(), eqipIndex));
         //*** проверка, а не надета ли в этот слот другая вещь
-        //todo сделать проверку, пустой ли слот
-        //todo сделать putOff вещи, которая тут раньше была надета
+        List<Item> itemsList = arenaUser.getItems();
+        // проверкa, пустой ли слот
+        for (Item oneItem: itemsList) {
+            if (oneItem.getSlot().equals(item.getSlot())) {
+                if (oneItem.isInSlot()) {
+                    // сделать putOff вещи, которая тут раньше была надета
+                    Item.putOff(arenaUser, oneItem.getEqipIndex());
+                }
+            }
+        }
         //todo проверка на соответствие требованиям (другие вещи тоже надо проверить, на случай если харки уменьшатся)
         //*** изменение характеристик перса
         arenaUser.setCurStr(arenaUser.getCurStr() + item.getStrBonus());
@@ -124,8 +132,8 @@ public class Item {
     }
 
 
-    public void putOff(String itemId) {
-
+    public void putOff() {
+        Item.putOff(db.getUser(ownerId), eqipIndex);
         //todo проверка на наличие в инвентаре
         //todo проверка а надета ли она вообще?
         //todo изменение характеристик перса (если изменяет основные харки, это потянет за собой изменение зависящих от них
@@ -425,9 +433,10 @@ public class Item {
         return "Item{" +
                 "itemId='" + itemId + '\'' +
                 ", name='" + name + '\'' +
+                ", eqipIndex='" + eqipIndex + '\'' +
                 ", price=" + price +
                 ", slot='" + slot + '\'' +
-                ", descr='" + descr + '\'' +
+                ", inSlot='" + inSlot + '\'' +
                 '}';
     }
 }

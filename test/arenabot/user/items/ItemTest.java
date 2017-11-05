@@ -22,15 +22,38 @@ public class ItemTest {
 
     @Test
     public void putOn() throws Exception {
-        LOGGER.info("Надеваем вещь");
-        testHelper.WARRIOR.putOn(0);
+        LOGGER.info("Инвентарь: {}", testHelper.WARRIOR.getItems());
+        LOGGER.info("Добавляем вещь: {}", Item.getItem("wba"));
+        testHelper.db.addItem(testHelper.WARRIOR.getUserId(), "wba");
+        int eqipIndex = -1;
+        LOGGER.info("Инвентарь:");
+        for (Item item : testHelper.WARRIOR.getItems()) {
+            LOGGER.info("{} Item: {}", item.getName(), item.getEqipIndex());
+            if (item.getItemId().equals("wba")) {
+                eqipIndex = item.getEqipIndex();
+            }
+        }
+        LOGGER.info("Тестовый персонаж: {}", testHelper.WARRIOR);
+        LOGGER.info("Надеваем вещь {} {}",
+                testHelper.WARRIOR.getItems().get(eqipIndex - 1).getEqipIndex(),
+                testHelper.WARRIOR.getItems().get(eqipIndex - 1).getName());
+        testHelper.WARRIOR.putOn(eqipIndex);
+        LOGGER.info("Тестовый персонаж: {}", testHelper.WARRIOR);
+        LOGGER.info("Надеваем вещь: {} {}",
+                testHelper.WARRIOR.getItems().get(0).getEqipIndex(),
+                testHelper.WARRIOR.getItems().get(0).getName());
+        testHelper.WARRIOR.putOn(testHelper.WARRIOR.getItems().get(0).getEqipIndex());
         LOGGER.info("Тестовый персонаж: {}", testHelper.WARRIOR);
         LOGGER.info("Инвентарь: {}", testHelper.WARRIOR.getItems());
-        LOGGER.info("EqipIndex: {}", testHelper.WARRIOR.getItems().get(0).getEqipIndex());
+        for (Item item : testHelper.WARRIOR.getItems()) {
+            LOGGER.info("{} Item: {}", item.getName(), item.getEqipIndex());
+        }
+        //todo доделать сравнение характеристик
     }
 
     @After
     public void tearDown() throws Exception {
+        testHelper.WARRIOR.dropUser();
         testHelper.close();
     }
 
