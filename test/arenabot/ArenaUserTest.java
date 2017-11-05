@@ -1,13 +1,12 @@
 package arenabot;
 
-import arenabot.database.ConnectionDB;
 import arenabot.database.DatabaseManager;
+import arenabot.test.TestHelper;
 import arenabot.user.ArenaUser;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import static arenabot.Config.TEST_DB_LINK;
 import static org.junit.Assert.*;
 
 /**
@@ -16,25 +15,19 @@ import static org.junit.Assert.*;
  */
 public class ArenaUserTest {
 
-    private DatabaseManager db;
     private ArenaUser warrior;
+    private TestHelper testHelper = new TestHelper();
 
     @Before
     public void setUp() throws Exception {
-        DatabaseManager.setConnection(new ConnectionDB(TEST_DB_LINK));
-        db = DatabaseManager.getInstance();
-        ArenaBot arenaBot = new ArenaBot();
-        arenaBot.setDb(db);
-//        warrior = ArenaUser.create(ArenaUser.UserClass.WARRIOR);
-//        warrior.setUserId(-1);
-//        warrior.setName("test_warrior");
-        warrior = ArenaUser.create(-1,"test_warrior", ArenaUser.UserClass.WARRIOR, "o");
-        db.setUser(warrior);
+        testHelper.init();
     }
+
+
 
     @After
     public void tearDown() throws Exception {
-        DatabaseManager.getConnection().closeConnection();
+        testHelper.close();
     }
 
     @Test

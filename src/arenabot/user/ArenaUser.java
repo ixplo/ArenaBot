@@ -9,7 +9,7 @@ import arenabot.user.classes.Archer;
 import arenabot.user.classes.Mage;
 import arenabot.user.classes.Priest;
 import arenabot.user.classes.Warrior;
-import arenabot.user.inventory.Item;
+import arenabot.user.items.Item;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.bots.AbsSender;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
@@ -28,7 +28,6 @@ public abstract class ArenaUser {
 
     public static DatabaseManager db;
 
-
     public enum UserClass { ARCHER, MAGE, PRIEST, WARRIOR }
 
     public enum UserRace {
@@ -44,7 +43,6 @@ public abstract class ArenaUser {
         KOBOLD,
     }
 
-    public List<String> actionsName = Arrays.asList("Атака", "Защита", "Лечение");
     private int userId;
     private String name;
     private String userTitle;
@@ -83,7 +81,8 @@ public abstract class ArenaUser {
     private int curExp;
     private long lastGame;
     private int status;
-
+    public List<String> actionsName = Arrays.asList("Атака", "Защита", "Лечение");
+    private List<Item> items;
 
     /****** constructor ******
      * use ArenaUser.create
@@ -120,6 +119,8 @@ public abstract class ArenaUser {
     /****** static ******/
 
     public static ArenaUser create(int userId, String name, UserClass userClass, String race) {
+
+        //todo вставить проверку, что такой уже есть
         ArenaUser arenaUser = ArenaUser.create(userClass);
         arenaUser.userId = userId;
         arenaUser.name = name;
@@ -582,6 +583,11 @@ public abstract class ArenaUser {
     }
 
     /****** get ******/
+
+    public List<Item> getItems() {
+        return db.getItems(userId);
+    }
+
     public String getUserTitle() {
         return userTitle;
     }
@@ -762,5 +768,26 @@ public abstract class ArenaUser {
         return actionsId;
     }
 
+    @Override
+    public String toString() {
+        return "ArenaUser{" +
+                "userId=" + userId +
+                ", name='" + name + '\'' +
+                ", race='" + race + '\'' +
+                ", userClass='" + userClass + '\'' +
+                ", nativeStr=" + nativeStr +
+                ", nativeDex=" + nativeDex +
+                ", nativeWis=" + nativeWis +
+                ", nativeInt=" + nativeInt +
+                ", nativeCon=" + nativeCon +
+                ", freePoints=" + freePoints +
+                ", maxHitPoints=" + maxHitPoints +
+                ", money=" + money +
+                ", experience=" + experience +
+                ", level=" + level +
+                ", lastGame=" + lastGame +
+                ", status=" + status +
+                '}';
+    }
 
 }

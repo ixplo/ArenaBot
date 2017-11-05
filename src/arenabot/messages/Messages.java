@@ -4,7 +4,7 @@ import arenabot.ArenaBot;
 import arenabot.Config;
 import arenabot.battle.*;
 import arenabot.user.ArenaUser;
-import arenabot.user.inventory.Item;
+import arenabot.user.items.Item;
 import org.telegram.telegrambots.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.api.methods.AnswerInlineQuery;
 import org.telegram.telegrambots.api.methods.send.SendMessage;

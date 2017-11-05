@@ -2,7 +2,7 @@ package arenabot.database;
 
 import arenabot.user.ArenaUser;
 import arenabot.Config;
-import arenabot.user.inventory.Item;
+import arenabot.user.items.Item;
 import arenabot.battle.Team;
 import org.telegram.telegrambots.logging.BotLogger;
 
@@ -378,6 +378,53 @@ public class DatabaseManager {
             e.printStackTrace();
         }
         return updatedRows > 0;
+    }
+
+    public List<Item> getItems(Integer userId){
+        List<Item> itemsList = new ArrayList<>();
+        String queryText = "Select inventory.user_id," +
+                "INVENTORY.counter, " +
+                "INVENTORY.IN_SLOT," +
+                "items.* " +
+                "FROM inventory, items " +
+                "WHERE inventory.user_id=? and inventory.id=items.id";
+        try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
+            preparedStatement.setInt(1, userId);
+            final  ResultSet result = preparedStatement.executeQuery();
+            while (result.next()) {
+                Item item = new Item();
+                item.setOwnerId(userId);
+                item.setEqipIndex(result.getInt("counter"));
+                item.setInSlot(result.getString("in_slot"));
+                item.setItemId(result.getString("id"));
+                item.setName(result.getString("name"));
+                item.setPrice(result.getInt("price"));
+                item.setMinHit(result.getInt("hit_min"));
+                item.setMaxHit(result.getInt("hit_max"));
+                item.setAttack(result.getInt("attack"));
+                item.setProtect(result.getInt("protect"));
+                item.setStrBonus(result.getInt("strength"));
+                item.setDexBonus(result.getInt("dexterity"));
+                item.setWisBonus(result.getInt("wisdom"));
+                item.setIntBonus(result.getInt("intellect"));
+                item.setConBonus(result.getInt("const"));
+                item.setStrNeeded(result.getInt("need_str"));
+                item.setDexNeeded(result.getInt("need_dex"));
+                item.setWisNeeded(result.getInt("need_wis"));
+                item.setIntNeeded(result.getInt("need_int"));
+                item.setConNeeded(result.getInt("need_con"));
+                item.setisWeapon(result.getInt("is_on_att") == 1);
+                item.setSlot(result.getString("slot"));
+                item.setShop(result.getString("shop"));
+                item.setRace(result.getString("race"));
+                item.setDescr(result.getString("descr"));
+                item.setItemsSet(result.getString("items_set"));
+                itemsList.add(item);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return itemsList;
     }
 
     public Item getItem(String itemId) {

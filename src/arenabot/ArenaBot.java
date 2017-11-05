@@ -8,7 +8,7 @@ import arenabot.battle.Registration;
 import arenabot.database.DatabaseManager;
 import arenabot.messages.Messages;
 import arenabot.user.ArenaUser;
-import arenabot.user.inventory.Item;
+import arenabot.user.items.Item;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.*;
 import org.telegram.telegrambots.api.objects.inlinequery.InlineQuery;
@@ -25,7 +25,7 @@ public class ArenaBot extends TelegramLongPollingCommandBot {
     private static final String LOGTAG = "ARENABOT";
     public static Registration registration;
 
-    ArenaBot() {
+    public ArenaBot() {
 
         register(new CmdStart());
         register(new CmdReg());

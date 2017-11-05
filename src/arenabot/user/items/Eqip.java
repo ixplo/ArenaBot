@@ -1,4 +1,4 @@
-package arenabot.user.inventory;
+package arenabot.user.items;
 
 import java.util.List;
 

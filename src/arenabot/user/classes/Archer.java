@@ -2,7 +2,7 @@ package arenabot.user.classes;
 
 import arenabot.Config;
 import arenabot.user.ArenaUser;
-import arenabot.user.inventory.Item;
+import arenabot.user.items.Item;
 import arenabot.user.spells.Skill;
 
 import java.util.ArrayList;

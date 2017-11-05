@@ -3,7 +3,7 @@ package arenabot.user.classes;
 import arenabot.Config;
 import arenabot.messages.Messages;
 import arenabot.user.ArenaUser;
-import arenabot.user.inventory.Item;
+import arenabot.user.items.Item;
 import arenabot.user.spells.Spell;
 
 import java.util.ArrayList;

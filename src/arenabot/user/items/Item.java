@@ -1,4 +1,4 @@
-package arenabot.user.inventory;
+package arenabot.user.items;
 
 import arenabot.Config;
 import arenabot.database.DatabaseManager;
@@ -43,10 +43,13 @@ public class Item {
         db = manager;
     }
 
-    //todo
-    //int userId;
-    //in_slot;
-    //eqipIndex;
+    // поля, относящиеся к владельцу вещи, заполняются в arenaUser.getItems
+    private Integer ownerId;
+    private int eqipIndex;
+    private String inSlot;
+
+    public Item() {
+    }
 
     public Item(String itemId) {
         this.itemId = itemId;
@@ -169,11 +172,7 @@ public class Item {
         //todo снова изменить характеристики из-за предыдущего пункта
     }
 
-/*todo
-    boolean isInSlot(Integer userId, Integer eqipIndex) {
-        return in_slot!=null;
-    }
-*/
+
 
     public static String getItemName(Integer userId, Integer eqipIndex) {
         return db.getItem(Item.getItemId(userId, eqipIndex)).name;
@@ -185,6 +184,18 @@ public class Item {
 
     public static Item getItem(String itemId) {
         return db.getItem(itemId);
+    }
+
+    public int getEqipIndex() {
+        return eqipIndex;
+    }
+
+    public void setEqipIndex(int eqipIndex) {
+        this.eqipIndex = eqipIndex;
+    }
+
+    boolean isInSlot() {
+        return inSlot != null;
     }
 
     public static String getSlotName(String slot) {
@@ -208,6 +219,21 @@ public class Item {
         d *= precise;
         int i = (int) Math.round(d);
         return (double) i / precise;
+    }
+
+    public ArenaUser getOwner() {
+        if (ownerId == null) {
+            return null;
+        }
+        return db.getUser(ownerId);
+    }
+
+    public void setOwnerId(Integer ownerId) {
+        this.ownerId = ownerId;
+    }
+
+    public void setInSlot(String inSlot) {
+        this.inSlot = inSlot;
     }
 
     public String getItemId() {
@@ -394,4 +420,14 @@ public class Item {
         this.itemsSet = itemsSet;
     }
 
+    @Override
+    public String toString() {
+        return "Item{" +
+                "itemId='" + itemId + '\'' +
+                ", name='" + name + '\'' +
+                ", price=" + price +
+                ", slot='" + slot + '\'' +
+                ", descr='" + descr + '\'' +
+                '}';
+    }
 }
