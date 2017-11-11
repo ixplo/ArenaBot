@@ -1,7 +1,7 @@
 package arenabot.battle;
 
 import arenabot.user.ArenaUser;
-import arenabot.Config;
+import arenabot.config.Config;
 
 import java.util.ArrayList;
 import java.util.List;

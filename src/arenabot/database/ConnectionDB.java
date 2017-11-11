@@ -1,6 +1,6 @@
 package arenabot.database;
 
-import arenabot.Config;
+import arenabot.config.Config;
 import org.telegram.telegrambots.logging.BotLogger;
 
 import java.sql.*;

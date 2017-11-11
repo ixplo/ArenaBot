@@ -1,7 +1,7 @@
 package arenabot.commands;
 
-import arenabot.ArenaBot;
-import arenabot.Config;
+import arenabot.Bot;
+import arenabot.config.Config;
 import arenabot.messages.Messages;
 import arenabot.battle.Registration;
 import arenabot.user.ArenaUser;
@@ -27,10 +27,10 @@ public class CmdReg extends BotCommand {
         if (!ArenaUser.doesUserExists(user.getId())) {
             return;
         }
-        if(!Registration.isOn || ArenaBot.registration.getMemberStatus(user.getId()) != Config.UNREG){
+        if(!Registration.isOn || Bot.registration.getMemberStatus(user.getId()) != Config.UNREG){
             return;
         }
-        ArenaBot.registration.regMember(user.getId());
+        Bot.registration.regMember(user.getId());
         Messages.sendRegMsg(user.getId());
     }
 }

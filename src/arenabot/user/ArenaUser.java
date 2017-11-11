@@ -1,6 +1,6 @@
 package arenabot.user;
 
-import arenabot.Config;
+import arenabot.config.Config;
 import arenabot.messages.Messages;
 import arenabot.battle.Battle;
 import arenabot.battle.Round;
@@ -14,9 +14,9 @@ import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.bots.AbsSender;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.util.*;
 
 import static com.google.common.math.IntMath.pow;
 
@@ -29,19 +29,6 @@ public abstract class ArenaUser {
     public static DatabaseManager db;
 
     public enum UserClass { ARCHER, MAGE, PRIEST, WARRIOR }
-
-    public enum UserRace {
-        ELF,
-        HUMAN,
-        GNOME,
-        GIANT,
-        NAZGUL,
-        GOBLIN,
-        HOBBIT,
-        TROLL,
-        ORC,
-        KOBOLD,
-    }
 
     private int userId;
     private String name;
@@ -82,14 +69,17 @@ public abstract class ArenaUser {
     private long lastGame;
     private int status;
     public List<String> actionsName = Arrays.asList("Атака", "Защита", "Лечение");
-    private List<Item> items;
+    //private List<Item> items;
 
     /****** constructor ******
      * use ArenaUser.create
      *************************/
     public ArenaUser(){}
 
-    /****** abstract ******/
+    // **************************************************
+    // ******** abstract ********************************
+    // **************************************************
+
     public abstract void setClassFeatures();
 
     public abstract void getClassFeatures();
@@ -116,7 +106,9 @@ public abstract class ArenaUser {
 
     public abstract void learn(int level);
 
-    /****** static ******/
+    // **************************************************
+    // ******** STATIC **********************************
+    // **************************************************
 
     public static ArenaUser create(int userId, String name, UserClass userClass, String race) {
 
@@ -199,9 +191,6 @@ public abstract class ArenaUser {
         return db.getIntFrom(Config.USERS, userId, "status");
     }
 
-    public void dropUser() {
-        dropUser(userId);
-    }
     public static void dropUser(int userId) {
         if (!db.doesUserExists(userId)) {
             throw new RuntimeException("No such user in database: " + userId);
@@ -350,7 +339,27 @@ public abstract class ArenaUser {
         return db.getColumn(Config.CLASSES, "descr");
     }
 
-    /****** Common stuff ******/
+    // **************************************************
+    // ******** Instance ********************************
+    // **************************************************
+
+    public Map<String, Object> getParams() {
+        Map<String, Object> params = new HashMap<>();
+        for (Field field: ArenaUser.class.getDeclaredFields()) {
+           if (field.getModifiers() == Modifier.PRIVATE) {
+               try {
+                   params.put(field.getName(),field.get(this));
+               } catch (IllegalAccessException e) {
+                   e.printStackTrace();
+               }
+           }
+        }
+        return params;
+    }
+
+    public void dropUser() {
+        dropUser(userId);
+    }
 
     public void putOn(int eqipIndex) {
         Item.putOn(this, eqipIndex);
@@ -360,7 +369,9 @@ public abstract class ArenaUser {
         Item.putOff(this, eqipIndex);
     }
 
-    /****** Add ******/
+    // **************************************************
+    // ******** adders **********************************
+    // **************************************************
 
     public void addCurHitPoints(double hitPointsChange) {
         this.curHitPoints = ArenaUser.roundDouble(this.curHitPoints + hitPointsChange);
@@ -425,7 +436,10 @@ public abstract class ArenaUser {
         db.setIntTo(Config.USERS, userId, "money", this.money);
     }
 
-    /****** set ******/
+    // **************************************************
+    // ******** setters *********************************
+    // **************************************************
+
     public void setLastGame() {
         db.setLongTo(Config.USERS, userId, "last_game", System.currentTimeMillis());
     }
@@ -585,7 +599,9 @@ public abstract class ArenaUser {
         db.setIntTo(Config.USERS, userId, "status", status);
     }
 
-    /****** get ******/
+    // **************************************************
+    // ******** getters *********************************
+    // **************************************************
 
     public List<Item> getItems() {
         return db.getItems(userId);
@@ -804,7 +820,6 @@ public abstract class ArenaUser {
                 ", curExp=" + curExp +
                 ", lastGame=" + lastGame +
                 ", status=" + status +
-                ", items=" + items +
                 '}';
     }
 

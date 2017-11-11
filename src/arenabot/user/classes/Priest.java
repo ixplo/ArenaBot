@@ -1,6 +1,6 @@
 package arenabot.user.classes;
 
-import arenabot.Config;
+import arenabot.config.Config;
 import arenabot.messages.Messages;
 import arenabot.user.ArenaUser;
 import arenabot.user.items.Item;

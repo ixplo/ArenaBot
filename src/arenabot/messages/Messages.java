@@ -1,7 +1,7 @@
 package arenabot.messages;
 
-import arenabot.ArenaBot;
-import arenabot.Config;
+import arenabot.Bot;
+import arenabot.config.Config;
 import arenabot.battle.*;
 import arenabot.user.ArenaUser;
 import arenabot.user.items.Item;
@@ -39,11 +39,11 @@ public final class Messages {
     }
 
     /***** uses for send messages ******/
-    private static ArenaBot arenaBot;
+    private static Bot bot;
 
     /***** DI *****/
-    public static void setArenaBot(ArenaBot arenaBot) {
-        Messages.arenaBot = arenaBot;
+    public static void setBot(Bot bot) {
+        Messages.bot = bot;
     }
 
 
@@ -175,7 +175,7 @@ public final class Messages {
         SendMessage msg = new SendMessage();
         msg.setChatId(chatId);
         msg.enableHtml(true);
-        int membersCount = ArenaBot.registration.getMembersCount();
+        int membersCount = Bot.registration.getMembersCount();
         if (!Registration.isOn) {
             msg.setText("Бой уже идет");
             return msg;
@@ -184,7 +184,7 @@ public final class Messages {
             msg.setText("Еще никто не зарегистрировался");
             return msg;
         }
-        msg.setText(ArenaBot.registration.getList());
+        msg.setText(Bot.registration.getList());
         return msg;
     }
 
@@ -266,10 +266,10 @@ public final class Messages {
                 userRace + " создан!");
         query.setCallbackQueryId(queryId);
         try {
-            arenaBot.sendMessage(statMsg);
-            arenaBot.sendMessage(xStatMsg);
-            arenaBot.sendMessage(eqMsg);
-            arenaBot.answerCallbackQuery(query);
+            bot.sendMessage(statMsg);
+            bot.sendMessage(xStatMsg);
+            bot.sendMessage(eqMsg);
+            bot.answerCallbackQuery(query);
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
@@ -283,8 +283,8 @@ public final class Messages {
         query.setText("Вы выбрали класс: " + ArenaUser.getClassName(userClass));
         query.setCallbackQueryId(queryId);
         try {
-            arenaBot.sendMessage(Messages.getChooseRaceMsg(chatId, userClass));
-            arenaBot.answerCallbackQuery(query);
+            bot.sendMessage(Messages.getChooseRaceMsg(chatId, userClass));
+            bot.answerCallbackQuery(query);
         } catch (TelegramApiException e) {
             BotLogger.error(LOGTAG, e);
         }
@@ -302,8 +302,8 @@ public final class Messages {
         edit.setChatId(chatId);
         edit.setMessageId(msgId);
         try {
-            arenaBot.editMessageReplyMarkup(edit);
-            arenaBot.answerCallbackQuery(query);
+            bot.editMessageReplyMarkup(edit);
+            bot.answerCallbackQuery(query);
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
@@ -325,9 +325,9 @@ public final class Messages {
         editText.setMessageId(msgId);
         editText.setText("Персонаж удален");
         try {
-            arenaBot.editMessageReplyMarkup(edit);
-            arenaBot.editMessageText(editText);
-            arenaBot.answerCallbackQuery(query);
+            bot.editMessageReplyMarkup(edit);
+            bot.editMessageText(editText);
+            bot.answerCallbackQuery(query);
         } catch (TelegramApiException e) {
             BotLogger.error(LOGTAG, e);
         }
@@ -454,7 +454,7 @@ public final class Messages {
         msg.enableHtml(true);
         msg.setText(msgText);
         try {
-            arenaBot.sendMessage(msg);
+            bot.sendMessage(msg);
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
@@ -468,7 +468,7 @@ public final class Messages {
         msg.enableHtml(true);
         msg.setText(msgText);
         try {
-            id = arenaBot.sendMessage(msg).getMessageId();
+            id = bot.sendMessage(msg).getMessageId();
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
@@ -482,7 +482,7 @@ public final class Messages {
         editText.setMessageId(msgId);
         editText.setText(msgText);
         try {
-            arenaBot.editMessageText(editText);
+            bot.editMessageText(editText);
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
@@ -513,8 +513,8 @@ public final class Messages {
         try {
             for (Integer id : membersId) {
                 msg.setChatId((long) id);
-                arenaBot.sendMessage(msg);
-                arenaBot.sendMessage(getInlineKeyboardMsg((long) id, "Выберите цель:", buttonsName, callbacksData));
+                bot.sendMessage(msg);
+                bot.sendMessage(getInlineKeyboardMsg((long) id, "Выберите цель:", buttonsName, callbacksData));
             }
         } catch (TelegramApiException e) {
             e.printStackTrace();
@@ -539,7 +539,7 @@ public final class Messages {
         msg.setText(msgText.toString());
         try {
             msg.setChatId(chatId);
-            arenaBot.sendMessage(msg);
+            bot.sendMessage(msg);
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
@@ -575,7 +575,7 @@ public final class Messages {
         try {
             for (Integer id : membersId) {
                 msg.setChatId((long) id);
-                arenaBot.sendMessage(msg);
+                bot.sendMessage(msg);
             }
         } catch (TelegramApiException e) {
             e.printStackTrace();
@@ -590,7 +590,7 @@ public final class Messages {
         try {
             for (ArenaUser user : members) {
                 msg.setChatId((long) user.getUserId());
-                arenaBot.sendMessage(msg);
+                bot.sendMessage(msg);
             }
         } catch (TelegramApiException e) {
             e.printStackTrace();
@@ -602,7 +602,7 @@ public final class Messages {
         try {
             for (ArenaUser user : members) {
                 msg.setChatId((long) user.getUserId());
-                arenaBot.sendMessage(msg);
+                bot.sendMessage(msg);
             }
         } catch (TelegramApiException e) {
             e.printStackTrace();
@@ -617,7 +617,7 @@ public final class Messages {
         try {
             for (Member user : members) {
                 msg.setChatId((long) user.getUserId());
-                arenaBot.sendMessage(msg);
+                bot.sendMessage(msg);
             }
         } catch (TelegramApiException e) {
             e.printStackTrace();
@@ -670,8 +670,8 @@ public final class Messages {
                 .append(ArenaUser.getUser(userId).getClassName()).append("/")
                 .append(ArenaUser.getUser(userId).getRaceName()).append(" уровень:")
                 .append(ArenaUser.getUser(userId).getLevel()).append(")")
-                .append(" вошел в команду ").append(ArenaBot.registration.getMemberTeam(userId));
-        sendToAllMembers(ArenaBot.registration.getMembers(), messageText.toString());
+                .append(" вошел в команду ").append(Bot.registration.getMemberTeam(userId));
+        sendToAllMembers(Bot.registration.getMembers(), messageText.toString());
 
     }
 
@@ -695,7 +695,7 @@ public final class Messages {
         msg.setText(messageText);
         msg.setChatId(chatId);
         try {
-            arenaBot.sendMessage(msg);
+            bot.sendMessage(msg);
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
@@ -704,7 +704,7 @@ public final class Messages {
     public static void sendMessage(SendMessage message) {
 
         try {
-            arenaBot.sendMessage(message);
+            bot.sendMessage(message);
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
@@ -770,9 +770,9 @@ public final class Messages {
         query.setText("Вы выбрали цель: " + ArenaUser.getUserName(targetId));
         query.setCallbackQueryId(queryId);
         try {
-            arenaBot.sendMessage(Messages.getInlineKeyboardMsg(chatId, "Выберите действие:",
+            bot.sendMessage(Messages.getInlineKeyboardMsg(chatId, "Выберите действие:",
                     ArenaUser.getUser(userId).getActionsName(), ArenaUser.getUser(userId).getActionsId()));
-            arenaBot.answerCallbackQuery(query);
+            bot.answerCallbackQuery(query);
         } catch (TelegramApiException e) {
             BotLogger.error(LOGTAG, e);
         }
@@ -803,9 +803,9 @@ public final class Messages {
                 .setMessageId(callbackQuery.getMessage().getMessageId())
                 .setReplyMarkup(getInlineKeyboardMarkup(buttonText, buttonData));
         try {
-            arenaBot.editMessageText(editText);
-            arenaBot.editMessageReplyMarkup(markup);
-            arenaBot.answerCallbackQuery(query);
+            bot.editMessageText(editText);
+            bot.editMessageReplyMarkup(markup);
+            bot.answerCallbackQuery(query);
         } catch (TelegramApiException e) {
             BotLogger.error(LOGTAG, e);
         }
@@ -822,8 +822,8 @@ public final class Messages {
         editText.setMessageId(callbackQuery.getMessage().getMessageId());
         editText.setText("Заказ принят:");
         try {
-            arenaBot.editMessageText(editText);
-            arenaBot.answerCallbackQuery(query);
+            bot.editMessageText(editText);
+            bot.answerCallbackQuery(query);
         } catch (TelegramApiException e) {
             BotLogger.error(LOGTAG, e);
         }
@@ -845,9 +845,9 @@ public final class Messages {
         markup.setMessageId(callbackQuery.getMessage().getMessageId());
         markup.setReplyMarkup(getInlineKeyboardMarkup(ArenaUser.getUser(userId).getCastsName(), ArenaUser.getUser(userId).getCastsId()));
         try {
-            arenaBot.editMessageText(editText);
-            arenaBot.editMessageReplyMarkup(markup);
-            arenaBot.answerCallbackQuery(query);
+            bot.editMessageText(editText);
+            bot.editMessageReplyMarkup(markup);
+            bot.answerCallbackQuery(query);
         } catch (TelegramApiException e) {
             BotLogger.error(LOGTAG, e);
         }
@@ -859,7 +859,7 @@ public final class Messages {
         AnswerCallbackQuery query = new AnswerCallbackQuery();
         query.setCallbackQueryId(queryId);
         try {
-            arenaBot.answerCallbackQuery(query);
+            bot.answerCallbackQuery(query);
         } catch (TelegramApiException e) {
             BotLogger.error(LOGTAG, e);
         }
@@ -875,8 +875,8 @@ public final class Messages {
         editText.setMessageId(callbackQuery.getMessage().getMessageId());
         editText.setText("");
         try {
-            arenaBot.editMessageReplyMarkup(edit);
-            arenaBot.editMessageText(editText);
+            bot.editMessageReplyMarkup(edit);
+            bot.editMessageText(editText);
         } catch (TelegramApiException e) {
             BotLogger.error(LOGTAG, e);
         }

@@ -1,11 +1,11 @@
 package arenabot.test;
 
-import arenabot.ArenaBot;
+import arenabot.Bot;
 import arenabot.database.ConnectionDB;
 import arenabot.database.DatabaseManager;
 import arenabot.user.ArenaUser;
 
-import static arenabot.Config.TEST_DB_LINK;
+import static arenabot.config.Config.TEST_DB_LINK;
 
 public class TestHelper {
 
@@ -23,14 +23,15 @@ public class TestHelper {
     }
 
     public void init() {
-        ArenaBot arenaBot = new ArenaBot();
+        Bot bot = new Bot();
         DatabaseManager.setConnection(new ConnectionDB(TEST_DB_LINK));
         db = DatabaseManager.getInstance();
-        arenaBot.setDb(db);
+        bot.setDb(db);
 
     }
 
     public void close() {
+        WARRIOR.dropUser();
         DatabaseManager.getConnection().closeConnection();
     }
 }

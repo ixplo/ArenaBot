@@ -1,6 +1,6 @@
 package arenabot.battle;
 
-import arenabot.*;
+import arenabot.config.Config;
 import arenabot.user.ArenaUser;
 
 /**
@@ -38,12 +38,12 @@ public class Member {
     }
 
     public static void addMember(int userId, String teamId){
-        Registration.db.setIntTo(arenabot.Config.USERS,userId,"status", Config.REG);
-        Registration.db.setStringTo(arenabot.Config.USERS,userId,"team", teamId);
+        Registration.db.setIntTo(Config.USERS,userId,"status", Config.REG);
+        Registration.db.setStringTo(Config.USERS,userId,"team", teamId);
     }
 
     public static void removeMember(int userId){
-        Registration.db.setIntTo(arenabot.Config.USERS,userId,"status", Config.UNREG);
+        Registration.db.setIntTo(Config.USERS,userId,"status", Config.UNREG);
         if (Team.getTeam(getMember(userId).getTeamId()).isRegisteredTeam()) Registration.db.setStringTo(Config.USERS,userId,"team", "");
     }
 

@@ -1,4 +1,4 @@
-package arenabot.user;
+package arenabot.user.ratings;
 
 /**
  * ixplo

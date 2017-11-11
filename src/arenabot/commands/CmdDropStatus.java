@@ -1,6 +1,6 @@
 package arenabot.commands;
 
-import arenabot.Config;
+import arenabot.config.Config;
 import arenabot.battle.Registration;
 import arenabot.user.ArenaUser;
 import org.telegram.telegrambots.api.objects.Chat;

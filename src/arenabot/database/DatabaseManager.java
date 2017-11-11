@@ -1,7 +1,7 @@
 package arenabot.database;
 
 import arenabot.user.ArenaUser;
-import arenabot.Config;
+import arenabot.config.Config;
 import arenabot.user.items.Item;
 import arenabot.battle.Team;
 import org.telegram.telegrambots.logging.BotLogger;

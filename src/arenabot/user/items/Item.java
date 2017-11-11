@@ -1,6 +1,6 @@
 package arenabot.user.items;
 
-import arenabot.Config;
+import arenabot.config.Config;
 import arenabot.database.DatabaseManager;
 import arenabot.user.ArenaUser;
 

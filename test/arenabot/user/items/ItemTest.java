@@ -3,10 +3,15 @@ package arenabot.user.items;
 import arenabot.database.DatabaseManager;
 import arenabot.test.TestHelper;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.lang.reflect.Field;
+import java.util.List;
+import java.util.Map;
 
 public class ItemTest {
 
@@ -34,26 +39,31 @@ public class ItemTest {
             }
         }
         LOGGER.info("Тестовый персонаж: {}", testHelper.WARRIOR);
+        Map<String, Object> startParams = testHelper.WARRIOR.getParams();
         LOGGER.info("Надеваем вещь {} {}",
                 testHelper.WARRIOR.getItems().get(eqipIndex - 1).getEqipIndex(),
                 testHelper.WARRIOR.getItems().get(eqipIndex - 1).getName());
         testHelper.WARRIOR.putOn(eqipIndex);
+        Map<String, Object> params1 = testHelper.WARRIOR.getParams();
         LOGGER.info("Тестовый персонаж: {}", testHelper.WARRIOR);
+
         LOGGER.info("Надеваем вещь: {} {}",
                 testHelper.WARRIOR.getItems().get(0).getEqipIndex(),
                 testHelper.WARRIOR.getItems().get(0).getName());
         testHelper.WARRIOR.putOn(testHelper.WARRIOR.getItems().get(0).getEqipIndex());
+        Map<String, Object> params2 = testHelper.WARRIOR.getParams();
         LOGGER.info("Тестовый персонаж: {}", testHelper.WARRIOR);
         LOGGER.info("Инвентарь: {}", testHelper.WARRIOR.getItems());
         for (Item item : testHelper.WARRIOR.getItems()) {
             LOGGER.info("{} Item: {}", item.getName(), item.getEqipIndex());
         }
+        Assert.assertNotEquals("Характеристики не изменились ", startParams, params1);
+        Assert.assertEquals("Характеристики не совпадают ", startParams, params2);
         //todo доделать сравнение характеристик
     }
 
     @After
     public void tearDown() throws Exception {
-        testHelper.WARRIOR.dropUser();
         testHelper.close();
     }
 

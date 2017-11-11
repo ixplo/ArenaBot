@@ -1,6 +1,6 @@
 package arenabot.user.spells;
 
-import arenabot.Config;
+import arenabot.config.Config;
 
 import static arenabot.user.ArenaUser.db;
 

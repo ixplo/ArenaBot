@@ -2,7 +2,7 @@ package arenabot.battle;
 
 import arenabot.messages.Messages;
 import arenabot.user.ArenaUser;
-import arenabot.Config;
+import arenabot.config.Config;
 import arenabot.database.DatabaseManager;
 
 import java.util.Timer;

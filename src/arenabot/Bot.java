@@ -5,6 +5,7 @@ import arenabot.battle.Round;
 import arenabot.battle.actions.Action;
 import arenabot.commands.*;
 import arenabot.battle.Registration;
+import arenabot.config.Config;
 import arenabot.database.DatabaseManager;
 import arenabot.messages.Messages;
 import arenabot.user.ArenaUser;
@@ -20,12 +21,12 @@ import org.telegram.telegrambots.logging.BotLogger;
  * ixplo
  * 24.04.2017.
  */
-public class ArenaBot extends TelegramLongPollingCommandBot {
+public class Bot extends TelegramLongPollingCommandBot {
 
     private static final String LOGTAG = "ARENABOT";
     public static Registration registration;
 
-    public ArenaBot() {
+    public Bot() {
 
         register(new CmdStart());
         register(new CmdReg());
@@ -61,7 +62,7 @@ public class ArenaBot extends TelegramLongPollingCommandBot {
     private void initBot() {
         setDb(DatabaseManager.getInstance());
         registration = new Registration();
-        Messages.setArenaBot(this);
+        Messages.setBot(this);
     }
 
     public void setDb(DatabaseManager db) {

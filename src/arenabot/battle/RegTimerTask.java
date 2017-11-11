@@ -1,6 +1,6 @@
 package arenabot.battle;
 
-import arenabot.Config;
+import arenabot.config.Config;
 import arenabot.messages.Messages;
 
 import java.util.Timer;

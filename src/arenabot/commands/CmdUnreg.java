@@ -1,7 +1,7 @@
 package arenabot.commands;
 
-import arenabot.ArenaBot;
-import arenabot.Config;
+import arenabot.Bot;
+import arenabot.config.Config;
 import arenabot.user.ArenaUser;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Chat;
@@ -31,12 +31,12 @@ public class CmdUnreg extends BotCommand {
 
         StringBuilder messageBuilder = new StringBuilder();
         String userName = ArenaUser.getUserName(user.getId());
-        if(ArenaBot.registration.isOn && ArenaBot.registration.getMemberStatus(user.getId()) != Config.REG){
+        if(Bot.registration.isOn && Bot.registration.getMemberStatus(user.getId()) != Config.REG){
             return;
         }
-        ArenaBot.registration.unregMember(user.getId());
+        Bot.registration.unregMember(user.getId());
         messageBuilder.append("<b>").append(userName).append("</b> вышел из команды ").
-                append(ArenaBot.registration.getMemberTeam(user.getId()));
+                append(Bot.registration.getMemberTeam(user.getId()));
         SendMessage answer = new SendMessage();
         answer.enableHtml(true);
         answer.setChatId(chat.getId().toString());
