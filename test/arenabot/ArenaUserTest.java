@@ -63,13 +63,13 @@ public class ArenaUserTest {
     public void doesUserExists() throws Exception {
        assertTrue(ArenaUser.doesUserExists(362812407));
        assertFalse(ArenaUser.doesUserExists(1));
-       assertFalse(ArenaUser.doesUserExists(-1));
     }
 
     @Test
     public void getUserName() throws Exception {
         assertEquals(ArenaUser.getUserName(362812407),"ixplo");
-        assertNull(warrior.getName());
+        ArenaUser newUser = ArenaUser.create(ArenaUser.UserClass.WARRIOR);
+        assertNull(newUser.getName());
     }
 
 

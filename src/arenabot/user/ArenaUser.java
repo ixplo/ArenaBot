@@ -144,7 +144,6 @@ public abstract class ArenaUser {
         arenaUser.minHit = (double) (arenaUser.curStr - 3) / 4;
         arenaUser.maxHit = (double) (arenaUser.curStr - 3) / 4;
         arenaUser.attack = new BigDecimal(0.91 * arenaUser.curDex + 0.39 * arenaUser.curStr);
-        arenaUser.attack.setScale(Config.SCALE,BigDecimal.ROUND_DOWN);
         arenaUser.protect = roundDouble(0.4 * arenaUser.curDex + 0.6 * arenaUser.curCon);
         arenaUser.heal = roundDouble(0.06 * arenaUser.curWis + 0.04 * arenaUser.curInt);
         arenaUser.magicProtect = roundDouble(0.6 * arenaUser.curWis + 0.4 * arenaUser.curInt);
