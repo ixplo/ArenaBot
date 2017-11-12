@@ -5,6 +5,7 @@ import arenabot.config.Config;
 import arenabot.battle.*;
 import arenabot.user.ArenaUser;
 import arenabot.user.items.Item;
+import arenabot.validate.Validation;
 import org.telegram.telegrambots.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.api.methods.AnswerInlineQuery;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
@@ -76,8 +77,9 @@ public final class Messages {
         out.append("Ваш инвентарь: \n");
         int size = items.size();
         for (int i = 0; i < size; i++) {
-            int count = i + 1;
+            int count = i;
             out.append(count);
+            // bold for items in slot
             if (Item.isItemInSlot(count, userId)) {
                 out.append(".<b>").append(items.get(i).getName()).append("</b>, ");
             } else {
@@ -85,7 +87,7 @@ public final class Messages {
             }
         }
         out.append("\nОружие: <b>");
-        if (arenaUser.getCurWeapon() == 0) {
+        if (arenaUser.getCurWeapon() < 0) {
             out.append("без оружия</b>");
         } else {
             out.append(Item.getItem(Item.getItemId(arenaUser.getUserId(), arenaUser.getCurWeapon())).getName());
@@ -338,7 +340,7 @@ public final class Messages {
         SendMessage msg = new SendMessage();
         msg.setChatId(chatId);
         msg.enableHtml(true);
-        if (strings.length == 0 || !isNumeric(strings[0])) {
+        if (strings.length == 0 || !Validation.isNumeric(strings[0])) {
             msg.setText("Формат: <i>/ex 1</i> - посмотреть предмет в инвентаре под номером 1");
             try {
                 absSender.sendMessage(msg);
@@ -879,15 +881,6 @@ public final class Messages {
             bot.editMessageText(editText);
         } catch (TelegramApiException e) {
             BotLogger.error(LOGTAG, e);
-        }
-    }
-
-    private static boolean isNumeric(String s) {
-        try {
-            Integer.parseInt(s);
-            return true;
-        } catch (NumberFormatException e) {
-            return false;
         }
     }
 

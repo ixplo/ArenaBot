@@ -265,7 +265,7 @@ public class DatabaseManager {
             preparedStatement.setDouble(33, arenaUser.getCurHitPoints());
             preparedStatement.setInt(34, arenaUser.getCurExp());
             preparedStatement.setLong(35, arenaUser.getLastGame());
-            preparedStatement.setInt(36, arenaUser.getCurWeapon());
+            preparedStatement.setInt(36, arenaUser.getCurWeapon() - 1);
             preparedStatement.setInt(37, arenaUser.getStatus());
             updatedRows = preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -279,7 +279,7 @@ public class DatabaseManager {
         String queryText = "Select in_slot FROM inventory WHERE user_id=? AND counter=?;";
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setInt(1, userId);
-            preparedStatement.setInt(2, eqipIndex);
+            preparedStatement.setInt(2, eqipIndex + 1);
             final ResultSet result = preparedStatement.executeQuery();
             if (result.next()) {
                 resultString = result.getString("in_slot");
@@ -395,7 +395,7 @@ public class DatabaseManager {
             while (result.next()) {
                 Item item = new Item();
                 item.setOwnerId(userId);
-                item.setEqipIndex(result.getInt("counter"));
+                item.setEqipIndex(result.getInt("counter") - 1);
                 item.setInSlot(result.getString("in_slot"));
                 item.setItemId(result.getString("id"));
                 item.setName(result.getString("name"));
@@ -935,14 +935,15 @@ public class DatabaseManager {
     }
 
     /***
-     * "UPDATE users SET ?=? WHERE id=?;"
+     * "UPDATE users SET ?=? WHERE id=? and user_id=?;"
      ***/
-    public boolean setStringTo(String tableName, String id, String recordColumn, String recordValue) {
+    public boolean setStringTo(String tableName, Integer userId, String id, String recordColumn, String recordValue) {
         int updatedRows = 0;
-        String queryText = "UPDATE " + tableName + " SET " + recordColumn + "=? WHERE id=?;";
+        String queryText = "UPDATE " + tableName + " SET " + recordColumn + "=? WHERE id=? and user_id=?;";
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setString(1, recordValue);
             preparedStatement.setString(2, id);
+            preparedStatement.setInt(3, userId);
             updatedRows = preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

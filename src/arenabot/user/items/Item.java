@@ -56,8 +56,9 @@ public class Item {
         this.itemId = itemId;
     }
 
+    // items count in eq
     public static int getEqipAmount(Integer userId) {
-        return db.getCount(Config.EQIP, Config.USER_ID, userId); //items count in eq
+        return db.getCount(Config.EQIP, Config.USER_ID, userId);
     }
 
     private static List<String> getItemsId(int userId) {
@@ -81,18 +82,18 @@ public class Item {
     }
 
     public static String getItemId(int userId, Integer eqipIndex) {
-        return db.getStringByBy(Config.EQIP, "id", "counter", eqipIndex, Config.USER_ID, userId);
+        return db.getStringByBy(Config.EQIP, "id", "counter", eqipIndex + 1, Config.USER_ID, userId);
     }
 
-    public static void putOn(ArenaUser arenaUser, Integer eqipIndex) { // refactor to instance instead static
+    public static void putOn(ArenaUser arenaUser, Integer eqipIndex) {
 
         //*** проверка на наличие в инвентаре
-        if (eqipIndex > getEqipAmount(arenaUser.getUserId())) {
-            throw new RuntimeException("Invalid eqip index: " + eqipIndex);
+        if (eqipIndex + 1 > getEqipAmount(arenaUser.getUserId())) {
+            throw new IllegalArgumentException("Invalid eqip index: " + eqipIndex);
         }
         //*** проверка, а не надета ли уже она
         if (isItemInSlot(arenaUser.getUserId(), eqipIndex)) {
-            return;
+            throw new IllegalArgumentException("Attempt to puton item that is already in slot");
         }
         Item item = getItem(getItemId(arenaUser.getUserId(), eqipIndex));
         //*** проверка, а не надета ли в этот слот другая вещь
@@ -123,10 +124,12 @@ public class Item {
         }
         arenaUser.setMagicProtect(arenaUser.getMagicProtect() + roundDouble(0.6 * item.getWisBonus() + 0.4 * item.getIntBonus()));
         arenaUser.setHeal(arenaUser.getHeal() + roundDouble(0.06 * item.getWisBonus() + 0.04 * item.getIntBonus()));
-        if (item.isWeapon()) arenaUser.setCurWeapon(eqipIndex);
         //*** заносим in_slot
         item.markAsPuttedOn(arenaUser.getUserId(), eqipIndex);
         arenaUser.putOnClassFeatures(item);
+        if (item.isWeapon()) {
+            arenaUser.setCurWeapon(eqipIndex); //todo разобраться с нумерацией!
+        }
         db.setUser(arenaUser);
         //todo снова изменить характеристики из-за предыдущего пункта
     }
@@ -144,12 +147,12 @@ public class Item {
     public static void putOff(ArenaUser arenaUser, int eqipIndex) {
 
         //*** проверка на наличие в инвентаре
-        if (eqipIndex > getEqipAmount(arenaUser.getUserId())) {
+        if (eqipIndex + 1 > getEqipAmount(arenaUser.getUserId())) {
             throw new IllegalArgumentException("Invalid eqip index: " + eqipIndex);
         }
         //*** проверка, а надета ли она
         if (!isItemInSlot(arenaUser.getUserId(), eqipIndex)) {
-            throw new IllegalArgumentException("Attempt to putoff item that is not worn");
+            throw new IllegalArgumentException("Attempt to putoff item that is not in slot");
         }
         //todo проверка на соответствие требованиям (другие вещи тоже надо проверить, на случай если харки уменьшатся)
 
@@ -171,10 +174,17 @@ public class Item {
         }
         arenaUser.setMagicProtect(arenaUser.getMagicProtect() - roundDouble(0.6 * item.getWisBonus() + 0.4 * item.getIntBonus()));
         arenaUser.setHeal(arenaUser.getHeal() - roundDouble(0.06 * item.getWisBonus() + 0.04 * item.getIntBonus()));
-        if (item.isWeapon()) arenaUser.setCurWeapon(0); //надеваем Ладошку
         //*** заносим in_slot
         item.markAsPuttedOff(arenaUser.getUserId(), eqipIndex);
         arenaUser.putOffClassFeatures(item);
+        // если вещь - оружие, и не Ладошка, то надеваем Ладошку
+        if (item.isWeapon()) {
+            if (item.eqipIndex != 0) {
+                putOn(arenaUser, 0);
+            } else {
+                arenaUser.setCurWeapon(-1);
+            }
+        }
         db.setUser(arenaUser);
         //todo снова изменить характеристики из-за предыдущего пункта
     }
@@ -200,7 +210,7 @@ public class Item {
         this.eqipIndex = eqipIndex;
     }
 
-    boolean isInSlot() {
+    public boolean isInSlot() {
         return inSlot != null;
     }
 
@@ -209,11 +219,11 @@ public class Item {
     }
 
     public boolean markAsPuttedOn(Integer userId, Integer eqipIndex) {
-        return db.setStringTo(Config.EQIP, itemId, "in_slot", slot);
+        return db.setStringTo(Config.EQIP, userId, itemId, "in_slot", slot);
     }
 
     public boolean markAsPuttedOff(Integer userId, Integer eqipIndex) {
-        return db.setStringTo(Config.EQIP, itemId, "in_slot", null);
+        return db.setStringTo(Config.EQIP, userId, itemId, "in_slot", null);
     }
 
     private static double roundDouble(double d) {

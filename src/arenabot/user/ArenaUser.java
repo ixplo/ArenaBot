@@ -149,7 +149,7 @@ public abstract class ArenaUser {
         arenaUser.magicProtect = roundDouble(0.6 * arenaUser.curWis + 0.4 * arenaUser.curInt);
         arenaUser.setClassFeatures();
         db.addItem(userId, "waa"); //todo arenaUser.addItem(new Item("waa"));
-        arenaUser.putOn(1); //todo overloaded method putOn("waa")
+        arenaUser.putOn(0); //todo overloaded method putOn("waa")
         db.setUser(arenaUser);
         return arenaUser;
     }
@@ -362,6 +362,9 @@ public abstract class ArenaUser {
         dropUser(userId);
     }
 
+    public int getEqipAmount() {
+        return Item.getEqipAmount(userId);
+    }
     public void putOn(int eqipIndex) {
         Item.putOn(this, eqipIndex);
     }

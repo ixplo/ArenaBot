@@ -39,6 +39,8 @@ public class Bot extends TelegramLongPollingCommandBot {
         register(new CmdXstat());
         register(new CmdHark());
         register(new CmdEq());
+        register(new CmdPutOn());
+        register(new CmdPutOff());
         register(new CmdEx());
         register(new CmdDo());
         register(new CmdList());

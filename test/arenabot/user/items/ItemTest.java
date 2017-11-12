@@ -48,12 +48,12 @@ public class ItemTest {
         LOGGER.info("Тестовый персонаж: {}", warrior);
         Map<String, Object> startParams = warrior.getParams();
         LOGGER.info("Надеваем вещь {} {}",
-                warrior.getItems().get(eqipIndex - 1).getEqipIndex(),
-                warrior.getItems().get(eqipIndex - 1).getName());
+                warrior.getItems().get(eqipIndex).getEqipIndex(),
+                warrior.getItems().get(eqipIndex).getName());
         warrior.putOn(eqipIndex);
         Map<String, Object> params1 = warrior.getParams();
-        Assert.assertNotEquals("Характеристики не изменились ", startParams, params1);
         LOGGER.info("Тестовый персонаж: {}", warrior);
+        Assert.assertNotEquals("Характеристики не изменились ", startParams, params1);
 
         LOGGER.info("Надеваем вещь: {} {}",
                 warrior.getItems().get(0).getEqipIndex(),
@@ -70,34 +70,49 @@ public class ItemTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void putOff_wrongEqipIndex() throws Exception {
-        warrior.putOff(2);
+        warrior.putOff(1);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void putOff_twice() throws Exception {
+        testHelper.db.addItem(warrior.getUserId(), "wba");
         warrior.putOff(1);
         warrior.putOff(1);
     }
 
     @Test
     public void putOff_allGood() throws Exception {
-        warrior.putOff(1);
+        warrior.putOff(0);
     }
 
     @Test
     public void getEqipAmount() throws Exception {
+        Assert.assertEquals(1, warrior.getEqipAmount());
+        testHelper.db.addItem(warrior.getUserId(), "wba");
+        Assert.assertEquals(2, warrior.getEqipAmount());
     }
 
     @Test
     public void getItems() throws Exception {
+        Assert.assertEquals(0,warrior.getItems().get(0).getEqipIndex());
+        testHelper.db.addItem(warrior.getUserId(), "wba");
+        Assert.assertEquals(1,warrior.getItems().get(1).getEqipIndex());
     }
 
     @Test
     public void getEqipIndex() throws Exception {
+        Assert.assertEquals(0, warrior.getItems().get(0).getEqipIndex());
     }
 
     @Test
-    public void isItemInSlot() throws Exception {
+    public void isInSlot() throws Exception {
+        testHelper.db.addItem(warrior.getUserId(), "wba");
+        Assert.assertTrue(warrior.getItems().get(0).isInSlot());
+        Assert.assertFalse(warrior.getItems().get(1).isInSlot());
+        warrior.putOn(1);
+        Assert.assertTrue(warrior.getItems().get(1).isInSlot());
+        warrior.putOff(1);
+        Assert.assertFalse(warrior.getItems().get(1).isInSlot());
     }
 
     @Test
