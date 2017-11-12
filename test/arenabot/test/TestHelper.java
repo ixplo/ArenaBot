@@ -11,6 +11,7 @@ public class TestHelper {
 
     public DatabaseManager db;
     public static ArenaUser WARRIOR;
+    public static ArenaUser MAGE;
 
     public TestHelper() {
         init();
@@ -19,7 +20,9 @@ public class TestHelper {
 
     private void generateData() {
         WARRIOR = ArenaUser.create(-1,"test_warrior", ArenaUser.UserClass.WARRIOR, "o");
+        MAGE = ArenaUser.create(-2, "test_mage", ArenaUser.UserClass.MAGE, "e");
         db.setUser(WARRIOR);
+        db.setUser(MAGE);
     }
 
     public void init() {
@@ -32,6 +35,7 @@ public class TestHelper {
 
     public void close() {
         WARRIOR.dropUser();
+        MAGE.dropUser();
         DatabaseManager.getConnection().closeConnection();
     }
 }

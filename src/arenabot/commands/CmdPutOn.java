@@ -35,7 +35,7 @@ public class CmdPutOn extends BotCommand {
             return;
         }
         eqipIndex = Integer.parseInt(strings[0]);
-        if (eqipIndex + 1> ArenaUser.getUser(user.getId()).getEqipAmount()) {
+        if (eqipIndex + 1 > ArenaUser.getUser(user.getId()).getEqipAmount()) {
             Messages.sendMessage(absSender, chat.getId(), "Неверный номер. Пример использования: /puton 1");
             return;
         }

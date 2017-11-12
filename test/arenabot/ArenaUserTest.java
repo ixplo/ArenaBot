@@ -24,6 +24,7 @@ public class ArenaUserTest {
 
     private TestHelper testHelper = new TestHelper();
     private ArenaUser warrior = TestHelper.WARRIOR;
+    private ArenaUser mage = TestHelper.MAGE;
 
     @Before
     public void setUp() throws Exception {
@@ -73,12 +74,10 @@ public class ArenaUserTest {
     }
 
 
-    @Test //(expected = IllegalArgumentException.class)
+    @Test
     public void create() throws Exception {
-        ArenaUser newUser = ArenaUser.create(-500, "test_notNull", ArenaUser.UserClass.WARRIOR, "o");
-        assertNotNull(newUser);
-        assertEquals(ArenaUser.UserClass.MAGE.toString(),
-                ArenaUser.create(-501, "test_Mage", ArenaUser.UserClass.MAGE, "o").getUserClass());
+        assertNotNull(warrior);
+        assertEquals(ArenaUser.UserClass.MAGE.toString(), mage.getUserClass());
     }
 //
 //    @Test
