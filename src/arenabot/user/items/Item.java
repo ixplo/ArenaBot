@@ -66,8 +66,7 @@ public class Item {
 
     public static List<Item> getItems(int userId) {
         List<Item> items = new LinkedList<>();
-        for (String id :
-                getItemsId(userId)) {
+        for (String id : getItemsId(userId)) {
             items.add(db.getItem(id));
         }
         return items;
@@ -99,7 +98,7 @@ public class Item {
         //*** проверка, а не надета ли в этот слот другая вещь
         List<Item> itemsList = arenaUser.getItems();
         // проверкa, пустой ли слот и освобождение его
-        for (Item oneItem: itemsList) {
+        for (Item oneItem : itemsList) {
             if (oneItem.getSlot().equals(item.getSlot())) {
                 if (oneItem.isInSlot()) {
                     // сделать putOff вещи, которая тут раньше была надета
@@ -146,12 +145,11 @@ public class Item {
 
         //*** проверка на наличие в инвентаре
         if (eqipIndex > getEqipAmount(arenaUser.getUserId())) {
-            throw new RuntimeException("Invalid eqip index: " + eqipIndex);
+            throw new IllegalArgumentException("Invalid eqip index: " + eqipIndex);
         }
         //*** проверка, а надета ли она
         if (!isItemInSlot(arenaUser.getUserId(), eqipIndex)) {
-            //todo throw
-            return;
+            throw new IllegalArgumentException("Attempt to putoff item that is not worn");
         }
         //todo проверка на соответствие требованиям (другие вещи тоже надо проверить, на случай если харки уменьшатся)
 
@@ -180,7 +178,6 @@ public class Item {
         db.setUser(arenaUser);
         //todo снова изменить характеристики из-за предыдущего пункта
     }
-
 
 
     public static String getItemName(Integer userId, Integer eqipIndex) {
