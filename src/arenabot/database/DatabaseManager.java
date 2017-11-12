@@ -6,6 +6,7 @@ import arenabot.user.items.Item;
 import arenabot.battle.Team;
 import org.telegram.telegrambots.logging.BotLogger;
 
+import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -170,7 +171,7 @@ public class DatabaseManager {
                 arenaUser.setCurCon(result.getInt("cur_con"));
                 arenaUser.setMinHit(result.getDouble("min_hit"));
                 arenaUser.setMaxHit(result.getDouble("max_hit"));
-                arenaUser.setAttack(result.getDouble("attack"));
+                arenaUser.setAttack(result.getBigDecimal("attack"));
                 arenaUser.setProtect(result.getDouble("protect"));
                 arenaUser.setHeal(result.getDouble("heal"));
                 arenaUser.setMagicProtect(result.getDouble("m_protect"));
@@ -257,7 +258,7 @@ public class DatabaseManager {
             preparedStatement.setInt(26, arenaUser.getCurCon());
             preparedStatement.setDouble(27, arenaUser.getMinHit());
             preparedStatement.setDouble(28, arenaUser.getMaxHit());
-            preparedStatement.setDouble(29, arenaUser.getAttack());
+            preparedStatement.setBigDecimal(29, arenaUser.getAttack());
             preparedStatement.setDouble(30, arenaUser.getProtect());
             preparedStatement.setDouble(31, arenaUser.getHeal());
             preparedStatement.setDouble(32, arenaUser.getMagicProtect());
@@ -861,6 +862,22 @@ public class DatabaseManager {
         String queryText = "UPDATE " + tableName + " SET " + recordColumn + "=? WHERE id=?;";
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setDouble(1, recordValue);
+            preparedStatement.setInt(2, id);
+            updatedRows = preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return updatedRows > 0;
+    }
+
+    /***
+     * "UPDATE users SET ?=? WHERE id=?;"
+     ***/
+    public boolean setBigDecimalTo(String tableName, Integer id, String recordColumn, BigDecimal recordValue) {
+        int updatedRows = 0;
+        String queryText = "UPDATE " + tableName + " SET " + recordColumn + "=? WHERE id=?;";
+        try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
+            preparedStatement.setBigDecimal(1, recordValue);
             preparedStatement.setInt(2, id);
             updatedRows = preparedStatement.executeUpdate();
         } catch (SQLException e) {

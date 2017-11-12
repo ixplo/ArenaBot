@@ -17,6 +17,8 @@ import org.telegram.telegrambots.bots.TelegramLongPollingCommandBot;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
 import org.telegram.telegrambots.logging.BotLogger;
 
+import java.math.BigDecimal;
+
 /**
  * ixplo
  * 24.04.2017.

@@ -5,6 +5,7 @@ import arenabot.user.ArenaUser;
 import arenabot.user.items.Item;
 import arenabot.user.spells.Skill;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -85,13 +86,13 @@ public class Archer extends ArenaUser implements SkillApplicant {
     private void doIntBonus(int numberOfPoints) {
         setMinHit(roundDouble(getMinHit() + (double) numberOfPoints / 4));
         setMaxHit(roundDouble(getMaxHit() + (double) numberOfPoints / 4));
-        setAttack(roundDouble(getAttack() + 0.39 * numberOfPoints));
+        setAttack(getAttack().add(new BigDecimal(0.39 * numberOfPoints)));
     }
 
     private void undoStrBonus(int numberOfPoints) {
         setMinHit(roundDouble(getMinHit() - (double) numberOfPoints / 4));
         setMaxHit(roundDouble(getMaxHit() - (double) numberOfPoints / 4));
-        setAttack(roundDouble(getAttack() - 0.39 * numberOfPoints));
+        setAttack(getAttack().subtract(new BigDecimal(0.39 * numberOfPoints)));
     }
 
     @Override
@@ -112,9 +113,9 @@ public class Archer extends ArenaUser implements SkillApplicant {
     }
 
     @Override
-    public void setAttack(double attack) {
+    public void setAttack(BigDecimal attack) {
         super.setAttack(attack);
-        db.setDoubleTo(Config.USERS, getUserId(), "attack", attack);
+        db.setBigDecimalTo(Config.USERS, getUserId(), "attack", attack);
     }
 
     @Override

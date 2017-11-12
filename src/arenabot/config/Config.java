@@ -1,5 +1,7 @@
 package arenabot.config;
 
+import java.math.BigDecimal;
+
 /**
  * ixplo
  * 25.04.2017.
@@ -41,6 +43,7 @@ public class Config {
     public static final int ROUND_TIME = 45000;
     public static final int ROUND_REMIND = 30000;
     public static final int GOLD_FOR_MEMBER = 10;
-
+    public static final int SCALE = 2;
+    public static final int ROUNDED = BigDecimal.ROUND_DOWN;
 
 }

@@ -4,6 +4,7 @@ import arenabot.config.Config;
 import arenabot.database.DatabaseManager;
 import arenabot.user.ArenaUser;
 
+import java.math.BigDecimal;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -97,7 +98,7 @@ public class Item {
         Item item = getItem(getItemId(arenaUser.getUserId(), eqipIndex));
         //*** проверка, а не надета ли в этот слот другая вещь
         List<Item> itemsList = arenaUser.getItems();
-        // проверкa, пустой ли слот
+        // проверкa, пустой ли слот и освобождение его
         for (Item oneItem: itemsList) {
             if (oneItem.getSlot().equals(item.getSlot())) {
                 if (oneItem.isInSlot()) {
@@ -115,7 +116,7 @@ public class Item {
         arenaUser.setCurCon(arenaUser.getCurCon() + item.getConBonus());
         arenaUser.setMinHit(arenaUser.getMinHit() + item.getMinHit() + item.getStrBonus() / 4);
         arenaUser.setMaxHit(arenaUser.getMaxHit() + item.getMaxHit() + item.getStrBonus() / 4);
-        arenaUser.setAttack(arenaUser.getAttack() + item.getAttack() + roundDouble(0.91 * item.getDexBonus() + 0.39 * item.getStrBonus()));
+        arenaUser.setAttack(arenaUser.getAttack().add(new BigDecimal(item.getAttack() + roundDouble(0.91 * item.getDexBonus() + 0.39 * item.getStrBonus()))));
         arenaUser.setProtect(arenaUser.getProtect() + item.getProtect() + roundDouble(0.4 * item.getDexBonus() + 0.6 * item.getConBonus()));
         arenaUser.setMaxHitPoints(arenaUser.getMaxHitPoints() + roundDouble(1.3333333 * item.getConBonus()));//todo переделать, иначе выскочит нецелое число
         if (arenaUser.getStatus() != 2) {
@@ -164,7 +165,7 @@ public class Item {
         arenaUser.setCurCon(arenaUser.getCurCon() - item.getConBonus());
         arenaUser.setMinHit(arenaUser.getMinHit() - item.getMinHit() - item.getStrBonus() / 4);
         arenaUser.setMaxHit(arenaUser.getMaxHit() - item.getMaxHit() - item.getStrBonus() / 4);
-        arenaUser.setAttack(arenaUser.getAttack() - item.getAttack() - roundDouble(0.91 * item.getDexBonus() + 0.39 * item.getStrBonus()));
+        arenaUser.setAttack(arenaUser.getAttack().subtract(new BigDecimal(item.getAttack() - roundDouble(0.91 * item.getDexBonus() + 0.39 * item.getStrBonus()))));
         arenaUser.setProtect(arenaUser.getProtect() - item.getProtect() - roundDouble(0.4 * item.getDexBonus() + 0.6 * item.getConBonus()));
         arenaUser.setMaxHitPoints(arenaUser.getMaxHitPoints() - roundDouble(1.3333333 * item.getConBonus()));//todo переделать на BigDecimal, иначе выскочит нецелое число
         if (arenaUser.getStatus() != 2) { //todo поменять цифры на константы

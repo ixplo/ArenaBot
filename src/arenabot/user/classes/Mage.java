@@ -9,6 +9,7 @@ import arenabot.user.ArenaUser;
 import arenabot.user.items.Item;
 import arenabot.user.spells.Spell;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 import static arenabot.messages.Messages.fillWithSpaces;
@@ -141,8 +142,8 @@ public class Mage extends ArenaUser implements SpellCaster {
                         "\n(опыт:+" + spell.getExpBonus() + "/" + getCurExp() + ")</pre>";
             }
             for (Action attackAction : attackOnTargetList) {
-                double attack = attackAction.getUser().getAttack() * attackAction.getPercent() / 100;
-                if (attack > armor) {
+                BigDecimal attack = attackAction.getUser().getAttack().multiply(new BigDecimal(attackAction.getPercent() / 100));
+                if (attack.doubleValue() > armor) {
                     break;
                 }
                 int experience = (int) (4 * ((Attack) attackAction).getHit());

@@ -7,6 +7,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.math.BigDecimal;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -20,15 +22,13 @@ import static org.junit.Assert.assertTrue;
  */
 public class ArenaUserTest {
 
-    private ArenaUser warrior;
     private TestHelper testHelper = new TestHelper();
+    private ArenaUser warrior = TestHelper.WARRIOR;
 
     @Before
     public void setUp() throws Exception {
         testHelper.init();
     }
-
-
 
     @After
     public void tearDown() throws Exception {
@@ -45,14 +45,14 @@ public class ArenaUserTest {
         warrior.setNativeCon(5);
         warrior.setCurCon(5);
         warrior.setMinHit(0);
-        warrior.setAttack(ArenaUser.roundDouble(0.91 * warrior.getCurDex() + 0.39 * warrior.getCurStr()));
+        warrior.setAttack(new BigDecimal(0.91 * warrior.getCurDex() + 0.39 * warrior.getCurStr()));
         warrior.setProtect(ArenaUser.roundDouble(0.4 * warrior.getCurDex() + 0.6 * warrior.getCurCon()));
         warrior.addHark("nativeStr",1);
         warrior.addHark("nativeCon",1);
         assertEquals(4, warrior.getCurStr());
         assertEquals(6, warrior.getCurCon());
         assertEquals(0.25, warrior.getMinHit(),0);
-        assertEquals(4.29, warrior.getAttack(),0);
+        assertEquals(0,warrior.getAttack().compareTo(new BigDecimal("4.28")));
         assertEquals(4.8, warrior.getProtect(),0);
         warrior.addHark("nativeStr",3);
         assertEquals(7, warrior.getNativeStr());

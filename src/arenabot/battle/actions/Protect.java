@@ -3,6 +3,7 @@ package arenabot.battle.actions;
 import arenabot.user.items.Item;
 import arenabot.battle.Round;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -25,8 +26,8 @@ public class Protect extends Action {
             return;
         }
         for (Action attackAction : attackOnTargetList) {
-            double attack = attackAction.user.getAttack() * attackAction.getPercent() / 100;
-            if (attack > protect) {
+            BigDecimal attack = attackAction.user.getAttack().multiply(new BigDecimal(attackAction.getPercent() / 100));
+            if (attack.doubleValue() > protect) {
                 return;
             }
             experience = (int) (4 * ((Attack) attackAction).getHit());
