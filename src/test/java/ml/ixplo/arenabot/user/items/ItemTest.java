@@ -16,7 +16,6 @@ public class ItemTest {
 
     public static final Logger LOGGER = LoggerFactory.getLogger(ItemTest.class);
 
-    private DatabaseManager db;
     private TestHelper testHelper = new TestHelper();
     private ArenaUser warrior = TestHelper.WARRIOR;
 

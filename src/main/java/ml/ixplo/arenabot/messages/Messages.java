@@ -85,7 +85,7 @@ public final class Messages {
         for (int i = 0; i < size; i++) {
             int count = i;
             out.append(count);
-            // bold for items in slot
+            // bold font for items in slot
             if (Item.isItemInSlot(count, userId)) {
                 out.append(".<b>").append(items.get(i).getName()).append("</b>, ");
             } else {

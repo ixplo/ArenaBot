@@ -24,8 +24,10 @@
         <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>  <!-- Ensure you run mvn install before sonar:sonar -->
         <sonar.java.codeCoveragePlugin>jacoco</sonar.java.codeCoveragePlugin>
         <sonar.surefire.reportsPath>/target/surefire-reports</sonar.surefire.reportsPath>
-        <sonar.jacoco.reportPath>target/jacoco.exec</sonar.jacoco.reportPath>    <!-- This is the default, put here to be explicit -->
-        <sonar.jacoco.itReportPath>${project.basedir}/../target/jacoco-it.exec</sonar.jacoco.itReportPath>
+        <sonar.junit.reportPaths>
+            ${project.basedir}/target/jacoco.exec,
+            ${project.basedir}/target/jacoco-it.exec
+        </sonar.junit.reportPaths>
         <jdk.version>1.8</jdk.version>
     </properties>
     <dependencies>
