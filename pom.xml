@@ -32,6 +32,11 @@
             ${project.basedir}/target/jacoco.exec,
             ${project.basedir}/target/jacoco-it.exec
         </sonar.junit.reportPaths>
+        <sonar.coverage.exclusions>
+            **/*Exception.java,
+            **/config/**/*.java,
+            **/src/test/**/*
+        </sonar.coverage.exclusions>
         <jdk.version>1.8</jdk.version>
     </properties>
     <dependencies>
