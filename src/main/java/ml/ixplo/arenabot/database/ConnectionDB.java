@@ -52,7 +52,7 @@ public class ConnectionDB {
     }
 
     public Boolean executeQuery(String query) {
-        boolean executeResult = false;
+        boolean executeResult;
         try (final Statement statement = this.currentConnection.createStatement()) {
             executeResult = statement.execute(query);
         } catch (SQLException e) {

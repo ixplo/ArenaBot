@@ -1,7 +1,6 @@
 package ml.ixplo.arenabot.user.items;
 
-import ml.ixplo.arenabot.database.DbException;
-import ml.ixplo.arenabot.helper.Constants;
+import ml.ixplo.arenabot.helper.Presets;
 import ml.ixplo.arenabot.helper.TestHelper;
 import ml.ixplo.arenabot.user.ArenaUser;
 import org.junit.After;
@@ -120,27 +119,27 @@ public class ItemTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void getItemId_WrongParam() throws Exception {
-        Item.getItemId(warrior.getUserId(), Constants.WRONG_ITEM_INDEX);
+        Item.getItemId(warrior.getUserId(), Presets.WRONG_ITEM_INDEX);
     }
 
     @Test
     public void getItemName_allGood() throws Exception {
-        Assert.assertEquals(Constants.ITEM_NAME, Item.getItemName(warrior.getUserId(), Constants.ITEM_INDEX));
+        Assert.assertEquals(Presets.ITEM_NAME, Item.getItemName(warrior.getUserId(), Presets.ITEM_INDEX));
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void getItemName_wrongParam() throws Exception {
-        Item.getItemName(warrior.getUserId(), Constants.WRONG_ITEM_INDEX);
+        Item.getItemName(warrior.getUserId(), Presets.WRONG_ITEM_INDEX);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void getItemName_wrongUserId() throws Exception {
-        Item.getItemName(Constants.NON_EXIST_USER_ID, Constants.ITEM_INDEX);
+        Item.getItemName(Presets.NON_EXIST_USER_ID, Presets.ITEM_INDEX);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void getItem_WrongParam() throws Exception {
-        Item.getItem(Constants.WRONG_ITEM_ID);
+        Item.getItem(Presets.WRONG_ITEM_ID);
     }
 
 }

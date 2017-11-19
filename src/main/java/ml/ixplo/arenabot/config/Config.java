@@ -12,7 +12,7 @@ public class Config {
     public static final String VERSION = "0.3";
     public static final String BOT_CHANNEL_NAME = "#Arena";
     public final String rules = "rules.html";      //mc(rules)
-//    public static final long CHANNEL_ID = -161929436;//arena
+    //    public static final long CHANNEL_ID = -161929436;//arena
     public static final long CHANNEL_ID = -202049243;//#arena
     public static final Integer IS_ADMIN = 362812407;
     public static final String BOT_TOKEN = "298781231:AAHDBJLNCjRpxmT7aazDhh5Hr7t6xNLCwr0";
@@ -36,9 +36,9 @@ public class Config {
     public static final int BOT_PHOTO_HEIGHT = 178;
     public static final boolean DO_NOT_COMMAND_UPDATE = false;
     public static final int WIDTH = 27;
-    public static final int UNREG=0;
-    public static final int REG=1;
-    public static final int IN_BATTLE=2;
+    public static final int UNREG = 0;
+    public static final int REG = 1;
+    public static final int IN_BATTLE = 2;
     public static final int DELAY = 15;
     public static final int ROUND_TIME = 45000;
     public static final int ROUND_REMIND = 30000;

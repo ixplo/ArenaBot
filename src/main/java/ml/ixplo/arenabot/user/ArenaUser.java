@@ -770,7 +770,7 @@ public abstract class ArenaUser {
     }
 
     public int getStatus() {
-        return status;
+        return db.getIntFrom(Config.USERS, userId, "status");
     }
 
     public String getName() {

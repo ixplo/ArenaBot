@@ -76,15 +76,8 @@ public class DatabaseManager {
         return isExists;
     }
 
-    public boolean dropStatus() {
-        int updatedRows = 0;
-        String queryText = "UPDATE users SET status='0';";
-        try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
-            updatedRows = preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return updatedRows > 0;
+    public void dropStatus() {
+        connection.executeQuery("UPDATE users SET status='0';");
     }
 
     public boolean dropUser(Integer userId) {

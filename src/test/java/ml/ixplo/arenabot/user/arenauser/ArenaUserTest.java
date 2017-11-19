@@ -1,6 +1,6 @@
 package ml.ixplo.arenabot.user.arenauser;
 
-import ml.ixplo.arenabot.helper.Constants;
+import ml.ixplo.arenabot.helper.Presets;
 import ml.ixplo.arenabot.helper.TestHelper;
 import ml.ixplo.arenabot.user.ArenaUser;
 import org.junit.After;
@@ -44,6 +44,10 @@ public class ArenaUserTest {
         warrior.setCurStr(3);
         warrior.setNativeDex(3);
         warrior.setCurDex(3);
+        warrior.setNativeInt(3);
+        warrior.setCurInt(3);
+        warrior.setNativeWis(3);
+        warrior.setCurWis(3);
         warrior.setNativeCon(5);
         warrior.setCurCon(5);
         warrior.setMinHit(0);
@@ -59,17 +63,23 @@ public class ArenaUserTest {
         warrior.addHark("nativeStr", 3);
         assertEquals(7, warrior.getNativeStr());
         assertEquals(1, warrior.getMinHit(), 0);
+        warrior.addHark("nativeDex", 3);
+        assertEquals(6, warrior.getNativeDex());
+        warrior.addHark("nativeWis", 3);
+        assertEquals(6, warrior.getNativeWis());
+        warrior.addHark("nativeInt", 3);
+        assertEquals(6, warrior.getNativeInt());
     }
 
     @Test
     public void doesUserExists() throws Exception {
-        assertTrue(ArenaUser.doesUserExists(Constants.WARRIOR_ID));
-        assertFalse(ArenaUser.doesUserExists(Constants.NON_EXIST_USER_ID));
+        assertTrue(ArenaUser.doesUserExists(Presets.WARRIOR_ID));
+        assertFalse(ArenaUser.doesUserExists(Presets.NON_EXIST_USER_ID));
     }
 
     @Test
     public void getUserName() throws Exception {
-        assertEquals(ArenaUser.getUserName(Constants.WARRIOR_ID), Constants.WARRIOR_NAME);
+        assertEquals(ArenaUser.getUserName(Presets.WARRIOR_ID), Presets.WARRIOR_NAME);
         ArenaUser newUser = ArenaUser.create(ArenaUser.UserClass.WARRIOR);
         assertNull(newUser.getName());
     }
@@ -85,8 +95,8 @@ public class ArenaUserTest {
     @Test(expected = IllegalArgumentException.class)
     public void create_existed() throws Exception {
         ArenaUser.create(
-                Constants.WARRIOR_ID,
-                Constants.WARRIOR_NAME,
+                Presets.WARRIOR_ID,
+                Presets.WARRIOR_NAME,
                 ArenaUser.UserClass.WARRIOR,
                 "o");
     }
@@ -114,7 +124,7 @@ public class ArenaUserTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void getUser_nonExist() throws Exception {
-        ArenaUser.getUser(Constants.NON_EXIST_USER_ID);
+        ArenaUser.getUser(Presets.NON_EXIST_USER_ID);
     }
 
 

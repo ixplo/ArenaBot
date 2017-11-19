@@ -1,6 +1,6 @@
 package ml.ixplo.arenabot.helper;
 
-public class Constants {
+public class Presets {
     public static final int NON_EXIST_USER_ID = 1;
     public static final String WRONG_ITEM_ID = "wrong";
     public static final String WRONG_ITEM_NAME = "wrong";
