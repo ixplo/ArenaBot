@@ -113,7 +113,10 @@ public abstract class ArenaUser {
 
     public static ArenaUser create(int userId, String name, UserClass userClass, String race) {
 
-        //todo вставить проверку, что такой уже есть
+        //проверка, что такой уже есть
+        if (doesUserExists(userId)) {
+            throw new IllegalArgumentException("Such user with userId " + userId + " already exists");
+        }
         ArenaUser arenaUser = ArenaUser.create(userClass);
         arenaUser.userId = userId;
         arenaUser.name = name;
@@ -199,6 +202,10 @@ public abstract class ArenaUser {
         db.dropItems(userId);
         db.dropSpells(userId);
         db.dropUser(userId);
+    }
+
+    public static void dropUser(ArenaUser user) {
+        dropUser(user.userId);
     }
 
     public static double roundDouble(double d) {
@@ -359,7 +366,7 @@ public abstract class ArenaUser {
     }
 
     public void dropUser() {
-        dropUser(userId);
+        dropUser(this);
     }
 
     public int getEqipAmount() {

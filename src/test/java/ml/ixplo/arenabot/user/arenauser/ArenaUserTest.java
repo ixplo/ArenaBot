@@ -1,5 +1,6 @@
-package ml.ixplo.arenabot;
+package ml.ixplo.arenabot.user.arenauser;
 
+import ml.ixplo.arenabot.config.Constants;
 import ml.ixplo.arenabot.helper.TestHelper;
 import ml.ixplo.arenabot.user.ArenaUser;
 import org.junit.After;
@@ -75,13 +76,25 @@ public class ArenaUserTest {
 
     @Test
     public void create() throws Exception {
-        assertNotNull(warrior);
-        assertEquals(ArenaUser.UserClass.MAGE.toString(), mage.getUserClass());
+        ArenaUser priest = ArenaUser.create(ArenaUser.UserClass.PRIEST);
+        assertNotNull(priest);
+        assertEquals(ArenaUser.UserClass.PRIEST.toString(), priest.getUserClass());
     }
-//
-//    @Test
-//    public void dropUser() throws Exception {
-//    }
+
+    @Test
+    public void setClassFeatures() throws Exception {
+
+        ArenaUser mage = ArenaUser.create(ArenaUser.UserClass.MAGE);
+        assertEquals("Атака", mage.getActionsName().get(0));
+
+    }
+
+    @Test
+    public void dropUser() throws Exception {
+        int userId = warrior.getUserId();
+        warrior.dropUser();
+        assertFalse(ArenaUser.doesUserExists(userId));
+    }
 //
 //    @Test
 //    public void getUser() throws Exception {

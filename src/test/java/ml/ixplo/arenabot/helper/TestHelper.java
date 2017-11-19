@@ -19,6 +19,12 @@ public class TestHelper {
     }
 
     private void generateData() {
+        if (ArenaUser.doesUserExists(-1)) {
+            ArenaUser.dropUser(-1);
+        }
+        if (ArenaUser.doesUserExists(-2)) {
+            ArenaUser.dropUser(-2);
+        }
         WARRIOR = ArenaUser.create(-1,"test_warrior", ArenaUser.UserClass.WARRIOR, "o");
         MAGE = ArenaUser.create(-2, "test_mage", ArenaUser.UserClass.MAGE, "e");
         db.setUser(WARRIOR);
@@ -34,8 +40,12 @@ public class TestHelper {
     }
 
     public void close() {
-        WARRIOR.dropUser();
-        MAGE.dropUser();
+        if (WARRIOR.doesUserExists()) {
+            WARRIOR.dropUser();
+        }
+        if (MAGE.doesUserExists()) {
+            MAGE.dropUser();
+        }
         DatabaseManager.getConnection().closeConnection();
     }
 }
