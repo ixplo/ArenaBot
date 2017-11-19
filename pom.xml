@@ -23,6 +23,10 @@
         <jacoco-plugin.version>0.7.8</jacoco-plugin.version>
         <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>  <!-- Ensure you run mvn install before sonar:sonar -->
         <sonar.java.codeCoveragePlugin>jacoco</sonar.java.codeCoveragePlugin>
+        <sonar.language>java</sonar.language>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+        <sonar.login>6f93aaf67759b8b3cc7f57036c872d78a9d5f551</sonar.login>
+        <sonar.organization>ixplo-github</sonar.organization>
         <sonar.surefire.reportsPath>/target/surefire-reports</sonar.surefire.reportsPath>
         <sonar.junit.reportPaths>
             ${project.basedir}/target/jacoco.exec,
@@ -63,6 +67,11 @@
     <build>
         <plugins>
             <plugin>
+                <groupId>org.sonarsource.scanner.maven</groupId>
+                <artifactId>sonar-maven-plugin</artifactId>
+                <version>3.3.0.603</version>
+            </plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${compiler-plugin.version}</version>
@@ -77,8 +86,6 @@
                 <version>${surefire-plugin.version}</version>
                 <configuration>
                     <argLine>
-                        <!--@{argLine}-->
-                        <!-- -Dfile.encoding=UTF-8-->
                     </argLine>
                 </configuration>
             </plugin>

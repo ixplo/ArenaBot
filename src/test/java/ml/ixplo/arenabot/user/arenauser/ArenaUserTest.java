@@ -75,10 +75,15 @@ public class ArenaUserTest {
 
 
     @Test
-    public void create() throws Exception {
+    public void create_allGood() throws Exception {
         ArenaUser priest = ArenaUser.create(ArenaUser.UserClass.PRIEST);
         assertNotNull(priest);
         assertEquals(ArenaUser.UserClass.PRIEST.toString(), priest.getUserClass());
+    }
+
+    @Test (expected = IllegalArgumentException.class)
+    public void create_existed() throws Exception {
+        ArenaUser.create(-1,"already_exist", ArenaUser.UserClass.WARRIOR,"o");
     }
 
     @Test
