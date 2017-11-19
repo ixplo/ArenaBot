@@ -1,6 +1,7 @@
 package ml.ixplo.arenabot.user.items;
 
 import ml.ixplo.arenabot.config.Config;
+import ml.ixplo.arenabot.config.Constants;
 import ml.ixplo.arenabot.database.DatabaseManager;
 import ml.ixplo.arenabot.user.ArenaUser;
 
@@ -100,11 +101,9 @@ public class Item {
         List<Item> itemsList = arenaUser.getItems();
         // проверкa, пустой ли слот и освобождение его
         for (Item oneItem : itemsList) {
-            if (oneItem.getSlot().equals(item.getSlot())) {
-                if (oneItem.isInSlot()) {
-                    // сделать putOff вещи, которая тут раньше была надета
-                    Item.putOff(arenaUser, oneItem.getEqipIndex());
-                }
+            if (oneItem.getSlot().equals(item.getSlot()) && oneItem.isInSlot()) {
+                // сделать putOff вещи, которая тут раньше была надета
+                Item.putOff(arenaUser, oneItem.getEqipIndex());
             }
         }
         //todo проверка на соответствие требованиям (другие вещи тоже надо проверить, на случай если харки уменьшатся)
@@ -116,10 +115,10 @@ public class Item {
         arenaUser.setCurCon(arenaUser.getCurCon() + item.getConBonus());
         arenaUser.setMinHit(arenaUser.getMinHit() + item.getMinHit() + item.getStrBonus() / 4);
         arenaUser.setMaxHit(arenaUser.getMaxHit() + item.getMaxHit() + item.getStrBonus() / 4);
-        arenaUser.setAttack(arenaUser.getAttack().add(new BigDecimal(item.getAttack() + roundDouble(0.91 * item.getDexBonus() + 0.39 * item.getStrBonus()))));
+        arenaUser.setAttack(arenaUser.getAttack().add(BigDecimal.valueOf(item.getAttack() + roundDouble(0.91 * item.getDexBonus() + 0.39 * item.getStrBonus()))));
         arenaUser.setProtect(arenaUser.getProtect() + item.getProtect() + roundDouble(0.4 * item.getDexBonus() + 0.6 * item.getConBonus()));
         arenaUser.setMaxHitPoints(arenaUser.getMaxHitPoints() + roundDouble(1.3333333 * item.getConBonus()));//todo переделать, иначе выскочит нецелое число
-        if (arenaUser.getStatus() != 2) {
+        if (arenaUser.getStatus() != Constants.IN_BATTLE) {
             arenaUser.setCurHitPoints(arenaUser.getMaxHitPoints()); // not in battle
         }
         arenaUser.setMagicProtect(arenaUser.getMagicProtect() + roundDouble(0.6 * item.getWisBonus() + 0.4 * item.getIntBonus()));
@@ -128,7 +127,7 @@ public class Item {
         item.markAsPuttedOn(arenaUser.getUserId(), eqipIndex);
         arenaUser.putOnClassFeatures(item);
         if (item.isWeapon()) {
-            arenaUser.setCurWeapon(eqipIndex); //todo разобраться с нумерацией!
+            arenaUser.setCurWeapon(eqipIndex);
         }
         db.setUser(arenaUser);
         //todo снова изменить характеристики из-за предыдущего пункта
@@ -166,11 +165,11 @@ public class Item {
         arenaUser.setCurCon(arenaUser.getCurCon() - item.getConBonus());
         arenaUser.setMinHit(arenaUser.getMinHit() - item.getMinHit() - item.getStrBonus() / 4);
         arenaUser.setMaxHit(arenaUser.getMaxHit() - item.getMaxHit() - item.getStrBonus() / 4);
-        arenaUser.setAttack(arenaUser.getAttack().subtract(new BigDecimal(item.getAttack() - roundDouble(0.91 * item.getDexBonus() + 0.39 * item.getStrBonus()))));
+        arenaUser.setAttack(arenaUser.getAttack().subtract(BigDecimal.valueOf(item.getAttack() - roundDouble(0.91 * item.getDexBonus() + 0.39 * item.getStrBonus()))));
         arenaUser.setProtect(arenaUser.getProtect() - item.getProtect() - roundDouble(0.4 * item.getDexBonus() + 0.6 * item.getConBonus()));
         arenaUser.setMaxHitPoints(arenaUser.getMaxHitPoints() - roundDouble(1.3333333 * item.getConBonus()));//todo переделать на BigDecimal, иначе выскочит нецелое число
-        if (arenaUser.getStatus() != 2) { //todo поменять цифры на константы
-            arenaUser.setCurHitPoints(arenaUser.getMaxHitPoints()); // not in battle
+        if (arenaUser.getStatus() != Constants.IN_BATTLE) {
+            arenaUser.setCurHitPoints(arenaUser.getMaxHitPoints());
         }
         arenaUser.setMagicProtect(arenaUser.getMagicProtect() - roundDouble(0.6 * item.getWisBonus() + 0.4 * item.getIntBonus()));
         arenaUser.setHeal(arenaUser.getHeal() - roundDouble(0.06 * item.getWisBonus() + 0.04 * item.getIntBonus()));
@@ -231,10 +230,10 @@ public class Item {
     }
 
     private static double roundDouble(double d, int precise) {
-        precise = pow(10, precise);
-        d *= precise;
-        int i = (int) Math.round(d);
-        return (double) i / precise;
+        int prec = pow(10, precise);
+        double di = d * prec;
+        int i = (int) Math.round(di);
+        return (double) i / prec;
     }
 
     public ArenaUser getOwner() {

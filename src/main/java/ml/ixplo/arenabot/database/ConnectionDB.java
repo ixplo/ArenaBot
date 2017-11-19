@@ -40,15 +40,26 @@ public class ConnectionDB {
 
     }
 
-    public ResultSet runSqlQuery(String query) throws SQLException {
-        final Statement statement;
-        statement = this.currentConnection.createStatement();
-        return statement.executeQuery(query);
+    public ResultSet runSqlQuery(String query) {
+        ResultSet resultSet = null;
+        try (Statement statement = this.currentConnection.createStatement()){
+            resultSet = statement.executeQuery(query);
+        } catch (SQLException e) {
+            BotLogger.error(LOGTAG, e.getMessage());
+            throw new DbException(e.getMessage(), e);
+        }
+        return resultSet;
     }
 
-    public Boolean executeQuery(String query) throws SQLException {
-        final Statement statement = this.currentConnection.createStatement();
-        return statement.execute(query);
+    public Boolean executeQuery(String query) {
+        boolean executeResult = false;
+        try (final Statement statement = this.currentConnection.createStatement()) {
+            executeResult = statement.execute(query);
+        } catch (SQLException e) {
+            BotLogger.error(LOGTAG, e.getMessage());
+            throw new DbException(e.getMessage(), e);
+        }
+        return executeResult;
     }
 
     public PreparedStatement getPreparedStatement(String query) throws SQLException {

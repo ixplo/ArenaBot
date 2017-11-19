@@ -149,7 +149,6 @@ public class Priest extends ArenaUser implements SpellCaster {
 
     public void setMagicAttack(double magicAttack) {
         this.magicAttack = magicAttack;
-        this.magicAttack = magicAttack;
         db.setDoubleTo(Config.USERS, getUserId(), "m_attack", magicAttack);
     }
 

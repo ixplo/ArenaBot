@@ -86,13 +86,13 @@ public class Archer extends ArenaUser implements SkillApplicant {
     private void doIntBonus(int numberOfPoints) {
         setMinHit(roundDouble(getMinHit() + (double) numberOfPoints / 4));
         setMaxHit(roundDouble(getMaxHit() + (double) numberOfPoints / 4));
-        setAttack(getAttack().add(new BigDecimal(0.39 * numberOfPoints)));
+        setAttack(getAttack().add(BigDecimal.valueOf(0.39 * numberOfPoints)));
     }
 
     private void undoStrBonus(int numberOfPoints) {
         setMinHit(roundDouble(getMinHit() - (double) numberOfPoints / 4));
         setMaxHit(roundDouble(getMaxHit() - (double) numberOfPoints / 4));
-        setAttack(getAttack().subtract(new BigDecimal(0.39 * numberOfPoints)));
+        setAttack(getAttack().subtract(BigDecimal.valueOf(0.39 * numberOfPoints)));
     }
 
     @Override
