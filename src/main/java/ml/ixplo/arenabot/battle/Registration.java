@@ -38,7 +38,7 @@ public class Registration {
 
     public void startBattle() {
         if (!isOn) return;
-        Battle battle = new Battle(getTeams(), ArenaUser.getUsers(getMembersId()));
+        new Battle(getTeams(), ArenaUser.getUsers(getMembersId()));
         isOn = false;
     }
 
