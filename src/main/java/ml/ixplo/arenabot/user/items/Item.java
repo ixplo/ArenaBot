@@ -136,11 +136,6 @@ public class Item {
 
     public void putOff() {
         Item.putOff(db.getUser(ownerId), eqipIndex);
-        //todo проверка на наличие в инвентаре
-        //todo проверка а надета ли она вообще?
-        //todo изменение характеристик перса (если изменяет основные харки, это потянет за собой изменение зависящих от них
-        //todo проверка на соответствие требованиям (другие вещи могут перестать соответствовать)
-        //todo обнулить in_slot - снова изменить из-за этого характеристики
     }
 
     public static void putOff(ArenaUser arenaUser, int eqipIndex) {
@@ -217,11 +212,11 @@ public class Item {
         return db.getStringFrom("SLOTS", slot, "name");
     }
 
-    public boolean markAsPuttedOn(Integer userId, Integer eqipIndex) {
+    private boolean markAsPuttedOn(Integer userId, Integer eqipIndex) {
         return db.setStringTo(Config.EQIP, userId, itemId, "in_slot", slot);
     }
 
-    public boolean markAsPuttedOff(Integer userId, Integer eqipIndex) {
+    private boolean markAsPuttedOff(Integer userId, Integer eqipIndex) {
         return db.setStringTo(Config.EQIP, userId, itemId, "in_slot", null);
     }
 

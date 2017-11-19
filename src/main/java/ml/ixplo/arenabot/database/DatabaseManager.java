@@ -60,6 +60,7 @@ public class DatabaseManager {
     public static ConnectionDB getConnection() {
         return connection;
     }
+
     public boolean doesUserExists(Integer userId) {
         Boolean isExists = false;
         String queryText = "Select id FROM users WHERE Id=?";
@@ -381,7 +382,7 @@ public class DatabaseManager {
         return updatedRows > 0;
     }
 
-    public List<Item> getItems(Integer userId){
+    public List<Item> getItems(Integer userId) {
         List<Item> itemsList = new ArrayList<>();
         String queryText = "Select inventory.user_id," +
                 "INVENTORY.counter, " +
@@ -391,7 +392,7 @@ public class DatabaseManager {
                 "WHERE inventory.user_id=? and inventory.id=items.id";
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setInt(1, userId);
-            final  ResultSet result = preparedStatement.executeQuery();
+            final ResultSet result = preparedStatement.executeQuery();
             while (result.next()) {
                 Item item = new Item();
                 item.setOwnerId(userId);
@@ -457,9 +458,12 @@ public class DatabaseManager {
                 item.setRace(result.getString("race"));
                 item.setDescr(result.getString("descr"));
                 item.setItemsSet(result.getString("items_set"));
+            } else {
+                throw  new IllegalArgumentException("No item exist with item_id: " + itemId);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            BotLogger.error(LOGTAG, e.getMessage());
+            throw new DbException(e.getMessage(), e);
         }
         return item;
     }
@@ -732,7 +736,7 @@ public class DatabaseManager {
             final ResultSet result = preparedStatement.executeQuery();
             if (result.next()) {
                 resultString = result.getString(columnName);
-            } else throw new RuntimeException("No such int: " + queryText);
+            } else throw new IllegalArgumentException("No such int: " + queryText);
         } catch (SQLException e) {
             e.printStackTrace();
         }

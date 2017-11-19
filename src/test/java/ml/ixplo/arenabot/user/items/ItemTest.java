@@ -1,5 +1,7 @@
 package ml.ixplo.arenabot.user.items;
 
+import ml.ixplo.arenabot.database.DbException;
+import ml.ixplo.arenabot.helper.Constants;
 import ml.ixplo.arenabot.helper.TestHelper;
 import ml.ixplo.arenabot.user.ArenaUser;
 import org.junit.After;
@@ -90,9 +92,9 @@ public class ItemTest {
 
     @Test
     public void getItems() throws Exception {
-        Assert.assertEquals(0,warrior.getItems().get(0).getEqipIndex());
+        Assert.assertEquals(0, warrior.getItems().get(0).getEqipIndex());
         testHelper.db.addItem(warrior.getUserId(), "wba");
-        Assert.assertEquals(1,warrior.getItems().get(1).getEqipIndex());
+        Assert.assertEquals(1, warrior.getItems().get(1).getEqipIndex());
     }
 
     @Test
@@ -112,24 +114,33 @@ public class ItemTest {
     }
 
     @Test
-    public void getItemId() throws Exception {
+    public void getItemId_AllGood() throws Exception {
+        Assert.assertEquals("waa", warrior.getItems().get(0).getItemId());
     }
 
-
-    @Test
-    public void getItemName() throws Exception {
-    }
-
-    @Test
-    public void getItem() throws Exception {
+    @Test(expected = IllegalArgumentException.class)
+    public void getItemId_WrongParam() throws Exception {
+        Item.getItemId(warrior.getUserId(), Constants.WRONG_ITEM_INDEX);
     }
 
     @Test
-    public void markAsPuttedOn() throws Exception {
+    public void getItemName_allGood() throws Exception {
+        Assert.assertEquals(Constants.ITEM_NAME, Item.getItemName(warrior.getUserId(), Constants.ITEM_INDEX));
     }
 
-    @Test
-    public void markAsPuttedOff() throws Exception {
+    @Test(expected = IllegalArgumentException.class)
+    public void getItemName_wrongParam() throws Exception {
+        Item.getItemName(warrior.getUserId(), Constants.WRONG_ITEM_INDEX);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void getItemName_wrongUserId() throws Exception {
+        Item.getItemName(Constants.NON_EXIST_USER_ID, Constants.ITEM_INDEX);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void getItem_WrongParam() throws Exception {
+        Item.getItem(Constants.WRONG_ITEM_ID);
     }
 
 }
