@@ -220,6 +220,9 @@ public abstract class ArenaUser {
     }
 
     public static ArenaUser getUser(Integer userId) {
+        if (!db.doesUserExists(userId)) {
+            throw new IllegalArgumentException("No such user in database: " + userId);
+        }
         ArenaUser arenaUser = db.getUser(userId);
         arenaUser.getClassFeatures();
         return arenaUser;

@@ -19,14 +19,22 @@ public class TestHelper {
     }
 
     private void generateData() {
-        if (ArenaUser.doesUserExists(-1)) {
-            ArenaUser.dropUser(-1);
+        if (ArenaUser.doesUserExists(Constants.WARRIOR_ID)) {
+            ArenaUser.dropUser(Constants.WARRIOR_ID);
         }
-        if (ArenaUser.doesUserExists(-2)) {
-            ArenaUser.dropUser(-2);
+        if (ArenaUser.doesUserExists(Constants.MAGE_ID)) {
+            ArenaUser.dropUser(Constants.MAGE_ID);
         }
-        WARRIOR = ArenaUser.create(-1,"test_warrior", ArenaUser.UserClass.WARRIOR, "o");
-        MAGE = ArenaUser.create(-2, "test_mage", ArenaUser.UserClass.MAGE, "e");
+        WARRIOR = ArenaUser.create(
+                Constants.WARRIOR_ID,
+                Constants.WARRIOR_NAME,
+                ArenaUser.UserClass.WARRIOR,
+                "o");
+        MAGE = ArenaUser.create(
+                Constants.MAGE_ID,
+                Constants.MAGE_NAME,
+                ArenaUser.UserClass.MAGE,
+                "e");
         db.setUser(WARRIOR);
         db.setUser(MAGE);
     }

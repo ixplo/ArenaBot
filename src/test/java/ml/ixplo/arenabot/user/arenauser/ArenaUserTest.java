@@ -1,6 +1,6 @@
 package ml.ixplo.arenabot.user.arenauser;
 
-import ml.ixplo.arenabot.config.Constants;
+import ml.ixplo.arenabot.helper.Constants;
 import ml.ixplo.arenabot.helper.TestHelper;
 import ml.ixplo.arenabot.user.ArenaUser;
 import org.junit.After;
@@ -8,6 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.math.BigDecimal;
+import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -48,27 +49,27 @@ public class ArenaUserTest {
         warrior.setMinHit(0);
         warrior.setAttack(new BigDecimal(0.91 * warrior.getCurDex() + 0.39 * warrior.getCurStr()));
         warrior.setProtect(ArenaUser.roundDouble(0.4 * warrior.getCurDex() + 0.6 * warrior.getCurCon()));
-        warrior.addHark("nativeStr",1);
-        warrior.addHark("nativeCon",1);
+        warrior.addHark("nativeStr", 1);
+        warrior.addHark("nativeCon", 1);
         assertEquals(4, warrior.getCurStr());
         assertEquals(6, warrior.getCurCon());
-        assertEquals(0.25, warrior.getMinHit(),0);
-        assertEquals(0,warrior.getAttack().compareTo(new BigDecimal("4.28")));
-        assertEquals(4.8, warrior.getProtect(),0);
-        warrior.addHark("nativeStr",3);
+        assertEquals(0.25, warrior.getMinHit(), 0);
+        assertEquals(0, warrior.getAttack().compareTo(new BigDecimal("4.28")));
+        assertEquals(4.8, warrior.getProtect(), 0);
+        warrior.addHark("nativeStr", 3);
         assertEquals(7, warrior.getNativeStr());
-        assertEquals(1, warrior.getMinHit(),0);
+        assertEquals(1, warrior.getMinHit(), 0);
     }
 
     @Test
     public void doesUserExists() throws Exception {
-       assertTrue(ArenaUser.doesUserExists(362812407));
-       assertFalse(ArenaUser.doesUserExists(1));
+        assertTrue(ArenaUser.doesUserExists(Constants.WARRIOR_ID));
+        assertFalse(ArenaUser.doesUserExists(Constants.NON_EXIST_USER_ID));
     }
 
     @Test
     public void getUserName() throws Exception {
-        assertEquals(ArenaUser.getUserName(362812407),"ixplo");
+        assertEquals(ArenaUser.getUserName(Constants.WARRIOR_ID), Constants.WARRIOR_NAME);
         ArenaUser newUser = ArenaUser.create(ArenaUser.UserClass.WARRIOR);
         assertNull(newUser.getName());
     }
@@ -81,9 +82,13 @@ public class ArenaUserTest {
         assertEquals(ArenaUser.UserClass.PRIEST.toString(), priest.getUserClass());
     }
 
-    @Test (expected = IllegalArgumentException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void create_existed() throws Exception {
-        ArenaUser.create(-1,"already_exist", ArenaUser.UserClass.WARRIOR,"o");
+        ArenaUser.create(
+                Constants.WARRIOR_ID,
+                Constants.WARRIOR_NAME,
+                ArenaUser.UserClass.WARRIOR,
+                "o");
     }
 
     @Test
@@ -96,16 +101,23 @@ public class ArenaUserTest {
 
     @Test
     public void dropUser() throws Exception {
-        int userId = warrior.getUserId();
         warrior.dropUser();
-        assertFalse(ArenaUser.doesUserExists(userId));
+        assertFalse(ArenaUser.doesUserExists(warrior.getUserId()));
     }
-//
-//    @Test
-//    public void getUser() throws Exception {
-//    }
-//
-//
+
+    @Test
+    public void getUser_allGood() throws Exception {
+        Map<String, Object> params1 = warrior.getParams();
+        Map<String, Object> params2 = ArenaUser.getUser(warrior.getUserId()).getParams();
+        assertEquals(params1, params2);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void getUser_nonExist() throws Exception {
+        ArenaUser.getUser(Constants.NON_EXIST_USER_ID);
+    }
+
+
 //    @Test
 //    public void getUserTeam() throws Exception {
 //    }

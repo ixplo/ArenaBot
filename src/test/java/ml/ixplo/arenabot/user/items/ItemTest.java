@@ -1,6 +1,5 @@
 package ml.ixplo.arenabot.user.items;
 
-import ml.ixplo.arenabot.database.DatabaseManager;
 import ml.ixplo.arenabot.helper.TestHelper;
 import ml.ixplo.arenabot.user.ArenaUser;
 import org.junit.After;
