@@ -82,11 +82,19 @@ public class Item {
         return db.getSlot(userId, eqipIndex) != null;
     }
 
-    public static String getItemId(int userId, Integer eqipIndex) {
+    public static String getItemId(int userId, int eqipIndex) {
         return db.getStringByBy(Config.EQIP, "id", "counter", eqipIndex + 1, Config.USER_ID, userId);
     }
 
-    public static void putOn(ArenaUser arenaUser, Integer eqipIndex) {
+    public static void add(int userId, String itemId) {
+        db.addItem(userId, itemId);
+    }
+
+    public static void drop(int userId, int eqipIndex) {
+        db.dropItem(userId, getItemId(userId, eqipIndex));
+    }
+
+    public static void putOn(ArenaUser arenaUser, int eqipIndex) {
 
         //*** проверка на наличие в инвентаре
         if (eqipIndex + 1 > getEqipAmount(arenaUser.getUserId())) {
@@ -133,10 +141,6 @@ public class Item {
         //todo снова изменить характеристики из-за предыдущего пункта
     }
 
-
-    public void putOff() {
-        Item.putOff(db.getUser(ownerId), eqipIndex);
-    }
 
     public static void putOff(ArenaUser arenaUser, int eqipIndex) {
 
@@ -196,6 +200,18 @@ public class Item {
         return db.getItem(itemId);
     }
 
+    /***************************************************
+     ********* Instance ********************************
+     ***************************************************/
+
+    public void drop(int eqipIndex) {
+        drop(ownerId, eqipIndex);
+    }
+
+    public void putOff() {
+        Item.putOff(db.getUser(ownerId), eqipIndex);
+    }
+
     public int getEqipIndex() {
         return eqipIndex;
     }
@@ -212,12 +228,12 @@ public class Item {
         return db.getStringFrom("SLOTS", slot, "name");
     }
 
-    private boolean markAsPuttedOn(Integer userId, Integer eqipIndex) {
-        return db.setStringTo(Config.EQIP, userId, itemId, "in_slot", slot);
+    private boolean markAsPuttedOn(Integer userId, int eqipIndex) {
+        return db.setStringTo(Config.EQIP, userId, getItemId(userId, eqipIndex), "in_slot", slot);
     }
 
-    private boolean markAsPuttedOff(Integer userId, Integer eqipIndex) {
-        return db.setStringTo(Config.EQIP, userId, itemId, "in_slot", null);
+    private boolean markAsPuttedOff(Integer userId, int eqipIndex) {
+        return db.setStringTo(Config.EQIP, userId, getItemId(userId, eqipIndex), "in_slot", null);
     }
 
     private static double roundDouble(double d) {

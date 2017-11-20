@@ -29,7 +29,7 @@ public abstract class ArenaUser {
 
     public static DatabaseManager db;
 
-    public enum UserClass { ARCHER, MAGE, PRIEST, WARRIOR }
+    public enum UserClass {ARCHER, MAGE, PRIEST, WARRIOR}
 
     private int userId;
     private String name;
@@ -75,7 +75,8 @@ public abstract class ArenaUser {
     /****** constructor ******
      * use ArenaUser.create
      *************************/
-    public ArenaUser(){}
+    public ArenaUser() {
+    }
 
     // **************************************************
     // ******** abstract ********************************
@@ -151,8 +152,8 @@ public abstract class ArenaUser {
         arenaUser.heal = roundDouble(0.06 * arenaUser.curWis + 0.04 * arenaUser.curInt);
         arenaUser.magicProtect = roundDouble(0.6 * arenaUser.curWis + 0.4 * arenaUser.curInt);
         arenaUser.setClassFeatures();
-        db.addItem(userId, "waa"); //todo arenaUser.addItem(new Item("waa"));
-        arenaUser.putOn(0); //todo overloaded method putOn("waa")
+        arenaUser.addItem("waa");
+        arenaUser.putOn(0);
         db.setUser(arenaUser);
         return arenaUser;
     }
@@ -356,14 +357,14 @@ public abstract class ArenaUser {
 
     public Map<String, Object> getParams() {
         Map<String, Object> params = new HashMap<>();
-        for (Field field: ArenaUser.class.getDeclaredFields()) {
-           if (field.getModifiers() == Modifier.PRIVATE) {
-               try {
-                   params.put(field.getName(),field.get(this));
-               } catch (IllegalAccessException e) {
-                   e.printStackTrace();
-               }
-           }
+        for (Field field : ArenaUser.class.getDeclaredFields()) {
+            if (field.getModifiers() == Modifier.PRIVATE) {
+                try {
+                    params.put(field.getName(), field.get(this));
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+            }
         }
         return params;
     }
@@ -375,12 +376,21 @@ public abstract class ArenaUser {
     public int getEqipAmount() {
         return Item.getEqipAmount(userId);
     }
+
     public void putOn(int eqipIndex) {
         Item.putOn(this, eqipIndex);
     }
 
     public void putOff(int eqipIndex) {
         Item.putOff(this, eqipIndex);
+    }
+
+    public void addItem(String itemId) {
+        Item.add(userId, itemId);
+    }
+
+    public void dropItem(int eqipIndex) {
+        Item.drop(userId, eqipIndex);
     }
 
     // **************************************************

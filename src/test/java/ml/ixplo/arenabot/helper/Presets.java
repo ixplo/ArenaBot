@@ -11,4 +11,5 @@ public class Presets {
     public static final String WARRIOR_NAME = "test_warrior";
     public static final int MAGE_ID = -2;
     public static final String MAGE_NAME = "test_mage";
+    public static final String FLAMBERG = "wba";
 }

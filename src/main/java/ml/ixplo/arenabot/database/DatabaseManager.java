@@ -104,6 +104,23 @@ public class DatabaseManager {
         return deletedRows > 0;
     }
 
+    public boolean dropItem(Integer userId, String itemId) {
+        int deletedRows = 0;
+        String queryText = "DELETE FROM inventory WHERE user_Id=? and id=?;";
+        try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
+            preparedStatement.setInt(1, userId);
+            preparedStatement.setString(2, itemId);
+            deletedRows = preparedStatement.executeUpdate();
+            if (deletedRows <= 0) {
+                throw new IllegalArgumentException("Нет вещи у игрока(userId=" + userId + ") с itemId=" + itemId);
+            }
+        } catch (SQLException e) {
+            BotLogger.error(LOGTAG, e.getMessage());
+            throw new DbException(e.getMessage(), e);
+        }
+        return deletedRows > 0;
+    }
+
     public boolean dropActions(Integer userId) {
         int deletedRows = 0;
         String queryText = "DELETE FROM round_actions WHERE id=?;";
@@ -358,6 +375,9 @@ public class DatabaseManager {
     }
 
     public boolean addItem(Integer userId, String itemId) {
+        // check if item non exist exeption will be throwed
+        getItem(itemId);
+
         int updatedRows = 0;
         String queryText = "INSERT OR REPLACE INTO inventory " +
                 "(id," +
@@ -452,7 +472,7 @@ public class DatabaseManager {
                 item.setDescr(result.getString("descr"));
                 item.setItemsSet(result.getString("items_set"));
             } else {
-                throw  new IllegalArgumentException("No item exist with item_id: " + itemId);
+                throw new IllegalArgumentException("No item exist with item_id: " + itemId);
             }
         } catch (SQLException e) {
             BotLogger.error(LOGTAG, e.getMessage());

@@ -32,13 +32,13 @@ public class ItemTest {
     @Test
     public void putOn() throws Exception {
         LOGGER.info("Инвентарь: {}", warrior.getItems());
-        LOGGER.info("Добавляем вещь: {}", Item.getItem("wba"));
-        testHelper.db.addItem(warrior.getUserId(), "wba");
+        LOGGER.info("Добавляем вещь: {}", Item.getItem(Presets.FLAMBERG));
+        warrior.addItem(Presets.FLAMBERG);
         int eqipIndex = -1;
         LOGGER.info("Инвентарь:");
         for (Item item : warrior.getItems()) {
             LOGGER.info("{} Item: {}", item.getName(), item.getEqipIndex());
-            if (item.getItemId().equals("wba")) {
+            if (item.getItemId().equals(Presets.FLAMBERG)) {
                 eqipIndex = item.getEqipIndex();
             }
         }
@@ -72,7 +72,7 @@ public class ItemTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void putOff_twice() throws Exception {
-        testHelper.db.addItem(warrior.getUserId(), "wba");
+        warrior.addItem(Presets.FLAMBERG);
         warrior.putOff(1);
         warrior.putOff(1);
     }
@@ -85,14 +85,14 @@ public class ItemTest {
     @Test
     public void getEqipAmount() throws Exception {
         Assert.assertEquals(1, warrior.getEqipAmount());
-        testHelper.db.addItem(warrior.getUserId(), "wba");
+        warrior.addItem(Presets.FLAMBERG);
         Assert.assertEquals(2, warrior.getEqipAmount());
     }
 
     @Test
     public void getItems() throws Exception {
         Assert.assertEquals(0, warrior.getItems().get(0).getEqipIndex());
-        testHelper.db.addItem(warrior.getUserId(), "wba");
+        warrior.addItem(Presets.FLAMBERG);
         Assert.assertEquals(1, warrior.getItems().get(1).getEqipIndex());
     }
 
@@ -103,7 +103,7 @@ public class ItemTest {
 
     @Test
     public void isInSlot() throws Exception {
-        testHelper.db.addItem(warrior.getUserId(), "wba");
+        warrior.addItem(Presets.FLAMBERG);
         Assert.assertTrue(warrior.getItems().get(0).isInSlot());
         Assert.assertFalse(warrior.getItems().get(1).isInSlot());
         warrior.putOn(1);
@@ -142,4 +142,20 @@ public class ItemTest {
         Item.getItem(Presets.WRONG_ITEM_ID);
     }
 
+    @Test
+    public void add_allGood() {
+        Item.add(warrior.getUserId(), Presets.FLAMBERG);
+        Assert.assertEquals(2, warrior.getItems().size());
+        Assert.assertEquals(Presets.FLAMBERG, warrior.getItems().get(1).getItemId());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void add_wrongItemId() {
+        Item.add(warrior.getUserId(), Presets.WRONG_ITEM_ID);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void drop_wrongItemId() {
+        Item.drop(warrior.getUserId(), Presets.WRONG_ITEM_INDEX);
+    }
 }

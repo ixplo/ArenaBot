@@ -9,7 +9,8 @@ import static ml.ixplo.arenabot.config.Config.TEST_DB_LINK;
 
 public class TestHelper {
 
-    public DatabaseManager db;
+
+    private DatabaseManager db;
     public static ArenaUser WARRIOR;
     public static ArenaUser MAGE;
 
@@ -55,5 +56,13 @@ public class TestHelper {
             MAGE.dropUser();
         }
         DatabaseManager.getConnection().closeConnection();
+    }
+
+    public DatabaseManager getDb() {
+        return db;
+    }
+
+    public void setDb(DatabaseManager db) {
+        this.db = db;
     }
 }

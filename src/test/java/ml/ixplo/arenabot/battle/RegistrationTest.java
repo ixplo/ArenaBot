@@ -20,7 +20,7 @@ public class RegistrationTest {
     @Before
     public void setUp() throws Exception {
         testHelper.init();
-        Registration.setDb(testHelper.db);
+        Registration.setDb(testHelper.getDb());
     }
 
     @After

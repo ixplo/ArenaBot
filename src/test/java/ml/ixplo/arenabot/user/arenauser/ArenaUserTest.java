@@ -4,6 +4,7 @@ import ml.ixplo.arenabot.helper.Presets;
 import ml.ixplo.arenabot.helper.TestHelper;
 import ml.ixplo.arenabot.user.ArenaUser;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -125,6 +126,31 @@ public class ArenaUserTest {
     @Test(expected = IllegalArgumentException.class)
     public void getUser_nonExist() throws Exception {
         ArenaUser.getUser(Presets.NON_EXIST_USER_ID);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void addItem_wrongItemId() {
+        warrior.addItem(Presets.WRONG_ITEM_ID);
+    }
+
+    @Test
+    public void addItem_allGood() {
+        warrior.addItem(Presets.FLAMBERG);
+        Assert.assertEquals(2, warrior.getItems().size());
+        Assert.assertEquals(Presets.FLAMBERG, warrior.getItems().get(1).getItemId());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void dropItem_wrongItemId() {
+        warrior.dropItem(Presets.WRONG_ITEM_INDEX);
+    }
+
+    @Test
+    public void dropItem_allGood() {
+        warrior.addItem(Presets.FLAMBERG);
+        warrior.dropItem(1);
+        Assert.assertEquals(1, warrior.getItems().size());
+        Assert.assertEquals("waa", warrior.getItems().get(0).getItemId());
     }
 
 
