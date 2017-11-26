@@ -198,28 +198,10 @@ public final class Messages {
 
     public static SendMessage getInlineKeyboardMsg(Long chatId, String messageText, List<String> buttonsText, List<String> buttonsCallbackData) {
 
-        InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
-        List<List<InlineKeyboardButton>> rows = new ArrayList<>();
-        int buttonsAmount = buttonsText.size();
-        int rowsAmount = buttonsAmount / 4 + (buttonsAmount % 4 == 0 ? 0 : 1);
-        int buttonsCounter = 0;
-        for (int i = 0; i < rowsAmount; i++) {
-            List<InlineKeyboardButton> row = new ArrayList<>();
-            for (int j = 0; j < 4; j++) {
-                if (buttonsCounter >= buttonsAmount) break;
-                InlineKeyboardButton button = new InlineKeyboardButton();
-                button.setText(buttonsText.get(buttonsCounter));
-                button.setCallbackData(buttonsCallbackData.get(buttonsCounter));
-                row.add(button);
-                buttonsCounter++;
-            }
-            rows.add(row);
-        }
-        markup.setKeyboard(rows);
         SendMessage msg = new SendMessage();
         msg.setChatId(chatId);
         msg.setText(messageText);
-        msg.setReplyMarkup(markup);
+        msg.setReplyMarkup(getInlineKeyboardMarkup(buttonsText, buttonsCallbackData));
         msg.enableHtml(true);
         return msg;
     }
