@@ -19,7 +19,6 @@ public class RegistrationTest {
 
     @Before
     public void setUp() throws Exception {
-        testHelper.init();
         Registration.setDb(testHelper.getDb());
     }
 

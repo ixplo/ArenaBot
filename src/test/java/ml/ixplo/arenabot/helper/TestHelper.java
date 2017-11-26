@@ -4,6 +4,7 @@ import ml.ixplo.arenabot.Bot;
 import ml.ixplo.arenabot.database.ConnectionDB;
 import ml.ixplo.arenabot.database.DatabaseManager;
 import ml.ixplo.arenabot.user.ArenaUser;
+import ml.ixplo.arenabot.user.items.Item;
 
 import static ml.ixplo.arenabot.config.Config.TEST_DB_LINK;
 
@@ -16,16 +17,11 @@ public class TestHelper {
 
     public TestHelper() {
         init();
+        clearData();
         generateData();
     }
 
     private void generateData() {
-        if (ArenaUser.doesUserExists(Presets.WARRIOR_ID)) {
-            ArenaUser.dropUser(Presets.WARRIOR_ID);
-        }
-        if (ArenaUser.doesUserExists(Presets.MAGE_ID)) {
-            ArenaUser.dropUser(Presets.MAGE_ID);
-        }
         WARRIOR = ArenaUser.create(
                 Presets.WARRIOR_ID,
                 Presets.WARRIOR_NAME,
@@ -40,21 +36,24 @@ public class TestHelper {
         db.setUser(MAGE);
     }
 
+    private void clearData() {
+        if (db.doesUserExists(Presets.WARRIOR_ID)) {
+            ArenaUser.dropUser(Presets.WARRIOR_ID);
+        }
+        if (db.doesUserExists(Presets.MAGE_ID)) {
+            ArenaUser.dropUser(Presets.MAGE_ID);
+        }
+    }
+
     public void init() {
-        Bot bot = new Bot();
         DatabaseManager.setConnection(new ConnectionDB(TEST_DB_LINK));
         db = DatabaseManager.getInstance();
-        bot.setDb(db);
-
+        ArenaUser.setDb(db);
+        Item.setDb(db);
     }
 
     public void close() {
-        if (WARRIOR.doesUserExists()) {
-            WARRIOR.dropUser();
-        }
-        if (MAGE.doesUserExists()) {
-            MAGE.dropUser();
-        }
+        clearData();
         DatabaseManager.getConnection().closeConnection();
     }
 

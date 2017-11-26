@@ -21,7 +21,6 @@ public class ItemTest {
 
     @Before
     public void setUp() throws Exception {
-        testHelper.init();
     }
 
     @After

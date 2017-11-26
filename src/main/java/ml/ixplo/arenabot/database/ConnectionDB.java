@@ -42,7 +42,8 @@ public class ConnectionDB {
 
     public ResultSet runSqlQuery(String query) {
         ResultSet resultSet = null;
-        try (Statement statement = this.currentConnection.createStatement()){
+        try {
+            Statement statement = this.currentConnection.createStatement();
             resultSet = statement.executeQuery(query);
         } catch (SQLException e) {
             BotLogger.error(LOGTAG, e.getMessage());
@@ -53,7 +54,8 @@ public class ConnectionDB {
 
     public Boolean executeQuery(String query) {
         boolean executeResult;
-        try (final Statement statement = this.currentConnection.createStatement()) {
+        try {
+            final Statement statement = this.currentConnection.createStatement();
             executeResult = statement.execute(query);
         } catch (SQLException e) {
             BotLogger.error(LOGTAG, e.getMessage());

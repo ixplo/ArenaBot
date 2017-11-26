@@ -28,7 +28,9 @@ public class DatabaseManager {
      * Private constructor (due to Singleton)
      ***/
     private DatabaseManager() {
-        connection = new ConnectionDB();
+        if (connection == null) {
+            connection = new ConnectionDB();
+        }
         final int currentVersion = connection.checkVersion();
         BotLogger.info(LOGTAG, "Current db version: " + currentVersion);
     }
@@ -54,6 +56,9 @@ public class DatabaseManager {
     }
 
     public static void setConnection(ConnectionDB conn) {
+        if (connection != null) {
+            connection.closeConnection();
+        }
         connection = conn;
     }
 
@@ -62,18 +67,15 @@ public class DatabaseManager {
     }
 
     public boolean doesUserExists(Integer userId) {
-        Boolean isExists = false;
-        String queryText = "Select id FROM users WHERE Id=?";
-        try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
-            preparedStatement.setInt(1, userId);
-            final ResultSet result = preparedStatement.executeQuery();
+        try (final ResultSet result = connection.runSqlQuery("Select id FROM users WHERE Id=" + userId)) {
             if (result.next()) {
-                isExists = true;
+                return true;
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            BotLogger.error(LOGTAG, e.getMessage());
+            throw new DbException(e.getMessage(), e);
         }
-        return isExists;
+        return false;
     }
 
     public void dropStatus() {

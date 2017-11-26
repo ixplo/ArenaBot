@@ -30,7 +30,6 @@ public class ArenaUserTest {
 
     @Before
     public void setUp() throws Exception {
-        testHelper.init();
     }
 
     @After

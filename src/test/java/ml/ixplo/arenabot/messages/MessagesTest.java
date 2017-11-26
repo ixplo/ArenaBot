@@ -22,8 +22,7 @@ public class MessagesTest {
 
     @Before
     public void setUp() throws Exception {
-        Messages.setBot(new Bot());
-        testHelper.init();
+        Messages.setBot(new Bot(testHelper.getDb()));
         warrior = TestHelper.WARRIOR;
     }
 

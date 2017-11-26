@@ -5,6 +5,7 @@ import ml.ixplo.arenabot.battle.Round;
 import ml.ixplo.arenabot.battle.actions.Action;
 import ml.ixplo.arenabot.battle.Registration;
 import ml.ixplo.arenabot.config.Config;
+import ml.ixplo.arenabot.database.ConnectionDB;
 import ml.ixplo.arenabot.database.DatabaseManager;
 import ml.ixplo.arenabot.messages.Messages;
 import ml.ixplo.arenabot.user.ArenaUser;
@@ -44,6 +45,10 @@ public class Bot extends TelegramLongPollingCommandBot {
     public static Registration registration;
 
     public Bot() {
+        this(DatabaseManager.getInstance());
+    }
+
+    public Bot(DatabaseManager db) {
 
         register(new CmdStart());
         register(new CmdReg());
@@ -63,7 +68,9 @@ public class Bot extends TelegramLongPollingCommandBot {
         CmdHelp cmdHelp = new CmdHelp(this);
         register(cmdHelp);
 
-        initBot();
+        setDb(db);
+        registration = new Registration();
+        Messages.setBot(this);
 
         registerDefaultAction((absSender, message) -> {
             SendMessage commandUnknownMessage = new SendMessage();
@@ -76,12 +83,6 @@ public class Bot extends TelegramLongPollingCommandBot {
             }
             cmdHelp.execute(absSender, message.getFrom(), message.getChat(), new String[]{});
         });
-    }
-
-    private void initBot() {
-        setDb(DatabaseManager.getInstance());
-        registration = new Registration();
-        Messages.setBot(this);
     }
 
     public void setDb(DatabaseManager db) {
