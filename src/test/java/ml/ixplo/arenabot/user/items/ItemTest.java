@@ -29,6 +29,11 @@ public class ItemTest {
     }
 
     @Test
+    public void getInfo() {
+        Assert.assertTrue(warrior.getItems().get(Presets.ITEM_INDEX).getInfo().contains(Presets.ITEM_NAME));
+    }
+
+    @Test
     public void putOn() throws Exception {
         LOGGER.info("Инвентарь: {}", warrior.getItems());
         LOGGER.info("Добавляем вещь: {}", Item.getItem(Presets.FLAMBERG));

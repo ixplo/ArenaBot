@@ -25,7 +25,7 @@ public class CmdXstat extends BotCommand {
             return;
         }
         try {
-            absSender.sendMessage(Messages.getUserXStatMsg(chat.getId(), user.getId()));
+            absSender.sendMessage(Messages.getUserXStatMsg(user.getId()));
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }

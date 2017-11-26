@@ -26,12 +26,12 @@ public class TestHelper {
                 Presets.WARRIOR_ID,
                 Presets.WARRIOR_NAME,
                 ArenaUser.UserClass.WARRIOR,
-                "o");
+                Presets.WARRIOR_RACE);
         MAGE = ArenaUser.create(
                 Presets.MAGE_ID,
                 Presets.MAGE_NAME,
                 ArenaUser.UserClass.MAGE,
-                "e");
+                Presets.MAGE_RACE);
         db.setUser(WARRIOR);
         db.setUser(MAGE);
     }

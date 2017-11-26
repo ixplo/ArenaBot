@@ -24,6 +24,6 @@ public class CmdDrop extends BotCommand {
         if (!ArenaUser.doesUserExists(user.getId())) {
             return;
         }
-        Messages.sendDropMsg(absSender, chat);
+        Messages.sendMessage(Messages.getDropMsg(user.getId()));
     }
 }

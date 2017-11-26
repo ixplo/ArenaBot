@@ -1,7 +1,6 @@
 package ml.ixplo.arenabot.user.items;
 
 import ml.ixplo.arenabot.config.Config;
-import ml.ixplo.arenabot.config.Constants;
 import ml.ixplo.arenabot.database.DatabaseManager;
 import ml.ixplo.arenabot.user.ArenaUser;
 
@@ -10,6 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static com.google.common.math.IntMath.pow;
+import static ml.ixplo.arenabot.messages.Messages.fillWithSpaces;
 
 /**
  * ixplo
@@ -200,6 +200,67 @@ public class Item {
         return db.getItem(itemId);
     }
 
+    public static String getItemInfo(Integer userId, int eqipIndex) {
+        Item item = Item.getItem(Item.getItemId(userId, eqipIndex));
+        StringBuilder out = new StringBuilder();
+        out.append("Вещь: <b>").append(item.getName()).append("</b> \nЦена [").append(item.getPrice());
+        out.append("]\n\n").append(item.getDescr()).append("\n\n");
+        if (item.isWeapon()) {
+            out.append(fillWithSpaces("<code>Урон:", item.getMinHit() + "-" + item.getMaxHit() + "</code>\n", Config.WIDTH));
+        }
+        out.append(fillWithSpaces("<code>Атака:", item.getAttack() + "</code>\n", Config.WIDTH));
+        out.append(fillWithSpaces("<code>Защита:", item.getProtect() + "</code>\n", Config.WIDTH));
+        if (item.getStrBonus() != 0) {
+            out.append(fillWithSpaces("<code>Бонус к Силе:", item.getStrBonus() + "</code>\n", Config.WIDTH));
+        }
+        if (item.getDexBonus() != 0) {
+            out.append(fillWithSpaces("<code>Бонус к Ловкости:", item.getDexBonus() + "</code>\n", Config.WIDTH));
+        }
+        if (item.getWisBonus() != 0) {
+            out.append(fillWithSpaces("<code>Бонус к Мудрости:", item.getWisBonus() + "</code>\n", Config.WIDTH));
+        }
+        if (item.getIntBonus() != 0) {
+            out.append(fillWithSpaces("<code>Бонус к Интеллекту:", item.getIntBonus() + "</code>\n", Config.WIDTH));
+        }
+        if (item.getConBonus() != 0) {
+            out.append(fillWithSpaces("<code>Бонус к Телосложению:", item.getConBonus() + "</code>\n", Config.WIDTH));
+        }
+        if (item.getStrNeeded() != 0
+                || item.getDexNeeded() != 0
+                || item.getWisNeeded() != 0
+                || item.getIntNeeded() != 0
+                || item.getConNeeded() != 0) {
+            out.append("\n\nТребования к характеристикам:\n");
+        }
+        if (item.getStrNeeded() != 0) {
+            out.append(fillWithSpaces("<code>Сила:", item.getStrNeeded() + "</code>\n", Config.WIDTH));
+        }
+        if (item.getDexNeeded() != 0) {
+            out.append(fillWithSpaces("<code>Ловкость:", item.getDexNeeded() + "</code>\n", Config.WIDTH));
+        }
+        if (item.getWisNeeded() != 0) {
+            out.append(fillWithSpaces("<code>Мудрость:", item.getWisNeeded() + "</code>\n", Config.WIDTH));
+        }
+        if (item.getIntNeeded() != 0) {
+            out.append(fillWithSpaces("<code>Интеллект:", item.getIntNeeded() + "</code>\n", Config.WIDTH));
+        }
+        if (item.getConNeeded() != 0) {
+            out.append(fillWithSpaces("<code>Телосложение:", item.getConNeeded() + "</code>\n", Config.WIDTH));
+        }
+        if (item.getRace() != null) {
+            out.append(fillWithSpaces("<code>Только для расы:", item.getRace() + "</code>\n", Config.WIDTH));
+        }
+        out.append(fillWithSpaces("<code>Слот:", Item.getSlotName(item.getSlot()) + "</code>\n", Config.WIDTH));
+        String isInSlot = Item.isItemInSlot(eqipIndex, userId) ? "Надето" : "Не надето";
+        out.append(fillWithSpaces("<code>Состояние:",
+                isInSlot + "</code>\n", Config.WIDTH));
+        return out.toString();
+    }
+
+    public static String getSlotName(String slot) {
+        return db.getStringFrom("SLOTS", slot, "name");
+    }
+
     /***************************************************
      ********* Instance ********************************
      ***************************************************/
@@ -224,8 +285,8 @@ public class Item {
         return inSlot != null;
     }
 
-    public static String getSlotName(String slot) {
-        return db.getStringFrom("SLOTS", slot, "name");
+    public String getInfo() {
+        return getItemInfo(ownerId, eqipIndex);
     }
 
     private boolean markAsPuttedOn(Integer userId, int eqipIndex) {

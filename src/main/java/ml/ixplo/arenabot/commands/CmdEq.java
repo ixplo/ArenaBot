@@ -31,7 +31,7 @@ public class CmdEq extends BotCommand {
             return;
         }
         try {
-            absSender.sendMessage(Messages.getEqipMsg(chat.getId(), user.getId()));
+            absSender.sendMessage(Messages.getEqipMsg(user.getId()));
         } catch (TelegramApiException e) {
             BotLogger.error(LOGTAG, e);
         }

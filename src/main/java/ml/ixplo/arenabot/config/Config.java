@@ -12,8 +12,10 @@ public class Config {
     public static final String VERSION = "0.3";
     public static final String BOT_CHANNEL_NAME = "#Arena";
     public final String rules = "rules.html";      //mc(rules)
-    //    public static final long CHANNEL_ID = -161929436;//arena
-    public static final long CHANNEL_ID = -202049243;//#arena
+    public static final long TEST_CHANNEL_ID = -161929436;
+    public static final String TEST_CHANNEL_NAME = "arena";
+    public static final long CHANNEL_ID = -202049243;
+    public static final String CHANNEL_NAME = "#arena";
     public static final Integer ADMIN_ID = 362812407;
     public static final String BOT_TOKEN = "298781231:AAHDBJLNCjRpxmT7aazDhh5Hr7t6xNLCwr0";
     public static final String DB_CONTROLLER = "org.sqlite.JDBC";

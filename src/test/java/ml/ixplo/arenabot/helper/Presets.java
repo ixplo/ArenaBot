@@ -10,8 +10,12 @@ public class Presets {
     public static final int WRONG_ITEM_INDEX = -1;
     public static final int WARRIOR_ID = -1;
     public static final String WARRIOR_NAME = "test_warrior";
+    public static final String WARRIOR_CLASS = "WARRIOR";
+    public static final String WARRIOR_RACE = "o";
     public static final int MAGE_ID = -2;
     public static final String MAGE_NAME = "test_mage";
+    public static final String MAGE_RACE = "e";
     public static final String FLAMBERG = "wba";
+    public static final CharSequence FLAMBERG_NAME = "Фламберг";
     public static final int TEST_DB_VERSION = 999;
 }

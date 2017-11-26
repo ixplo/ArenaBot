@@ -56,7 +56,7 @@ public class CmdHark extends BotCommand {
         ArenaUser.getUser(user.getId()).addHark(harkToUpId, Integer.parseInt(strings[1]));
         Messages.sendMessage(absSender, chat.getId(), "Вы подняли " + harkName + " на: <b>" + strings[1] + "</b>");
         try {
-            absSender.sendMessage(Messages.getUserStatMsg(chat.getId(), user.getId()));
+            absSender.sendMessage(Messages.getUserStatMsg(user.getId()));
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }

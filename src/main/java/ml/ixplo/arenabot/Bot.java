@@ -5,7 +5,6 @@ import ml.ixplo.arenabot.battle.Round;
 import ml.ixplo.arenabot.battle.actions.Action;
 import ml.ixplo.arenabot.battle.Registration;
 import ml.ixplo.arenabot.config.Config;
-import ml.ixplo.arenabot.database.ConnectionDB;
 import ml.ixplo.arenabot.database.DatabaseManager;
 import ml.ixplo.arenabot.messages.Messages;
 import ml.ixplo.arenabot.user.ArenaUser;
@@ -119,16 +118,24 @@ public class Bot extends TelegramLongPollingCommandBot {
         try {
             answerInlineQuery(Messages.getAnswerForInlineQuery(inlineQuery));
         } catch (TelegramApiException e) {
-            e.printStackTrace();
+            BotLogger.error(LOGTAG, e);
         }
     }
 
     private void handleCallbackQuery(CallbackQuery callbackQuery) {
-        String callbackCommand = callbackQuery.getData().substring(0, callbackQuery.getData().indexOf("_"));
-        String callbackEntry = callbackQuery.getData().substring(callbackQuery.getData().indexOf("_") + 1);
+        String callbackCommand = callbackQuery.getData().substring(0, callbackQuery.getData().indexOf('_'));
+        String callbackEntry = callbackQuery.getData().substring(callbackQuery.getData().indexOf('_') + 1);
+        //todo сделать нормально
         switch (callbackCommand) {
             case "newClassIs":
-                Messages.sendAskRace(callbackQuery, callbackEntry);
+                try {
+                    answerCallbackQuery(Messages.selectedUserClassQuery(callbackQuery.getId(), callbackEntry));
+                    sendMessage(Messages.getChooseRaceMsg(
+                        callbackQuery.getMessage().getChatId(),
+                        callbackEntry));
+                } catch (TelegramApiException e) {
+                    BotLogger.error(LOGTAG, e);
+                }
                 break;
             case "newRaceIs":
                 Integer userId = callbackQuery.getFrom().getId();
@@ -138,19 +145,24 @@ public class Bot extends TelegramLongPollingCommandBot {
                 String userRace = callbackEntry.substring(0, 1);
                 String userClass = callbackEntry.substring(1);
                 ArenaUser.create(userId, userName, ArenaUser.UserClass.valueOf(userClass), userRace);
-                userClass = ArenaUser.getClassName(userClass);
-                userRace = ArenaUser.getRaceName(userRace);
-                Messages.sendCreateUser(callbackQuery, userClass, userRace);
+                try {
+                    answerCallbackQuery(Messages.getCreateUserQuery(
+                            callbackQuery.getId(),
+                            ArenaUser.getClassName(userClass),
+                            ArenaUser.getRaceName(userRace)));
+                    sendMessage(Messages.getCreateUserMsg(userId));
+                } catch (TelegramApiException e) {
+                    BotLogger.error(LOGTAG, e);
+                }
                 break;
             case "del":
                 if (callbackEntry.equals("Cancel")) {
                     Messages.sendCancelDelete(callbackQuery);
-                    break;
                 } else if (callbackEntry.equals("Delete")) {
                     ArenaUser.dropUser(callbackQuery.getFrom().getId());
                     Messages.sendAfterDelete(callbackQuery);
-                    break;
                 }
+                break;
             case "reg":
                 registration.regMember(callbackQuery.getFrom().getId());
                 Messages.sendEmptyAnswerQuery(callbackQuery);

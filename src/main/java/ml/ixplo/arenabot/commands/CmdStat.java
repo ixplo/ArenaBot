@@ -30,7 +30,7 @@ public class CmdStat extends BotCommand{
             return;
         }
         try {
-            absSender.sendMessage(Messages.getUserStatMsg(chat.getId(), user.getId()));
+            absSender.sendMessage(Messages.getUserStatMsg(user.getId()));
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
