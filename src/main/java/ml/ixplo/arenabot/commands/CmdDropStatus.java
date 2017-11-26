@@ -27,7 +27,7 @@ public class CmdDropStatus extends BotCommand{
         if (!ArenaUser.doesUserExists(user.getId())) {
             return;
         }
-        if (!user.getId().equals(Config.IS_ADMIN)) {
+        if (!user.getId().equals(Config.ADMIN_ID)) {
             return;
         }
         Registration.dropStatus();

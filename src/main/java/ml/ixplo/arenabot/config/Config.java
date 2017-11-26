@@ -14,7 +14,7 @@ public class Config {
     public final String rules = "rules.html";      //mc(rules)
     //    public static final long CHANNEL_ID = -161929436;//arena
     public static final long CHANNEL_ID = -202049243;//#arena
-    public static final Integer IS_ADMIN = 362812407;
+    public static final Integer ADMIN_ID = 362812407;
     public static final String BOT_TOKEN = "298781231:AAHDBJLNCjRpxmT7aazDhh5Hr7t6xNLCwr0";
     public static final String DB_CONTROLLER = "org.sqlite.JDBC";
     public static final String DB_LINK = "jdbc:sqlite:ArenaDb.sqlite";

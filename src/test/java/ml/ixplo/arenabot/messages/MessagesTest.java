@@ -39,21 +39,45 @@ public class MessagesTest {
 
     @Test
     public void getEqipMsg() throws Exception {
-        SendMessage msg = Messages.getEqipMsg((long) Config.IS_ADMIN, Config.IS_ADMIN);
-        LOGGER.info("Получено сообщение об инвентаре: {}", msg.toString());
-        Assert.assertEquals(Config.IS_ADMIN.toString(), msg.getChatId());
-        Assert.assertEquals("sendmessage", msg.getMethod());
+        SendMessage message = Messages.getEqipMsg((long) Config.ADMIN_ID, Config.ADMIN_ID);
+        Assert.assertEquals(Config.ADMIN_ID.toString(), message.getChatId());
+        Assert.assertEquals("sendmessage", message.getMethod());
         Assert.assertEquals("Ваш инвентарь: \n"
                 + "0.<b>Ладошка</b>, \n"
-                + "Оружие: <b>Ладошка</b>(0)", msg.getText());
+                + "Оружие: <b>Ладошка</b>(0)", message.getText());
     }
 
     @Test
     public void getUserStatMsg() throws Exception {
+        SendMessage message = Messages.getUserStatMsg((long) Config.ADMIN_ID, Config.ADMIN_ID);
+        Assert.assertEquals(Config.ADMIN_ID.toString(), message.getChatId());
+        Assert.assertTrue(message.getText().contains("Ваши характеристики"));
+        Assert.assertTrue(message.getText().contains("Победы"));
+        Assert.assertTrue(message.getText().contains("Игры"));
+        Assert.assertTrue(message.getText().contains("Был в бою"));
+        Assert.assertTrue(message.getText().contains("Опыт"));
+        Assert.assertTrue(message.getText().contains("Жизни"));
+        Assert.assertTrue(message.getText().contains("Золото"));
+        Assert.assertTrue(message.getText().contains("Сила"));
+        Assert.assertTrue(message.getText().contains("Ловкость"));
+        Assert.assertTrue(message.getText().contains("Мудрость"));
+        Assert.assertTrue(message.getText().contains("Интеллект"));
+        Assert.assertTrue(message.getText().contains("Телосложение"));
+        Assert.assertTrue(message.getText().contains("Свободные очки"));
     }
 
     @Test
     public void getUserXStatMsg() throws Exception {
+        SendMessage message = Messages.getUserXStatMsg((long) Config.ADMIN_ID, Config.ADMIN_ID);
+        LOGGER.info(message.toString());
+        Assert.assertTrue(message.getText().contains("Ваши расширенные характеристики"));
+        Assert.assertTrue(message.getText().contains("Урон"));
+        Assert.assertTrue(message.getText().contains("Атака"));
+        Assert.assertTrue(message.getText().contains("Защита"));
+        Assert.assertTrue(message.getText().contains("Лечение"));
+        Assert.assertTrue(message.getText().contains("Защ. от магии"));
+        Assert.assertTrue(message.getText().contains("Мана"));
+        Assert.assertTrue(message.getText().contains("Магич. бонусы"));
     }
 
     @Test
