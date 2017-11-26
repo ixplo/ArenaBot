@@ -1,2 +1,2 @@
 # ArenaBot
-bot for Telegram. This is game about warriors and mages for popular messenger Telegram.
+bot for Telegram. This is the game about warriors and mages for popular messenger Telegram.
