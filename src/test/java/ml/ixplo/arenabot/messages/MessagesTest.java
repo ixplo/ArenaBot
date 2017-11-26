@@ -12,6 +12,12 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
+import org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup;
+import org.telegram.telegrambots.api.objects.replykeyboard.buttons.InlineKeyboardButton;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class MessagesTest {
 
@@ -69,7 +75,7 @@ public class MessagesTest {
     @Test
     public void getUserXStatMsg() throws Exception {
         SendMessage message = Messages.getUserXStatMsg((long) Config.ADMIN_ID, Config.ADMIN_ID);
-        LOGGER.info(message.toString());
+        Assert.assertEquals(Config.ADMIN_ID.toString(), message.getChatId());
         Assert.assertTrue(message.getText().contains("Ваши расширенные характеристики"));
         Assert.assertTrue(message.getText().contains("Урон"));
         Assert.assertTrue(message.getText().contains("Атака"));
@@ -82,10 +88,30 @@ public class MessagesTest {
 
     @Test
     public void getListMsg() throws Exception {
+        SendMessage message = Messages.getListMsg((long) Config.ADMIN_ID);
+        Assert.assertEquals(Config.ADMIN_ID.toString(), message.getChatId());
+        Assert.assertEquals("Еще никто не зарегистрировался", message.getText());
     }
 
     @Test
     public void getInlineKeyboardMsg() throws Exception {
+        SendMessage message = Messages.getInlineKeyboardMsg(
+                (long) Config.ADMIN_ID,
+                Config.BOT_NAME,
+                Arrays.asList("one", "two"),
+                Arrays.asList("oneC", "twoC"));
+        Assert.assertEquals(Config.ADMIN_ID.toString(), message.getChatId());
+        Assert.assertEquals(Config.BOT_NAME, message.getText());
+        Assert.assertTrue(message.getReplyMarkup() instanceof InlineKeyboardMarkup);
+        InlineKeyboardMarkup ikm = (InlineKeyboardMarkup)message.getReplyMarkup();
+        InlineKeyboardButton firstButton = new InlineKeyboardButton();
+        InlineKeyboardButton secondButton = new InlineKeyboardButton();
+        firstButton.setText("one");
+        secondButton.setText("two");
+        Assert.assertTrue(ikm.getKeyboard().get(0).get(0).getText().equals("one"));
+        Assert.assertTrue(ikm.getKeyboard().get(0).get(1).getText().equals("two"));
+        Assert.assertTrue(ikm.getKeyboard().get(0).get(0).getCallbackData().equals("oneC"));
+        Assert.assertTrue(ikm.getKeyboard().get(0).get(1).getCallbackData().equals("twoC"));
     }
 
     @Test
