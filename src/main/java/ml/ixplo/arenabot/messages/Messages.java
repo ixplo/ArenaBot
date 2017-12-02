@@ -430,6 +430,16 @@ public final class Messages {
         return answer;
     }
 
+    public static SendMessage getAskActionMsg(int userId) {
+        return getInlineKeyboardMsg((long)userId, "Выберите действие:",
+                    ArenaUser.getUser(userId).getActionsName(), ArenaUser.getUser(userId).getActionsId());
+    }
+
+    public static AnswerCallbackQuery getSelectTargetQuery(String queryId, int targetId) {
+        return new AnswerCallbackQuery().setCallbackQueryId(queryId)
+                .setText("Вы выбрали цель: " + ArenaUser.getUserName(targetId));
+    }
+
     public static AnswerCallbackQuery selectedUserClassQuery(String queryId, String userClass) {
         return new AnswerCallbackQuery().setCallbackQueryId(queryId)
                 .setText("Вы выбрали класс: " + ArenaUser.getClassName(userClass));
@@ -621,23 +631,6 @@ public final class Messages {
                 .append(" вошел в команду ").append(Bot.registration.getMemberTeam(userId));
         sendToAllMembers(Bot.registration.getMembers(), messageText.toString());
 
-    }
-
-    public static void sendAskActionId(CallbackQuery callbackQuery, int targetId) {
-
-        String queryId = callbackQuery.getId();
-        Long chatId = callbackQuery.getMessage().getChatId();
-        int userId = callbackQuery.getFrom().getId();
-        AnswerCallbackQuery query = new AnswerCallbackQuery();
-        query.setText("Вы выбрали цель: " + ArenaUser.getUserName(targetId));
-        query.setCallbackQueryId(queryId);
-        try {
-            bot.sendMessage(Messages.getInlineKeyboardMsg(chatId, "Выберите действие:",
-                    ArenaUser.getUser(userId).getActionsName(), ArenaUser.getUser(userId).getActionsId()));
-            bot.answerCallbackQuery(query);
-        } catch (TelegramApiException e) {
-            BotLogger.error(LOGTAG, e);
-        }
     }
 
     public static void sendAskPercent(CallbackQuery callbackQuery, String actionName) {

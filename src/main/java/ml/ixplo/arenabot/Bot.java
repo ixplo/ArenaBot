@@ -175,7 +175,13 @@ public class Bot extends TelegramLongPollingCommandBot {
             case "target":
                 Action.addAction(callbackQuery.getFrom().getId());
                 Action.setTargetId(callbackQuery.getFrom().getId(), Integer.parseInt(callbackEntry));
-                Messages.sendAskActionId(callbackQuery, Integer.parseInt(callbackEntry));
+                try {
+                    answerCallbackQuery(Messages.getSelectTargetQuery(
+                            callbackQuery.getId(), Integer.parseInt(callbackEntry)));
+                    sendMessage(Messages.getAskActionMsg(callbackQuery.getFrom().getId()));
+                } catch (TelegramApiException e) {
+                    BotLogger.error(LOGTAG, e);
+                }
                 break;
             case "spell":
                 if (callbackEntry.equals("spell")) {

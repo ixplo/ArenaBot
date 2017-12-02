@@ -18,4 +18,6 @@ public class Presets {
     public static final String FLAMBERG = "wba";
     public static final CharSequence FLAMBERG_NAME = "Фламберг";
     public static final int TEST_DB_VERSION = 999;
+    public static final int TARGET_ID = 1;
+    public static final String QUERY_ID = "AnyQueryId";
 }

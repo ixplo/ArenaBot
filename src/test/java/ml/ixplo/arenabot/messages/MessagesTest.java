@@ -23,6 +23,7 @@ import org.telegram.telegrambots.api.objects.replykeyboard.buttons.InlineKeyboar
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
+import java.util.List;
 
 public class MessagesTest {
 
@@ -150,18 +151,18 @@ public class MessagesTest {
     @Test
     public void selectedUserClassQuery() throws Exception {
         AnswerCallbackQuery answerCallbackQuery = Messages.selectedUserClassQuery(
-                "AnyQueryId", Presets.WARRIOR_CLASS);
-        Assert.assertEquals("AnyQueryId", answerCallbackQuery.getCallbackQueryId());
+                Presets.QUERY_ID, Presets.WARRIOR_CLASS);
+        Assert.assertEquals(Presets.QUERY_ID, answerCallbackQuery.getCallbackQueryId());
         Assert.assertEquals("Вы выбрали класс: " + warrior.getClassName(), answerCallbackQuery.getText());
     }
 
     @Test
     public void getCreateUserQuery() {
         AnswerCallbackQuery answerCallbackQuery = Messages.getCreateUserQuery(
-                "AnyQueryId",
+                Presets.QUERY_ID,
                 warrior.getClassName(),
                 warrior.getRaceName());
-        Assert.assertEquals("AnyQueryId", answerCallbackQuery.getCallbackQueryId());
+        Assert.assertEquals(Presets.QUERY_ID, answerCallbackQuery.getCallbackQueryId());
         Assert.assertEquals("Ваш персонаж "
                 + warrior.getClassName() + "/"
                 + warrior.getRaceName() + " создан!", answerCallbackQuery.getText());
@@ -277,7 +278,28 @@ public class MessagesTest {
     }
 
     @Test
-    public void sendAskActionId() throws Exception {
+    public void getAskActionMsg() throws Exception {
+        SendMessage message = Messages.getAskActionMsg(warrior.getUserId());
+        Assert.assertEquals(warrior.getUserId(), Integer.parseInt(message.getChatId()));
+        Assert.assertTrue(message.getText().contains("Выберите действие"));
+        Assert.assertTrue(message.getReplyMarkup() instanceof InlineKeyboardMarkup);
+        List<String> actions = ArenaUser.getUser(warrior.getUserId()).getActionsName();
+        InlineKeyboardMarkup ikm = (InlineKeyboardMarkup) message.getReplyMarkup();
+        List<List<InlineKeyboardButton>> list = ikm.getKeyboard();
+        for (List<InlineKeyboardButton> inlineKeyboardButtonList : list) {
+            for (InlineKeyboardButton button : inlineKeyboardButtonList) {
+                Assert.assertTrue(actions.contains(button.getText()));
+            }
+        }
+    }
+
+    @Test
+    public void getSelectTargetQueryTest() {
+        AnswerCallbackQuery answerCallbackQuery = Messages.getSelectTargetQuery(
+                Presets.QUERY_ID,
+                Presets.MAGE_ID);
+        Assert.assertEquals(Presets.QUERY_ID, answerCallbackQuery.getCallbackQueryId());
+        Assert.assertEquals("Вы выбрали цель: " + Presets.MAGE_NAME, answerCallbackQuery.getText());
     }
 
     @Test
