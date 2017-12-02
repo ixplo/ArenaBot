@@ -20,6 +20,8 @@ import org.telegram.telegrambots.api.objects.inlinequery.result.InlineQueryResul
 import org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 
 public class MessagesTest {
@@ -40,6 +42,13 @@ public class MessagesTest {
         testHelper.close();
     }
 
+
+    @Test (expected = InvocationTargetException.class)
+    public void UnsupportedOperationExceptionTest() throws NoSuchMethodException, IllegalAccessException, InstantiationException, InvocationTargetException {
+        Constructor<Messages> constructor = Messages.class.getDeclaredConstructor();
+        constructor.setAccessible(true);
+        constructor.newInstance();
+    }
 
     @Test
     public void getGreetingsMsg() throws Exception {
