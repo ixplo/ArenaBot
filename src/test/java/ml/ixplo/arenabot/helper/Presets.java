@@ -20,4 +20,6 @@ public class Presets {
     public static final int TEST_DB_VERSION = 999;
     public static final int TARGET_ID = 1;
     public static final String QUERY_ID = "AnyQueryId";
+    public static final String TEST_TEAM = "test_team";
+    public static final String QUERY_TEXT = "query_text";
 }

@@ -131,8 +131,8 @@ public class Bot extends TelegramLongPollingCommandBot {
                 try {
                     answerCallbackQuery(Messages.selectedUserClassQuery(callbackQuery.getId(), callbackEntry));
                     sendMessage(Messages.getChooseRaceMsg(
-                        callbackQuery.getMessage().getChatId(),
-                        callbackEntry));
+                            callbackQuery.getMessage().getChatId(),
+                            callbackEntry));
                 } catch (TelegramApiException e) {
                     BotLogger.error(LOGTAG, e);
                 }
@@ -164,12 +164,24 @@ public class Bot extends TelegramLongPollingCommandBot {
                 }
                 break;
             case "reg":
-                registration.regMember(callbackQuery.getFrom().getId());
-                Messages.sendEmptyAnswerQuery(callbackQuery);
-                Messages.sendRegMsg(callbackQuery.getFrom().getId());
+                int memberId = callbackQuery.getFrom().getId();
+                registration.regMember(memberId);
+                try {
+                    answerCallbackQuery(Messages.getAnswerCallbackQuery(callbackQuery.getId(), null));
+                } catch (TelegramApiException e) {
+                    BotLogger.error(LOGTAG, e);
+                }
+                Messages.sendToAllMembers(
+                        registration.getMembers(),
+                        Messages.getRegMemberMsg(memberId, registration.getMember(memberId).getTeamId())
+                );
                 break;
             case "learnSpell":
-                Messages.sendEmptyAnswerQuery(callbackQuery);
+                try {
+                    answerCallbackQuery(Messages.getAnswerCallbackQuery(callbackQuery.getId(), null));
+                } catch (TelegramApiException e) {
+                    BotLogger.error(LOGTAG, e);
+                }
                 ArenaUser.getUser(callbackQuery.getFrom().getId()).learn(Integer.parseInt(callbackEntry));
                 break;
             case "target":

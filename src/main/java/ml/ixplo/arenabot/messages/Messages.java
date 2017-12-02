@@ -146,11 +146,9 @@ public final class Messages {
         }
     }
 
-    public static void sendToAllMembers(List<Member> members, String msgText) {
+    //todo выпилить
+    public static void sendToAllMembers(List<Member> members, SendMessage msg) {
 
-        SendMessage msg = new SendMessage();
-        msg.enableHtml(true);
-        msg.setText(msgText);
         try {
             for (Member user : members) {
                 msg.setChatId((long) user.getUserId());
@@ -191,18 +189,6 @@ public final class Messages {
 
         try {
             bot.sendMessage(message);
-        } catch (TelegramApiException e) {
-            BotLogger.error(LOGTAG, e);
-        }
-    }
-
-    public static void sendEmptyAnswerQuery(CallbackQuery callbackQuery) {
-
-        String queryId = callbackQuery.getId();
-        AnswerCallbackQuery query = new AnswerCallbackQuery();
-        query.setCallbackQueryId(queryId);
-        try {
-            bot.answerCallbackQuery(query);
         } catch (TelegramApiException e) {
             BotLogger.error(LOGTAG, e);
         }
@@ -381,11 +367,6 @@ public final class Messages {
         return new SendMessage().setChatId((long) userId).setText(msgText);
     }
 
-    public static AnswerCallbackQuery getCreateUserQuery(String queryId, String userClass, String userRace) {
-        return new AnswerCallbackQuery().setCallbackQueryId(queryId)
-                .setText("Ваш персонаж " + userClass + "/" + userRace + " создан!");
-    }
-
     public static SendMessage getExMsg(int userId, int eqipIndex) {
         return new SendMessage().enableHtml(true).setChatId((long) userId).setText(Item.getItemInfo(userId, eqipIndex));
     }
@@ -435,6 +416,15 @@ public final class Messages {
                     ArenaUser.getUser(userId).getActionsName(), ArenaUser.getUser(userId).getActionsId());
     }
 
+
+    //todo переделать все под один универсальный метод, а текст сообщения хранить в xml
+    public static AnswerCallbackQuery getAnswerCallbackQuery(String queryId, String queryText) {
+        if (queryText == null) {
+            return new AnswerCallbackQuery().setCallbackQueryId(queryId);
+        }
+        return new AnswerCallbackQuery().setCallbackQueryId(queryId).setText(queryText);
+    }
+
     public static AnswerCallbackQuery getSelectTargetQuery(String queryId, int targetId) {
         return new AnswerCallbackQuery().setCallbackQueryId(queryId)
                 .setText("Вы выбрали цель: " + ArenaUser.getUserName(targetId));
@@ -443,6 +433,11 @@ public final class Messages {
     public static AnswerCallbackQuery selectedUserClassQuery(String queryId, String userClass) {
         return new AnswerCallbackQuery().setCallbackQueryId(queryId)
                 .setText("Вы выбрали класс: " + ArenaUser.getClassName(userClass));
+    }
+
+    public static AnswerCallbackQuery getCreateUserQuery(String queryId, String userClass, String userRace) {
+        return new AnswerCallbackQuery().setCallbackQueryId(queryId)
+                .setText("Ваш персонаж " + userClass + "/" + userRace + " создан!");
     }
 
     public static void sendCancelDelete(CallbackQuery callbackQuery) {
@@ -621,16 +616,12 @@ public final class Messages {
         }
     }
 
-    public static void sendRegMsg(int userId) {
-
-        StringBuilder messageText = new StringBuilder();
-        messageText.append("<b>").append(ArenaUser.getUserName(userId)).append("</b> (")
-                .append(ArenaUser.getUser(userId).getClassName()).append("/")
-                .append(ArenaUser.getUser(userId).getRaceName()).append(" уровень:")
-                .append(ArenaUser.getUser(userId).getLevel()).append(")")
-                .append(" вошел в команду ").append(Bot.registration.getMemberTeam(userId));
-        sendToAllMembers(Bot.registration.getMembers(), messageText.toString());
-
+    public static SendMessage getRegMemberMsg(int userId, String teamName) {
+        return new SendMessage().setChatId((long)userId).enableHtml(true).setText("</b> ("
+                + ArenaUser.getUserName(userId) + "/"
+                + ArenaUser.getUser(userId).getRaceName()
+                + " уровень:" + ArenaUser.getUser(userId).getLevel() + ")"
+                + " вошел в команду " + teamName);
     }
 
     public static void sendAskPercent(CallbackQuery callbackQuery, String actionName) {

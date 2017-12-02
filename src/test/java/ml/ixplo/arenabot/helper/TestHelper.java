@@ -32,6 +32,7 @@ public class TestHelper {
                 Presets.MAGE_NAME,
                 ArenaUser.UserClass.MAGE,
                 Presets.MAGE_RACE);
+        WARRIOR.setTeam(Presets.TEST_TEAM);
         db.setUser(WARRIOR);
         db.setUser(MAGE);
     }

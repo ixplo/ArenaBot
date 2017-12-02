@@ -247,11 +247,19 @@ public class MessagesTest {
     }
 
     @Test
-    public void sendRegMsg() throws Exception {
+    public void getRegMemberMsg() throws Exception {
+        SendMessage message = Messages.getRegMemberMsg(warrior.getUserId(), warrior.getTeam());
+        Assert.assertEquals(warrior.getUserId(), Integer.parseInt(message.getChatId()));
+        Assert.assertTrue(message.getText().contains(warrior.getName()));
+        Assert.assertTrue(message.getText().contains("вошел в команду"));
+        Assert.assertTrue(message.getText().contains(warrior.getTeamName()));
     }
 
     @Test
-    public void sendMessage() throws Exception {
+    public void getAnswerCallbackQuery() throws Exception {
+        AnswerCallbackQuery callbackQuery = Messages.getAnswerCallbackQuery(Presets.QUERY_ID, Presets.QUERY_TEXT);
+        Assert.assertEquals(Presets.QUERY_ID, callbackQuery.getCallbackQueryId());
+        Assert.assertEquals(Presets.QUERY_TEXT, callbackQuery.getText());
     }
 
     @Test

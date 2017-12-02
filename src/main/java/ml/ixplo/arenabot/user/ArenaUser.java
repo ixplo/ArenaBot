@@ -294,6 +294,7 @@ public abstract class ArenaUser {
         getUser(userId).doAction(strings);
     }
 
+    //todo выпилить
     public static List<ArenaUser> getUsers(List<Integer> usersId) {
         List<ArenaUser> users = new ArrayList<>();
         int count = usersId.size();

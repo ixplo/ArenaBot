@@ -7,6 +7,7 @@ import ml.ixplo.arenabot.user.ArenaUser;
  * ixplo
  * 29.04.2017.
  */
+//todo выпилить и возвращать ArenaUser
 public class Member {
     Integer userId;
     String name;
