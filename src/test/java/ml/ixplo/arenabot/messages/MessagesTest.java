@@ -1,6 +1,7 @@
 package ml.ixplo.arenabot.messages;
 
 import ml.ixplo.arenabot.Bot;
+import ml.ixplo.arenabot.battle.Registration;
 import ml.ixplo.arenabot.config.Config;
 import ml.ixplo.arenabot.helper.Presets;
 import ml.ixplo.arenabot.helper.TestHelper;
@@ -31,10 +32,11 @@ public class MessagesTest {
 
     ArenaUser warrior;
     private TestHelper testHelper = new TestHelper();
+    private Bot bot = new Bot(testHelper.getDb());
 
     @Before
     public void setUp() throws Exception {
-        Messages.setBot(new Bot(testHelper.getDb()));
+        Messages.setBot(bot);
         warrior = TestHelper.WARRIOR;
     }
 
@@ -44,7 +46,7 @@ public class MessagesTest {
     }
 
 
-    @Test (expected = InvocationTargetException.class)
+    @Test(expected = InvocationTargetException.class)
     public void UnsupportedOperationExceptionTest() throws NoSuchMethodException, IllegalAccessException, InstantiationException, InvocationTargetException {
         Constructor<Messages> constructor = Messages.class.getDeclaredConstructor();
         constructor.setAccessible(true);
@@ -118,6 +120,15 @@ public class MessagesTest {
         SendMessage message = Messages.getListMsg((long) Config.ADMIN_ID);
         Assert.assertEquals(Config.ADMIN_ID.toString(), message.getChatId());
         Assert.assertEquals("Еще никто не зарегистрировался", message.getText());
+
+        Registration.isOn = false;
+        message = Messages.getListMsg((long) warrior.getUserId());
+        Assert.assertEquals("Бой уже идет", message.getText());
+
+        Registration.isOn = true;
+        Bot.registration.regMember(warrior.getUserId());
+        message = Messages.getListMsg((long) warrior.getUserId());
+        Assert.assertTrue(message.getText().contains(warrior.getName()));
     }
 
     @Test
@@ -188,7 +199,7 @@ public class MessagesTest {
 
     @Test
     public void getExMsg() throws Exception {
-        SendMessage message = Messages.getExMsg(warrior.getUserId(),Presets.ITEM_INDEX);
+        SendMessage message = Messages.getExMsg(warrior.getUserId(), Presets.ITEM_INDEX);
         Assert.assertEquals(warrior.getUserId(), Integer.parseInt(message.getChatId()));
         Assert.assertTrue(warrior.getItems().get(Presets.ITEM_INDEX).getInfo().contains(Presets.ITEM_NAME));
     }
