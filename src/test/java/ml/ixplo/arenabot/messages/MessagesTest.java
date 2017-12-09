@@ -271,6 +271,10 @@ public class MessagesTest {
         AnswerCallbackQuery callbackQuery = Messages.getAnswerCallbackQuery(Presets.QUERY_ID, Presets.QUERY_TEXT);
         Assert.assertEquals(Presets.QUERY_ID, callbackQuery.getCallbackQueryId());
         Assert.assertEquals(Presets.QUERY_TEXT, callbackQuery.getText());
+
+        callbackQuery = Messages.getAnswerCallbackQuery(Presets.QUERY_ID, null);
+        Assert.assertEquals(Presets.QUERY_ID, callbackQuery.getCallbackQueryId());
+        Assert.assertEquals(null, callbackQuery.getText());
     }
 
     @Test
