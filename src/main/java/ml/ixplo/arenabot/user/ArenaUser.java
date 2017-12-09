@@ -278,7 +278,7 @@ public abstract class ArenaUser {
             SendMessage msg = new SendMessage();
             msg.setChatId(chatId);
             msg.enableHtml(true);
-            msg.setText("Цель по номером " + Integer.parseInt(strings[1]) +
+            msg.setText("Цель под номером " + Integer.parseInt(strings[1]) +
                     " не найдена. Всего есть целей: " + Round.getCurMembersId().size());
             try {
                 absSender.sendMessage(msg);

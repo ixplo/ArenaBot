@@ -440,23 +440,12 @@ public final class Messages {
                 .setText("Ваш персонаж " + userClass + "/" + userRace + " создан!");
     }
 
-    public static void sendCancelDelete(CallbackQuery callbackQuery) {
+    public static AnswerCallbackQuery getCancelDeleteQuery(String queryId) {
+        return new AnswerCallbackQuery().setText("Вы отменили удаление").setCallbackQueryId(queryId);
+    }
 
-        String queryId = callbackQuery.getId();
-        Long chatId = callbackQuery.getMessage().getChatId();
-        Integer msgId = callbackQuery.getMessage().getMessageId();
-        AnswerCallbackQuery query = new AnswerCallbackQuery();
-        query.setText("Вы отменили удаление");
-        query.setCallbackQueryId(queryId);
-        EditMessageReplyMarkup edit = new EditMessageReplyMarkup();
-        edit.setChatId(chatId);
-        edit.setMessageId(msgId);
-        try {
-            bot.editMessageReplyMarkup(edit);
-            bot.answerCallbackQuery(query);
-        } catch (TelegramApiException e) {
-            BotLogger.error(LOGTAG, e);
-        }
+    public static EditMessageReplyMarkup getCancelDeleteMarkup(int userId, Integer messageId) {
+        return new EditMessageReplyMarkup().setChatId((long)userId).setMessageId(messageId);
     }
 
     public static void sendAfterDelete(CallbackQuery callbackQuery) {

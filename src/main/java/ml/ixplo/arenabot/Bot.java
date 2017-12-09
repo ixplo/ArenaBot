@@ -98,7 +98,11 @@ public class Bot extends TelegramLongPollingCommandBot {
         } else if (update.hasInlineQuery()) {
             handleInlineQuery(update.getInlineQuery());
         } else if (update.hasCallbackQuery()) {
-            handleCallbackQuery(update.getCallbackQuery());
+            try {
+                handleCallbackQuery(update.getCallbackQuery());
+            } catch (TelegramApiException e) {
+                BotLogger.error(LOGTAG, e);
+            }
         }
     }
 
@@ -122,20 +126,14 @@ public class Bot extends TelegramLongPollingCommandBot {
         }
     }
 
-    private void handleCallbackQuery(CallbackQuery callbackQuery) {
+    private void handleCallbackQuery(CallbackQuery callbackQuery) throws TelegramApiException {
         String callbackCommand = callbackQuery.getData().substring(0, callbackQuery.getData().indexOf('_'));
         String callbackEntry = callbackQuery.getData().substring(callbackQuery.getData().indexOf('_') + 1);
         //todo сделать нормально
         switch (callbackCommand) {
             case "newClassIs":
-                try {
-                    answerCallbackQuery(Messages.selectedUserClassQuery(callbackQuery.getId(), callbackEntry));
-                    sendMessage(Messages.getChooseRaceMsg(
-                            callbackQuery.getMessage().getChatId(),
-                            callbackEntry));
-                } catch (TelegramApiException e) {
-                    BotLogger.error(LOGTAG, e);
-                }
+                answerCallbackQuery(Messages.selectedUserClassQuery(callbackQuery.getId(), callbackEntry));
+                sendMessage(Messages.getChooseRaceMsg(callbackQuery.getMessage().getChatId(), callbackEntry));
                 break;
             case "newRaceIs":
                 Integer userId = callbackQuery.getFrom().getId();
@@ -145,19 +143,17 @@ public class Bot extends TelegramLongPollingCommandBot {
                 String userRace = callbackEntry.substring(0, 1);
                 String userClass = callbackEntry.substring(1);
                 ArenaUser.create(userId, userName, ArenaUser.UserClass.valueOf(userClass), userRace);
-                try {
-                    answerCallbackQuery(Messages.getCreateUserQuery(
-                            callbackQuery.getId(),
-                            ArenaUser.getClassName(userClass),
-                            ArenaUser.getRaceName(userRace)));
-                    sendMessage(Messages.getCreateUserMsg(userId));
-                } catch (TelegramApiException e) {
-                    BotLogger.error(LOGTAG, e);
-                }
+                answerCallbackQuery(Messages.getCreateUserQuery(
+                        callbackQuery.getId(),
+                        ArenaUser.getClassName(userClass),
+                        ArenaUser.getRaceName(userRace)));
+                sendMessage(Messages.getCreateUserMsg(userId));
                 break;
             case "del":
                 if (callbackEntry.equals("Cancel")) {
-                    Messages.sendCancelDelete(callbackQuery);
+                    answerCallbackQuery(Messages.getCancelDeleteQuery(callbackQuery.getId()));
+                    editMessageReplyMarkup(Messages.getCancelDeleteMarkup(callbackQuery.getFrom().getId(),
+                            callbackQuery.getMessage().getMessageId()));
                 } else if (callbackEntry.equals("Delete")) {
                     ArenaUser.dropUser(callbackQuery.getFrom().getId());
                     Messages.sendAfterDelete(callbackQuery);
@@ -166,34 +162,22 @@ public class Bot extends TelegramLongPollingCommandBot {
             case "reg":
                 int memberId = callbackQuery.getFrom().getId();
                 registration.regMember(memberId);
-                try {
-                    answerCallbackQuery(Messages.getAnswerCallbackQuery(callbackQuery.getId(), null));
-                } catch (TelegramApiException e) {
-                    BotLogger.error(LOGTAG, e);
-                }
+                answerCallbackQuery(Messages.getAnswerCallbackQuery(callbackQuery.getId(), null));
                 Messages.sendToAllMembers(
                         registration.getMembers(),
                         Messages.getRegMemberMsg(memberId, registration.getMember(memberId).getTeamId())
                 );
                 break;
             case "learnSpell":
-                try {
-                    answerCallbackQuery(Messages.getAnswerCallbackQuery(callbackQuery.getId(), null));
-                } catch (TelegramApiException e) {
-                    BotLogger.error(LOGTAG, e);
-                }
+                answerCallbackQuery(Messages.getAnswerCallbackQuery(callbackQuery.getId(), null));
                 ArenaUser.getUser(callbackQuery.getFrom().getId()).learn(Integer.parseInt(callbackEntry));
                 break;
             case "target":
                 Action.addAction(callbackQuery.getFrom().getId());
                 Action.setTargetId(callbackQuery.getFrom().getId(), Integer.parseInt(callbackEntry));
-                try {
-                    answerCallbackQuery(Messages.getSelectTargetQuery(
-                            callbackQuery.getId(), Integer.parseInt(callbackEntry)));
-                    sendMessage(Messages.getAskActionMsg(callbackQuery.getFrom().getId()));
-                } catch (TelegramApiException e) {
-                    BotLogger.error(LOGTAG, e);
-                }
+                answerCallbackQuery(Messages.getSelectTargetQuery(
+                        callbackQuery.getId(), Integer.parseInt(callbackEntry)));
+                sendMessage(Messages.getAskActionMsg(callbackQuery.getFrom().getId()));
                 break;
             case "spell":
                 if (callbackEntry.equals("spell")) {

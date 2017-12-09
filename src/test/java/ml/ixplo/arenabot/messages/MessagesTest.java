@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.api.methods.AnswerInlineQuery;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
+import org.telegram.telegrambots.api.methods.updatingmessages.EditMessageReplyMarkup;
 import org.telegram.telegrambots.api.objects.inlinequery.InlineQuery;
 import org.telegram.telegrambots.api.objects.inlinequery.result.InlineQueryResultArticle;
 import org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -190,7 +191,17 @@ public class MessagesTest {
     }
 
     @Test
-    public void sendCancelDelete() throws Exception {
+    public void getCancelDeleteQuery() throws Exception {
+        AnswerCallbackQuery answerCallbackQuery = Messages.getCancelDeleteQuery(Presets.QUERY_ID);
+        Assert.assertEquals(Presets.QUERY_ID, answerCallbackQuery.getCallbackQueryId());
+        Assert.assertEquals("Вы отменили удаление", answerCallbackQuery.getText());
+    }
+
+    @Test
+    public void getCancelDeleteMarkup() throws Exception {
+        EditMessageReplyMarkup markup = Messages.getCancelDeleteMarkup(warrior.getUserId(), Presets.MESSAGE_ID);
+        Assert.assertEquals(Presets.MESSAGE_ID, markup.getMessageId());
+        Assert.assertEquals(warrior.getUserId(), Integer.parseInt(markup.getChatId()));
     }
 
     @Test
