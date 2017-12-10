@@ -123,14 +123,14 @@ public class MessagesTest {
         Assert.assertEquals(Config.ADMIN_ID.toString(), message.getChatId());
         Assert.assertEquals("Еще никто не зарегистрировался", message.getText());
 
-        Registration.isOn = false;
-        message = Messages.getListMsg((long) warrior.getUserId());
-        Assert.assertEquals("Бой уже идет", message.getText());
-
-        Registration.isOn = true;
-        Bot.registration.regMember(warrior.getUserId());
+        Registration registration = new Registration();
+        Bot.getRegistration().regMember(warrior.getUserId());
         message = Messages.getListMsg((long) warrior.getUserId());
         Assert.assertTrue(message.getText().contains(warrior.getName()));
+
+        registration.startBattle();
+        message = Messages.getListMsg((long) warrior.getUserId());
+        Assert.assertEquals("Бой уже идет", message.getText());
     }
 
     @Test
