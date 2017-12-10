@@ -152,47 +152,48 @@ public class DatabaseManager {
         String queryText = "Select * FROM users WHERE Id=?";
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setInt(1, userId);
-            final ResultSet result = preparedStatement.executeQuery();
-            if (result.next()) {
-                arenaUser = ArenaUser.create(ArenaUser.UserClass.valueOf(result.getString("class")));
-                arenaUser.setUserId(result.getInt("id"));
-                arenaUser.setUserClass(result.getString("class"));
-                arenaUser.setName(result.getString("name"));
-                arenaUser.setUserTitle(result.getString("title"));
-                arenaUser.setUserPostTitle(result.getString("post_title"));
-                arenaUser.setTeamId(result.getString("team"));
-                arenaUser.setTeamRank(result.getString("team_rank"));
-                arenaUser.setRace(result.getString("race"));
-                arenaUser.setDescr(result.getString("descr"));
-                arenaUser.setSex(result.getInt("sex"));
-                arenaUser.setUserGames(result.getInt("games"));
-                arenaUser.setUserWins(result.getInt("wins"));
-                arenaUser.setNativeStr(result.getInt("strangth"));//strength
-                arenaUser.setNativeDex(result.getInt("dexterity"));
-                arenaUser.setNativeWis(result.getInt("wisdom"));
-                arenaUser.setNativeInt(result.getInt("intellect"));
-                arenaUser.setNativeCon(result.getInt("const"));
-                arenaUser.setFreePoints(result.getInt("free_points"));
-                arenaUser.setMaxHitPoints(result.getDouble("hp"));
-                arenaUser.setMoney(result.getInt("money"));
-                arenaUser.setExperience(result.getInt("exp"));
-                arenaUser.setLevel(result.getInt("level"));
-                arenaUser.setCurStr(result.getInt("cur_str"));
-                arenaUser.setCurDex(result.getInt("cur_dex"));
-                arenaUser.setCurWis(result.getInt("cur_wis"));
-                arenaUser.setCurInt(result.getInt("cur_int"));
-                arenaUser.setCurCon(result.getInt("cur_con"));
-                arenaUser.setMinHit(result.getDouble("min_hit"));
-                arenaUser.setMaxHit(result.getDouble("max_hit"));
-                arenaUser.setAttack(result.getBigDecimal("attack"));
-                arenaUser.setProtect(result.getDouble("protect"));
-                arenaUser.setHeal(result.getDouble("heal"));
-                arenaUser.setMagicProtect(result.getDouble("m_protect"));
-                arenaUser.setCurHitPoints(result.getDouble("cur_hp"));
-                arenaUser.setCurExp(result.getInt("cur_exp"));
-                arenaUser.setLastGame(result.getLong("last_game"));
-                arenaUser.setCurWeapon(result.getInt("cur_weapon"));
-                arenaUser.setStatus(result.getInt("status"));
+            try (final ResultSet result = preparedStatement.executeQuery()) {
+                if (result.next()) {
+                    arenaUser = ArenaUser.create(ArenaUser.UserClass.valueOf(result.getString("class")));
+                    arenaUser.setUserId(result.getInt("id"));
+                    arenaUser.setUserClass(result.getString("class"));
+                    arenaUser.setName(result.getString("name"));
+                    arenaUser.setUserTitle(result.getString("title"));
+                    arenaUser.setUserPostTitle(result.getString("post_title"));
+                    arenaUser.setTeamId(result.getString("team"));
+                    arenaUser.setTeamRank(result.getString("team_rank"));
+                    arenaUser.setRace(result.getString("race"));
+                    arenaUser.setDescr(result.getString("descr"));
+                    arenaUser.setSex(result.getInt("sex"));
+                    arenaUser.setUserGames(result.getInt("games"));
+                    arenaUser.setUserWins(result.getInt("wins"));
+                    arenaUser.setNativeStr(result.getInt("strangth"));//strength
+                    arenaUser.setNativeDex(result.getInt("dexterity"));
+                    arenaUser.setNativeWis(result.getInt("wisdom"));
+                    arenaUser.setNativeInt(result.getInt("intellect"));
+                    arenaUser.setNativeCon(result.getInt("const"));
+                    arenaUser.setFreePoints(result.getInt("free_points"));
+                    arenaUser.setMaxHitPoints(result.getDouble("hp"));
+                    arenaUser.setMoney(result.getInt("money"));
+                    arenaUser.setExperience(result.getInt("exp"));
+                    arenaUser.setLevel(result.getInt("level"));
+                    arenaUser.setCurStr(result.getInt("cur_str"));
+                    arenaUser.setCurDex(result.getInt("cur_dex"));
+                    arenaUser.setCurWis(result.getInt("cur_wis"));
+                    arenaUser.setCurInt(result.getInt("cur_int"));
+                    arenaUser.setCurCon(result.getInt("cur_con"));
+                    arenaUser.setMinHit(result.getDouble("min_hit"));
+                    arenaUser.setMaxHit(result.getDouble("max_hit"));
+                    arenaUser.setAttack(result.getBigDecimal("attack"));
+                    arenaUser.setProtect(result.getDouble("protect"));
+                    arenaUser.setHeal(result.getDouble("heal"));
+                    arenaUser.setMagicProtect(result.getDouble("m_protect"));
+                    arenaUser.setCurHitPoints(result.getDouble("cur_hp"));
+                    arenaUser.setCurExp(result.getInt("cur_exp"));
+                    arenaUser.setLastGame(result.getLong("last_game"));
+                    arenaUser.setCurWeapon(result.getInt("cur_weapon"));
+                    arenaUser.setStatus(result.getInt("status"));
+                }
             }
         } catch (SQLException e) {
             BotLogger.error(LOGTAG, e.getMessage());
@@ -293,9 +294,10 @@ public class DatabaseManager {
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setInt(1, userId);
             preparedStatement.setInt(2, eqipIndex + 1);
-            final ResultSet result = preparedStatement.executeQuery();
-            if (result.next()) {
-                resultString = result.getString("in_slot");
+            try (final ResultSet result = preparedStatement.executeQuery()) {
+                if (result.next()) {
+                    resultString = result.getString("in_slot");
+                }
             }
         } catch (SQLException e) {
             BotLogger.error(LOGTAG, e.getMessage());
@@ -407,36 +409,37 @@ public class DatabaseManager {
                 "WHERE inventory.user_id=? and inventory.id=items.id";
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setInt(1, userId);
-            final ResultSet result = preparedStatement.executeQuery();
-            while (result.next()) {
-                Item item = new Item();
-                item.setOwnerId(userId);
-                item.setEqipIndex(result.getInt("counter") - 1);
-                item.setInSlot(result.getString("in_slot"));
-                item.setItemId(result.getString("id"));
-                item.setName(result.getString("name"));
-                item.setPrice(result.getInt("price"));
-                item.setMinHit(result.getInt("hit_min"));
-                item.setMaxHit(result.getInt("hit_max"));
-                item.setAttack(result.getInt("attack"));
-                item.setProtect(result.getInt("protect"));
-                item.setStrBonus(result.getInt("strength"));
-                item.setDexBonus(result.getInt("dexterity"));
-                item.setWisBonus(result.getInt("wisdom"));
-                item.setIntBonus(result.getInt("intellect"));
-                item.setConBonus(result.getInt("const"));
-                item.setStrNeeded(result.getInt("need_str"));
-                item.setDexNeeded(result.getInt("need_dex"));
-                item.setWisNeeded(result.getInt("need_wis"));
-                item.setIntNeeded(result.getInt("need_int"));
-                item.setConNeeded(result.getInt("need_con"));
-                item.setisWeapon(result.getInt("is_on_att") == 1);
-                item.setSlot(result.getString("slot"));
-                item.setShop(result.getString("shop"));
-                item.setRace(result.getString("race"));
-                item.setDescr(result.getString("descr"));
-                item.setItemsSet(result.getString("items_set"));
-                itemsList.add(item);
+            try (final ResultSet result = preparedStatement.executeQuery()) {
+                while (result.next()) {
+                    Item item = new Item();
+                    item.setOwnerId(userId);
+                    item.setEqipIndex(result.getInt("counter") - 1);
+                    item.setInSlot(result.getString("in_slot"));
+                    item.setItemId(result.getString("id"));
+                    item.setName(result.getString("name"));
+                    item.setPrice(result.getInt("price"));
+                    item.setMinHit(result.getInt("hit_min"));
+                    item.setMaxHit(result.getInt("hit_max"));
+                    item.setAttack(result.getInt("attack"));
+                    item.setProtect(result.getInt("protect"));
+                    item.setStrBonus(result.getInt("strength"));
+                    item.setDexBonus(result.getInt("dexterity"));
+                    item.setWisBonus(result.getInt("wisdom"));
+                    item.setIntBonus(result.getInt("intellect"));
+                    item.setConBonus(result.getInt("const"));
+                    item.setStrNeeded(result.getInt("need_str"));
+                    item.setDexNeeded(result.getInt("need_dex"));
+                    item.setWisNeeded(result.getInt("need_wis"));
+                    item.setIntNeeded(result.getInt("need_int"));
+                    item.setConNeeded(result.getInt("need_con"));
+                    item.setisWeapon(result.getInt("is_on_att") == 1);
+                    item.setSlot(result.getString("slot"));
+                    item.setShop(result.getString("shop"));
+                    item.setRace(result.getString("race"));
+                    item.setDescr(result.getString("descr"));
+                    item.setItemsSet(result.getString("items_set"));
+                    itemsList.add(item);
+                }
             }
         } catch (SQLException e) {
             BotLogger.error(LOGTAG, e.getMessage());
@@ -449,32 +452,33 @@ public class DatabaseManager {
         String queryText = "Select * FROM items WHERE id=?";
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setString(1, itemId);
-            final ResultSet result = preparedStatement.executeQuery();
-            if (result.next()) {
-                item.setName(result.getString("name"));
-                item.setPrice(result.getInt("price"));
-                item.setMinHit(result.getInt("hit_min"));
-                item.setMaxHit(result.getInt("hit_max"));
-                item.setAttack(result.getInt("attack"));
-                item.setProtect(result.getInt("protect"));
-                item.setStrBonus(result.getInt("strength"));
-                item.setDexBonus(result.getInt("dexterity"));
-                item.setWisBonus(result.getInt("wisdom"));
-                item.setIntBonus(result.getInt("intellect"));
-                item.setConBonus(result.getInt("const"));
-                item.setStrNeeded(result.getInt("need_str"));
-                item.setDexNeeded(result.getInt("need_dex"));
-                item.setWisNeeded(result.getInt("need_wis"));
-                item.setIntNeeded(result.getInt("need_int"));
-                item.setConNeeded(result.getInt("need_con"));
-                item.setisWeapon(result.getInt("is_on_att") == 1);
-                item.setSlot(result.getString("slot"));
-                item.setShop(result.getString("shop"));
-                item.setRace(result.getString("race"));
-                item.setDescr(result.getString("descr"));
-                item.setItemsSet(result.getString("items_set"));
-            } else {
-                throw new IllegalArgumentException("No item exist with item_id: " + itemId);
+            try (final ResultSet result = preparedStatement.executeQuery()) {
+                if (result.next()) {
+                    item.setName(result.getString("name"));
+                    item.setPrice(result.getInt("price"));
+                    item.setMinHit(result.getInt("hit_min"));
+                    item.setMaxHit(result.getInt("hit_max"));
+                    item.setAttack(result.getInt("attack"));
+                    item.setProtect(result.getInt("protect"));
+                    item.setStrBonus(result.getInt("strength"));
+                    item.setDexBonus(result.getInt("dexterity"));
+                    item.setWisBonus(result.getInt("wisdom"));
+                    item.setIntBonus(result.getInt("intellect"));
+                    item.setConBonus(result.getInt("const"));
+                    item.setStrNeeded(result.getInt("need_str"));
+                    item.setDexNeeded(result.getInt("need_dex"));
+                    item.setWisNeeded(result.getInt("need_wis"));
+                    item.setIntNeeded(result.getInt("need_int"));
+                    item.setConNeeded(result.getInt("need_con"));
+                    item.setisWeapon(result.getInt("is_on_att") == 1);
+                    item.setSlot(result.getString("slot"));
+                    item.setShop(result.getString("shop"));
+                    item.setRace(result.getString("race"));
+                    item.setDescr(result.getString("descr"));
+                    item.setItemsSet(result.getString("items_set"));
+                } else {
+                    throw new IllegalArgumentException("No item exist with item_id: " + itemId);
+                }
             }
         } catch (SQLException e) {
             BotLogger.error(LOGTAG, e.getMessage());
@@ -515,15 +519,16 @@ public class DatabaseManager {
         String queryText = "Select * FROM teams WHERE Id=?";
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setString(1, id);
-            final ResultSet result = preparedStatement.executeQuery();
-            if (result.next()) {
-                team.setName(result.getString("name"));
-                team.setRegistered(result.getInt("registered") > 0);
-                team.setPublic(result.getInt("is_public") > 0);
-                team.setGames(result.getInt("games"));
-                team.setWins(result.getInt("wins"));
-                team.setDescr(result.getString("descr"));
-                team.setHtmlName(result.getString("html_name"));
+            try (final ResultSet result = preparedStatement.executeQuery()) {
+                if (result.next()) {
+                    team.setName(result.getString("name"));
+                    team.setRegistered(result.getInt("registered") > 0);
+                    team.setPublic(result.getInt("is_public") > 0);
+                    team.setGames(result.getInt("games"));
+                    team.setWins(result.getInt("wins"));
+                    team.setDescr(result.getString("descr"));
+                    team.setHtmlName(result.getString("html_name"));
+                }
             }
         } catch (SQLException e) {
             BotLogger.error(LOGTAG, e.getMessage());
@@ -543,9 +548,10 @@ public class DatabaseManager {
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setInt(1, userId);
             preparedStatement.setInt(2, spellLevel);
-            final ResultSet result = preparedStatement.executeQuery();
-            while (result.next()) {
-                resultStringArr.add(result.getString("id"));
+            try (final ResultSet result = preparedStatement.executeQuery()) {
+                while (result.next()) {
+                    resultStringArr.add(result.getString("id"));
+                }
             }
         } catch (SQLException e) {
             BotLogger.error(LOGTAG, e.getMessage());
@@ -558,9 +564,10 @@ public class DatabaseManager {
         String queryText = "Select " + columnName + " FROM " + tableName + " WHERE id=?;";
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setInt(1, id);
-            final ResultSet result = preparedStatement.executeQuery();
-            if (result.next()) {
-                resultInt = result.getInt(columnName);
+            try (final ResultSet result = preparedStatement.executeQuery()) {
+                if (result.next()) {
+                    resultInt = result.getInt(columnName);
+                }
             }
         } catch (SQLException e) {
             BotLogger.error(LOGTAG, e.getMessage());
@@ -573,9 +580,10 @@ public class DatabaseManager {
         String queryText = "Select " + columnName + " FROM " + tableName + " WHERE id=?;";
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setString(1, id);
-            final ResultSet result = preparedStatement.executeQuery();
-            if (result.next()) {
-                resultInt = result.getInt(columnName);
+            try (final ResultSet result = preparedStatement.executeQuery()) {
+                if (result.next()) {
+                    resultInt = result.getInt(columnName);
+                }
             }
         } catch (SQLException e) {
             BotLogger.error(LOGTAG, e.getMessage());
@@ -588,9 +596,10 @@ public class DatabaseManager {
         String queryText = "Select " + selectedColumn + " FROM " + tableName + " WHERE " + findByColumn + "=?;";
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setInt(1, id);
-            final ResultSet result = preparedStatement.executeQuery();
-            if (result.next()) {
-                resultInt = result.getInt(selectedColumn);
+            try (final ResultSet result = preparedStatement.executeQuery()) {
+                if (result.next()) {
+                    resultInt = result.getInt(selectedColumn);
+                }
             }
         } catch (SQLException e) {
             BotLogger.error(LOGTAG, e.getMessage());
@@ -603,9 +612,10 @@ public class DatabaseManager {
         String queryText = "Select " + columnName + " FROM " + tableName + " WHERE id=?;";
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setInt(1, id);
-            final ResultSet result = preparedStatement.executeQuery();
-            if (result.next()) {
-                resultDouble = result.getDouble(columnName);
+            try (final ResultSet result = preparedStatement.executeQuery()) {
+                if (result.next()) {
+                    resultDouble = result.getDouble(columnName);
+                }
             }
         } catch (SQLException e) {
             BotLogger.error(LOGTAG, e.getMessage());
@@ -618,9 +628,10 @@ public class DatabaseManager {
         String queryText = "Select " + columnName + " FROM " + tableName + " WHERE id=?;";
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setString(1, id);
-            final ResultSet result = preparedStatement.executeQuery();
-            if (result.next()) {
-                resultDouble = result.getDouble(columnName);
+            try (final ResultSet result = preparedStatement.executeQuery() {
+                if (result.next()) {
+                    resultDouble = result.getDouble(columnName);
+                }
             }
         } catch (SQLException e) {
             BotLogger.error(LOGTAG, e.getMessage());
@@ -631,14 +642,15 @@ public class DatabaseManager {
     /***
      * SELECT id FROM users WHERE status='1';
      ***/
-    public ArrayList<Integer> getInts(String tableName, String columnId, Integer id, String columnName) {
-        ArrayList<Integer> resultIntArr = new ArrayList<>();
+    public List<Integer> getInts(String tableName, String columnId, Integer id, String columnName) {
+        List<Integer> resultIntArr = new ArrayList<>();
         String queryText = "Select " + columnName + " FROM " + tableName + " WHERE " + columnId + "=?;";
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setInt(1, id);
-            final ResultSet result = preparedStatement.executeQuery();
-            while (result.next()) {
-                resultIntArr.add(result.getInt(columnName));
+            try (final ResultSet result = preparedStatement.executeQuery()) {
+                while (result.next()) {
+                    resultIntArr.add(result.getInt(columnName));
+                }
             }
         } catch (SQLException e) {
             BotLogger.error(LOGTAG, e.getMessage());
@@ -651,9 +663,10 @@ public class DatabaseManager {
         String queryText = "Select " + columnName + " FROM " + tableName + " WHERE id=?;";
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setString(1, id);
-            final ResultSet result = preparedStatement.executeQuery();
-            if (result.next()) {
-                resultString = result.getString(columnName);
+            try (final ResultSet result = preparedStatement.executeQuery()) {
+                if (result.next()) {
+                    resultString = result.getString(columnName);
+                }
             }
         } catch (SQLException e) {
             BotLogger.error(LOGTAG, e.getMessage());
@@ -666,9 +679,10 @@ public class DatabaseManager {
         String queryText = "Select " + columnName + " FROM " + tableName + " WHERE id=?;";
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setInt(1, id);
-            final ResultSet result = preparedStatement.executeQuery();
-            if (result.next()) {
-                resultString = result.getString(columnName);
+            try (final ResultSet result = preparedStatement.executeQuery()) {
+                if (result.next()) {
+                    resultString = result.getString(columnName);
+                }
             }
         } catch (SQLException e) {
             BotLogger.error(LOGTAG, e.getMessage());
@@ -681,9 +695,10 @@ public class DatabaseManager {
         String queryText = "Select " + selectedColumn + " FROM " + tableName + " WHERE " + findByColumn + "=?;";
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setInt(1, id);
-            final ResultSet result = preparedStatement.executeQuery();
-            if (result.next()) {
-                resultString = result.getString(selectedColumn);
+            try (final ResultSet result = preparedStatement.executeQuery()) {
+                if (result.next()) {
+                    resultString = result.getString(selectedColumn);
+                }
             }
         } catch (SQLException e) {
             BotLogger.error(LOGTAG, e.getMessage());
@@ -704,9 +719,10 @@ public class DatabaseManager {
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setString(1, firstId);
             preparedStatement.setInt(2, secondId);
-            final ResultSet result = preparedStatement.executeQuery();
-            if (result.next()) {
-                resultInt = result.getInt(columnName);
+            try (final ResultSet result = preparedStatement.executeQuery()) {
+                if (result.next()) {
+                    resultInt = result.getInt(columnName);
+                }
             }
         } catch (SQLException e) {
             BotLogger.error(LOGTAG, e.getMessage());
@@ -726,10 +742,13 @@ public class DatabaseManager {
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setInt(1, firstId);
             preparedStatement.setInt(2, secondId);
-            final ResultSet result = preparedStatement.executeQuery();
-            if (result.next()) {
-                resultInt = result.getInt(columnName);
-            } else throw new RuntimeException("No such int: " + queryText);
+            try (final ResultSet result = preparedStatement.executeQuery()) {
+                if (result.next()) {
+                    resultInt = result.getInt(columnName);
+                } else {
+                    throw new RuntimeException("No such int: " + queryText);
+                }
+            }
         } catch (SQLException e) {
             BotLogger.error(LOGTAG, e.getMessage());
         }
@@ -748,24 +767,28 @@ public class DatabaseManager {
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setInt(1, firstId);
             preparedStatement.setInt(2, secondId);
-            final ResultSet result = preparedStatement.executeQuery();
-            if (result.next()) {
-                resultString = result.getString(columnName);
-            } else throw new IllegalArgumentException("No such int: " + queryText);
+            try (final ResultSet result = preparedStatement.executeQuery()) {
+                if (result.next()) {
+                    resultString = result.getString(columnName);
+                } else {
+                    throw new IllegalArgumentException("No such int: " + queryText);
+                }
+            }
         } catch (SQLException e) {
             BotLogger.error(LOGTAG, e.getMessage());
         }
         return resultString;
     }
 
-    public ArrayList<String> getStrings(String tableName, String columnId, Integer id, String columnName) {
-        ArrayList<String> resultStringArr = new ArrayList<>();
+    public List<String> getStrings(String tableName, String columnId, Integer id, String columnName) {
+        List<String> resultStringArr = new ArrayList<>();
         String queryText = "Select " + columnName + " FROM " + tableName + " WHERE " + columnId + "=?;";
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setInt(1, id);
-            final ResultSet result = preparedStatement.executeQuery();
-            while (result.next()) {
-                resultStringArr.add(result.getString(columnName));
+            try (final ResultSet result = preparedStatement.executeQuery()) {
+                while (result.next()) {
+                    resultStringArr.add(result.getString(columnName));
+                }
             }
         } catch (SQLException e) {
             BotLogger.error(LOGTAG, e.getMessage());
@@ -773,14 +796,15 @@ public class DatabaseManager {
         return resultStringArr;
     }
 
-    public ArrayList<String> getStrings(String tableName, String columnId, String id, String columnName) {
-        ArrayList<String> resultStringArr = new ArrayList<>();
+    public List<String> getStrings(String tableName, String columnId, String id, String columnName) {
+        List<String> resultStringArr = new ArrayList<>();
         String queryText = "Select " + columnName + " FROM " + tableName + " WHERE " + columnId + "=?;";
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setString(1, id);
-            final ResultSet result = preparedStatement.executeQuery();
-            while (result.next()) {
-                resultStringArr.add(result.getString(columnName));
+            try (final ResultSet result = preparedStatement.executeQuery()) {
+                while (result.next()) {
+                    resultStringArr.add(result.getString(columnName));
+                }
             }
         } catch (SQLException e) {
             BotLogger.error(LOGTAG, e.getMessage());
@@ -791,9 +815,9 @@ public class DatabaseManager {
     /***
      * SELECT name FROM users WHERE status='1' AND team='findById';
      ***/
-    public ArrayList<String> getStringsBy(String tableName, String columnName,
+    public List<String> getStringsBy(String tableName, String columnName,
                                           String firstColumn, String firstId, String secondColumn, Integer secondId) {
-        ArrayList<String> resultStringArr = new ArrayList<>();
+        List<String> resultStringArr = new ArrayList<>();
         String queryText = "Select " + columnName
                 + " FROM " + tableName
                 + " WHERE " + firstColumn + "=?"
@@ -801,9 +825,10 @@ public class DatabaseManager {
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setString(1, firstId);
             preparedStatement.setInt(2, secondId);
-            final ResultSet result = preparedStatement.executeQuery();
-            while (result.next()) {
-                resultStringArr.add(result.getString(columnName));
+            try (final ResultSet result = preparedStatement.executeQuery()) {
+                while (result.next()) {
+                    resultStringArr.add(result.getString(columnName));
+                }
             }
         } catch (SQLException e) {
             BotLogger.error(LOGTAG, e.getMessage());
@@ -814,9 +839,9 @@ public class DatabaseManager {
     /***
      * SELECT name FROM users WHERE status='1' AND team='findById';
      ***/
-    public ArrayList<String> getStringsBy(String tableName, String columnName,
+    public List<String> getStringsBy(String tableName, String columnName,
                                           String firstColumn, int firstId, String secondColumn, Integer secondId) {
-        ArrayList<String> resultStringArr = new ArrayList<>();
+        List<String> resultStringArr = new ArrayList<>();
         String queryText = "Select " + columnName
                 + " FROM " + tableName
                 + " WHERE " + firstColumn + "=?"
@@ -824,9 +849,10 @@ public class DatabaseManager {
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setInt(1, firstId);
             preparedStatement.setInt(2, secondId);
-            final ResultSet result = preparedStatement.executeQuery();
-            while (result.next()) {
-                resultStringArr.add(result.getString(columnName));
+            try (final ResultSet result = preparedStatement.executeQuery()) {
+                while (result.next()) {
+                    resultStringArr.add(result.getString(columnName));
+                }
             }
         } catch (SQLException e) {
             BotLogger.error(LOGTAG, e.getMessage());
@@ -837,9 +863,9 @@ public class DatabaseManager {
     /***
      * SELECT name FROM users WHERE status='1' AND team='findById';
      ***/
-    public ArrayList<Integer> getIntsBy(String tableName, String columnName,
+    public List<Integer> getIntsBy(String tableName, String columnName,
                                         String firstColumn, String firstId, String secondColumn, Integer secondId) {
-        ArrayList<Integer> resultStringArr = new ArrayList<>();
+        List<Integer> resultStringArr = new ArrayList<>();
         String queryText = "Select " + columnName
                 + " FROM " + tableName
                 + " WHERE " + firstColumn + "=?"
@@ -847,9 +873,10 @@ public class DatabaseManager {
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setString(1, firstId);
             preparedStatement.setInt(2, secondId);
-            final ResultSet result = preparedStatement.executeQuery();
-            while (result.next()) {
-                resultStringArr.add(result.getInt(columnName));
+            try (final ResultSet result = preparedStatement.executeQuery()) {
+                while (result.next()) {
+                    resultStringArr.add(result.getInt(columnName));
+                }
             }
         } catch (SQLException e) {
             BotLogger.error(LOGTAG, e.getMessage());
@@ -976,9 +1003,10 @@ public class DatabaseManager {
                 + " WHERE " + columnName + "=?;";
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setInt(1, value);
-            final ResultSet result = preparedStatement.executeQuery();
-            if (result.next()) {
-                return result.getInt("count(distinct " + columnOfCount + ")");
+            try (final ResultSet result = preparedStatement.executeQuery()) {
+                if (result.next()) {
+                    return result.getInt("count(distinct " + columnOfCount + ")");
+                }
             }
         } catch (SQLException e) {
             BotLogger.error(LOGTAG, e.getMessage());
