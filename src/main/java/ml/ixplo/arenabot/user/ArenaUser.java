@@ -289,7 +289,7 @@ public abstract class ArenaUser implements IUser{
         }
 
         Messages.sendDoMsg(absSender, chatId, strings[0], target, percent); //todo перенести в takeAction
-        Battle.battle.interrupt();
+        Battle.getBattle().interrupt();
         Round.round.takeAction(userId, strings[0], Round.round.getMembers().get(target).getUserId(), percent, spellId);
         getUser(userId).doAction(strings);
     }

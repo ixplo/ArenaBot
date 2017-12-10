@@ -18,7 +18,11 @@ public class Battle extends Thread {//состоит из Rounds, в конце 
     private List<Team> teams = new ArrayList<>();
     private List<String> curTeamsId = new ArrayList<>();
     private BattleResult battleResult;
-    public static Battle battle;
+    private static Battle battle;
+
+    public static Battle getBattle() {
+        return battle;
+    }
 
     Battle(List<Team> teams, List<ArenaUser> members) {
         this.members = members;

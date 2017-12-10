@@ -29,7 +29,7 @@ public class CmdList extends BotCommand {
             return;
         }
         if(!Registration.isOn){
-            Messages.sendListTo(chat.getId(), Battle.battle.getTeams());
+            Messages.sendListTo(chat.getId(), Battle.getBattle().getTeams());
             return;
         }
         try {

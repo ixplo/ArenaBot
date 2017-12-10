@@ -196,7 +196,7 @@ public class Bot extends TelegramLongPollingCommandBot {
                 break;
             case "percent":
                 Action.setPercent(userId, Integer.parseInt(callbackEntry));
-                Battle.battle.interrupt();
+                Battle.getBattle().interrupt();
                 Round.round.takeAction(userId,
                         Action.getActionId(userId, 1),
                         Action.getTargetId(userId, 1),
