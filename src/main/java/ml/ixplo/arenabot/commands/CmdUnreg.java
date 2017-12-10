@@ -31,12 +31,12 @@ public class CmdUnreg extends BotCommand {
 
         StringBuilder messageBuilder = new StringBuilder();
         String userName = ArenaUser.getUserName(user.getId());
-        if(Bot.registration.isOn && Bot.registration.getMemberStatus(user.getId()) != Config.REG){
+        if(Bot.getRegistration().isOn() && Bot.getRegistration().getMemberStatus(user.getId()) != Config.REG){
             return;
         }
-        Bot.registration.unregMember(user.getId());
+        Bot.getRegistration().unregMember(user.getId());
         messageBuilder.append("<b>").append(userName).append("</b> вышел из команды ").
-                append(Bot.registration.getMemberTeam(user.getId()));
+                append(Bot.getRegistration().getMemberTeam(user.getId()));
         SendMessage answer = new SendMessage();
         answer.enableHtml(true);
         answer.setChatId(chat.getId().toString());

@@ -27,11 +27,11 @@ public class CmdReg extends BotCommand {
         if (!ArenaUser.doesUserExists(user.getId())) {
             return;
         }
-        if (!Registration.isOn || Bot.registration.getMemberStatus(user.getId()) != Config.UNREG) {
+        if (!Registration.isOn() || Bot.getRegistration().getMemberStatus(user.getId()) != Config.UNREG) {
             return;
         }
-        Bot.registration.regMember(user.getId());
-        Messages.sendToAll(Bot.registration.getMembers(),
+        Bot.getRegistration().regMember(user.getId());
+        Messages.sendToAll(Bot.getRegistration().getMembers(),
                 Messages.getRegMemberMsg(user.getId(), ArenaUser.getUser(user.getId()).getTeamId()));
     }
 }

@@ -317,8 +317,8 @@ public final class Messages {
         SendMessage msg = new SendMessage();
         msg.setChatId(chatId);
         msg.enableHtml(true);
-        int membersCount = Bot.registration.getMembersCount();
-        if (!Registration.isOn) {
+        int membersCount = Bot.getRegistration().getMembersCount();
+        if (!Registration.isOn()) {
             msg.setText("Бой уже идет");
             return msg;
         }
@@ -326,7 +326,7 @@ public final class Messages {
             msg.setText("Еще никто не зарегистрировался");
             return msg;
         }
-        msg.setText(Bot.registration.getList());
+        msg.setText(Bot.getRegistration().getList());
         return msg;
     }
 

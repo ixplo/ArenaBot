@@ -14,7 +14,7 @@ import java.util.List;
  * 29.04.2017.
  */
 public class Registration {
-    public static boolean isOn;
+    private static boolean isOn;
     private static Timer regTimer;
     private static RegTimerTask regTimerTask;
     private List<Member> members;
@@ -30,6 +30,10 @@ public class Registration {
         isOn = true;
         members = new ArrayList<>();
         teams = new ArrayList<>();
+    }
+
+    public static boolean isOn() {
+        return isOn;
     }
 
     public static void dropStatus() {

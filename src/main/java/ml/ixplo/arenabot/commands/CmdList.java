@@ -28,7 +28,7 @@ public class CmdList extends BotCommand {
         if (!ArenaUser.doesUserExists(user.getId())) {
             return;
         }
-        if(!Registration.isOn){
+        if(!Registration.isOn()){
             Messages.sendListTo(chat.getId(), Battle.getBattle().getTeams());
             return;
         }
