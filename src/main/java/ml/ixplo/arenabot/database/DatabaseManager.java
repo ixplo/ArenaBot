@@ -628,7 +628,7 @@ public class DatabaseManager {
         String queryText = "Select " + columnName + " FROM " + tableName + " WHERE id=?;";
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setString(1, id);
-            try (final ResultSet result = preparedStatement.executeQuery() {
+            try (final ResultSet result = preparedStatement.executeQuery()) {
                 if (result.next()) {
                     resultDouble = result.getDouble(columnName);
                 }
