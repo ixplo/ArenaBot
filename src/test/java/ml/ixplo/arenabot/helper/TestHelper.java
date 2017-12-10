@@ -1,6 +1,5 @@
 package ml.ixplo.arenabot.helper;
 
-import ml.ixplo.arenabot.Bot;
 import ml.ixplo.arenabot.database.ConnectionDB;
 import ml.ixplo.arenabot.database.DatabaseManager;
 import ml.ixplo.arenabot.user.ArenaUser;
@@ -32,7 +31,7 @@ public class TestHelper {
                 Presets.MAGE_NAME,
                 ArenaUser.UserClass.MAGE,
                 Presets.MAGE_RACE);
-        WARRIOR.setTeam(Presets.TEST_TEAM);
+        WARRIOR.setTeamId(Presets.TEST_TEAM);
         db.setUser(WARRIOR);
         db.setUser(MAGE);
     }

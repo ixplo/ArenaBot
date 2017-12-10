@@ -73,7 +73,7 @@ public class Registration {
     public void unregMember(Integer userId) {
         Member.removeMember(userId);
         if (!Team.isRegisteredTeam(ArenaUser.getUserTeam(userId))) {
-            ArenaUser.getUser(userId).setTeam("");
+            ArenaUser.getUser(userId).setTeamId("");
         }
         if (regTimer != null) {
             Messages.editChannelMsg(Config.CHANNEL_ID, regTimerTask.getMessageId(), "Таймер остановлен");

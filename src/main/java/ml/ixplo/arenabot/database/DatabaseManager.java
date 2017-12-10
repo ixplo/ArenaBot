@@ -160,7 +160,7 @@ public class DatabaseManager {
                 arenaUser.setName(result.getString("name"));
                 arenaUser.setUserTitle(result.getString("title"));
                 arenaUser.setUserPostTitle(result.getString("post_title"));
-                arenaUser.setTeam(result.getString("team"));
+                arenaUser.setTeamId(result.getString("team"));
                 arenaUser.setTeamRank(result.getString("team_rank"));
                 arenaUser.setRace(result.getString("race"));
                 arenaUser.setDescr(result.getString("descr"));
@@ -246,7 +246,7 @@ public class DatabaseManager {
             preparedStatement.setString(1, arenaUser.getName());
             preparedStatement.setString(2, arenaUser.getUserTitle());
             preparedStatement.setString(3, arenaUser.getUserPostTitle());
-            preparedStatement.setString(4, arenaUser.getTeam());
+            preparedStatement.setString(4, arenaUser.getTeamId());
             preparedStatement.setString(5, arenaUser.getTeamRank());
             preparedStatement.setString(6, arenaUser.getRace());
             preparedStatement.setString(7, arenaUser.getUserClass());

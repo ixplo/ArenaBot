@@ -281,11 +281,11 @@ public class MessagesTest {
 
     @Test
     public void getRegMemberMsg() throws Exception {
-        SendMessage message = Messages.getRegMemberMsg(warrior.getUserId(), warrior.getTeam());
+        SendMessage message = Messages.getRegMemberMsg(warrior.getUserId(), warrior.getTeamId());
         Assert.assertEquals(warrior.getUserId().toString(), message.getChatId());
         Assert.assertTrue(message.getText().contains(warrior.getName()));
         Assert.assertTrue(message.getText().contains("вошел в команду"));
-        Assert.assertTrue(message.getText().contains(warrior.getTeamName()));
+        Assert.assertTrue(message.getText().contains(warrior.getTeamId()));
     }
 
     @Test

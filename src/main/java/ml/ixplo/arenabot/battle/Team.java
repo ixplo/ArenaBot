@@ -109,10 +109,7 @@ public class Team {
         teamsId.clear();
         for (IUser member: members){
             if (curMembersId.contains(member.getUserId())) {
-                if (member instanceof ArenaUser) {
-                    ArenaUser arenaUser = (ArenaUser) member;
-                    teamsId.add(arenaUser.getTeamName());
-                }
+                teamsId.add(member.getTeamId());
             }
         }
     }

@@ -35,7 +35,7 @@ public abstract class ArenaUser implements IUser{
     private String name;
     private String userTitle;
     private String userPostTitle;
-    private String team;
+    private String teamId;
     private String teamRank;
     private String race;
     private String userClass;
@@ -490,9 +490,9 @@ public abstract class ArenaUser implements IUser{
         this.userPostTitle = userPostTitle;
     }
 
-    public void setTeam(String team) {
-        this.team = team;
-        db.setStringTo(Config.USERS, userId, "team", team);
+    public void setTeamId(String teamId) {
+        this.teamId = teamId;
+        db.setStringTo(Config.USERS, userId, "team", teamId);
     }
 
     public void setTeamRank(String teamRank) {
@@ -640,8 +640,8 @@ public abstract class ArenaUser implements IUser{
         return userPostTitle;
     }
 
-    public String getTeamName() {
-        return team;
+    public String getTeamId() {
+        return teamId;
     }
 
     public String getTeamRank() {
@@ -794,10 +794,6 @@ public abstract class ArenaUser implements IUser{
 
     public String getRaceName() {
         return db.getStringFrom(Config.RACES, race, "name");
-    }
-
-    public String getTeam() {
-        return team;
     }
 
     public List<String> getActionsName() {

@@ -78,14 +78,12 @@ public class Round {
 
     private void takeOutCorpses() {
         for (IUser member : members) {
-            if (member instanceof ArenaUser) {
-                ArenaUser arenaUser = (ArenaUser) member;
+                ArenaUser arenaUser = ArenaUser.getUser(member.getUserId());
                 if (arenaUser.getCurHitPoints() <= 0) {
                     Messages.sendToAll(members, "<b>" + arenaUser.getName() + "</b> потерял возможность продолжать бой.");
-                    curMembersId.remove(getIndex(curMembersId, member.getUserId()));
+                    curMembersId.remove(getIndex(curMembersId, arenaUser.getUserId()));
                     Team.refreshTeamsId(members, curMembersId, curTeamsId);
                 }
-            }
         }
     }
 
