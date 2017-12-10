@@ -39,10 +39,10 @@ public class Priest extends ArenaUser implements SpellCaster {
 
     @Override
     public void getClassFeatures() {
-        maxMana = db.getDoubleFrom(Config.USERS, getUserId(), "mana");
-        spellPoints = db.getIntFrom(Config.USERS, getUserId(), "s_points");
-        magicAttack = db.getDoubleFrom(Config.USERS, getUserId(), "m_attack");
-        curMana = db.getDoubleFrom(Config.USERS, getUserId(), "cur_mana");
+        maxMana = getDb().getDoubleFrom(Config.USERS, getUserId(), "mana");
+        spellPoints = getDb().getIntFrom(Config.USERS, getUserId(), "s_points");
+        magicAttack = getDb().getDoubleFrom(Config.USERS, getUserId(), "m_attack");
+        curMana = getDb().getDoubleFrom(Config.USERS, getUserId(), "cur_mana");
     }
 
     @Override
@@ -144,25 +144,25 @@ public class Priest extends ArenaUser implements SpellCaster {
 
     public void addSpellPoints(int spellPoints) {
         this.spellPoints += spellPoints;
-        db.setIntTo(Config.USERS, getUserId(), "s_points", spellPoints);
+        getDb().setIntTo(Config.USERS, getUserId(), "s_points", spellPoints);
     }
 
     public void setMagicAttack(double magicAttack) {
         this.magicAttack = magicAttack;
-        db.setDoubleTo(Config.USERS, getUserId(), "m_attack", magicAttack);
+        getDb().setDoubleTo(Config.USERS, getUserId(), "m_attack", magicAttack);
     }
 
     public void setCurMana(double curMana) {
         this.curMana = curMana;
-        db.setDoubleTo(Config.USERS, getUserId(), "cur_mana", curMana);
+        getDb().setDoubleTo(Config.USERS, getUserId(), "cur_mana", curMana);
     }
     public void addCurMana(double curMana) {
         this.curMana += curMana;
-        db.setDoubleTo(Config.USERS, getUserId(), "cur_mana", curMana);
+        getDb().setDoubleTo(Config.USERS, getUserId(), "cur_mana", curMana);
     }
 
     public double getMaxMana() {
-        maxMana = db.getDoubleFrom(Config.USERS, getUserId(), "max_mana");
+        maxMana = getDb().getDoubleFrom(Config.USERS, getUserId(), "max_mana");
         return maxMana;
     }
 

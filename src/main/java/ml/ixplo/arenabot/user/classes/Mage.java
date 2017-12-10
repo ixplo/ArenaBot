@@ -32,7 +32,7 @@ public class Mage extends ArenaUser implements SpellCaster {
     }
 
     public static List<String> getAllSpellsName() {
-        return db.getStrings(Config.SPELLS, "class", UserClass.MAGE.toString(), "name");
+        return getDb().getStrings(Config.SPELLS, "class", UserClass.MAGE.toString(), "name");
     }
 
     @Override
@@ -47,10 +47,10 @@ public class Mage extends ArenaUser implements SpellCaster {
     @Override
     public void getClassFeatures() {
         actionsName = Arrays.asList("Атака", "Защита", "Лечение", "Магия");
-        maxMana = db.getDoubleFrom(Config.USERS, getUserId(), "mana");
-        curMana = db.getDoubleFrom(Config.USERS, getUserId(), "cur_mana");
-        spellPoints = db.getIntFrom(Config.USERS, getUserId(), "s_points");
-        magicAttack = db.getDoubleFrom(Config.USERS, getUserId(), "m_attack");
+        maxMana = getDb().getDoubleFrom(Config.USERS, getUserId(), "mana");
+        curMana = getDb().getDoubleFrom(Config.USERS, getUserId(), "cur_mana");
+        spellPoints = getDb().getIntFrom(Config.USERS, getUserId(), "s_points");
+        magicAttack = getDb().getDoubleFrom(Config.USERS, getUserId(), "m_attack");
         spells = getSpells();
     }
 
@@ -227,7 +227,7 @@ public class Mage extends ArenaUser implements SpellCaster {
 
     private void setSpell(String spellId) {
 
-        db.addSpell(getUserId(), spellId, Spell.getSpellGrade(getUserId(), spellId) + 1);
+        getDb().addSpell(getUserId(), spellId, Spell.getSpellGrade(getUserId(), spellId) + 1);
     }
 
     static int countReceivedSpellPoints(int curExp, int exp) {
@@ -261,7 +261,7 @@ public class Mage extends ArenaUser implements SpellCaster {
     }
 
     private String getSpellToLearn(int spellLevel) {
-        List<String> spellsId = db.getSpellsIdToLearn(getUserId(), spellLevel);
+        List<String> spellsId = getDb().getSpellsIdToLearn(getUserId(), spellLevel);
         Random rnd = new Random();
         return spellsId.get(rnd.nextInt(spellsId.size()));
     }
@@ -282,36 +282,36 @@ public class Mage extends ArenaUser implements SpellCaster {
 
     public void setMaxMana(double maxMana) {
         this.maxMana = maxMana;
-        db.setDoubleTo(Config.USERS, getUserId(), "mana", maxMana);
+        getDb().setDoubleTo(Config.USERS, getUserId(), "mana", maxMana);
     }
 
     public void addSpellPoints(int spellPoints) {
 
-        db.setIntTo(Config.USERS, getUserId(), "s_points", getSpellPoints() + spellPoints);
+        getDb().setIntTo(Config.USERS, getUserId(), "s_points", getSpellPoints() + spellPoints);
     }
 
     public void setMagicAttack(double magicAttack) {
         this.magicAttack = magicAttack;
-        db.setDoubleTo(Config.USERS, getUserId(), "m_attack", magicAttack);
+        getDb().setDoubleTo(Config.USERS, getUserId(), "m_attack", magicAttack);
     }
 
     public void setCurMana(double curMana) {
         this.curMana = curMana;
-        db.setDoubleTo(Config.USERS, getUserId(), "cur_mana", curMana);
+        getDb().setDoubleTo(Config.USERS, getUserId(), "cur_mana", curMana);
     }
 
     public void addCurMana(double manaChange) {
         this.curMana += manaChange;
-        db.setDoubleTo(Config.USERS, getUserId(), "cur_mana", curMana);
+        getDb().setDoubleTo(Config.USERS, getUserId(), "cur_mana", curMana);
     }
 
     public double getMaxMana() {
-        maxMana = db.getDoubleFrom(Config.USERS, getUserId(), "mana");
+        maxMana = getDb().getDoubleFrom(Config.USERS, getUserId(), "mana");
         return maxMana;
     }
 
     public int getSpellPoints() {
-        spellPoints = db.getIntFrom(Config.USERS, getUserId(), "s_points");
+        spellPoints = getDb().getIntFrom(Config.USERS, getUserId(), "s_points");
         return spellPoints;
     }
 
@@ -328,13 +328,13 @@ public class Mage extends ArenaUser implements SpellCaster {
         List<String> spellsName = new ArrayList<>();
         List<String> spellsId = getSpellsId();
         for (String spell : spellsId) {
-            spellsName.add(db.getStringFrom(Config.SPELLS, spell, "name"));
+            spellsName.add(getDb().getStringFrom(Config.SPELLS, spell, "name"));
         }
         return spellsName;
     }
 
     public List<String> getSpellsId() {
-        return db.getStrings(Config.AVAILABLE_SPELLS, "user_id", getUserId(), "id");
+        return getDb().getStrings(Config.AVAILABLE_SPELLS, "user_id", getUserId(), "id");
     }
 
 }

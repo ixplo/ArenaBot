@@ -17,8 +17,7 @@ import static ml.ixplo.arenabot.messages.Messages.fillWithSpaces;
  * ixplo
  * 28.04.2017.
  */
-public class Archer extends ArenaUser implements SkillApplicant {
-    public static final List<String> actionsName = Arrays.asList("Атака", "Защита", "Лечение");
+public class Archer extends ArenaUser implements SkillCaster {
     ArrayList<Skill> skills;
     private int maxTarget;
     int energy;
@@ -29,6 +28,7 @@ public class Archer extends ArenaUser implements SkillApplicant {
 
     @Override
     public void setClassFeatures() {
+        actionsName = Arrays.asList("Атака", "Защита", "Лечение");
         refreshMaxTargets();
         undoStrBonus(getCurStr());
         doIntBonus(getCurInt());
@@ -36,7 +36,7 @@ public class Archer extends ArenaUser implements SkillApplicant {
 
     @Override
     public void getClassFeatures() {
-        maxTarget = db.getIntFrom(Config.USERS, getUserId(), "max_target");
+        maxTarget = getDb().getIntFrom(Config.USERS, getUserId(), "max_target");
     }
 
     @Override
@@ -103,19 +103,19 @@ public class Archer extends ArenaUser implements SkillApplicant {
     @Override
     public void setMinHit(double minHit) {
         super.setMinHit(minHit);
-        db.setDoubleTo(Config.USERS, getUserId(), "min_hit", minHit);
+        getDb().setDoubleTo(Config.USERS, getUserId(), "min_hit", minHit);
     }
 
     @Override
     public void setMaxHit(double maxHit) {
         super.setMaxHit(maxHit);
-        db.setDoubleTo(Config.USERS, getUserId(), "max_hit", maxHit);
+        getDb().setDoubleTo(Config.USERS, getUserId(), "max_hit", maxHit);
     }
 
     @Override
     public void setAttack(BigDecimal attack) {
         super.setAttack(attack);
-        db.setBigDecimalTo(Config.USERS, getUserId(), "attack", attack);
+        getDb().setBigDecimalTo(Config.USERS, getUserId(), "attack", attack);
     }
 
     @Override
@@ -145,7 +145,7 @@ public class Archer extends ArenaUser implements SkillApplicant {
 
     public void setMaxTarget(int maxTarget) {
         this.maxTarget = maxTarget;
-        db.setIntTo(Config.USERS, getUserId(), "max_target", maxTarget);
+        getDb().setIntTo(Config.USERS, getUserId(), "max_target", maxTarget);
     }
 
     public int getMaxTarget() {

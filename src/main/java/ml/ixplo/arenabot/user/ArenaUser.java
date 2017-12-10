@@ -1,6 +1,7 @@
 package ml.ixplo.arenabot.user;
 
 import ml.ixplo.arenabot.config.Config;
+import ml.ixplo.arenabot.exception.ArenaUserException;
 import ml.ixplo.arenabot.messages.Messages;
 import ml.ixplo.arenabot.battle.Battle;
 import ml.ixplo.arenabot.battle.Round;
@@ -13,6 +14,7 @@ import ml.ixplo.arenabot.user.items.Item;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.bots.AbsSender;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
+import org.telegram.telegrambots.logging.BotLogger;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -27,7 +29,9 @@ import static com.google.common.math.IntMath.pow;
  */
 public abstract class ArenaUser implements IUser{
 
-    public static DatabaseManager db;
+    public static final String LOGTAG = "ARENAUSER";
+
+    private static DatabaseManager db;
 
     public enum UserClass {ARCHER, MAGE, PRIEST, WARRIOR}
 
@@ -69,8 +73,8 @@ public abstract class ArenaUser implements IUser{
     private int curExp;
     private long lastGame;
     private int status;
-    public List<String> actionsName = Arrays.asList("Атака", "Защита", "Лечение");
-    //private List<Item> items;
+    protected List<String> actionsName = Arrays.asList("Атака", "Защита", "Лечение");
+
 
     /****** constructor ******
      * use ArenaUser.create
@@ -177,7 +181,7 @@ public abstract class ArenaUser implements IUser{
                 hero = new Priest();
                 break;
             default:
-                throw new RuntimeException("Unknown userClass: " + userClassId);
+                throw new ArenaUserException("Unknown userClass: " + userClassId);
         }
         return hero;
     }
@@ -198,7 +202,7 @@ public abstract class ArenaUser implements IUser{
 
     public static void dropUser(int userId) {
         if (!db.doesUserExists(userId)) {
-            throw new RuntimeException("No such user in database: " + userId);
+            throw new ArenaUserException("No such user in database: " + userId);
         }
         db.dropItems(userId);
         db.dropSpells(userId);
@@ -258,7 +262,7 @@ public abstract class ArenaUser implements IUser{
             try {
                 absSender.sendMessage(msg);
             } catch (TelegramApiException e) {
-                e.printStackTrace();
+                BotLogger.error(LOGTAG, e);
             }
             return;
         }
@@ -270,7 +274,7 @@ public abstract class ArenaUser implements IUser{
             try {
                 absSender.sendMessage(msg);
             } catch (TelegramApiException e) {
-                e.printStackTrace();
+                BotLogger.error(LOGTAG, e);
             }
             return;
         }
@@ -283,7 +287,7 @@ public abstract class ArenaUser implements IUser{
             try {
                 absSender.sendMessage(msg);
             } catch (TelegramApiException e) {
-                e.printStackTrace();
+                BotLogger.error(LOGTAG, e);
             }
             return;
         }
@@ -352,7 +356,11 @@ public abstract class ArenaUser implements IUser{
         return db.getColumn(Config.CLASSES, "descr");
     }
 
-    // **************************************************
+    public static DatabaseManager getDb() {
+        return db;
+    }
+
+// **************************************************
     // ******** Instance ********************************
     // **************************************************
 
@@ -363,7 +371,7 @@ public abstract class ArenaUser implements IUser{
                 try {
                     params.put(field.getName(), field.get(this));
                 } catch (IllegalAccessException e) {
-                    e.printStackTrace();
+                    BotLogger.error(LOGTAG, e);
                 }
             }
         }

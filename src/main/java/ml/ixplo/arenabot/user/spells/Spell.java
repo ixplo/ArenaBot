@@ -25,23 +25,23 @@ public class Spell { //todo add implements Durable в потомка - клас�
     public static Spell getSpell(String id) {
         Spell spell = new Spell();
         spell.id = id;
-        spell.name = ArenaUser.db.getStringFrom(Config.SPELLS, id, "name");
-        spell.effect = ArenaUser.db.getStringFrom(Config.SPELLS, id, "effect");
-        spell.manaCost = ArenaUser.db.getIntFrom(Config.SPELLS, id, "mana_cost");
-        spell.level = ArenaUser.db.getIntFrom(Config.SPELLS, id, "level");
-        spell.duration = ArenaUser.db.getIntFrom(Config.SPELLS, id, "duration");
-        spell.damage = ArenaUser.db.getIntFrom(Config.SPELLS, id, "hit");
-        spell.armor = ArenaUser.db.getIntFrom(Config.SPELLS, id, "armor");
-        spell.expBonus = ArenaUser.db.getIntFrom(Config.SPELLS, id, "exp_bonus");
-        spell.probability = ArenaUser.db.getIntFrom(Config.SPELLS, id, "probability");
-        spell.gradeOneBonus = ArenaUser.db.getDoubleFrom(Config.SPELLS, id, "bonus_g1");
-        spell.gradeTwoBonus = ArenaUser.db.getDoubleFrom(Config.SPELLS, id, "bonus_g2");
-        spell.gradeThreeBonus = ArenaUser.db.getDoubleFrom(Config.SPELLS, id, "bonus_g3");
+        spell.name = ArenaUser.getDb().getStringFrom(Config.SPELLS, id, "name");
+        spell.effect = ArenaUser.getDb().getStringFrom(Config.SPELLS, id, "effect");
+        spell.manaCost = ArenaUser.getDb().getIntFrom(Config.SPELLS, id, "mana_cost");
+        spell.level = ArenaUser.getDb().getIntFrom(Config.SPELLS, id, "level");
+        spell.duration = ArenaUser.getDb().getIntFrom(Config.SPELLS, id, "duration");
+        spell.damage = ArenaUser.getDb().getIntFrom(Config.SPELLS, id, "hit");
+        spell.armor = ArenaUser.getDb().getIntFrom(Config.SPELLS, id, "armor");
+        spell.expBonus = ArenaUser.getDb().getIntFrom(Config.SPELLS, id, "exp_bonus");
+        spell.probability = ArenaUser.getDb().getIntFrom(Config.SPELLS, id, "probability");
+        spell.gradeOneBonus = ArenaUser.getDb().getDoubleFrom(Config.SPELLS, id, "bonus_g1");
+        spell.gradeTwoBonus = ArenaUser.getDb().getDoubleFrom(Config.SPELLS, id, "bonus_g2");
+        spell.gradeThreeBonus = ArenaUser.getDb().getDoubleFrom(Config.SPELLS, id, "bonus_g3");
         return spell;
     }
 
     public static int getSpellGrade(int userId, String spellId){
-        return ArenaUser.db.getIntByBy(Config.AVAILABLE_SPELLS,
+        return ArenaUser.getDb().getIntByBy(Config.AVAILABLE_SPELLS,
                 "spell_grade",
                 "id", spellId,
                 "user_id", userId);

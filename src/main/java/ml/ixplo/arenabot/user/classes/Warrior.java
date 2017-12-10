@@ -11,7 +11,7 @@ import java.util.List;
  * ixplo
  * 28.04.2017.
  */
-public class Warrior extends ArenaUser implements SkillApplicant{
+public class Warrior extends ArenaUser implements SkillCaster {
     ArrayList<Skill> skills;
     int energy;
 
