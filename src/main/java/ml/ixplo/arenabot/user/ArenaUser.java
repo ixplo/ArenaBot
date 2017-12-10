@@ -25,7 +25,7 @@ import static com.google.common.math.IntMath.pow;
  * ixplo
  * 24.04.2017.
  */
-public abstract class ArenaUser {
+public abstract class ArenaUser implements IUser{
 
     public static DatabaseManager db;
 
@@ -290,7 +290,7 @@ public abstract class ArenaUser {
 
         Messages.sendDoMsg(absSender, chatId, strings[0], target, percent); //todo перенести в takeAction
         Battle.battle.interrupt();
-        Round.round.takeAction(userId, strings[0], Round.round.getMembers().get(target).userId, percent, spellId);
+        Round.round.takeAction(userId, strings[0], Round.round.getMembers().get(target).getUserId(), percent, spellId);
         getUser(userId).doAction(strings);
     }
 
@@ -772,7 +772,7 @@ public abstract class ArenaUser {
         return lastGame;
     }
 
-    public int getUserId() {
+    public Integer getUserId() {
         return userId;
     }
 

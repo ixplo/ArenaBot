@@ -165,7 +165,7 @@ public class Bot extends TelegramLongPollingCommandBot {
             case "reg":
                 registration.regMember(userId);
                 answerCallbackQuery(Messages.getAnswerCallbackQuery(queryId, null));
-                Messages.sendToAllMembers(
+                Messages.sendToAll(
                         registration.getMembers(),
                         Messages.getRegMemberMsg(userId, registration.getMember(userId).getTeamId())
                 );

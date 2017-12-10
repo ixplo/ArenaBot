@@ -202,7 +202,7 @@ public class MessagesTest {
     public void getCancelDeleteMarkup() throws Exception {
         EditMessageReplyMarkup markup = Messages.getEditMessageReplyMarkup(warrior.getUserId(), Presets.MESSAGE_ID);
         Assert.assertEquals(Presets.MESSAGE_ID, markup.getMessageId());
-        Assert.assertEquals(warrior.getUserId(), Integer.parseInt(markup.getChatId()));
+        Assert.assertEquals(warrior.getUserId().toString(), markup.getChatId());
     }
 
     @Test
@@ -222,14 +222,14 @@ public class MessagesTest {
     @Test
     public void getExMsg() throws Exception {
         SendMessage message = Messages.getExMsg(warrior.getUserId(), Presets.ITEM_INDEX);
-        Assert.assertEquals(warrior.getUserId(), Integer.parseInt(message.getChatId()));
+        Assert.assertEquals(warrior.getUserId().toString(), message.getChatId());
         Assert.assertTrue(warrior.getItems().get(Presets.ITEM_INDEX).getInfo().contains(Presets.ITEM_NAME));
     }
 
     @Test
     public void getDropMsg() throws Exception {
         SendMessage message = Messages.getDropMsg(warrior.getUserId());
-        Assert.assertEquals(warrior.getUserId(), Integer.parseInt(message.getChatId()));
+        Assert.assertEquals(warrior.getUserId().toString(), message.getChatId());
         Assert.assertEquals("<b>Удалить</b> персонажа без возможности восстановления?", message.getText());
         Assert.assertTrue(message.getReplyMarkup() instanceof InlineKeyboardMarkup);
         InlineKeyboardMarkup ikm = (InlineKeyboardMarkup) message.getReplyMarkup();
@@ -282,7 +282,7 @@ public class MessagesTest {
     @Test
     public void getRegMemberMsg() throws Exception {
         SendMessage message = Messages.getRegMemberMsg(warrior.getUserId(), warrior.getTeam());
-        Assert.assertEquals(warrior.getUserId(), Integer.parseInt(message.getChatId()));
+        Assert.assertEquals(warrior.getUserId().toString(), message.getChatId());
         Assert.assertTrue(message.getText().contains(warrior.getName()));
         Assert.assertTrue(message.getText().contains("вошел в команду"));
         Assert.assertTrue(message.getText().contains(warrior.getTeamName()));
@@ -309,7 +309,7 @@ public class MessagesTest {
     @Test
     public void getOpenPrivateWithBotMsg() throws Exception {
         SendMessage message = Messages.getOpenPrivateWithBotMsg(warrior.getUserId(), warrior.getName());
-        Assert.assertEquals(warrior.getUserId(), Integer.parseInt(message.getChatId()));
+        Assert.assertEquals(warrior.getUserId().toString(), message.getChatId());
         Assert.assertTrue(message.getText().contains("Добро пожаловать"));
         Assert.assertTrue(message.getText().contains(warrior.getName()));
     }
@@ -317,7 +317,7 @@ public class MessagesTest {
     @Test
     public void getAskActionMsg() throws Exception {
         SendMessage message = Messages.getAskActionMsg(warrior.getUserId());
-        Assert.assertEquals(warrior.getUserId(), Integer.parseInt(message.getChatId()));
+        Assert.assertEquals(warrior.getUserId().toString(), message.getChatId());
         Assert.assertTrue(message.getText().contains("Выберите действие"));
         Assert.assertTrue(message.getReplyMarkup() instanceof InlineKeyboardMarkup);
         List<String> actions = ArenaUser.getUser(warrior.getUserId()).getActionsName();

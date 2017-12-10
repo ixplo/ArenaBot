@@ -2,6 +2,7 @@ package ml.ixplo.arenabot.battle;
 
 import ml.ixplo.arenabot.user.ArenaUser;
 import ml.ixplo.arenabot.config.Config;
+import ml.ixplo.arenabot.user.IUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -104,11 +105,14 @@ public class Team {
         member.teamId = id;
     }
 
-    static public void refreshTeamsId(List<ArenaUser> members, List<Integer> curMembersId, List<String> teamsId){
+    static public void refreshTeamsId(List<? extends IUser> members, List<Integer> curMembersId, List<String> teamsId){
         teamsId.clear();
-        for (ArenaUser user: members){
-            if (curMembersId.contains(user.getUserId())) {
-                teamsId.add(user.getTeamName());
+        for (IUser member: members){
+            if (curMembersId.contains(member.getUserId())) {
+                if (member instanceof ArenaUser) {
+                    ArenaUser arenaUser = (ArenaUser) member;
+                    teamsId.add(arenaUser.getTeamName());
+                }
             }
         }
     }

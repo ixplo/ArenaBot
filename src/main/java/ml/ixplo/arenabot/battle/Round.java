@@ -1,9 +1,10 @@
 package ml.ixplo.arenabot.battle;
 
-import ml.ixplo.arenabot.user.ArenaUser;
+import ml.ixplo.arenabot.battle.actions.Action;
 import ml.ixplo.arenabot.config.Config;
 import ml.ixplo.arenabot.messages.Messages;
-import ml.ixplo.arenabot.battle.actions.Action;
+import ml.ixplo.arenabot.user.ArenaUser;
+import ml.ixplo.arenabot.user.IUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +18,7 @@ public class Round {
     public static Round round;
     private static List<Integer> curMembersId;
     private static List<String> curTeamsId;
-    private List<ArenaUser> members;
+    private List<? extends IUser> members;
     private List<Team> teams;
     private List<Order> orders;
     Battle battle;
@@ -26,13 +27,13 @@ public class Round {
         return curMembersId;
     }
 
-    public List<ArenaUser> getMembers() {
+    public List<? extends IUser> getMembers() {
         return members;
     }
 
     //todo убрать лишние параметры
     //todo не изменять передаваемые параметры
-    Round(List<Integer> curMembersId, List<String> curTeamsId, List<ArenaUser> members, List<Team> teams, Battle battle) {
+    Round(List<Integer> curMembersId, List<String> curTeamsId, List<? extends IUser> members, List<Team> teams, Battle battle) {
         this.members = members;
         this.teams = teams;
         this.battle = battle;
@@ -47,7 +48,7 @@ public class Round {
         timer.schedule(new EndRound(this), Config.ROUND_TIME);
         timer.schedule(new RemindAboutEndRound(this), Config.ROUND_REMIND);
         Messages.sendListToAll(teams);
-        for (ArenaUser member : members) {
+        for (IUser member : members) {
             orders.add(new Order(member.getUserId(), round));
         }
         while (!isOrdersDone()) {
@@ -76,11 +77,14 @@ public class Round {
     }
 
     private void takeOutCorpses() {
-        for (ArenaUser member : members) {
-            if (member.getCurHitPoints() <= 0) {
-                Messages.sendToAll(members, "<b>" + member.getName() + "</b> потерял возможность продолжать бой.");
-                curMembersId.remove(getIndex(curMembersId, member.getUserId()));
-                Team.refreshTeamsId(members, curMembersId, curTeamsId);
+        for (IUser member : members) {
+            if (member instanceof ArenaUser) {
+                ArenaUser arenaUser = (ArenaUser) member;
+                if (arenaUser.getCurHitPoints() <= 0) {
+                    Messages.sendToAll(members, "<b>" + arenaUser.getName() + "</b> потерял возможность продолжать бой.");
+                    curMembersId.remove(getIndex(curMembersId, member.getUserId()));
+                    Team.refreshTeamsId(members, curMembersId, curTeamsId);
+                }
             }
         }
     }
@@ -140,9 +144,9 @@ public class Round {
         throw new RuntimeException("Invalid userId: " + userId);
     }
 
-    public ArenaUser getMember(Integer userId) {
-        for (ArenaUser member : members) {
-            if (member.getUserId() == userId) {
+    public IUser getMember(Integer userId) {
+        for (IUser member : members) {
+            if (member.getUserId().equals(userId)) {
                 return member;
             }
         }
@@ -163,8 +167,8 @@ public class Round {
 
     public List<Action> getAttackOnTargetList(int targetId){
         List<Action> attackOnTarget = new ArrayList<>();
-        List<Action> OnTargetList = getActionsByTarget(targetId);
-        for (Action action : OnTargetList) {
+        List<Action> onTargetList = getActionsByTarget(targetId);
+        for (Action action : onTargetList) {
             if(action.getActionId().equals("a")){
                 attackOnTarget.add(action);
             }

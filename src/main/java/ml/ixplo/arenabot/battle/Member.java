@@ -2,13 +2,14 @@ package ml.ixplo.arenabot.battle;
 
 import ml.ixplo.arenabot.config.Config;
 import ml.ixplo.arenabot.user.ArenaUser;
+import ml.ixplo.arenabot.user.IUser;
 
 /**
  * ixplo
  * 29.04.2017.
  */
 //todo выпилить и возвращать ArenaUser
-public class Member {
+public class Member implements IUser{
     Integer userId;
     String name;
     String teamId;

@@ -7,6 +7,7 @@ import ml.ixplo.arenabot.battle.Round;
 import ml.ixplo.arenabot.battle.Team;
 import ml.ixplo.arenabot.config.Config;
 import ml.ixplo.arenabot.user.ArenaUser;
+import ml.ixplo.arenabot.user.IUser;
 import ml.ixplo.arenabot.user.items.Item;
 import org.telegram.telegrambots.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.api.methods.AnswerInlineQuery;
@@ -118,13 +119,13 @@ public final class Messages {
     }
 
 
-    public static void sendToAll(List<ArenaUser> members, String msgText) {
+    public static void sendToAll(List<? extends IUser> members, String msgText) {
 
         SendMessage msg = new SendMessage();
         msg.enableHtml(true);
         msg.setText(msgText);
         try {
-            for (ArenaUser user : members) {
+            for (IUser user : members) {
                 msg.setChatId((long) user.getUserId());
                 bot.sendMessage(msg);
             }
@@ -133,23 +134,10 @@ public final class Messages {
         }
     }
 
-    public static void sendToAll(List<ArenaUser> members, SendMessage msg) {
+    public static void sendToAll(List<? extends IUser> members, SendMessage msg) {
 
         try {
-            for (ArenaUser user : members) {
-                msg.setChatId((long) user.getUserId());
-                bot.sendMessage(msg);
-            }
-        } catch (TelegramApiException e) {
-            BotLogger.error(LOGTAG, e);
-        }
-    }
-
-    //todo выпилить
-    public static void sendToAllMembers(List<Member> members, SendMessage msg) {
-
-        try {
-            for (Member user : members) {
+            for (IUser user : members) {
                 msg.setChatId((long) user.getUserId());
                 bot.sendMessage(msg);
             }
@@ -515,27 +503,32 @@ public final class Messages {
         }
     }
 
-    public static void sendResultToAll(List<Team> teams, List<ArenaUser> members, List<Integer> membersLive) {
+    public static void sendResultToAll(List<Team> teams, List<? extends IUser> members, List<Integer> membersLive) {
 
         SendMessage msg = new SendMessage();
         StringBuilder msgText = new StringBuilder();
         List<Integer> membersId = new ArrayList<>();
         for (Team team : teams) {
             msgText.append("Команда ").append(team.getName()).append(": ");
-            for (ArenaUser user : members) {
-                if (team.getBattleMembersId().contains(user.getUserId())) {
-                    msgText.append(user.getName()).append("(опыт:+").append(user.getCurExp());
-                    msgText.append("/").append(user.getCurExp() + user.getExperience());
-                    msgText.append(", золото:+");
-                    if (membersLive.contains(user.getUserId())) {
-                        msgText.append(members.size() * Config.GOLD_FOR_MEMBER - Config.GOLD_FOR_MEMBER);
-                        msgText.append("/").append(user.getMoney()
-                                + members.size() * Config.GOLD_FOR_MEMBER - Config.GOLD_FOR_MEMBER).append(")");
-                    } else {
-                        msgText.append("0");
-                        msgText.append("/").append(user.getMoney()).append(")");
+            for (IUser member : members) {
+                if (member instanceof ArenaUser) {
+                    ArenaUser arenaUser = (ArenaUser) member;
+                    if (team.getBattleMembersId().contains(member.getUserId())) {
+                        msgText.append(arenaUser.getName()).append("(опыт:+").append(arenaUser.getCurExp());
+                        msgText.append("/").append(arenaUser.getCurExp() + arenaUser.getExperience());
+                        msgText.append(", золото:+");
+                        if (membersLive.contains(arenaUser.getUserId())) {
+                            msgText.append(members.size() * Config.GOLD_FOR_MEMBER - Config.GOLD_FOR_MEMBER);
+                            msgText.append("/").append(arenaUser.getMoney()
+                                    + members.size() * Config.GOLD_FOR_MEMBER - Config.GOLD_FOR_MEMBER).append(")");
+                        } else {
+                            msgText.append("0");
+                            msgText.append("/").append(arenaUser.getMoney()).append(")");
+                        }
+                        membersId.add(member.getUserId());
                     }
-                    membersId.add(user.getUserId());
+                } else {
+                    throw new RuntimeException("Invalid IUser type! Need ArenaUser");
                 }
             }
             msgText.append("\n");

@@ -3,6 +3,7 @@ package ml.ixplo.arenabot.battle;
 import ml.ixplo.arenabot.user.ArenaUser;
 import ml.ixplo.arenabot.config.Config;
 import ml.ixplo.arenabot.messages.Messages;
+import ml.ixplo.arenabot.user.IUser;
 
 
 import java.util.Collections;

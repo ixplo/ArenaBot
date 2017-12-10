@@ -43,8 +43,9 @@ public abstract class Action {
             default:
                 throw new RuntimeException("Unknown action actionId: " + actionId);
         }
-        action.user = Round.round.getMember(userId);
-        action.target = Round.round.getMember(targetId);
+        //todo проверка instanceof
+        action.user = (ArenaUser) Round.round.getMember(userId);
+        action.target = (ArenaUser) Round.round.getMember(targetId);
         action.percent = percent;
         return action;
     }

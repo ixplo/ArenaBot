@@ -31,7 +31,7 @@ public class CmdReg extends BotCommand {
             return;
         }
         Bot.registration.regMember(user.getId());
-        Messages.sendToAllMembers(Bot.registration.getMembers(),
+        Messages.sendToAll(Bot.registration.getMembers(),
                 Messages.getRegMemberMsg(user.getId(), ArenaUser.getUser(user.getId()).getTeam()));
     }
 }
