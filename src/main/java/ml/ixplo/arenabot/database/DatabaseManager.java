@@ -1,5 +1,6 @@
 package ml.ixplo.arenabot.database;
 
+import ml.ixplo.arenabot.exception.ArenaUserException;
 import ml.ixplo.arenabot.user.ArenaUser;
 import ml.ixplo.arenabot.config.Config;
 import ml.ixplo.arenabot.user.items.Item;
@@ -746,7 +747,7 @@ public class DatabaseManager {
                 if (result.next()) {
                     resultInt = result.getInt(columnName);
                 } else {
-                    throw new RuntimeException("No such int: " + queryText);
+                    throw new ArenaUserException("No such int: " + queryText);
                 }
             }
         } catch (SQLException e) {

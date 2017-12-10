@@ -136,7 +136,7 @@ public class Mage extends ArenaUser implements SpellCaster {
                     " \\\\ опыт:+" + damage * spell.getExpBonus() + "/" + getCurExp() + ")</pre>";
         } else if (spell.getEffect().equals("ARMOR")) {
             double armor = roundDouble(spell.getArmor() + bonus);
-            List<Action> attackOnTargetList = Round.round.getAttackOnTargetList(target.getUserId());
+            List<Action> attackOnTargetList = Round.getCurrent().getAttackOnTargetList(target.getUserId());
             if (attackOnTargetList.size() == 0) {
                 return "<pre>" + getName() + " использовал заклинание [" + spell.getName() + "] на " +
                         target.getName() + " и поднял защиту на " + armor +

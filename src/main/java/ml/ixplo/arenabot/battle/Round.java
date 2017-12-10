@@ -2,6 +2,7 @@ package ml.ixplo.arenabot.battle;
 
 import ml.ixplo.arenabot.battle.actions.Action;
 import ml.ixplo.arenabot.config.Config;
+import ml.ixplo.arenabot.exception.ArenaUserException;
 import ml.ixplo.arenabot.messages.Messages;
 import ml.ixplo.arenabot.user.ArenaUser;
 import ml.ixplo.arenabot.user.IUser;
@@ -15,7 +16,7 @@ import java.util.Timer;
  * 29.04.2017.
  */
 public class Round {
-    public static Round round;
+    private static Round round;
     private static List<Integer> curMembersId;
     private static List<String> curTeamsId;
     private List<? extends IUser> members;
@@ -109,7 +110,7 @@ public class Round {
                 return i;
             }
         }
-        throw new RuntimeException("Invalid userId: " + userId);
+        throw new ArenaUserException("Invalid userId: " + userId);
     }
 
     private int getIndex(List<Integer> users, int userId) {
@@ -119,7 +120,7 @@ public class Round {
                 return i;
             }
         }
-        throw new RuntimeException("Invalid userId: " + userId);
+        throw new ArenaUserException("Invalid userId: " + userId);
     }
 
     private int getIndex(List<Team> teams, String teamId) {
@@ -129,7 +130,7 @@ public class Round {
                 return i;
             }
         }
-        throw new RuntimeException("Invalid teamId: " + teamId);
+        throw new ArenaUserException("Invalid teamId: " + teamId);
     }
 
     public int getIndex(int userId) {
@@ -139,7 +140,7 @@ public class Round {
                 return i;
             }
         }
-        throw new RuntimeException("Invalid userId: " + userId);
+        throw new ArenaUserException("Invalid userId: " + userId);
     }
 
     public IUser getMember(Integer userId) {
@@ -148,7 +149,7 @@ public class Round {
                 return member;
             }
         }
-        throw new RuntimeException("Invalid userId: " + userId);
+        throw new ArenaUserException("Invalid userId: " + userId);
     }
 
     public List<Action> getActionsByTarget(int targetId) {
@@ -176,5 +177,9 @@ public class Round {
 
     public List<Order> getOrders() {
         return orders;
+    }
+
+    public static Round getCurrent() {
+        return round;
     }
 }

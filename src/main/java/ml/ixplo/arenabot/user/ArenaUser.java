@@ -250,7 +250,7 @@ public abstract class ArenaUser implements IUser{
             percent = Integer.parseInt(strings[2]);
         }
         if (strings.length < 2) {
-            target = Round.round.getIndex(userId);
+            target = Round.getCurrent().getIndex(userId);
         } else {
             target = Integer.parseInt(strings[1]) - 1;
         }
@@ -294,7 +294,7 @@ public abstract class ArenaUser implements IUser{
 
         Messages.sendDoMsg(absSender, chatId, strings[0], target, percent); //todo перенести в takeAction
         Battle.getBattle().interrupt();
-        Round.round.takeAction(userId, strings[0], Round.round.getMembers().get(target).getUserId(), percent, spellId);
+        Round.getCurrent().takeAction(userId, strings[0], Round.getCurrent().getMembers().get(target).getUserId(), percent, spellId);
         getUser(userId).doAction(strings);
     }
 

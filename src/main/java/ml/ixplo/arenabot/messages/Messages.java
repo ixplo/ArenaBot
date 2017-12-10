@@ -6,6 +6,7 @@ import ml.ixplo.arenabot.battle.Registration;
 import ml.ixplo.arenabot.battle.Round;
 import ml.ixplo.arenabot.battle.Team;
 import ml.ixplo.arenabot.config.Config;
+import ml.ixplo.arenabot.exception.ArenaUserException;
 import ml.ixplo.arenabot.user.ArenaUser;
 import ml.ixplo.arenabot.user.IUser;
 import ml.ixplo.arenabot.user.items.Item;
@@ -528,7 +529,7 @@ public final class Messages {
                         membersId.add(member.getUserId());
                     }
                 } else {
-                    throw new RuntimeException("Invalid IUser type! Need ArenaUser");
+                    throw new ArenaUserException("Invalid IUser type! Need ArenaUser");
                 }
             }
             msgText.append("\n");

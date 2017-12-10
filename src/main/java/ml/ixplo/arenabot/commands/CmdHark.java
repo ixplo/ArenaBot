@@ -5,6 +5,7 @@ package ml.ixplo.arenabot.commands;
  * 25.04.2017.
  */
 
+import ml.ixplo.arenabot.exception.ArenaUserException;
 import ml.ixplo.arenabot.messages.Messages;
 import ml.ixplo.arenabot.user.ArenaUser;
 import org.telegram.telegrambots.api.objects.Chat;
@@ -12,6 +13,7 @@ import org.telegram.telegrambots.api.objects.User;
 import org.telegram.telegrambots.bots.AbsSender;
 import org.telegram.telegrambots.bots.commands.BotCommand;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
+import org.telegram.telegrambots.logging.BotLogger;
 
 public class CmdHark extends BotCommand {
 
@@ -58,7 +60,7 @@ public class CmdHark extends BotCommand {
         try {
             absSender.sendMessage(Messages.getUserStatMsg(user.getId()));
         } catch (TelegramApiException e) {
-            e.printStackTrace();
+            BotLogger.error(LOGTAG, e);
         }
     }
 
@@ -75,7 +77,7 @@ public class CmdHark extends BotCommand {
             case "nativeCon":
                 return "Телосложение";
             default:
-                throw new RuntimeException("Invalid harkToUpId: " + harkToUpId);
+                throw new ArenaUserException("Invalid harkToUpId: " + harkToUpId);
         }
     }
 

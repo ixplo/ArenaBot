@@ -2,6 +2,7 @@ package ml.ixplo.arenabot.battle.actions;
 
 import ml.ixplo.arenabot.config.Config;
 import ml.ixplo.arenabot.database.DatabaseManager;
+import ml.ixplo.arenabot.exception.ArenaUserException;
 import ml.ixplo.arenabot.user.ArenaUser;
 import ml.ixplo.arenabot.battle.Round;
 
@@ -41,7 +42,7 @@ public abstract class Action {
                 action = new CastSpell(spellId);
                 break;
             default:
-                throw new RuntimeException("Unknown action actionId: " + actionId);
+                throw new ArenaUserException("Unknown action actionId: " + actionId);
         }
         action.user = ArenaUser.getUser(userId);
         action.target = ArenaUser.getUser(targetId);
@@ -81,7 +82,7 @@ public abstract class Action {
                 action = "m";
                 break;
             default:
-                throw new RuntimeException("Unknown action actionId: " + callbackEntry);
+                throw new ArenaUserException("Unknown action actionId: " + callbackEntry);
         }
         db.setStringTo(Config.ROUND_ACTIONS, userId, "action_type", action);
     }

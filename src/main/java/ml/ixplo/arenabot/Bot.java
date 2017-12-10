@@ -6,6 +6,7 @@ import ml.ixplo.arenabot.battle.actions.Action;
 import ml.ixplo.arenabot.battle.Registration;
 import ml.ixplo.arenabot.config.Config;
 import ml.ixplo.arenabot.database.DatabaseManager;
+import ml.ixplo.arenabot.exception.ArenaUserException;
 import ml.ixplo.arenabot.messages.Messages;
 import ml.ixplo.arenabot.user.ArenaUser;
 import ml.ixplo.arenabot.user.items.Item;
@@ -197,7 +198,7 @@ public class Bot extends TelegramLongPollingCommandBot {
             case "percent":
                 Action.setPercent(userId, Integer.parseInt(callbackEntry));
                 Battle.getBattle().interrupt();
-                Round.round.takeAction(userId,
+                Round.getCurrent().takeAction(userId,
                         Action.getActionId(userId, 1),
                         Action.getTargetId(userId, 1),
                         Action.getPercent(userId, 1),
@@ -206,7 +207,7 @@ public class Bot extends TelegramLongPollingCommandBot {
                 Action.clearActions(userId);
                 break;
             default: {
-                throw new RuntimeException("Unknown callbackQuery: " + callbackQuery.getData());
+                throw new ArenaUserException("Unknown callbackQuery: " + callbackQuery.getData());
             }
         }
     }

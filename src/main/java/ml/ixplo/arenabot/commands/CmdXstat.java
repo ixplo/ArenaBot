@@ -7,6 +7,7 @@ import org.telegram.telegrambots.api.objects.User;
 import org.telegram.telegrambots.bots.AbsSender;
 import org.telegram.telegrambots.bots.commands.BotCommand;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
+import org.telegram.telegrambots.logging.BotLogger;
 
 public class CmdXstat extends BotCommand {
     public static final String LOGTAG = "XSTATCOMMAND";
@@ -27,7 +28,7 @@ public class CmdXstat extends BotCommand {
         try {
             absSender.sendMessage(Messages.getUserXStatMsg(user.getId()));
         } catch (TelegramApiException e) {
-            e.printStackTrace();
+            BotLogger.error(LOGTAG, e);
         }
     }
 }

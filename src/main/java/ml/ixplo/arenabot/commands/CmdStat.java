@@ -7,6 +7,7 @@ import org.telegram.telegrambots.api.objects.User;
 import org.telegram.telegrambots.bots.AbsSender;
 import org.telegram.telegrambots.bots.commands.BotCommand;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
+import org.telegram.telegrambots.logging.BotLogger;
 
 /**
  * ixplo
@@ -32,7 +33,7 @@ public class CmdStat extends BotCommand{
         try {
             absSender.sendMessage(Messages.getUserStatMsg(user.getId()));
         } catch (TelegramApiException e) {
-            e.printStackTrace();
+            BotLogger.error(LOGTAG, e);
         }
     }
 }
