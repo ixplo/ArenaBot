@@ -129,14 +129,16 @@ public class Bot extends TelegramLongPollingCommandBot {
     private void handleCallbackQuery(CallbackQuery callbackQuery) throws TelegramApiException {
         String callbackCommand = callbackQuery.getData().substring(0, callbackQuery.getData().indexOf('_'));
         String callbackEntry = callbackQuery.getData().substring(callbackQuery.getData().indexOf('_') + 1);
+        Integer userId = callbackQuery.getFrom().getId();
+        Integer messageId = callbackQuery.getMessage().getMessageId();
+        String queryId = callbackQuery.getId();
         //todo сделать нормально
         switch (callbackCommand) {
             case "newClassIs":
-                answerCallbackQuery(Messages.selectedUserClassQuery(callbackQuery.getId(), callbackEntry));
+                answerCallbackQuery(Messages.selectedUserClassQuery(queryId, callbackEntry));
                 sendMessage(Messages.getChooseRaceMsg(callbackQuery.getMessage().getChatId(), callbackEntry));
                 break;
             case "newRaceIs":
-                Integer userId = callbackQuery.getFrom().getId();
                 String userName = callbackQuery.getFrom().getFirstName() == null ?
                         callbackQuery.getFrom().getLastName() :
                         callbackQuery.getFrom().getFirstName();
@@ -144,64 +146,64 @@ public class Bot extends TelegramLongPollingCommandBot {
                 String userClass = callbackEntry.substring(1);
                 ArenaUser.create(userId, userName, ArenaUser.UserClass.valueOf(userClass), userRace);
                 answerCallbackQuery(Messages.getCreateUserQuery(
-                        callbackQuery.getId(),
+                        queryId,
                         ArenaUser.getClassName(userClass),
                         ArenaUser.getRaceName(userRace)));
                 sendMessage(Messages.getCreateUserMsg(userId));
                 break;
             case "del":
                 if (callbackEntry.equals("Cancel")) {
-                    answerCallbackQuery(Messages.getCancelDeleteQuery(callbackQuery.getId()));
-                    editMessageReplyMarkup(Messages.getCancelDeleteMarkup(callbackQuery.getFrom().getId(),
-                            callbackQuery.getMessage().getMessageId()));
+                    answerCallbackQuery(Messages.getCancelDeleteQuery(queryId));
+                    editMessageReplyMarkup(Messages.getEditMessageReplyMarkup(userId, messageId));
                 } else if (callbackEntry.equals("Delete")) {
-                    ArenaUser.dropUser(callbackQuery.getFrom().getId());
-                    Messages.sendAfterDelete(callbackQuery);
+                    ArenaUser.dropUser(userId);
+                    editMessageReplyMarkup(Messages.getEditMessageReplyMarkup(userId, messageId));
+                    editMessageText(Messages.getAfterDeleteMessageText(userId, messageId));
+                    answerCallbackQuery(Messages.getAfterDeleteQuery(queryId));
                 }
                 break;
             case "reg":
-                int memberId = callbackQuery.getFrom().getId();
-                registration.regMember(memberId);
-                answerCallbackQuery(Messages.getAnswerCallbackQuery(callbackQuery.getId(), null));
+                registration.regMember(userId);
+                answerCallbackQuery(Messages.getAnswerCallbackQuery(queryId, null));
                 Messages.sendToAllMembers(
                         registration.getMembers(),
-                        Messages.getRegMemberMsg(memberId, registration.getMember(memberId).getTeamId())
+                        Messages.getRegMemberMsg(userId, registration.getMember(userId).getTeamId())
                 );
                 break;
             case "learnSpell":
-                answerCallbackQuery(Messages.getAnswerCallbackQuery(callbackQuery.getId(), null));
-                ArenaUser.getUser(callbackQuery.getFrom().getId()).learn(Integer.parseInt(callbackEntry));
+                answerCallbackQuery(Messages.getAnswerCallbackQuery(queryId, null));
+                ArenaUser.getUser(userId).learn(Integer.parseInt(callbackEntry));
                 break;
             case "target":
-                Action.addAction(callbackQuery.getFrom().getId());
-                Action.setTargetId(callbackQuery.getFrom().getId(), Integer.parseInt(callbackEntry));
+                Action.addAction(userId);
+                Action.setTargetId(userId, Integer.parseInt(callbackEntry));
                 answerCallbackQuery(Messages.getSelectTargetQuery(
-                        callbackQuery.getId(), Integer.parseInt(callbackEntry)));
-                sendMessage(Messages.getAskActionMsg(callbackQuery.getFrom().getId()));
+                        queryId, Integer.parseInt(callbackEntry)));
+                sendMessage(Messages.getAskActionMsg(userId));
                 break;
             case "spell":
                 if (callbackEntry.equals("spell")) {
                     Messages.sendAskSpell(callbackQuery);
                     break;
                 }
-                Action.setCastId(callbackQuery.getFrom().getId(), callbackEntry);
-                Action.setActionId(callbackQuery.getFrom().getId(), "Магия");
+                Action.setCastId(userId, callbackEntry);
+                Action.setActionId(userId, "Магия");
                 Messages.sendAskPercent(callbackQuery, "Магия");
                 break;
             case "action":
-                Action.setActionId(callbackQuery.getFrom().getId(), callbackEntry);
+                Action.setActionId(userId, callbackEntry);
                 Messages.sendAskPercent(callbackQuery, callbackEntry);
                 break;
             case "percent":
-                Action.setPercent(callbackQuery.getFrom().getId(), Integer.parseInt(callbackEntry));
+                Action.setPercent(userId, Integer.parseInt(callbackEntry));
                 Battle.battle.interrupt();
-                Round.round.takeAction(callbackQuery.getFrom().getId(),
-                        Action.getActionId(callbackQuery.getFrom().getId(), 1),
-                        Action.getTargetId(callbackQuery.getFrom().getId(), 1),
-                        Action.getPercent(callbackQuery.getFrom().getId(), 1),
-                        Action.getSpellId(callbackQuery.getFrom().getId(), 1));
+                Round.round.takeAction(userId,
+                        Action.getActionId(userId, 1),
+                        Action.getTargetId(userId, 1),
+                        Action.getPercent(userId, 1),
+                        Action.getSpellId(userId, 1));
                 Messages.sendActionTaken(callbackQuery);
-                Action.clearActions(callbackQuery.getFrom().getId());
+                Action.clearActions(userId);
                 break;
             default: {
                 throw new RuntimeException("Unknown callbackQuery: " + callbackQuery.getData());

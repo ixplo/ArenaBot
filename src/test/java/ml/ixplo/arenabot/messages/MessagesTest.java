@@ -17,6 +17,7 @@ import org.telegram.telegrambots.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.api.methods.AnswerInlineQuery;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.methods.updatingmessages.EditMessageReplyMarkup;
+import org.telegram.telegrambots.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.api.objects.inlinequery.InlineQuery;
 import org.telegram.telegrambots.api.objects.inlinequery.result.InlineQueryResultArticle;
 import org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -199,13 +200,23 @@ public class MessagesTest {
 
     @Test
     public void getCancelDeleteMarkup() throws Exception {
-        EditMessageReplyMarkup markup = Messages.getCancelDeleteMarkup(warrior.getUserId(), Presets.MESSAGE_ID);
+        EditMessageReplyMarkup markup = Messages.getEditMessageReplyMarkup(warrior.getUserId(), Presets.MESSAGE_ID);
         Assert.assertEquals(Presets.MESSAGE_ID, markup.getMessageId());
         Assert.assertEquals(warrior.getUserId(), Integer.parseInt(markup.getChatId()));
     }
 
     @Test
-    public void sendAfterDelete() throws Exception {
+    public void getAfterDeleteQuery() throws Exception {
+        AnswerCallbackQuery answerCallbackQuery = Messages.getAfterDeleteQuery(Presets.QUERY_ID);
+        Assert.assertEquals(Presets.QUERY_ID, answerCallbackQuery.getCallbackQueryId());
+        Assert.assertEquals("Персонаж удален", answerCallbackQuery.getText());
+    }
+
+    @Test
+    public void getAfterDeleteMessageText() throws Exception {
+        EditMessageText messageText = Messages.getAfterDeleteMessageText(warrior.getUserId(), Presets.MESSAGE_ID);
+        Assert.assertEquals(Presets.MESSAGE_ID, messageText.getMessageId());
+        Assert.assertEquals("Персонаж удален", messageText.getText());
     }
 
     @Test
@@ -286,14 +297,6 @@ public class MessagesTest {
         callbackQuery = Messages.getAnswerCallbackQuery(Presets.QUERY_ID, null);
         Assert.assertEquals(Presets.QUERY_ID, callbackQuery.getCallbackQueryId());
         Assert.assertEquals(null, callbackQuery.getText());
-    }
-
-    @Test
-    public void sendMessage1() throws Exception {
-    }
-
-    @Test
-    public void sendMessage2() throws Exception {
     }
 
     @Test

@@ -14,7 +14,6 @@ import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.methods.updatingmessages.EditMessageReplyMarkup;
 import org.telegram.telegrambots.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.api.objects.CallbackQuery;
-import org.telegram.telegrambots.api.objects.User;
 import org.telegram.telegrambots.api.objects.inlinequery.InlineQuery;
 import org.telegram.telegrambots.api.objects.inlinequery.inputmessagecontent.InputTextMessageContent;
 import org.telegram.telegrambots.api.objects.inlinequery.result.InlineQueryResultArticle;
@@ -418,6 +417,8 @@ public final class Messages {
 
 
     //todo переделать все под один универсальный метод, а текст сообщения хранить в xml
+    //todo конкретный результат определять по коду
+    //todo getAnswerCallbackQuery(String code, Map<String, Object> inParams)
     public static AnswerCallbackQuery getAnswerCallbackQuery(String queryId, String queryText) {
         if (queryText == null) {
             return new AnswerCallbackQuery().setCallbackQueryId(queryId);
@@ -444,33 +445,18 @@ public final class Messages {
         return new AnswerCallbackQuery().setText("Вы отменили удаление").setCallbackQueryId(queryId);
     }
 
-    public static EditMessageReplyMarkup getCancelDeleteMarkup(int userId, Integer messageId) {
+    public static AnswerCallbackQuery getAfterDeleteQuery(String queryId) {
+        return new AnswerCallbackQuery().setText("Персонаж удален").setCallbackQueryId(queryId);
+    }
+
+    public static EditMessageReplyMarkup getEditMessageReplyMarkup(int userId, Integer messageId) {
         return new EditMessageReplyMarkup().setChatId((long)userId).setMessageId(messageId);
     }
 
-    public static void sendAfterDelete(CallbackQuery callbackQuery) {
-
-        String queryId = callbackQuery.getId();
-        Long chatId = callbackQuery.getMessage().getChatId();
-        Integer msgId = callbackQuery.getMessage().getMessageId();
-        AnswerCallbackQuery query = new AnswerCallbackQuery();
-        query.setText("Персонаж удален");
-        query.setCallbackQueryId(queryId);
-        EditMessageReplyMarkup edit = new EditMessageReplyMarkup();
-        edit.setChatId(chatId);
-        edit.setMessageId(msgId);
-        EditMessageText editText = new EditMessageText();
-        editText.setChatId(chatId);
-        editText.setMessageId(msgId);
-        editText.setText("Персонаж удален");
-        try {
-            bot.editMessageReplyMarkup(edit);
-            bot.editMessageText(editText);
-            bot.answerCallbackQuery(query);
-        } catch (TelegramApiException e) {
-            BotLogger.error(LOGTAG, e);
-        }
+    public static EditMessageText getAfterDeleteMessageText(int userId, Integer messageId) {
+        return new EditMessageText().setChatId((long)userId).setMessageId(messageId).setText("Персонаж удален");
     }
+
 
     public static void sendListToAll(List<Team> teams) {
 
