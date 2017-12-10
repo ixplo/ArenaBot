@@ -89,7 +89,7 @@ public class DatabaseManager {
             preparedStatement.setInt(1, userId);
             deletedRows = preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            BotLogger.error(LOGTAG, e.getMessage());
         }
         return deletedRows > 0;
     }
@@ -101,7 +101,7 @@ public class DatabaseManager {
             preparedStatement.setInt(1, userId);
             deletedRows = preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            BotLogger.error(LOGTAG, e.getMessage());
         }
         return deletedRows > 0;
     }
@@ -130,7 +130,7 @@ public class DatabaseManager {
             preparedStatement.setInt(1, userId);
             deletedRows = preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            BotLogger.error(LOGTAG, e.getMessage());
         }
         return deletedRows > 0;
     }
@@ -142,7 +142,7 @@ public class DatabaseManager {
             preparedStatement.setInt(1, userId);
             deletedRows = preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            BotLogger.error(LOGTAG, e.getMessage());
         }
         return deletedRows > 0;
     }
@@ -195,7 +195,7 @@ public class DatabaseManager {
                 arenaUser.setStatus(result.getInt("status"));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            BotLogger.error(LOGTAG, e.getMessage());
         }
         return arenaUser;
     }
@@ -282,7 +282,7 @@ public class DatabaseManager {
             preparedStatement.setInt(37, arenaUser.getStatus());
             updatedRows = preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            BotLogger.error(LOGTAG, e.getMessage());
         }
         return updatedRows > 0;
     }
@@ -298,7 +298,7 @@ public class DatabaseManager {
                 resultString = result.getString("in_slot");
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            BotLogger.error(LOGTAG, e.getMessage());
         }
         return resultString;
     }
@@ -312,7 +312,7 @@ public class DatabaseManager {
             preparedStatement.setString(3, classId);
             updatedRows = preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            BotLogger.error(LOGTAG, e.getMessage());
         }
         return updatedRows > 0;
     }
@@ -325,7 +325,7 @@ public class DatabaseManager {
             preparedStatement.setInt(2, record);
             updatedRows = preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            BotLogger.error(LOGTAG, e.getMessage());
         }
         return updatedRows > 0;
     }
@@ -338,7 +338,7 @@ public class DatabaseManager {
             preparedStatement.setString(2, record);
             updatedRows = preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            BotLogger.error(LOGTAG, e.getMessage());
         }
         return updatedRows > 0;
     }
@@ -355,7 +355,7 @@ public class DatabaseManager {
             preparedStatement.setInt(3, spellGrade);
             updatedRows = preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            BotLogger.error(LOGTAG, e.getMessage());
         }
         return updatedRows > 0;
     }
@@ -371,7 +371,7 @@ public class DatabaseManager {
             preparedStatement.setInt(2, count);
             updatedRows = preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            BotLogger.error(LOGTAG, e.getMessage());
         }
         return updatedRows > 0;
     }
@@ -392,7 +392,7 @@ public class DatabaseManager {
             preparedStatement.setInt(3, count);
             updatedRows = preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            BotLogger.error(LOGTAG, e.getMessage());
         }
         return updatedRows > 0;
     }
@@ -439,7 +439,7 @@ public class DatabaseManager {
                 itemsList.add(item);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            BotLogger.error(LOGTAG, e.getMessage());
         }
         return itemsList;
     }
@@ -505,7 +505,7 @@ public class DatabaseManager {
             preparedStatement.setString(8, team.getHtmlName());
             updatedRows = preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            BotLogger.error(LOGTAG, e.getMessage());
         }
         return updatedRows > 0;
     }
@@ -526,7 +526,7 @@ public class DatabaseManager {
                 team.setHtmlName(result.getString("html_name"));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            BotLogger.error(LOGTAG, e.getMessage());
         }
         return team;
     }
@@ -548,7 +548,7 @@ public class DatabaseManager {
                 resultStringArr.add(result.getString("id"));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            BotLogger.error(LOGTAG, e.getMessage());
         }
         return resultStringArr;
     }
@@ -563,7 +563,7 @@ public class DatabaseManager {
                 resultInt = result.getInt(columnName);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            BotLogger.error(LOGTAG, e.getMessage());
         }
         return resultInt;
     }
@@ -578,7 +578,7 @@ public class DatabaseManager {
                 resultInt = result.getInt(columnName);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            BotLogger.error(LOGTAG, e.getMessage());
         }
         return resultInt;
     }
@@ -593,7 +593,7 @@ public class DatabaseManager {
                 resultInt = result.getInt(selectedColumn);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            BotLogger.error(LOGTAG, e.getMessage());
         }
         return resultInt;
     }
@@ -608,7 +608,7 @@ public class DatabaseManager {
                 resultDouble = result.getDouble(columnName);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            BotLogger.error(LOGTAG, e.getMessage());
         }
         return resultDouble;
     }
@@ -623,7 +623,7 @@ public class DatabaseManager {
                 resultDouble = result.getDouble(columnName);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            BotLogger.error(LOGTAG, e.getMessage());
         }
         return resultDouble;
     }
@@ -641,7 +641,7 @@ public class DatabaseManager {
                 resultIntArr.add(result.getInt(columnName));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            BotLogger.error(LOGTAG, e.getMessage());
         }
         return resultIntArr;
     }
@@ -656,7 +656,7 @@ public class DatabaseManager {
                 resultString = result.getString(columnName);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            BotLogger.error(LOGTAG, e.getMessage());
         }
         return resultString;
     }
@@ -671,7 +671,7 @@ public class DatabaseManager {
                 resultString = result.getString(columnName);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            BotLogger.error(LOGTAG, e.getMessage());
         }
         return resultString;
     }
@@ -686,7 +686,7 @@ public class DatabaseManager {
                 resultString = result.getString(selectedColumn);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            BotLogger.error(LOGTAG, e.getMessage());
         }
         return resultString;
     }
@@ -709,7 +709,7 @@ public class DatabaseManager {
                 resultInt = result.getInt(columnName);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            BotLogger.error(LOGTAG, e.getMessage());
         }
         return resultInt;
     }
@@ -731,7 +731,7 @@ public class DatabaseManager {
                 resultInt = result.getInt(columnName);
             } else throw new RuntimeException("No such int: " + queryText);
         } catch (SQLException e) {
-            e.printStackTrace();
+            BotLogger.error(LOGTAG, e.getMessage());
         }
         return resultInt;
     }
@@ -753,7 +753,7 @@ public class DatabaseManager {
                 resultString = result.getString(columnName);
             } else throw new IllegalArgumentException("No such int: " + queryText);
         } catch (SQLException e) {
-            e.printStackTrace();
+            BotLogger.error(LOGTAG, e.getMessage());
         }
         return resultString;
     }
@@ -768,7 +768,7 @@ public class DatabaseManager {
                 resultStringArr.add(result.getString(columnName));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            BotLogger.error(LOGTAG, e.getMessage());
         }
         return resultStringArr;
     }
@@ -783,7 +783,7 @@ public class DatabaseManager {
                 resultStringArr.add(result.getString(columnName));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            BotLogger.error(LOGTAG, e.getMessage());
         }
         return resultStringArr;
     }
@@ -806,7 +806,7 @@ public class DatabaseManager {
                 resultStringArr.add(result.getString(columnName));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            BotLogger.error(LOGTAG, e.getMessage());
         }
         return resultStringArr;
     }
@@ -829,7 +829,7 @@ public class DatabaseManager {
                 resultStringArr.add(result.getString(columnName));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            BotLogger.error(LOGTAG, e.getMessage());
         }
         return resultStringArr;
     }
@@ -852,7 +852,7 @@ public class DatabaseManager {
                 resultStringArr.add(result.getInt(columnName));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            BotLogger.error(LOGTAG, e.getMessage());
         }
         return resultStringArr;
     }
@@ -868,7 +868,7 @@ public class DatabaseManager {
             preparedStatement.setInt(2, id);
             updatedRows = preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            BotLogger.error(LOGTAG, e.getMessage());
         }
         return updatedRows > 0;
     }
@@ -884,7 +884,7 @@ public class DatabaseManager {
             preparedStatement.setInt(2, id);
             updatedRows = preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            BotLogger.error(LOGTAG, e.getMessage());
         }
         return updatedRows > 0;
     }
@@ -900,7 +900,7 @@ public class DatabaseManager {
             preparedStatement.setInt(2, id);
             updatedRows = preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            BotLogger.error(LOGTAG, e.getMessage());
         }
         return updatedRows > 0;
     }
@@ -916,7 +916,7 @@ public class DatabaseManager {
             preparedStatement.setInt(2, id);
             updatedRows = preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            BotLogger.error(LOGTAG, e.getMessage());
         }
         return updatedRows > 0;
     }
@@ -932,7 +932,7 @@ public class DatabaseManager {
             preparedStatement.setString(2, id);
             updatedRows = preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            BotLogger.error(LOGTAG, e.getMessage());
         }
         return updatedRows > 0;
     }
@@ -948,7 +948,7 @@ public class DatabaseManager {
             preparedStatement.setInt(2, id);
             updatedRows = preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            BotLogger.error(LOGTAG, e.getMessage());
         }
         return updatedRows > 0;
     }
@@ -965,25 +965,9 @@ public class DatabaseManager {
             preparedStatement.setInt(3, userId);
             updatedRows = preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            BotLogger.error(LOGTAG, e.getMessage());
         }
         return updatedRows > 0;
-    }
-
-    public int getCount(String tableName, String columnName, Integer value) {
-        String queryText = "Select count(" + columnName + ") "
-                + "FROM " + tableName
-                + " WHERE " + columnName + "=?;";
-        try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
-            preparedStatement.setInt(1, value);
-            final ResultSet result = preparedStatement.executeQuery();
-            if (result.next()) {
-                return result.getInt("count(" + columnName + ")");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return -1;
     }
 
     public int getCountDistinct(String tableName, String columnOfCount, String columnName, Integer value) {
@@ -997,35 +981,56 @@ public class DatabaseManager {
                 return result.getInt("count(distinct " + columnOfCount + ")");
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            BotLogger.error(LOGTAG, e.getMessage());
         }
         return -1;
     }
 
-    public int getCount(String tableName, String columnName, String value) {//overload
+    public int getCount(String tableName, String columnName, Integer value) {
+        String queryText = "Select count(" + columnName + ") "
+                + "FROM " + tableName
+                + " WHERE " + columnName + "=?;";
+        try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
+            preparedStatement.setInt(1, value);
+            try (final ResultSet result = preparedStatement.executeQuery()) {
+                if (result.next()) {
+                    return result.getInt("count(" + columnName + ")");
+                }
+            }
+        } catch (SQLException e) {
+            BotLogger.error(LOGTAG, e.getMessage());
+        }
+        return -1;
+    }
+
+    // overload
+    public int getCount(String tableName, String columnName, String value) {
         String queryText = "Select count(" + columnName + ") FROM " + tableName + " WHERE " + columnName + "=?;";
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setString(1, value);
-            final ResultSet result = preparedStatement.executeQuery();
-            if (result.next()) {
-                return result.getInt("count(" + columnName + ")");
+            try (final ResultSet result = preparedStatement.executeQuery()) {
+                if (result.next()) {
+                    return result.getInt("count(" + columnName + ")");
+                }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            BotLogger.error(LOGTAG, e.getMessage());
         }
         return -1;
     }
 
-    public int getCount(String tableName, String columnName, Double value) {//overload
+    // overload
+    public int getCount(String tableName, String columnName, Double value) {
         String queryText = "Select count(" + columnName + ") FROM " + tableName + " WHERE " + columnName + "=?;";
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setDouble(1, value);
-            final ResultSet result = preparedStatement.executeQuery();
-            if (result.next()) {
-                return result.getInt("count(" + columnName + ")");
+            try (final ResultSet result = preparedStatement.executeQuery()){
+                if (result.next()) {
+                    return result.getInt("count(" + columnName + ")");
+                }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            BotLogger.error(LOGTAG, e.getMessage());
         }
         return -1;
     }
@@ -1033,13 +1038,13 @@ public class DatabaseManager {
     public List<String> getColumn(String tableName, String columnName) {
         List<String> column = new LinkedList<>();
         String queryText = "Select " + columnName + " FROM " + tableName + " order by rowid;";
-        try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
-            final ResultSet result = preparedStatement.executeQuery();
+        try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText);
+            final ResultSet result = preparedStatement.executeQuery()) {
             while (result.next()) {
                 column.add(result.getString(columnName));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            BotLogger.error(LOGTAG, e.getMessage());
         }
         return column;
     }
