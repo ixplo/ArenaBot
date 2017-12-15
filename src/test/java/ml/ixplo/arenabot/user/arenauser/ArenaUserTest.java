@@ -3,6 +3,7 @@ package ml.ixplo.arenabot.user.arenauser;
 import ml.ixplo.arenabot.helper.Presets;
 import ml.ixplo.arenabot.helper.TestHelper;
 import ml.ixplo.arenabot.user.ArenaUser;
+import ml.ixplo.arenabot.user.classes.UserClass;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -80,16 +81,16 @@ public class ArenaUserTest {
     @Test
     public void getUserName() throws Exception {
         assertEquals(ArenaUser.getUserName(Presets.WARRIOR_ID), Presets.WARRIOR_NAME);
-        ArenaUser newUser = ArenaUser.create(ArenaUser.UserClass.WARRIOR);
+        ArenaUser newUser = ArenaUser.create(UserClass.WARRIOR);
         assertNull(newUser.getName());
     }
 
 
     @Test
     public void create_allGood() throws Exception {
-        ArenaUser priest = ArenaUser.create(ArenaUser.UserClass.PRIEST);
+        ArenaUser priest = ArenaUser.create(UserClass.PRIEST);
         assertNotNull(priest);
-        assertEquals(ArenaUser.UserClass.PRIEST.toString(), priest.getUserClass());
+        assertEquals(UserClass.PRIEST.toString(), priest.getUserClass());
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -97,14 +98,14 @@ public class ArenaUserTest {
         ArenaUser.create(
                 Presets.WARRIOR_ID,
                 Presets.WARRIOR_NAME,
-                ArenaUser.UserClass.WARRIOR,
+                UserClass.WARRIOR,
                 "o");
     }
 
     @Test
     public void setClassFeatures() throws Exception {
 
-        ArenaUser mage = ArenaUser.create(ArenaUser.UserClass.MAGE);
+        ArenaUser mage = ArenaUser.create(UserClass.MAGE);
         assertEquals("Атака", mage.getActionsName().get(0));
 
     }

@@ -128,7 +128,7 @@ public class MessagesTest {
         message = Messages.getListMsg((long) warrior.getUserId());
         Assert.assertTrue(message.getText().contains(warrior.getName()));
 
-        registration.startBattle();
+        Registration.setIsOn(false);
         message = Messages.getListMsg((long) warrior.getUserId());
         Assert.assertEquals("Бой уже идет", message.getText());
     }

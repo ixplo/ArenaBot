@@ -9,6 +9,7 @@ import ml.ixplo.arenabot.database.DatabaseManager;
 import ml.ixplo.arenabot.exception.ArenaUserException;
 import ml.ixplo.arenabot.messages.Messages;
 import ml.ixplo.arenabot.user.ArenaUser;
+import ml.ixplo.arenabot.user.classes.UserClass;
 import ml.ixplo.arenabot.user.items.Item;
 import ml.ixplo.arenabot.commands.CmdDo;
 import ml.ixplo.arenabot.commands.CmdDrop;
@@ -148,7 +149,7 @@ public class Bot extends TelegramLongPollingCommandBot {
                         callbackQuery.getFrom().getFirstName();
                 String userRace = callbackEntry.substring(0, 1);
                 String userClass = callbackEntry.substring(1);
-                ArenaUser.create(userId, userName, ArenaUser.UserClass.valueOf(userClass), userRace);
+                ArenaUser.create(userId, userName, UserClass.valueOf(userClass), userRace);
                 answerCallbackQuery(Messages.getCreateUserQuery(
                         queryId,
                         ArenaUser.getClassName(userClass),

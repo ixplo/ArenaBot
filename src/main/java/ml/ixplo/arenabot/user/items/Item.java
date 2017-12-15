@@ -137,7 +137,7 @@ public class Item {
         if (item.isWeapon()) {
             arenaUser.setCurWeapon(eqipIndex);
         }
-        db.setUser(arenaUser);
+        db.updateUser(arenaUser);
         //todo снова изменить характеристики из-за предыдущего пункта
     }
 
@@ -183,7 +183,7 @@ public class Item {
                 arenaUser.setCurWeapon(-1);
             }
         }
-        db.setUser(arenaUser);
+        db.updateUser(arenaUser);
         //todo снова изменить характеристики из-за предыдущего пункта
     }
 

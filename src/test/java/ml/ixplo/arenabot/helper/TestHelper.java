@@ -1,9 +1,14 @@
 package ml.ixplo.arenabot.helper;
 
+import ml.ixplo.arenabot.config.Config;
 import ml.ixplo.arenabot.database.ConnectionDB;
 import ml.ixplo.arenabot.database.DatabaseManager;
 import ml.ixplo.arenabot.user.ArenaUser;
+import ml.ixplo.arenabot.user.classes.UserClass;
 import ml.ixplo.arenabot.user.items.Item;
+
+import java.util.HashSet;
+import java.util.Set;
 
 import static ml.ixplo.arenabot.config.Config.TEST_DB_LINK;
 
@@ -13,44 +18,84 @@ public class TestHelper {
     private DatabaseManager db;
     public static ArenaUser WARRIOR;
     public static ArenaUser MAGE;
+    public static ArenaUser EXIST_USER;
+    private static Set<Integer> USERS_ID = new HashSet<>();
 
     public TestHelper() {
-        init();
+        initDb();
+        fillSetOfUsersId();
         clearData();
         generateData();
     }
 
-    private void generateData() {
-        WARRIOR = ArenaUser.create(
-                Presets.WARRIOR_ID,
-                Presets.WARRIOR_NAME,
-                ArenaUser.UserClass.WARRIOR,
-                Presets.WARRIOR_RACE);
-        MAGE = ArenaUser.create(
-                Presets.MAGE_ID,
-                Presets.MAGE_NAME,
-                ArenaUser.UserClass.MAGE,
-                Presets.MAGE_RACE);
-        WARRIOR.setTeamId(Presets.TEST_TEAM);
-        db.setUser(WARRIOR);
-        db.setUser(MAGE);
-    }
-
-    private void clearData() {
-        if (db.doesUserExists(Presets.WARRIOR_ID)) {
-            ArenaUser.dropUser(Presets.WARRIOR_ID);
-        }
-        if (db.doesUserExists(Presets.MAGE_ID)) {
-            ArenaUser.dropUser(Presets.MAGE_ID);
-        }
-    }
-
-    public void init() {
+    private void initDb() {
         DatabaseManager.setConnection(new ConnectionDB(TEST_DB_LINK));
         db = DatabaseManager.getInstance();
         ArenaUser.setDb(db);
         Item.setDb(db);
     }
+
+    private void fillSetOfUsersId() {
+        USERS_ID.add(Presets.WARRIOR_ID);
+        USERS_ID.add(Presets.MAGE_ID);
+        USERS_ID.add(Presets.EXIST_USER_ID);
+        USERS_ID.add(Presets.NON_EXIST_USER_ID);
+    }
+
+    private void generateData() {
+        generateExistUser();
+        generateWarrior();
+        generateMage();
+        fillSetOfUsersId();
+    }
+
+    private void generateExistUser() {
+        db.addUser(Presets.EXIST_USER_ID, Presets.EXIST_USER_NAME);
+        db.setStringTo(Config.USERS, Presets.EXIST_USER_ID, "class", Presets.WARRIOR_CLASS);
+        db.addItem(Presets.EXIST_USER_ID, Presets.ITEM_ID);
+        EXIST_USER = db.getUser(Presets.EXIST_USER_ID);
+    }
+
+    private void generateMage() {
+        MAGE = ArenaUser.create(
+                Presets.MAGE_ID,
+                Presets.MAGE_NAME,
+                UserClass.MAGE,
+                Presets.MAGE_RACE);
+        db.updateUser(MAGE);
+    }
+
+    private void generateWarrior() {
+        WARRIOR = ArenaUser.create(
+                Presets.WARRIOR_ID,
+                Presets.WARRIOR_NAME,
+                UserClass.WARRIOR,
+                Presets.WARRIOR_RACE);
+        WARRIOR.setTeamId(Presets.TEST_TEAM);
+        db.updateUser(WARRIOR);
+    }
+
+    private void clearData() {
+        dropUsers();
+        dropItems();
+    }
+
+    private void dropUsers() {
+        for (Integer userId : USERS_ID) {
+            if (db.doesUserExists(userId)) {
+                ArenaUser.dropUser(userId);
+            }
+        }
+    }
+
+    private void dropItems() {
+        for (Integer userId : USERS_ID) {
+            if (!Item.getItems(userId).isEmpty()) {
+                db.dropItems(userId);
+            }
+        }
+    }
+
 
     public void close() {
         clearData();

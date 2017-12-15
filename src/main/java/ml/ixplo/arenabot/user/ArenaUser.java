@@ -1,6 +1,7 @@
 package ml.ixplo.arenabot.user;
 
 import ml.ixplo.arenabot.config.Config;
+import ml.ixplo.arenabot.config.Constants;
 import ml.ixplo.arenabot.exception.ArenaUserException;
 import ml.ixplo.arenabot.messages.Messages;
 import ml.ixplo.arenabot.battle.Battle;
@@ -9,6 +10,7 @@ import ml.ixplo.arenabot.database.DatabaseManager;
 import ml.ixplo.arenabot.user.classes.Archer;
 import ml.ixplo.arenabot.user.classes.Mage;
 import ml.ixplo.arenabot.user.classes.Priest;
+import ml.ixplo.arenabot.user.classes.UserClass;
 import ml.ixplo.arenabot.user.classes.Warrior;
 import ml.ixplo.arenabot.user.items.Item;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
@@ -27,13 +29,11 @@ import static com.google.common.math.IntMath.pow;
  * ixplo
  * 24.04.2017.
  */
-public abstract class ArenaUser implements IUser{
+public abstract class ArenaUser implements IUser {
 
     public static final String LOGTAG = "ARENAUSER";
 
     private static DatabaseManager db;
-
-    public enum UserClass {ARCHER, MAGE, PRIEST, WARRIOR}
 
     private int userId;
     private String name;
@@ -75,6 +75,8 @@ public abstract class ArenaUser implements IUser{
     private int status;
     protected List<String> actionsName = Arrays.asList("Атака", "Защита", "Лечение");
 
+    // instance
+    private static ArenaUser arenaUser;
 
     /****** constructor ******
      * use ArenaUser.create
@@ -115,39 +117,48 @@ public abstract class ArenaUser implements IUser{
     // **************************************************
     // ******** STATIC **********************************
     // **************************************************
-
+    //todo сделать класс Race
     public static ArenaUser create(int userId, String name, UserClass userClass, String race) {
-
-        //проверка, что такой уже есть
         if (doesUserExists(userId)) {
             throw new IllegalArgumentException("Such user with userId " + userId + " already exists");
         }
-        ArenaUser arenaUser = ArenaUser.create(userClass);
+        db.addUser(userId, name);
+        arenaUser = create(userClass, race);
         arenaUser.userId = userId;
         arenaUser.name = name;
-        arenaUser.userClass = userClass.toString();
-        db.addUser(userId, name, arenaUser.getUserClass());
-        arenaUser.race = race;
-        arenaUser.nativeStr = db.getIntFrom(Config.CLASSES, userClass.toString(), "str_start") +
-                db.getIntFrom(Config.RACES, race, "str_bonus");
-        arenaUser.nativeDex = db.getIntFrom(Config.CLASSES, userClass.toString(), "dex_start") +
-                db.getIntFrom(Config.RACES, race, "dex_bonus");
-        arenaUser.nativeWis = db.getIntFrom(Config.CLASSES, userClass.toString(), "wis_start") +
-                db.getIntFrom(Config.RACES, race, "wis_bonus");
-        arenaUser.nativeInt = db.getIntFrom(Config.CLASSES, userClass.toString(), "int_start") +
-                db.getIntFrom(Config.RACES, race, "int_bonus");
-        arenaUser.nativeCon = db.getIntFrom(Config.CLASSES, userClass.toString(), "con_start") +
-                db.getIntFrom(Config.RACES, race, "con_bonus");
-        arenaUser.freePoints = db.getIntFrom(Config.CLASSES, userClass.toString(), "free_bonus");
+        generateHarksForRaceAndClass();
+        generateCommonHarks();
+        arenaUser.setClassFeatures();
+        arenaUser.addItem("waa");
+        arenaUser.putOn(0);
+        db.updateUser(arenaUser);
+        return arenaUser;
+    }
+
+    private static void generateHarksForRaceAndClass() {
+        arenaUser.nativeStr = db.getIntFrom(Config.CLASSES, arenaUser.userClass.toString(), "str_start") +
+                db.getIntFrom(Config.RACES, arenaUser.race, "str_bonus");
+        arenaUser.nativeDex = db.getIntFrom(Config.CLASSES, arenaUser.userClass.toString(), "dex_start") +
+                db.getIntFrom(Config.RACES, arenaUser.race, "dex_bonus");
+        arenaUser.nativeWis = db.getIntFrom(Config.CLASSES, arenaUser.userClass.toString(), "wis_start") +
+                db.getIntFrom(Config.RACES, arenaUser.race, "wis_bonus");
+        arenaUser.nativeInt = db.getIntFrom(Config.CLASSES, arenaUser.userClass.toString(), "int_start") +
+                db.getIntFrom(Config.RACES, arenaUser.race, "int_bonus");
+        arenaUser.nativeCon = db.getIntFrom(Config.CLASSES, arenaUser.userClass.toString(), "con_start") +
+                db.getIntFrom(Config.RACES, arenaUser.race, "con_bonus");
+        arenaUser.freePoints = db.getIntFrom(Config.CLASSES, arenaUser.userClass.toString(), "free_bonus");
+        arenaUser.maxHitPoints = roundDouble(1.3333333 * arenaUser.curCon
+                + db.getIntFrom(Config.CLASSES, arenaUser.userClass.toString(), "hp_bonus"));
+        arenaUser.money = db.getIntFrom(Config.CLASSES, arenaUser.userClass.toString(), "money_start");
+    }
+
+    private static void generateCommonHarks() {
         arenaUser.curStr = arenaUser.nativeStr;
         arenaUser.curDex = arenaUser.nativeDex;
         arenaUser.curWis = arenaUser.nativeWis;
         arenaUser.curInt = arenaUser.nativeInt;
         arenaUser.curCon = arenaUser.nativeCon;
-        arenaUser.maxHitPoints = roundDouble(1.3333333 * arenaUser.curCon
-                + db.getIntFrom(Config.CLASSES, userClass.toString(), "hp_bonus"));
         arenaUser.curHitPoints = arenaUser.maxHitPoints;
-        arenaUser.money = db.getIntFrom(Config.CLASSES, userClass.toString(), "money_start");
         arenaUser.level = 1;
         arenaUser.minHit = (double) (arenaUser.curStr - 3) / 4;
         arenaUser.maxHit = (double) (arenaUser.curStr - 3) / 4;
@@ -155,11 +166,13 @@ public abstract class ArenaUser implements IUser{
         arenaUser.protect = roundDouble(0.4 * arenaUser.curDex + 0.6 * arenaUser.curCon);
         arenaUser.heal = roundDouble(0.06 * arenaUser.curWis + 0.04 * arenaUser.curInt);
         arenaUser.magicProtect = roundDouble(0.6 * arenaUser.curWis + 0.4 * arenaUser.curInt);
-        arenaUser.setClassFeatures();
-        arenaUser.addItem("waa");
-        arenaUser.putOn(0);
-        db.setUser(arenaUser);
-        return arenaUser;
+    }
+
+    public static ArenaUser create(UserClass userClassId, String race) {
+        ArenaUser user = create(userClassId);
+        user.race = race;
+        user.userClass = userClassId.toString();
+        return user;
     }
 
     public static ArenaUser create(UserClass userClassId) {
@@ -186,7 +199,7 @@ public abstract class ArenaUser implements IUser{
         return hero;
     }
 
-    //todo save user to db public static void setUser(Integer userId){common + abstract}
+    //todo save user to db public static void updateUser(Integer userId){common + abstract}
 
     public static void setDb(DatabaseManager dbManager) {
         db = dbManager;
@@ -444,7 +457,7 @@ public abstract class ArenaUser implements IUser{
         }
         addHarkClassFeatures(harkId, numberOfPoints);
         setFreePoints(getFreePoints() - numberOfPoints);
-        db.setUser(this);
+        db.updateUser(this);
     }
 
     public void addCurExp(int exp) {

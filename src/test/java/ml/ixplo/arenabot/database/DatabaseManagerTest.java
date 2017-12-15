@@ -1,6 +1,7 @@
 package ml.ixplo.arenabot.database;
 
 import ml.ixplo.arenabot.helper.Presets;
+import ml.ixplo.arenabot.helper.TestHelper;
 import ml.ixplo.arenabot.user.items.ItemTest;
 import org.junit.After;
 import org.junit.Assert;
@@ -9,22 +10,20 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static ml.ixplo.arenabot.config.Config.TEST_DB_LINK;
-
 public class DatabaseManagerTest {
 
     public static final Logger LOGGER = LoggerFactory.getLogger(ItemTest.class);
-    DatabaseManager db;
+    private DatabaseManager db;
+    private TestHelper testHelper = new TestHelper();
 
     @Before
     public void setUp() throws Exception {
-        DatabaseManager.setConnection(new ConnectionDB(TEST_DB_LINK));
-        db = DatabaseManager.getInstance();
+        db = testHelper.getDb();
     }
 
     @After
     public void tearDown() throws Exception {
-        DatabaseManager.getConnection().closeConnection();
+        testHelper.close();
     }
 
     @Test
@@ -43,6 +42,9 @@ public class DatabaseManagerTest {
 
     @Test
     public void dropUser() throws Exception {
+        Assert.assertTrue(db.doesUserExists(Presets.EXIST_USER_ID));
+        db.dropUser(Presets.EXIST_USER_ID);
+        Assert.assertFalse(db.doesUserExists(Presets.EXIST_USER_ID));
     }
 
     @Test
@@ -75,6 +77,8 @@ public class DatabaseManagerTest {
 
     @Test
     public void addUser() throws Exception {
+        db.addUser(Presets.NON_EXIST_USER_ID, Presets.MAGE_NAME);
+        Assert.assertTrue(db.doesUserExists(Presets.NON_EXIST_USER_ID));
     }
 
     @Test

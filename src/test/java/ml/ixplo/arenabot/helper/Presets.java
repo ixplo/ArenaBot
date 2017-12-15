@@ -3,8 +3,10 @@ package ml.ixplo.arenabot.helper;
 public class Presets {
     public static final int NON_EXIST_USER_ID = 1;
     public static final int EXIST_USER_ID = -500;
+    public static final String EXIST_USER_NAME = "test_notNull";
     public static final String WRONG_ITEM_ID = "wrong";
     public static final String WRONG_ITEM_NAME = "wrong";
+    public static final String ITEM_ID = "waa";
     public static final String ITEM_NAME = "Ладошка";
     public static final int ITEM_INDEX = 0;
     public static final int WRONG_ITEM_INDEX = -1;

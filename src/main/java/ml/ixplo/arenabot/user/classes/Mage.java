@@ -99,11 +99,11 @@ public class Mage extends ArenaUser implements SpellCaster {
         String message = "";
         Spell spell = getSpell(spellId);
         if (!isHappened(spell.getProbability() * percent / 100)) { //(Math.log(getMagicAttack()/target.getMagicProtect() + 4.6)/7)
-            return message = "<code>" + getName() + " пытался создать заклинание [" + spell.getName() + "] на "
+            return "<code>" + getName() + " пытался создать заклинание [" + spell.getName() + "] на "
                     + target.getName() + ", но заклинание провалилось.</code>";
         }
         if (spell.getManaCost() > curMana) {
-            return message = "<code>" + getName() + " пытался создать заклинание [" + spell.getName() + "] на "
+            return "<code>" + getName() + " пытался создать заклинание [" + spell.getName() + "] на "
                     + target.getName() + ", но у него не хватило маны.</code>";
         }
         double bonus;

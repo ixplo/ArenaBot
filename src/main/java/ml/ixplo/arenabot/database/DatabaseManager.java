@@ -3,6 +3,7 @@ package ml.ixplo.arenabot.database;
 import ml.ixplo.arenabot.exception.ArenaUserException;
 import ml.ixplo.arenabot.user.ArenaUser;
 import ml.ixplo.arenabot.config.Config;
+import ml.ixplo.arenabot.user.classes.UserClass;
 import ml.ixplo.arenabot.user.items.Item;
 import ml.ixplo.arenabot.battle.Team;
 import org.telegram.telegrambots.logging.BotLogger;
@@ -83,16 +84,14 @@ public class DatabaseManager {
         connection.executeQuery("UPDATE users SET status='0';");
     }
 
-    public boolean dropUser(Integer userId) {
-        int deletedRows = 0;
+    public void dropUser(Integer userId) {
         String queryText = "DELETE FROM users WHERE Id=?;";
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setInt(1, userId);
-            deletedRows = preparedStatement.executeUpdate();
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             BotLogger.error(LOGTAG, e.getMessage());
         }
-        return deletedRows > 0;
     }
 
     public boolean dropItems(Integer userId) {
@@ -155,7 +154,7 @@ public class DatabaseManager {
             preparedStatement.setInt(1, userId);
             try (final ResultSet result = preparedStatement.executeQuery()) {
                 if (result.next()) {
-                    arenaUser = ArenaUser.create(ArenaUser.UserClass.valueOf(result.getString("class")));
+                    arenaUser = ArenaUser.create(UserClass.valueOf(result.getString("class")));
                     arenaUser.setUserId(result.getInt("id"));
                     arenaUser.setUserClass(result.getString("class"));
                     arenaUser.setName(result.getString("name"));
@@ -202,8 +201,7 @@ public class DatabaseManager {
         return arenaUser;
     }
 
-    public boolean setUser(ArenaUser arenaUser) {
-        int updatedRows = 0;
+    public void updateUser(ArenaUser arenaUser) {
         String queryText = "UPDATE users SET " +
                 "name=?," +
                 "title=?," +
@@ -243,7 +241,6 @@ public class DatabaseManager {
                 "cur_weapon=?," +
                 "status=? WHERE id=?;";
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
-
             preparedStatement.setInt(38, arenaUser.getUserId());
             preparedStatement.setString(1, arenaUser.getName());
             preparedStatement.setString(2, arenaUser.getUserTitle());
@@ -282,11 +279,10 @@ public class DatabaseManager {
             preparedStatement.setLong(35, arenaUser.getLastGame());
             preparedStatement.setInt(36, arenaUser.getCurWeapon());
             preparedStatement.setInt(37, arenaUser.getStatus());
-            updatedRows = preparedStatement.executeUpdate();
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             BotLogger.error(LOGTAG, e.getMessage());
         }
-        return updatedRows > 0;
     }
 
     public String getSlot(int userId, Integer eqipIndex) {
@@ -306,18 +302,15 @@ public class DatabaseManager {
         return resultString;
     }
 
-    public boolean addUser(int userId, String name, String classId) {
-        int updatedRows = 0;
-        String queryText = "INSERT OR REPLACE INTO users(id,name,class) VALUES (?,?,?);";
+    public void addUser(int userId, String name) {
+        String queryText = "INSERT OR REPLACE INTO users(id,name) VALUES (?,?);";
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setInt(1, userId);
             preparedStatement.setString(2, name);
-            preparedStatement.setString(3, classId);
-            updatedRows = preparedStatement.executeUpdate();
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             BotLogger.error(LOGTAG, e.getMessage());
         }
-        return updatedRows > 0;
     }
 
     public boolean addInt(String tableName, String column, int record) {
@@ -380,7 +373,7 @@ public class DatabaseManager {
     }
 
     public boolean addItem(Integer userId, String itemId) {
-        // check if item non exist exeption will be throwed
+        // check if item non exist throw exception
         getItem(itemId);
 
         int updatedRows = 0;

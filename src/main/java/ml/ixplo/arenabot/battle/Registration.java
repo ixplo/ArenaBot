@@ -36,6 +36,10 @@ public class Registration {
         return isOn;
     }
 
+    public static void setIsOn(boolean isOn) {
+        Registration.isOn = isOn;
+    }
+
     public static void dropStatus() {
         db.dropStatus();
     }
