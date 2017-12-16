@@ -32,7 +32,7 @@ public class CmdEx extends BotCommand {
             return;
         }
         // проверка, что введенный параметр - это число
-        if (strings.length == 0 || !Validation.isNumeric(strings[0])) {
+        if (strings.length == 0 || !Validation.isInteger(strings[0])) {
             Messages.sendMessage(chat.getId(),"Формат: <i>/ex 1</i> - посмотреть предмет в инвентаре под номером 1");
             return;
         }

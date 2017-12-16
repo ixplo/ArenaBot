@@ -30,7 +30,7 @@ public class CmdPutOff extends BotCommand {
             Messages.sendMessage(absSender, chat.getId(), "После команды введите один номер. Пример использования: /putoff 1");
             return;
         }
-        if (!Validation.isNumeric(strings[0])) {
+        if (!Validation.isInteger(strings[0])) {
             Messages.sendMessage(absSender, chat.getId(), "Вводите номер вещи. Пример использования: /putoff 1");
             return;
         }

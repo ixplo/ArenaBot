@@ -34,9 +34,11 @@ public class Presets {
     public static final String MAGE_SPELL_EFFECT = "DAMAGE";
     public static final int MAGE_SPELL_ARMOR = 0;
     public static final int MAGE_SPELL_DURATION = 1;
-    public static final int MAGE_SPELL_LEVEL = 1;
+    public static final int MAGE_SPELL_FIRST_LEVEL = 1;
+    public static final int MAGE_SPELL_SECOND_LEVEL = 2;
     public static final int MAGE_SPELL_PROBABILITY = 95;
     public static final double MAGE_SPELL_GRADE_ONE_BONUS = 1.0;
     public static final double MAGE_SPELL_GRADE_TWO_BONUS = 1.5;
     public static final double MAGE_SPELL_GRADE_THREE_BONUS = 2.0;
+    public static final double DELTA = 0.01;
 }

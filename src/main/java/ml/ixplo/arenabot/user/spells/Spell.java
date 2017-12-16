@@ -51,10 +51,6 @@ public class Spell { //todo add implements Durable в потомка - клас�
         return probability;
     }
 
-    public void setProbability(int probability) {
-        this.probability = probability;
-    }
-
     public String getId() {
         return id;
     }
@@ -75,10 +71,6 @@ public class Spell { //todo add implements Durable в потомка - клас�
         return manaCost;
     }
 
-    public void setManaCost(int manaCost) {
-        this.manaCost = manaCost;
-    }
-
     public int getLevel() {
         return level;
     }
@@ -91,32 +83,16 @@ public class Spell { //todo add implements Durable в потомка - клас�
         return duration;
     }
 
-    public void setDuration(int duration) {
-        this.duration = duration;
-    }
-
     public String getEffect() {
         return effect;
-    }
-
-    public void setEffect(String effect) {
-        this.effect = effect;
     }
 
     public int getDamage() {
         return damage;
     }
 
-    public void setDamage(int damage) {
-        this.damage = damage;
-    }
-
     public int getExpBonus() {
         return expBonus;
-    }
-
-    public void setExpBonus(int expBonus) {
-        this.expBonus = expBonus;
     }
 
     public double getGradeOneBonus() {

@@ -41,10 +41,12 @@ public class MagicSpellTest {
         Assert.assertEquals(Presets.MAGE_SPELL_EFFECT, spell.getEffect());
         Assert.assertEquals(Presets.MAGE_SPELL_ARMOR, spell.getArmor());
         Assert.assertEquals(Presets.MAGE_SPELL_DURATION, spell.getDuration());
-        Assert.assertEquals(Presets.MAGE_SPELL_LEVEL, spell.getLevel());
-        Assert.assertEquals(Presets.MAGE_SPELL_GRADE_ONE_BONUS, spell.getGradeOneBonus(), 0.1);
-        Assert.assertEquals(Presets.MAGE_SPELL_GRADE_TWO_BONUS, spell.getGradeTwoBonus(), 0.1);
-        Assert.assertEquals(Presets.MAGE_SPELL_GRADE_THREE_BONUS, spell.getGradeThreeBonus(), 0.1);
+        Assert.assertEquals(Presets.MAGE_SPELL_FIRST_LEVEL, spell.getLevel());
+        Assert.assertEquals(Presets.MAGE_SPELL_GRADE_ONE_BONUS, spell.getGradeOneBonus(), Presets.DELTA);
+        Assert.assertEquals(Presets.MAGE_SPELL_GRADE_TWO_BONUS, spell.getGradeTwoBonus(), Presets.DELTA);
+        Assert.assertEquals(Presets.MAGE_SPELL_GRADE_THREE_BONUS, spell.getGradeThreeBonus(), Presets.DELTA);
         Assert.assertEquals(Presets.MAGE_SPELL_PROBABILITY, spell.getProbability());
+        spell.setLevel(Presets.MAGE_SPELL_SECOND_LEVEL);
+        Assert.assertEquals(Presets.MAGE_SPELL_SECOND_LEVEL, spell.getLevel());
     }
 }

@@ -1,7 +1,7 @@
 package ml.ixplo.arenabot.validate;
 
 public class Validation {
-    public static boolean isNumeric(String s) {
+    public static boolean isInteger(String s) {
         try {
             Integer.parseInt(s);
             return true;
