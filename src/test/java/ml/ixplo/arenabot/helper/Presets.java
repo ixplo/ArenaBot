@@ -1,6 +1,7 @@
 package ml.ixplo.arenabot.helper;
 
 public class Presets {
+    public static final String TEST_PROPERTIES = "src/test/resources/test.properties";
     public static final int NON_EXIST_USER_ID = 1;
     public static final int EXIST_USER_ID = -500;
     public static final String EXIST_USER_NAME = "test_notNull";

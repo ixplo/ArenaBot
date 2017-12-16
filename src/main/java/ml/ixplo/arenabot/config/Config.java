@@ -11,6 +11,7 @@ public class Config {
     public static final String BOT_NAME = "ArenaBot";
     public static final String VERSION = "0.3";
     public static final String BOT_CHANNEL_NAME = "#Arena";
+    public static final String PROPERTIES_FILE = "arena.properties";
     public final String rules = "rules.html";      //mc(rules)
     public static final long TEST_CHANNEL_ID = -161929436;
     public static final String TEST_CHANNEL_NAME = "arena";
