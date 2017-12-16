@@ -2,6 +2,7 @@ package ml.ixplo.arenabot.messages;
 
 import ml.ixplo.arenabot.Bot;
 import ml.ixplo.arenabot.battle.Registration;
+import ml.ixplo.arenabot.battle.Team;
 import ml.ixplo.arenabot.config.Config;
 import ml.ixplo.arenabot.helper.Presets;
 import ml.ixplo.arenabot.helper.TestHelper;
@@ -118,18 +119,18 @@ public class MessagesTest {
     }
 
     @Test
-    public void getListMsg() throws Exception {
-        SendMessage message = Messages.getListMsg((long) Config.ADMIN_ID);
+    public void getRegistrationListMsg() throws Exception {
+        SendMessage message = Messages.getRegistrationListMsg((long) Config.ADMIN_ID);
         Assert.assertEquals(Config.ADMIN_ID.toString(), message.getChatId());
         Assert.assertEquals("Еще никто не зарегистрировался", message.getText());
 
         Registration registration = new Registration();
         Bot.getRegistration().regMember(warrior.getUserId());
-        message = Messages.getListMsg((long) warrior.getUserId());
+        message = Messages.getRegistrationListMsg((long) warrior.getUserId());
         Assert.assertTrue(message.getText().contains(warrior.getName()));
 
         Registration.setIsOn(false);
-        message = Messages.getListMsg((long) warrior.getUserId());
+        message = Messages.getRegistrationListMsg((long) warrior.getUserId());
         Assert.assertEquals("Бой уже идет", message.getText());
     }
 
@@ -256,7 +257,12 @@ public class MessagesTest {
     }
 
     @Test
-    public void sendListTo() throws Exception {
+    public void getRoundTeamsList() throws Exception {
+        Team team = new Team(Presets.TEST_TEAM);
+        team.addMember(warrior);
+        SendMessage message = Messages.getRoundTeamsList((long)warrior.getUserId(), Arrays.asList(team));
+        Assert.assertEquals(warrior.getUserId().toString(), message.getChatId());
+        Assert.assertTrue(message.getText().contains(Presets.WARRIOR_NAME));
     }
 
     @Test

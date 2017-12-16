@@ -291,7 +291,6 @@ public final class Messages {
         return msg;
     }
 
-    //todo переделать и написать тест
     public static SendMessage getChooseRaceMsg(Long chatId, String userClass) {
 
         StringBuilder msgText = new StringBuilder();
@@ -312,7 +311,7 @@ public final class Messages {
         return getInlineKeyboardMsg(chatId, msgText.toString(), ArenaUser.getRacesName(), callbackData);
     }
 
-    public static SendMessage getListMsg(Long chatId) {
+    public static SendMessage getRegistrationListMsg(Long chatId) {
 
         SendMessage msg = new SendMessage();
         msg.setChatId(chatId);
@@ -458,7 +457,7 @@ public final class Messages {
         int count = 0;
         for (Team team : teams) {
             msgText.append("[");
-            for (Member user : team.getMembers()) {
+            for (IUser user : team.getMembers()) {
                 msgText.append(++count).append(" ");
                 msgText.append(user.getName()).append(" ");
                 membersId.add(user.getUserId());
@@ -480,28 +479,24 @@ public final class Messages {
         }
     }
 
-    public static void sendListTo(Long chatId, List<Team> teams) {
+    public static SendMessage getRoundTeamsList(Long chatId, List<Team> teams) {
 
-        SendMessage msg = new SendMessage();
+        SendMessage message = new SendMessage();
         StringBuilder msgText = new StringBuilder();
         msgText.append("Список: ");
         int count = 0;
         for (Team team : teams) {
             msgText.append("[");
-            for (Member user : team.getMembers()) {
+            for (IUser user : team.getMembers()) {
                 msgText.append(++count).append(" ");
                 msgText.append(user.getName()).append(" ");
             }
             msgText.append("]");
         }
-        msg.enableHtml(true);
-        msg.setText(msgText.toString());
-        try {
-            msg.setChatId(chatId);
-            bot.sendMessage(msg);
-        } catch (TelegramApiException e) {
-            BotLogger.error(LOGTAG, e);
-        }
+        message.enableHtml(true);
+        message.setText(msgText.toString());
+        message.setChatId(chatId);
+        return message;
     }
 
     public static void sendResultToAll(List<Team> teams, List<? extends IUser> members, List<Integer> membersLive) {

@@ -4,6 +4,7 @@ import ml.ixplo.arenabot.messages.Messages;
 import ml.ixplo.arenabot.user.ArenaUser;
 import ml.ixplo.arenabot.config.Config;
 import ml.ixplo.arenabot.database.DatabaseManager;
+import ml.ixplo.arenabot.user.IUser;
 
 import java.util.Timer;
 import java.util.ArrayList;
@@ -172,7 +173,7 @@ public class Registration {
 
     public Team getTeam(String id) {
         Team team = db.getTeam(id);
-        List<Member> teamMembers = new ArrayList<>();
+        List<IUser> teamMembers = new ArrayList<>();
         List<Member> allMembers = getMembers();
         int allMembersCount = getMembersCount();
         for (int i = 0; i < allMembersCount; i++) {

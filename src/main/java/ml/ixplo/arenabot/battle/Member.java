@@ -23,6 +23,11 @@ public class Member implements IUser{
         return teamId;
     }
 
+    @Override
+    public void setTeamId(String id) {
+        teamId = id;
+    }
+
     public int getStatus() {
         return ArenaUser.getStatus(userId);
     }

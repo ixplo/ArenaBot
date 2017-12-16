@@ -4,6 +4,7 @@ import ml.ixplo.arenabot.messages.Messages;
 import ml.ixplo.arenabot.battle.Battle;
 import ml.ixplo.arenabot.battle.Registration;
 import ml.ixplo.arenabot.user.ArenaUser;
+import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Chat;
 import org.telegram.telegrambots.api.objects.User;
 import org.telegram.telegrambots.bots.AbsSender;
@@ -25,17 +26,20 @@ public class CmdList extends BotCommand {
 
     @Override
     public void execute(AbsSender absSender, User user, Chat chat, String[] strings) {
-        if (!ArenaUser.doesUserExists(user.getId())) {
-            return;
+        if (ArenaUser.doesUserExists(user.getId())) {
+            try {
+                absSender.sendMessage(getListMessage(chat.getId()));
+            } catch (TelegramApiException e) {
+                BotLogger.error(LOGTAG, e);
+            }
         }
-        if(!Registration.isOn()){
-            Messages.sendListTo(chat.getId(), Battle.getBattle().getTeams());
-            return;
-        }
-        try {
-            absSender.sendMessage(Messages.getListMsg(chat.getId()));
-        } catch (TelegramApiException e) {
-            BotLogger.error(LOGTAG, e);
+    }
+
+    private SendMessage getListMessage(Long chatId) {
+        if (Registration.isOn()) {
+            return Messages.getRegistrationListMsg(chatId);
+        } else {
+            return Messages.getRoundTeamsList(chatId, Battle.getBattle().getTeams());
         }
     }
 }

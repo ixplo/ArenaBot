@@ -1,6 +1,5 @@
 package ml.ixplo.arenabot.battle;
 
-import ml.ixplo.arenabot.user.ArenaUser;
 import ml.ixplo.arenabot.config.Config;
 import ml.ixplo.arenabot.user.IUser;
 
@@ -21,7 +20,7 @@ public class Team {
     private String descr;
     private String htmlName;
 
-    private List<Member> members = new ArrayList<>();
+    private List<IUser> members = new ArrayList<>();
 
     public Team(String id) {
         this.id = id;
@@ -92,17 +91,17 @@ public class Team {
         this.name = name;
     }
 
-    public List<Member> getMembers() {
+    public List<IUser> getMembers() {
         return members;
     }
 
-    public void setMembers(List<Member> members) {
+    public void setMembers(List<IUser> members) {
         this.members = members;
     }
 
-    public void addMember(Member member) {
+    public void addMember(IUser member) {
         members.add(member);
-        member.teamId = id;
+        member.setTeamId(id);
     }
 
     static public void refreshTeamsId(List<? extends IUser> members, List<Integer> curMembersId, List<String> teamsId){
