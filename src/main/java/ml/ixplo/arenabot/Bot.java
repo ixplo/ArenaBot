@@ -48,6 +48,24 @@ public class Bot extends TelegramLongPollingCommandBot {
 
     public Bot(DatabaseManager db) {
 
+        registerCommands();
+        setDb(db);
+        Messages.setBot(this);
+
+        registerDefaultAction((absSender, message) -> {
+            SendMessage commandUnknownMessage = new SendMessage();
+            commandUnknownMessage.setChatId(message.getChatId());
+            commandUnknownMessage.setText("Команда '" + message.getText() + "' неизвестна боту.");
+            try {
+                absSender.sendMessage(commandUnknownMessage);
+            } catch (TelegramApiException e) {
+                BotLogger.error(LOGTAG, e);
+            }
+            getRegisteredCommand("help").execute(absSender, message.getFrom(), message.getChat(), new String[]{});
+        });
+    }
+
+    private void registerCommands() {
         register(new CmdStart());
         register(new CmdReg());
         register(new CmdUnreg());
@@ -63,23 +81,7 @@ public class Bot extends TelegramLongPollingCommandBot {
         register(new CmdDo());
         register(new CmdList());
         register(new CmdDropStatus());
-        CmdHelp cmdHelp = new CmdHelp(this);
-        register(cmdHelp);
-
-        setDb(db);
-        Messages.setBot(this);
-
-        registerDefaultAction((absSender, message) -> {
-            SendMessage commandUnknownMessage = new SendMessage();
-            commandUnknownMessage.setChatId(message.getChatId());
-            commandUnknownMessage.setText("Команда '" + message.getText() + "' неизвестна боту.");
-            try {
-                absSender.sendMessage(commandUnknownMessage);
-            } catch (TelegramApiException e) {
-                BotLogger.error(LOGTAG, e);
-            }
-            cmdHelp.execute(absSender, message.getFrom(), message.getChat(), new String[]{});
-        });
+        register(new CmdHelp(this));
     }
 
     public void setDb(DatabaseManager db) {
