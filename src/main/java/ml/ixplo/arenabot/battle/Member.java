@@ -10,10 +10,9 @@ import ml.ixplo.arenabot.user.IUser;
  */
 //todo выпилить и возвращать ArenaUser
 public class Member implements IUser{
-    Integer userId;
-    String name;
-    String teamId;
-    private int status;
+    private Integer userId;
+    private String name;
+    private String teamId;
 
     public Integer getUserId() {
         return userId;
@@ -32,16 +31,10 @@ public class Member implements IUser{
         return ArenaUser.getStatus(userId);
     }
 
-    public Member(int userId) {
-        this.userId = userId;
-        name = ArenaUser.getUserName(userId);
-    }
-
     public Member(int userId, String teamId) {
         this.userId = userId;
         name = ArenaUser.getUserName(userId);
         this.teamId = teamId;
-        status = ArenaUser.getStatus(userId);
     }
 
     public static void addMember(int userId, String teamId) {
@@ -64,5 +57,4 @@ public class Member implements IUser{
         return name;
     }
 
-    //todo new Thread
 }

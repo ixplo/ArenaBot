@@ -121,7 +121,7 @@ public class Registration {
     }
 
     public String getMemberTeam(Integer userId) {
-        return getMember(userId).teamId;
+        return getMember(userId).getTeamId();
     }
 
     public Member getMember(Integer userId) {
@@ -178,7 +178,7 @@ public class Registration {
         List<Member> allMembers = getMembers();
         int allMembersCount = getMembersCount();
         for (int i = 0; i < allMembersCount; i++) {
-            if (allMembers.get(i).teamId.equals(id)) {
+            if (allMembers.get(i).getTeamId().equals(id)) {
                 teamMembers.add(allMembers.get(i));
             }
         }

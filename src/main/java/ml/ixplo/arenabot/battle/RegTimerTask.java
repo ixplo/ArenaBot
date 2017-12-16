@@ -1,6 +1,5 @@
 package ml.ixplo.arenabot.battle;
 
-import ml.ixplo.arenabot.config.Config;
 import ml.ixplo.arenabot.config.PropertiesLoader;
 import ml.ixplo.arenabot.messages.Messages;
 

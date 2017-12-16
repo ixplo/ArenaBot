@@ -51,7 +51,6 @@ public class Order {
         txt.append("user=").append(userId).append("round=").append(round);
         txt.append("commonPercent=").append(commonPercent);
         for (Action action:actions){
-            //txt.append("[do ").append(action.actionId).append(" ").append(action.targetId);
             txt.append(" ").append(action.getPercent()).append("]");
         }
         return txt.toString();
