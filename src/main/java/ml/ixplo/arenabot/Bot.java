@@ -1,16 +1,8 @@
 package ml.ixplo.arenabot;
 
-import ml.ixplo.arenabot.battle.Battle;
-import ml.ixplo.arenabot.battle.Round;
-import ml.ixplo.arenabot.battle.actions.Action;
 import ml.ixplo.arenabot.battle.Registration;
-import ml.ixplo.arenabot.config.Config;
-import ml.ixplo.arenabot.database.DatabaseManager;
-import ml.ixplo.arenabot.exception.ArenaUserException;
-import ml.ixplo.arenabot.messages.Messages;
-import ml.ixplo.arenabot.user.ArenaUser;
-import ml.ixplo.arenabot.user.classes.UserClass;
-import ml.ixplo.arenabot.user.items.Item;
+import ml.ixplo.arenabot.battle.actions.Action;
+import ml.ixplo.arenabot.callbacks.Callbacks;
 import ml.ixplo.arenabot.commands.CmdDo;
 import ml.ixplo.arenabot.commands.CmdDrop;
 import ml.ixplo.arenabot.commands.CmdDropStatus;
@@ -27,6 +19,11 @@ import ml.ixplo.arenabot.commands.CmdStart;
 import ml.ixplo.arenabot.commands.CmdStat;
 import ml.ixplo.arenabot.commands.CmdUnreg;
 import ml.ixplo.arenabot.commands.CmdXstat;
+import ml.ixplo.arenabot.config.Config;
+import ml.ixplo.arenabot.database.DatabaseManager;
+import ml.ixplo.arenabot.messages.Messages;
+import ml.ixplo.arenabot.user.ArenaUser;
+import ml.ixplo.arenabot.user.items.Item;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.CallbackQuery;
 import org.telegram.telegrambots.api.objects.Message;
@@ -103,11 +100,7 @@ public class Bot extends TelegramLongPollingCommandBot {
         } else if (update.hasInlineQuery()) {
             handleInlineQuery(update.getInlineQuery());
         } else if (update.hasCallbackQuery()) {
-            try {
-                handleCallbackQuery(update.getCallbackQuery());
-            } catch (TelegramApiException e) {
-                BotLogger.error(LOGTAG, e);
-            }
+            handleCallbackQuery(update.getCallbackQuery());
         }
     }
 
@@ -119,7 +112,7 @@ public class Bot extends TelegramLongPollingCommandBot {
             return;
         }
         if (message.hasText()) {
-            //something useful
+            //no-op
         }
     }
 
@@ -131,88 +124,11 @@ public class Bot extends TelegramLongPollingCommandBot {
         }
     }
 
-    private void handleCallbackQuery(CallbackQuery callbackQuery) throws TelegramApiException {
-        String callbackCommand = callbackQuery.getData().substring(0, callbackQuery.getData().indexOf('_'));
-        String callbackEntry = callbackQuery.getData().substring(callbackQuery.getData().indexOf('_') + 1);
-        Integer userId = callbackQuery.getFrom().getId();
-        Integer messageId = callbackQuery.getMessage().getMessageId();
-        String queryId = callbackQuery.getId();
-        //todo сделать нормально
-        switch (callbackCommand) {
-            case "newClassIs":
-                answerCallbackQuery(Messages.selectedUserClassQuery(queryId, callbackEntry));
-                sendMessage(Messages.getChooseRaceMsg(callbackQuery.getMessage().getChatId(), callbackEntry));
-                break;
-            case "newRaceIs":
-                String userName = callbackQuery.getFrom().getFirstName() == null ?
-                        callbackQuery.getFrom().getLastName() :
-                        callbackQuery.getFrom().getFirstName();
-                String userRace = callbackEntry.substring(0, 1);
-                String userClass = callbackEntry.substring(1);
-                ArenaUser.create(userId, userName, UserClass.valueOf(userClass), userRace);
-                answerCallbackQuery(Messages.getCreateUserQuery(
-                        queryId,
-                        ArenaUser.getClassName(userClass),
-                        ArenaUser.getRaceName(userRace)));
-                sendMessage(Messages.getCreateUserMsg(userId));
-                break;
-            case "del":
-                if (callbackEntry.equals("Cancel")) {
-                    answerCallbackQuery(Messages.getCancelDeleteQuery(queryId));
-                    editMessageReplyMarkup(Messages.getEditMessageReplyMarkup(userId, messageId));
-                } else if (callbackEntry.equals("Delete")) {
-                    ArenaUser.dropUser(userId);
-                    editMessageReplyMarkup(Messages.getEditMessageReplyMarkup(userId, messageId));
-                    editMessageText(Messages.getAfterDeleteMessageText(userId, messageId));
-                    answerCallbackQuery(Messages.getAfterDeleteQuery(queryId));
-                }
-                break;
-            case "reg":
-                registration.regMember(userId);
-                answerCallbackQuery(Messages.getAnswerCallbackQuery(queryId, null));
-                Messages.sendToAll(
-                        registration.getMembers(),
-                        Messages.getRegMemberMsg(userId, registration.getMember(userId).getTeamId())
-                );
-                break;
-            case "learnSpell":
-                answerCallbackQuery(Messages.getAnswerCallbackQuery(queryId, null));
-                ArenaUser.getUser(userId).learn(Integer.parseInt(callbackEntry));
-                break;
-            case "target":
-                Action.addAction(userId);
-                Action.setTargetId(userId, Integer.parseInt(callbackEntry));
-                answerCallbackQuery(Messages.getSelectTargetQuery(
-                        queryId, Integer.parseInt(callbackEntry)));
-                sendMessage(Messages.getAskActionMsg(userId));
-                break;
-            case "spell":
-                if (callbackEntry.equals("spell")) {
-                    Messages.sendAskSpell(callbackQuery);
-                    break;
-                }
-                Action.setCastId(userId, callbackEntry);
-                Action.setActionId(userId, "Магия");
-                Messages.sendAskPercent(callbackQuery, "Магия");
-                break;
-            case "action":
-                Action.setActionId(userId, callbackEntry);
-                Messages.sendAskPercent(callbackQuery, callbackEntry);
-                break;
-            case "percent":
-                Action.setPercent(userId, Integer.parseInt(callbackEntry));
-                Battle.getBattle().interrupt();
-                Round.getCurrent().takeAction(userId,
-                        Action.getActionId(userId, 1),
-                        Action.getTargetId(userId, 1),
-                        Action.getPercent(userId, 1),
-                        Action.getSpellId(userId, 1));
-                Messages.sendActionTaken(callbackQuery);
-                Action.clearActions(userId);
-                break;
-            default: {
-                throw new ArenaUserException("Unknown callbackQuery: " + callbackQuery.getData());
-            }
+    private void handleCallbackQuery(CallbackQuery callbackQuery) {
+        try {
+            Callbacks.handleCallbackCommand(callbackQuery, this);
+        } catch (TelegramApiException e) {
+            BotLogger.error(LOGTAG, e);
         }
     }
 

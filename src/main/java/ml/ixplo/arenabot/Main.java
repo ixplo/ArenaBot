@@ -2,7 +2,6 @@ package ml.ixplo.arenabot;
 
 import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.TelegramBotsApi;
-import org.telegram.telegrambots.exceptions.TelegramApiException;
 import org.telegram.telegrambots.logging.BotLogger;
 import org.telegram.telegrambots.logging.BotsFileHandler;
 
@@ -26,13 +25,9 @@ public class Main {
         try {
             ApiContextInitializer.init();
             TelegramBotsApi telegramBotsApi = new TelegramBotsApi();
-            try {
-                telegramBotsApi.registerBot(new Bot());
-            } catch (TelegramApiException e) {
+            telegramBotsApi.registerBot(new Bot());
+            } catch (Exception e) {
                 BotLogger.error(LOGTAG, e);
             }
-        } catch (Exception e) {
-            BotLogger.error(LOGTAG, e);
-        }
     }
 }
