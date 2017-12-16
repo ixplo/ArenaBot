@@ -6,6 +6,7 @@ import ml.ixplo.arenabot.exception.ArenaUserException;
 import ml.ixplo.arenabot.messages.Messages;
 import ml.ixplo.arenabot.user.ArenaUser;
 import ml.ixplo.arenabot.user.IUser;
+import org.telegram.telegrambots.logging.BotLogger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.Timer;
  * 29.04.2017.
  */
 public class Round {
+    public static final String LOGTAG = "MESSAGES";
     private static Round round;
     private static List<Integer> curMembersId;
     private static List<String> curTeamsId;
@@ -56,7 +58,8 @@ public class Round {
             try {
                 Thread.sleep(Config.ROUND_TIME);
             } catch (InterruptedException e) {
-                System.out.println("Получен заказ");
+                //no-op
+                BotLogger.info(LOGTAG, "Получен заказ");
             }
         }
         timer.cancel();

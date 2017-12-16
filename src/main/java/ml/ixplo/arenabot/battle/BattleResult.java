@@ -1,5 +1,6 @@
 package ml.ixplo.arenabot.battle;
 
+import ml.ixplo.arenabot.config.PropertiesLoader;
 import ml.ixplo.arenabot.user.ArenaUser;
 import ml.ixplo.arenabot.config.Config;
 import ml.ixplo.arenabot.messages.Messages;
@@ -38,7 +39,8 @@ public class BattleResult {
             user.addUserGames();
             user.setLastGame();
         }
-        Messages.sendToAll(members, Messages.getInlineKeyboardMsg(Config.CHANNEL_ID, "Регистрация началась:",
+        Messages.sendToAll(members,
+                Messages.getInlineKeyboardMsg(PropertiesLoader.getChannelId(), "Регистрация началась:",
                 Collections.singletonList("Сыграть снова"), Collections.singletonList("reg_user")));
     }
 }

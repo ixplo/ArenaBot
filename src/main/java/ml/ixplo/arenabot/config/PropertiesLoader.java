@@ -14,6 +14,10 @@ public class PropertiesLoader {
     private static String LOGTAG = "PropertiesLoader";
     private static Map<String, String> settings = new HashMap<>();
 
+    public static Map<String, String> getProperties() {
+        return getProperties(Config.PROPERTIES_FILE);
+    }
+
     public static Map<String, String> getProperties(String file) {
         try {
             loadSettingsFrom(file);
@@ -23,6 +27,13 @@ public class PropertiesLoader {
         return settings;
     }
 
+    public static long getChannelId() {
+        return Long.parseLong(getProperties().get("channel.id"));
+    }
+
+    public static String getVersion() {
+        return getProperties().get("version");
+    }
     private static void loadSettingsFrom(String fileName) throws IOException {
         Properties properties = new Properties();
         FileInputStream fis = new FileInputStream(fileName);

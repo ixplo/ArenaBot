@@ -15,4 +15,9 @@ public class PropertiesLoaderTest {
         Assert.assertEquals(Presets.WARRIOR_NAME, settings.get("warrior.name"));
     }
 
+    @Test
+    public void getPropertiesDefault() throws Exception {
+        Map<String, String> settings = PropertiesLoader.getProperties();
+        Assert.assertTrue(settings.containsKey("channel.id"));
+    }
 }

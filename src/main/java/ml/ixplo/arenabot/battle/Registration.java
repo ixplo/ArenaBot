@@ -1,5 +1,6 @@
 package ml.ixplo.arenabot.battle;
 
+import ml.ixplo.arenabot.config.PropertiesLoader;
 import ml.ixplo.arenabot.messages.Messages;
 import ml.ixplo.arenabot.user.ArenaUser;
 import ml.ixplo.arenabot.config.Config;
@@ -85,7 +86,7 @@ public class Registration {
             ArenaUser.getUser(userId).setTeamId("");
         }
         if (regTimer != null) {
-            Messages.editChannelMsg(Config.CHANNEL_ID, regTimerTask.getMessageId(), "Таймер остановлен");
+            Messages.editChannelMsg(PropertiesLoader.getChannelId(), regTimerTask.getMessageId(), "Таймер остановлен");
             regTimer.cancel();
         }
     }

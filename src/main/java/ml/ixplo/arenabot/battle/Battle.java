@@ -1,5 +1,6 @@
 package ml.ixplo.arenabot.battle;
 
+import ml.ixplo.arenabot.config.PropertiesLoader;
 import ml.ixplo.arenabot.user.ArenaUser;
 import ml.ixplo.arenabot.config.Config;
 import ml.ixplo.arenabot.messages.Messages;
@@ -42,7 +43,7 @@ public class Battle extends Thread {//состоит из Rounds, в конце 
 
     public void run() {
         Thread.currentThread().setName("Battle");
-        Messages.sendChannelMsg(Config.CHANNEL_ID, "<a href=\"" + Config.BOT_PRIVATE + "\">БИТВА НАЧАЛАСЬ!</a>");
+        Messages.sendChannelMsg(PropertiesLoader.getChannelId(), "<a href=\"" + Config.BOT_PRIVATE + "\">БИТВА НАЧАЛАСЬ!</a>");
         int roundsCounter = 0;
         while (!isAlone()) {
             Messages.sendToAll(members, "Раунд " + ++roundsCounter);

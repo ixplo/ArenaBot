@@ -131,6 +131,7 @@
                                     <includes>
                                         <include>ArenaDb.sqlite</include>
                                         <include>run.bat</include>
+                                        <include>arena.properties</include>
                                     </includes>
                                 </resource>
                             </resources>
@@ -266,6 +267,7 @@
                         <filtering>true</filtering>
                         <includes>
                             <include>run.bat</include>
+                            <include>arena.properties</include>
                         </includes>
                     </resource>
                     <resource>
