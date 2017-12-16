@@ -6,6 +6,8 @@ import ml.ixplo.arenabot.exception.ArenaUserException;
 import ml.ixplo.arenabot.user.ArenaUser;
 import ml.ixplo.arenabot.battle.Round;
 
+import java.util.List;
+
 import static com.google.common.math.IntMath.pow;
 
 /**
@@ -66,9 +68,9 @@ public abstract class Action {
         db.setIntTo(Config.ROUND_ACTIONS, userId, "percent", percent);
     }
 
-    public static void setActionId(int userId, String callbackEntry) {
+    public static void setActionId(int userId, String actionType) {
         String action;
-        switch (callbackEntry) {
+        switch (actionType) {
             case "Атака":
                 action = "a";
                 break;
@@ -82,7 +84,7 @@ public abstract class Action {
                 action = "m";
                 break;
             default:
-                throw new ArenaUserException("Unknown action actionId: " + callbackEntry);
+                throw new ArenaUserException("Unknown action actionId: " + actionType);
         }
         db.setStringTo(Config.ROUND_ACTIONS, userId, "action_type", action);
     }
@@ -91,7 +93,7 @@ public abstract class Action {
         db.setStringTo(Config.ROUND_ACTIONS, userId, "cast_id", castId);
     }
 
-    public static String getActionId(int userId, int counter) {
+    public static String getActionType(int userId, int counter) {
         return db.getStringByBy(Config.ROUND_ACTIONS,
                 "action_type",
                 "id", userId,
@@ -119,7 +121,7 @@ public abstract class Action {
                 "counter", counter);
     }
 
-    public String getActionId() {
+    public String getActionType() {
         return actionId;
     }
 
@@ -149,7 +151,7 @@ public abstract class Action {
         return roundDouble(d, 2);
     }
 
-    static double roundDouble(double d, int precise) {
+    private static double roundDouble(double d, int precise) {
         precise = pow(10, precise);
         d *= precise;
         int i = (int) Math.round(d);

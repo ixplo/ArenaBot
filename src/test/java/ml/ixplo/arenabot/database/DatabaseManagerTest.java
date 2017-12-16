@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 
 public class DatabaseManagerTest {
 
-    public static final Logger LOGGER = LoggerFactory.getLogger(ItemTest.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ItemTest.class);
     private DatabaseManager db;
     private TestHelper testHelper = new TestHelper();
 
@@ -57,10 +57,12 @@ public class DatabaseManagerTest {
 
     @Test
     public void dropActions() throws Exception {
+
     }
 
     @Test
     public void dropSpells() throws Exception {
+
     }
 
     @Test

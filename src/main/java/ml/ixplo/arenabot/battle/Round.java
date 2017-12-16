@@ -171,7 +171,7 @@ public class Round {
         List<Action> attackOnTarget = new ArrayList<>();
         List<Action> onTargetList = getActionsByTarget(targetId);
         for (Action action : onTargetList) {
-            if(action.getActionId().equals("a")){
+            if(action.getActionType().equals("a")){
                 attackOnTarget.add(action);
             }
         }

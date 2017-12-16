@@ -13,6 +13,11 @@ public class Main {
     private static final String LOGTAG = "MAIN";
 
     public static void main(String[] args) {
+        initLogger();
+        startBot();
+    }
+
+    private static void initLogger() {
         BotLogger.setLevel(Level.ALL);
         BotLogger.registerLogger(new ConsoleHandler());
         try {
@@ -21,7 +26,9 @@ public class Main {
                 IOException e) {
             BotLogger.severe(LOGTAG, e);
         }
+    }
 
+    private static void startBot() {
         try {
             ApiContextInitializer.init();
             TelegramBotsApi telegramBotsApi = new TelegramBotsApi();

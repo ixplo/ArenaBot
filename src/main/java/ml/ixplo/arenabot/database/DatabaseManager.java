@@ -123,28 +123,24 @@ public class DatabaseManager {
         return deletedRows > 0;
     }
 
-    public boolean dropActions(Integer userId) {
-        int deletedRows = 0;
+    public void dropActions(Integer userId) {
         String queryText = "DELETE FROM round_actions WHERE id=?;";
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setInt(1, userId);
-            deletedRows = preparedStatement.executeUpdate();
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             BotLogger.error(LOGTAG, e.getMessage());
         }
-        return deletedRows > 0;
     }
 
-    public boolean dropSpells(int userId) {
-        int deletedRows = 0;
+    public void dropSpells(int userId) {
         String queryText = "DELETE FROM available_spells WHERE user_id=?;";
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setInt(1, userId);
-            deletedRows = preparedStatement.executeUpdate();
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             BotLogger.error(LOGTAG, e.getMessage());
         }
-        return deletedRows > 0;
     }
 
     public ArenaUser getUser(Integer userId) {
@@ -356,8 +352,7 @@ public class DatabaseManager {
         return updatedRows > 0;
     }
 
-    public boolean addAction(Integer userId) {
-        int updatedRows = 0;
+    public void addAction(Integer userId) {
         String queryText = "INSERT OR REPLACE INTO ROUND_ACTIONS " +
                 "(id," +
                 "counter) VALUES(?,?);";
@@ -365,18 +360,16 @@ public class DatabaseManager {
             preparedStatement.setInt(1, userId);
             int count = getCount("ROUND_ACTIONS", "id", userId) + 1;
             preparedStatement.setInt(2, count);
-            updatedRows = preparedStatement.executeUpdate();
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             BotLogger.error(LOGTAG, e.getMessage());
         }
-        return updatedRows > 0;
     }
 
-    public boolean addItem(Integer userId, String itemId) {
+    public void addItem(Integer userId, String itemId) {
         // check if item non exist throw exception
         getItem(itemId);
 
-        int updatedRows = 0;
         String queryText = "INSERT OR REPLACE INTO inventory " +
                 "(id," +
                 "user_Id," +
@@ -386,11 +379,10 @@ public class DatabaseManager {
             preparedStatement.setInt(2, userId);
             int count = getCount(Config.EQIP, "user_Id", userId) + 1;
             preparedStatement.setInt(3, count);
-            updatedRows = preparedStatement.executeUpdate();
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             BotLogger.error(LOGTAG, e.getMessage());
         }
-        return updatedRows > 0;
     }
 
     public List<Item> getItems(Integer userId) {

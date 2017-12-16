@@ -11,7 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class RegistrationTest {
-    public static final Logger LOGGER = LoggerFactory.getLogger(RegistrationTest.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(RegistrationTest.class);
 
     private TestHelper testHelper = new TestHelper();
     private ArenaUser warrior = TestHelper.WARRIOR;

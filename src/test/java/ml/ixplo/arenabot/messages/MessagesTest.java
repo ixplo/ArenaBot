@@ -31,7 +31,7 @@ import java.util.List;
 
 public class MessagesTest {
 
-    public static final Logger LOGGER = LoggerFactory.getLogger(ItemTest.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ItemTest.class);
 
     ArenaUser warrior;
     private TestHelper testHelper = new TestHelper();

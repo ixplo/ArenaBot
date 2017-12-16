@@ -14,7 +14,7 @@ import java.util.Map;
 
 public class ItemTest {
 
-    public static final Logger LOGGER = LoggerFactory.getLogger(ItemTest.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ItemTest.class);
 
     private TestHelper testHelper = new TestHelper();
     private ArenaUser warrior = TestHelper.WARRIOR;

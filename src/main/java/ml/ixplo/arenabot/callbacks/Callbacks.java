@@ -60,7 +60,7 @@ public class Callbacks {
         Action.setPercent(userId, Integer.parseInt(entry));
         Battle.getBattle().interrupt();
         Round.getCurrent().takeAction(userId,
-                Action.getActionId(userId, 1),
+                Action.getActionType(userId, 1),
                 Action.getTargetId(userId, 1),
                 Action.getPercent(userId, 1),
                 Action.getSpellId(userId, 1));
