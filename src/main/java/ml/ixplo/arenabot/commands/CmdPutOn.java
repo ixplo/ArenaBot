@@ -12,7 +12,7 @@ public class CmdPutOn extends BotCommand {
     public static final String LOGTAG = "DOCOMMAND";
 
     public CmdPutOn() {
-        super("putOn", "&lt&gt &ltномер&gt &lt%&gt - надеть вещь с указанным номером в инвентаре");
+        super("putOn", "&ltномер&gt - надеть вещь с указанным номером в инвентаре");
     }
 
     @Override

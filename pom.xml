@@ -21,6 +21,7 @@
         <exec-maven-plugin.version>1.6.0</exec-maven-plugin.version>
         <maven-jar-plugin.version>3.0.2</maven-jar-plugin.version>
         <maven-dependency-plugin.version>3.0.2</maven-dependency-plugin.version>
+        <maven-assembly-plugin.version>3.1.0</maven-assembly-plugin.version>
         <surefire-plugin.version>2.20.1</surefire-plugin.version>
         <jacoco-plugin.version>0.7.8</jacoco-plugin.version>
         <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>  <!-- Ensure you run mvn install before sonar:sonar -->
@@ -40,7 +41,6 @@
             **/src/test/**/*
         </sonar.coverage.exclusions>
         <jdk.version>1.8</jdk.version>
-        <maven-assembly-plugin.version>3.1.0</maven-assembly-plugin.version>
     </properties>
     <dependencies>
         <dependency>
