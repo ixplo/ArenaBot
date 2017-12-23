@@ -9,7 +9,7 @@ import org.telegram.telegrambots.bots.AbsSender;
 import org.telegram.telegrambots.bots.commands.BotCommand;
 
 public class CmdPutOn extends BotCommand {
-    public static final String LOGTAG = "DOCOMMAND";
+    public static final String LOGTAG = "PUTONCOMMAND";
 
     public CmdPutOn() {
         super("putOn", "&ltномер&gt - надеть вещь с указанным номером в инвентаре");
