@@ -350,7 +350,10 @@ public class MessagesTest {
     }
 
     @Test
-    public void sendActionTaken() throws Exception {
+    public void getActionTakenEditMsg() throws Exception {
+        EditMessageText messageText = Messages.getActionTakenEditMsg(warrior.getUserId(), Presets.MESSAGE_ID);
+        Assert.assertEquals(Presets.MESSAGE_ID, messageText.getMessageId());
+        Assert.assertEquals("Заказ принят", messageText.getText());
     }
 
     @Test

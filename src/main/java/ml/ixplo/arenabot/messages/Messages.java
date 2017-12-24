@@ -376,12 +376,10 @@ public final class Messages {
     }
 
     public static SendMessage getOpenPrivateWithBotMsg(int userId, String userName) {
-
         SendMessage answer = new SendMessage();
-        StringBuilder messageBuilder = new StringBuilder();
-        messageBuilder.append("Добро пожаловать, ").append(userName).append("!\n");
-        messageBuilder.append("<b>#arena</b> - ролевая чат игра, где вы можете сразиться с другими игроками.\n");
-        messageBuilder.append("Нажмите кнопку для начала.");
+        String messageText = "Добро пожаловать, " + userName + "!\n" +
+                "<b>#arena</b> - ролевая чат игра, где вы можете сразиться с другими игроками.\n" +
+                "Нажмите кнопку для начала.";
         InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rows = new ArrayList<>();
         List<InlineKeyboardButton> row = new ArrayList<>();
@@ -394,7 +392,7 @@ public final class Messages {
         answer.enableHtml(true);
         answer.setReplyMarkup(markup);
         answer.setChatId((long) userId);
-        answer.setText(messageBuilder.toString());
+        answer.setText(messageText);
         return answer;
     }
 
@@ -407,6 +405,7 @@ public final class Messages {
     //todo переделать все под один универсальный метод, а текст сообщения хранить в xml
     //todo конкретный результат определять по коду
     //todo getAnswerCallbackQuery(String code, Map<String, Object> inParams)
+    //todo вынести callbackquery в отдельный класс
     public static AnswerCallbackQuery getAnswerCallbackQuery(String queryId, String queryText) {
         if (queryText == null) {
             return new AnswerCallbackQuery().setCallbackQueryId(queryId);
@@ -445,6 +444,9 @@ public final class Messages {
         return new EditMessageText().setChatId((long)userId).setMessageId(messageId).setText("Персонаж удален");
     }
 
+    public static EditMessageText getActionTakenEditMsg(int userId, Integer messageId) {
+        return new EditMessageText().setChatId((long)userId).setMessageId(messageId).setText("Заказ принят:");
+    }
 
     public static void sendListToAll(List<Team> teams) {
 
@@ -615,24 +617,6 @@ public final class Messages {
         try {
             bot.editMessageText(editText);
             bot.editMessageReplyMarkup(markup);
-            bot.answerCallbackQuery(query);
-        } catch (TelegramApiException e) {
-            BotLogger.error(LOGTAG, e);
-        }
-    }
-
-    public static void sendActionTaken(CallbackQuery callbackQuery) {
-
-        String queryId = callbackQuery.getId();
-        Long chatId = callbackQuery.getMessage().getChatId();
-        AnswerCallbackQuery query = new AnswerCallbackQuery();
-        query.setCallbackQueryId(queryId);
-        EditMessageText editText = new EditMessageText();
-        editText.setChatId(chatId);
-        editText.setMessageId(callbackQuery.getMessage().getMessageId());
-        editText.setText("Заказ принят:");
-        try {
-            bot.editMessageText(editText);
             bot.answerCallbackQuery(query);
         } catch (TelegramApiException e) {
             BotLogger.error(LOGTAG, e);

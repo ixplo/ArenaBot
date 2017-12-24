@@ -56,7 +56,7 @@ public class Callbacks {
         }
     }
 
-    private static void handlePercent() {
+    private static void handlePercent() throws TelegramApiException {
         Action.setPercent(userId, Integer.parseInt(entry));
         Battle.getBattle().interrupt();
         Round.getCurrent().takeAction(userId,
@@ -64,7 +64,8 @@ public class Callbacks {
                 Action.getTargetId(userId, 1),
                 Action.getPercent(userId, 1),
                 Action.getSpellId(userId, 1));
-        Messages.sendActionTaken(query);
+        bot.answerCallbackQuery(Messages.getAnswerCallbackQuery(queryId, null));
+        bot.editMessageText(Messages.getActionTakenEditMsg(userId, messageId));
         Action.clearActions(userId);
     }
 
