@@ -413,6 +413,10 @@ public final class Messages {
         return new AnswerCallbackQuery().setCallbackQueryId(queryId).setText(queryText);
     }
 
+    public static AnswerCallbackQuery getEmptyQuery(String queryId) {
+        return getAnswerCallbackQuery(queryId, null);
+    }
+
     public static AnswerCallbackQuery getSelectTargetQuery(String queryId, int targetId) {
         return new AnswerCallbackQuery().setCallbackQueryId(queryId)
                 .setText("Вы выбрали цель: " + ArenaUser.getUserName(targetId));

@@ -64,7 +64,7 @@ public class Callbacks {
                 Action.getTargetId(userId, 1),
                 Action.getPercent(userId, 1),
                 Action.getSpellId(userId, 1));
-        bot.answerCallbackQuery(Messages.getAnswerCallbackQuery(queryId, null));
+        bot.answerCallbackQuery(Messages.getEmptyQuery(queryId));
         bot.editMessageText(Messages.getActionTakenEditMsg(userId, messageId));
         Action.clearActions(userId);
     }
@@ -93,13 +93,13 @@ public class Callbacks {
     }
 
     private static void handleLearnSpell() throws TelegramApiException {
-        bot.answerCallbackQuery(Messages.getAnswerCallbackQuery(queryId, null));
+        bot.answerCallbackQuery(Messages.getEmptyQuery(queryId));
         ArenaUser.getUser(userId).learn(Integer.parseInt(entry));
     }
 
     private static void handleReg() throws TelegramApiException {
         Bot.getRegistration().regMember(userId);
-        bot.answerCallbackQuery(Messages.getAnswerCallbackQuery(queryId, null));
+        bot.answerCallbackQuery(Messages.getEmptyQuery(queryId));
         Messages.sendToAll(
                 Bot.getRegistration().getMembers(),
                 Messages.getRegMemberMsg(userId, Bot.getRegistration().getMember(userId).getTeamId())
