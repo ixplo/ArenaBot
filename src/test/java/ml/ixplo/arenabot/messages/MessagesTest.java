@@ -357,6 +357,13 @@ public class MessagesTest {
     }
 
     @Test
+    public void getEmptyQuery() {
+        AnswerCallbackQuery query = Messages.getEmptyQuery(Presets.QUERY_ID);
+        Assert.assertEquals(Presets.QUERY_ID, query.getCallbackQueryId());
+        Assert.assertNull(query.getText());
+    }
+
+    @Test
     public void sendAskSpell() throws Exception {
     }
 
