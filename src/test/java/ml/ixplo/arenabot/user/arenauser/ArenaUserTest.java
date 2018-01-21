@@ -153,7 +153,13 @@ public class ArenaUserTest {
         Assert.assertEquals("waa", warrior.getItems().get(0).getItemId());
     }
 
+    @Test
+    public void getStatus() {
+        Assert.assertEquals(0, ArenaUser.getStatus(warrior.getUserId()));
+        warrior.setStatus(1);
+        Assert.assertEquals(1, ArenaUser.getStatus(warrior.getUserId()));
 
+    }
 //    @Test
 //    public void getUserTeam() throws Exception {
 //    }
