@@ -24,26 +24,21 @@ public class Round {
     private List<? extends IUser> members;
     private List<Team> teams;
     private List<Order> orders;
-    Battle battle;
 
-    public List<Integer> getCurMembersId() {
-        return curMembersId;
-    }
-
-    public List<? extends IUser> getMembers() {
-        return members;
-    }
 
     //todo убрать лишние параметры
     //todo не изменять передаваемые параметры
-    Round(List<Integer> curMembersId, List<String> curTeamsId, List<? extends IUser> members, List<Team> teams, Battle battle) {
-        this.members = members;
-        this.teams = teams;
-        this.battle = battle;
-        this.curMembersId = curMembersId;
-        this.curTeamsId = curTeamsId;
-        round = this;
+    Round(List<Integer> curMembersId, List<String> curTeamsId, List<? extends IUser> members, List<Team> teams) {
+        this.members = new ArrayList<>(members);
+        this.teams = new ArrayList<>(teams);
+        this.curMembersId = new ArrayList<>(curMembersId);
+        this.curTeamsId = new ArrayList<>(curTeamsId);
         orders = new ArrayList<>();
+        round = this;
+    }
+
+    public static Round getCurrent() {
+        return round;
     }
 
     void startRound() {
@@ -56,7 +51,7 @@ public class Round {
         }
         while (!isOrdersDone()) {
             try {
-                Thread.sleep(Config.ROUND_TIME);
+                Thread.sleep(Config.DELAY_TIME);
             } catch (InterruptedException e) {
                 //no-op
                 BotLogger.info(LOGTAG, "Получен заказ");
@@ -101,7 +96,6 @@ public class Round {
     }
 
     public void takeAction(int userId, String actionId, int targetId, int percent, String spellId) {
-
         int index = getIndex(orders, userId);
         orders.get(index).addAction(Action.create(userId, actionId, targetId, percent, spellId));
     }
@@ -182,7 +176,12 @@ public class Round {
         return orders;
     }
 
-    public static Round getCurrent() {
-        return round;
+    public List<Integer> getCurMembersId() {
+        return curMembersId;
     }
+
+    public List<IUser> getMembers() {
+        return (List<IUser>) members;
+    }
+
 }

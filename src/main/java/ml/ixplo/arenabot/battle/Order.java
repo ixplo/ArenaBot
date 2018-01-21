@@ -13,7 +13,7 @@ public class Order {
     Integer userId;
     private List<Action> actions;
     private Round round;
-    private int commonPercent;
+    private volatile int commonPercent;
 
     int getCommonPercent() {
         return commonPercent;

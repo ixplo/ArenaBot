@@ -44,6 +44,7 @@ public class Config {
     public static final int IN_BATTLE = 2;
     public static final int DELAY = 15;
     public static final int ROUND_TIME = 45000;
+    public static final int DELAY_TIME = 1000;
     public static final int ROUND_REMIND = 30000;
     public static final int GOLD_FOR_MEMBER = 10;
     public static final int SCALE = 2;

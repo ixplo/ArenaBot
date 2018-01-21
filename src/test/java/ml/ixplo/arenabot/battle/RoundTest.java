@@ -1,6 +1,8 @@
 package ml.ixplo.arenabot.battle;
 
+import ml.ixplo.arenabot.Bot;
 import ml.ixplo.arenabot.helper.TestHelper;
+import ml.ixplo.arenabot.messages.Messages;
 import ml.ixplo.arenabot.user.ArenaUser;
 import ml.ixplo.arenabot.user.items.ItemTest;
 import org.junit.After;
@@ -12,6 +14,9 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class RoundTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(ItemTest.class);
@@ -23,7 +28,7 @@ public class RoundTest {
     private List<String> curTeamsId;
     private List<ArenaUser> members;
     private List<Team> teams;
-    private Battle battle;
+
     @Before
     public void setUp() throws Exception {
         curMembersId = new ArrayList<>();
@@ -34,8 +39,8 @@ public class RoundTest {
         members.add(warrior);
         teams = new ArrayList<>();
         teams.add(new Team(warrior.getTeamId()));
-        battle = new Battle(teams, members);
-        round = new Round(curMembersId, curTeamsId, members, teams, battle);
+        round = new Round(curMembersId, curTeamsId, members, teams);
+        Messages.setBot(new Bot());
     }
 
     @After
@@ -54,6 +59,14 @@ public class RoundTest {
 
     @Test
     public void startRound() throws Exception {
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                round.getOrders().get(0).setZeroCommonPercent();
+            }
+        }, 1000);
+        round.startRound();
     }
 
     @Test
