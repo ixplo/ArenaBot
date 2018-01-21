@@ -48,7 +48,7 @@ public class Battle extends Thread {//состоит из Rounds, в конце 
         while (!isAlone()) {
             Messages.sendToAll(members, "Раунд " + ++roundsCounter);
             Round round = new Round(curMembersId, curTeamsId, members, teams);
-            round.startRound();
+            round.begin();
         }
         BattleResult battleResult = new BattleResult();
         battleResult.resultBattle(curMembersId, curTeamsId, members, teams);

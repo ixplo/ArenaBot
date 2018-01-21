@@ -14,7 +14,6 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -63,10 +62,10 @@ public class RoundTest {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                round.getOrders().get(0).setZeroCommonPercent();
+                round.stop();
             }
         }, 1000);
-        round.startRound();
+        round.begin();
     }
 
     @Test

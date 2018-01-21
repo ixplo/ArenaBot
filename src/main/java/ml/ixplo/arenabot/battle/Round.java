@@ -41,7 +41,7 @@ public class Round {
         return round;
     }
 
-    void startRound() {
+    void begin() {
         Timer timer = new Timer();
         timer.schedule(new EndRound(this), Config.ROUND_TIME);
         timer.schedule(new RemindAboutEndRound(this), Config.ROUND_REMIND);
@@ -73,6 +73,12 @@ public class Round {
         }
         takeOutCorpses();
 
+    }
+
+    public void stop() {
+        for (Order order : orders) {
+            order.setZeroCommonPercent();
+        }
     }
 
     private void takeOutCorpses() {
