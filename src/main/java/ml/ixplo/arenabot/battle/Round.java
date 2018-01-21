@@ -19,14 +19,14 @@ import java.util.Timer;
 public class Round {
     public static final String LOGTAG = "MESSAGES";
     private static Round round;
-    private static List<Integer> curMembersId;
-    private static List<String> curTeamsId;
+    private List<Integer> curMembersId;
+    private List<String> curTeamsId;
     private List<? extends IUser> members;
     private List<Team> teams;
     private List<Order> orders;
     Battle battle;
 
-    public static List<Integer> getCurMembersId() {
+    public List<Integer> getCurMembersId() {
         return curMembersId;
     }
 
@@ -40,9 +40,9 @@ public class Round {
         this.members = members;
         this.teams = teams;
         this.battle = battle;
-        Round.curMembersId = curMembersId;
-        Round.curTeamsId = curTeamsId;
-        Round.round = this;
+        this.curMembersId = curMembersId;
+        this.curTeamsId = curTeamsId;
+        round = this;
         orders = new ArrayList<>();
     }
 

@@ -1,7 +1,6 @@
 package ml.ixplo.arenabot.messages;
 
 import ml.ixplo.arenabot.Bot;
-import ml.ixplo.arenabot.battle.Member;
 import ml.ixplo.arenabot.battle.Registration;
 import ml.ixplo.arenabot.battle.Round;
 import ml.ixplo.arenabot.battle.Team;
@@ -576,7 +575,7 @@ public final class Messages {
                 }
                 return;
         }
-        out.append("<b>").append(ArenaUser.getUserName(Round.getCurMembersId().get(target)))
+        out.append("<b>").append(ArenaUser.getUserName(Round.getCurrent().getCurMembersId().get(target)))
                 .append("</b> на ").append(percent).append(" процентов");
         msg.setText(out.toString());
         try {

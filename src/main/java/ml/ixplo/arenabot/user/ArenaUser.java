@@ -1,12 +1,11 @@
 package ml.ixplo.arenabot.user;
 
-import ml.ixplo.arenabot.config.Config;
-import ml.ixplo.arenabot.config.Constants;
-import ml.ixplo.arenabot.exception.ArenaUserException;
-import ml.ixplo.arenabot.messages.Messages;
 import ml.ixplo.arenabot.battle.Battle;
 import ml.ixplo.arenabot.battle.Round;
+import ml.ixplo.arenabot.config.Config;
 import ml.ixplo.arenabot.database.DatabaseManager;
+import ml.ixplo.arenabot.exception.ArenaUserException;
+import ml.ixplo.arenabot.messages.Messages;
 import ml.ixplo.arenabot.user.classes.Archer;
 import ml.ixplo.arenabot.user.classes.Mage;
 import ml.ixplo.arenabot.user.classes.Priest;
@@ -21,7 +20,11 @@ import org.telegram.telegrambots.logging.BotLogger;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static com.google.common.math.IntMath.pow;
 
@@ -136,20 +139,20 @@ public abstract class ArenaUser implements IUser {
     }
 
     private static void generateHarksForRaceAndClass() {
-        arenaUser.nativeStr = db.getIntFrom(Config.CLASSES, arenaUser.userClass.toString(), "str_start") +
+        arenaUser.nativeStr = db.getIntFrom(Config.CLASSES, arenaUser.userClass, "str_start") +
                 db.getIntFrom(Config.RACES, arenaUser.race, "str_bonus");
-        arenaUser.nativeDex = db.getIntFrom(Config.CLASSES, arenaUser.userClass.toString(), "dex_start") +
+        arenaUser.nativeDex = db.getIntFrom(Config.CLASSES, arenaUser.userClass, "dex_start") +
                 db.getIntFrom(Config.RACES, arenaUser.race, "dex_bonus");
-        arenaUser.nativeWis = db.getIntFrom(Config.CLASSES, arenaUser.userClass.toString(), "wis_start") +
+        arenaUser.nativeWis = db.getIntFrom(Config.CLASSES, arenaUser.userClass, "wis_start") +
                 db.getIntFrom(Config.RACES, arenaUser.race, "wis_bonus");
-        arenaUser.nativeInt = db.getIntFrom(Config.CLASSES, arenaUser.userClass.toString(), "int_start") +
+        arenaUser.nativeInt = db.getIntFrom(Config.CLASSES, arenaUser.userClass, "int_start") +
                 db.getIntFrom(Config.RACES, arenaUser.race, "int_bonus");
-        arenaUser.nativeCon = db.getIntFrom(Config.CLASSES, arenaUser.userClass.toString(), "con_start") +
+        arenaUser.nativeCon = db.getIntFrom(Config.CLASSES, arenaUser.userClass, "con_start") +
                 db.getIntFrom(Config.RACES, arenaUser.race, "con_bonus");
-        arenaUser.freePoints = db.getIntFrom(Config.CLASSES, arenaUser.userClass.toString(), "free_bonus");
+        arenaUser.freePoints = db.getIntFrom(Config.CLASSES, arenaUser.userClass, "free_bonus");
         arenaUser.maxHitPoints = roundDouble(1.3333333 * arenaUser.curCon
-                + db.getIntFrom(Config.CLASSES, arenaUser.userClass.toString(), "hp_bonus"));
-        arenaUser.money = db.getIntFrom(Config.CLASSES, arenaUser.userClass.toString(), "money_start");
+                + db.getIntFrom(Config.CLASSES, arenaUser.userClass, "hp_bonus"));
+        arenaUser.money = db.getIntFrom(Config.CLASSES, arenaUser.userClass, "money_start");
     }
 
     private static void generateCommonHarks() {
@@ -210,7 +213,7 @@ public abstract class ArenaUser implements IUser {
     }
 
     public static int getStatus(int userId) {
-        return db.getIntFrom(Config.USERS, userId, "status");
+        return db.getIntFrom(Config.USERS, userId, Config.STATUS);
     }
 
     public static void dropUser(int userId) {
@@ -231,10 +234,10 @@ public abstract class ArenaUser implements IUser {
     }
 
     public static double roundDouble(double d, int precise) {
-        precise = pow(10, precise);
-        d *= precise;
-        int i = (int) Math.round(d);
-        return (double) i / precise;
+        int prec = pow(10, precise);
+        double dWithPrecise = d * prec;
+        int i = (int) Math.round(dWithPrecise);
+        return (double) i / prec;
     }
 
     public static ArenaUser getUser(Integer userId) {
@@ -291,12 +294,12 @@ public abstract class ArenaUser implements IUser {
             }
             return;
         }
-        if (target > Round.getCurMembersId().size() - 1) {
+        if (target > Round.getCurrent().getCurMembersId().size() - 1) {
             SendMessage msg = new SendMessage();
             msg.setChatId(chatId);
             msg.enableHtml(true);
             msg.setText("Цель под номером " + Integer.parseInt(strings[1]) +
-                    " не найдена. Всего есть целей: " + Round.getCurMembersId().size());
+                    " не найдена. Всего есть целей: " + Round.getCurrent().getCurMembersId().size());
             try {
                 absSender.sendMessage(msg);
             } catch (TelegramApiException e) {
@@ -642,7 +645,7 @@ public abstract class ArenaUser implements IUser {
 
     public void setStatus(int status) {
         this.status = status;
-        db.setIntTo(Config.USERS, userId, "status", status);
+        db.setIntTo(Config.USERS, userId, Config.STATUS, status);
     }
 
     // **************************************************
@@ -802,7 +805,7 @@ public abstract class ArenaUser implements IUser {
     }
 
     public int getStatus() {
-        return db.getIntFrom(Config.USERS, userId, "status");
+        return db.getIntFrom(Config.USERS, userId, Config.STATUS);
     }
 
     public String getName() {

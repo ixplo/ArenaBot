@@ -25,6 +25,7 @@ public class Config {
     public static final String BOT_PRIVATE = "https://telegram.me/ArenaMBot";
     public static final String BOT_PHOTO_LINK = "http://www.wallpapermint.com/wp-content/uploads/2014/02/Fantasy-World-Pack3-21-280x158.jpg";
     public static final String BOT_TUMB_PHOTO_LINK = "http://pixs.ru/showimage/tumbjpg_5168201_25993141.jpg";
+    public static final String STATUS = "status";
     public static final String USERS = "users";
     public static final String CLASSES = "classes";
     public static final String RACES = "races";
