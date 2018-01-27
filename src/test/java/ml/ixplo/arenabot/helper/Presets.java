@@ -14,7 +14,9 @@ public class Presets {
     public static final int WARRIOR_ID = -1;
     public static final String WARRIOR_NAME = "test_warrior";
     public static final String WARRIOR_CLASS = "WARRIOR";
+    public static final String WARRIOR_CLASS_NAME = "Воин";
     public static final String WARRIOR_RACE = "o";
+    public static final String WARRIOR_RACE_NAME = "Хоббит";
     public static final int MAGE_ID = -2;
     public static final String MAGE_NAME = "test_mage";
     public static final String MAGE_RACE = "e";

@@ -1,5 +1,6 @@
 package ml.ixplo.arenabot.user.arenauser;
 
+import ml.ixplo.arenabot.exception.ArenaUserException;
 import ml.ixplo.arenabot.helper.Presets;
 import ml.ixplo.arenabot.helper.TestHelper;
 import ml.ixplo.arenabot.user.ArenaUser;
@@ -93,6 +94,18 @@ public class ArenaUserTest {
         assertEquals(UserClass.PRIEST.toString(), priest.getUserClass());
     }
 
+    @Test
+    public void createArcher_allGood() throws Exception {
+        ArenaUser archer = ArenaUser.create(UserClass.ARCHER);
+        assertNotNull(archer);
+        assertEquals(UserClass.ARCHER.toString(), archer.getUserClass());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void create_nullClass() throws Exception {
+        ArenaUser.create(null);
+    }
+
     @Test(expected = IllegalArgumentException.class)
     public void create_existed() throws Exception {
         ArenaUser.create(
@@ -114,6 +127,12 @@ public class ArenaUserTest {
     public void dropUser() throws Exception {
         warrior.dropUser();
         assertFalse(ArenaUser.doesUserExists(warrior.getUserId()));
+    }
+
+    @Test(expected = ArenaUserException.class)
+    public void dropUserNonExists() throws Exception {
+        warrior.dropUser();
+        warrior.dropUser();
     }
 
     @Test
@@ -164,9 +183,10 @@ public class ArenaUserTest {
 //    public void getUserTeam() throws Exception {
 //    }
 //
-//    @Test
-//    public void getClassName() throws Exception {
-//    }
+    @Test
+    public void getClassName() throws Exception {
+        Assert.assertEquals(Presets.WARRIOR_CLASS_NAME, warrior.getClassName());
+    }
 //
 //    @Test
 //    public void getClassName1() throws Exception {
@@ -176,9 +196,10 @@ public class ArenaUserTest {
 //    public void getClassesDescr() throws Exception {
 //    }
 //
-//    @Test
-//    public void getRaceName() throws Exception {
-//    }
+    @Test
+    public void getRaceName() throws Exception {
+        Assert.assertEquals(Presets.WARRIOR_RACE_NAME, warrior.getRaceName());
+    }
 //
 //    @Test
 //    public void getRaceName1() throws Exception {

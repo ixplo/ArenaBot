@@ -20,7 +20,12 @@ public class Callbacks {
     private static Integer messageId;
     private static String queryId;
     private static String callbackCommand;
-    
+
+    /***** no instance for this class *****/
+    private Callbacks() {
+        throw new UnsupportedOperationException();
+    }
+
     public static void handleCallbackCommand(CallbackQuery callbackQuery, AbsSender absSender) throws TelegramApiException {
         initStaticVariables(callbackQuery, absSender);
         switch (callbackCommand) {
