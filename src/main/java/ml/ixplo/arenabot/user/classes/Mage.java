@@ -99,7 +99,6 @@ public class Mage extends ArenaUser implements SpellCaster {
 
     @Override
     public String doCast(ArenaUser target, int percent, String spellId) {
-        String message = "";
         Spell spell = getSpell(spellId);
         if (!isHappened(spell.getProbability() * percent / 100)) { //(Math.log(getMagicAttack()/target.getMagicProtect() + 4.6)/7)
             return "<code>" + getName() + " пытался создать заклинание [" + spell.getName() + "] на "
@@ -109,20 +108,13 @@ public class Mage extends ArenaUser implements SpellCaster {
             return "<code>" + getName() + " пытался создать заклинание [" + spell.getName() + "] на "
                     + target.getName() + ", но у него не хватило маны.</code>";
         }
-        double bonus;
-        if (Spell.getSpellGrade(getUserId(), spellId) == 1) {
-            bonus = spell.getGradeOneBonus();
-        } else if (Spell.getSpellGrade(getUserId(), spellId) == 2) {
-            bonus = spell.getGradeTwoBonus();
-        } else {
-            bonus = spell.getGradeThreeBonus();
-        }
-        double damage = roundDouble(spell.getDamage() + bonus);
+
+        double damage = roundDouble(spell.getDamage() + spell.getSpellBonus(getUserId()));
         if (spell.getEffect().equals("DAMAGE")) {
             target.addCurHitPoints(-damage);
             addCurMana(-spell.getManaCost());
             addCurExp((int) (damage * spell.getExpBonus()));
-            message = "<pre>" + getName() + " запустил заклинанием [" + spell.getName() + "] в " +
+            return "<pre>" + getName() + " запустил заклинанием [" + spell.getName() + "] в " +
                     target.getName() + " и ранил его на " + damage +
                     "\n(жизни:-" + damage + "/" + target.getCurHitPoints() +
                     " \\\\ опыт:+" + damage * spell.getExpBonus() + "/" + getCurExp() + ")</pre>";
@@ -133,14 +125,14 @@ public class Mage extends ArenaUser implements SpellCaster {
             target.addCurHitPoints(damage);
             addCurMana(-spell.getManaCost());
             addCurExp((int) (damage * spell.getExpBonus()));
-            message = "<pre>" + getName() + " Магией [" + spell.getName() + "] поднял здоровье у " +
+            return "<pre>" + getName() + " Магией [" + spell.getName() + "] поднял здоровье у " +
                     target.getName() + " на " + damage +
                     "\n(жизни:" + damage + "/" + target.getCurHitPoints() +
                     " \\\\ опыт:+" + damage * spell.getExpBonus() + "/" + getCurExp() + ")</pre>";
         } else if (spell.getEffect().equals("ARMOR")) {
-            double armor = roundDouble(spell.getArmor() + bonus);
+            double armor = roundDouble(spell.getArmor() + spell.getSpellBonus(getUserId()));
             List<Action> attackOnTargetList = Round.getCurrent().getAttackOnTargetList(target.getUserId());
-            if (attackOnTargetList.size() == 0) {
+            if (attackOnTargetList.isEmpty()) {
                 return "<pre>" + getName() + " использовал заклинание [" + spell.getName() + "] на " +
                         target.getName() + " и поднял защиту на " + armor +
                         "\n(опыт:+" + spell.getExpBonus() + "/" + getCurExp() + ")</pre>";
@@ -158,7 +150,7 @@ public class Mage extends ArenaUser implements SpellCaster {
                         "\n(" + getName() + "[опыт:+" + experience + "/" + getCurExp() + ")</pre>");
             }
         }
-        return message;
+        return "";
     }
 
     @Override

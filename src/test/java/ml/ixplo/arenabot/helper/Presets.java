@@ -31,7 +31,7 @@ public class Presets {
     public static final Integer MESSAGE_ID = 5353;
     public static final String TEST_TEAM = "test_team";
     public static final String QUERY_TEXT = "query_text";
-    public static final String MAGE_SPELL_ID = "1am";
+    public static final String MAGIC_ARROW_SPELL_ID = "1am";
     public static final String PRIEST_SPELL_ID = "1ap";
     public static final int MAGE_SPELL_DAMAGE = 3;
     public static final String MAGE_SPELL_NAME = "Магическая стрела";
@@ -43,6 +43,7 @@ public class Presets {
     public static final int MAGE_SPELL_FIRST_LEVEL = 1;
     public static final int MAGE_SPELL_SECOND_LEVEL = 2;
     public static final int MAGE_SPELL_PROBABILITY = 95;
+    public static final double EMPTY_BONUS = 0.0;
     public static final double MAGE_SPELL_GRADE_ONE_BONUS = 1.0;
     public static final double MAGE_SPELL_GRADE_TWO_BONUS = 1.5;
     public static final double MAGE_SPELL_GRADE_THREE_BONUS = 2.0;

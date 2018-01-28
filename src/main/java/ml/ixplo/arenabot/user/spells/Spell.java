@@ -47,6 +47,18 @@ public class Spell { //todo add implements Durable в потомка - клас�
                 "user_id", userId);
     }
 
+    public double getSpellBonus(int userId) {
+        double bonus = 0;
+        if (Spell.getSpellGrade(userId, id) == 1) {
+            bonus = getGradeOneBonus();
+        } else if (Spell.getSpellGrade(userId, id) == 2) {
+            bonus = getGradeTwoBonus();
+        } else if (Spell.getSpellGrade(userId, id) == 3){
+            bonus = getGradeThreeBonus();
+        }
+        return bonus;
+    }
+
     public int getProbability() {
         return probability;
     }

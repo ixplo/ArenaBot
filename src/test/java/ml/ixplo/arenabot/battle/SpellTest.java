@@ -12,7 +12,7 @@ import org.junit.Test;
  * ixplo
  * 08.05.2017.
  */
-public class MagicSpellTest {
+public class SpellTest {
 
     private TestHelper testHelper = new TestHelper();
     private ArenaUser warrior = TestHelper.WARRIOR;
@@ -25,15 +25,25 @@ public class MagicSpellTest {
 
     @Test
     public void getSpellGrade() {
-        Assert.assertTrue(Spell.getSpellGrade(mage.getUserId(), Presets.MAGE_SPELL_ID) == 1);
+        Assert.assertTrue(Spell.getSpellGrade(mage.getUserId(), Presets.MAGIC_ARROW_SPELL_ID) == 1);
         Assert.assertTrue(Spell.getSpellGrade(mage.getUserId(), Presets.PRIEST_SPELL_ID) == 0);
-        Assert.assertTrue(Spell.getSpellGrade(warrior.getUserId(), Presets.MAGE_SPELL_ID) == 0);
+        Assert.assertTrue(Spell.getSpellGrade(warrior.getUserId(), Presets.MAGIC_ARROW_SPELL_ID) == 0);
     }
 
     @Test
+    public void getSpellBonus() {
+        Spell spell = Spell.getSpell(Presets.MAGIC_ARROW_SPELL_ID);
+        double spellBonus = spell.getSpellBonus(mage.getUserId());
+        Assert.assertEquals(Presets.MAGE_SPELL_GRADE_ONE_BONUS, spellBonus, Presets.DELTA);
+        double emptySpellBonus = spell.getSpellBonus(warrior.getUserId());
+        Assert.assertEquals(Presets.EMPTY_BONUS, emptySpellBonus, Presets.DELTA);
+
+
+    }
+    @Test
     public void getSpell() {
-        Spell spell = Spell.getSpell(Presets.MAGE_SPELL_ID);
-        Assert.assertEquals(Presets.MAGE_SPELL_ID, spell.getId());
+        Spell spell = Spell.getSpell(Presets.MAGIC_ARROW_SPELL_ID);
+        Assert.assertEquals(Presets.MAGIC_ARROW_SPELL_ID, spell.getId());
         Assert.assertEquals(Presets.MAGE_SPELL_NAME, spell.getName());
         Assert.assertEquals(Presets.MAGE_SPELL_DAMAGE, spell.getDamage());
         Assert.assertEquals(Presets.MAGE_SPELL_MANACOST, spell.getManaCost());
