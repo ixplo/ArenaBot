@@ -328,7 +328,7 @@ public abstract class ArenaUser implements IUser {
         return db.getStringFrom(Config.USERS, userId, "name");
     }
 
-    public static String getUserTeam(Integer userId) {
+    public static String getUserTeamId(Integer userId) {
         return db.getStringFrom(Config.USERS, userId, "team");
     }
 

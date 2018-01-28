@@ -64,7 +64,7 @@ public class Registration {
 
     public void regMember(Integer userId) {
         String teamId;
-        if (Team.isRegisteredTeam(ArenaUser.getUserTeam(userId))) {
+        if (Team.isRegisteredTeam(ArenaUser.getUserTeamId(userId))) {
             teamId = regIfTeamRegistered(userId);
         } else {
             teamId = addNextUnregistered();
@@ -82,7 +82,7 @@ public class Registration {
 
     public void unregMember(Integer userId) {
         Member.removeMember(userId);
-        if (!Team.isRegisteredTeam(ArenaUser.getUserTeam(userId))) {
+        if (!Team.isRegisteredTeam(ArenaUser.getUserTeamId(userId))) {
             ArenaUser.getUser(userId).setTeamId("");
         }
         if (regTimer != null) {
@@ -95,7 +95,7 @@ public class Registration {
         //todo проверка на то, есть ли команда в teams
         //todo если нет в списке, то newRegisteredTeam();
         //todo regMember(userId);
-        return ArenaUser.getUserTeam(userId);
+        return ArenaUser.getUserTeamId(userId);
     }
 
     private String addNextUnregistered() {

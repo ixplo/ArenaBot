@@ -1,5 +1,8 @@
 package ml.ixplo.arenabot.helper;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class Presets {
     public static final String TEST_PROPERTIES = "src/test/resources/test.properties";
     public static final int NON_EXIST_USER_ID = 1;
@@ -44,4 +47,27 @@ public class Presets {
     public static final double MAGE_SPELL_GRADE_TWO_BONUS = 1.5;
     public static final double MAGE_SPELL_GRADE_THREE_BONUS = 2.0;
     public static final double DELTA = 0.01;
+    public static final List<String> USER_CLASSES_NAMES = Arrays.asList("Воин", "Маг", "Жрец", "Лучник");
+    public static final List<String> USER_RACES_NAMES = Arrays.asList(
+            "Эльф",
+            "Человек",
+            "Гном",
+            "Гигант",
+            "Назгул",
+            "Гоблин",
+            "Хоббит",
+            "Тролль",
+            "Орк",
+            "Кобольд");
+    public static final List<String> USER_RACES_ID = Arrays.asList(
+            "e",
+            "h",
+            "g",
+            "a",
+            "n",
+            "b",
+            "o",
+            "i",
+            "t",
+            "k");
 }

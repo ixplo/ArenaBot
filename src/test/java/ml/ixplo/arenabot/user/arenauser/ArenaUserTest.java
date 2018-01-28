@@ -11,6 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
@@ -25,7 +26,6 @@ import static org.junit.Assert.assertTrue;
  * 01.05.2017.
  */
 public class ArenaUserTest {
-
     private TestHelper testHelper = new TestHelper();
     private ArenaUser warrior = TestHelper.WARRIOR;
     private ArenaUser mage = TestHelper.MAGE;
@@ -107,6 +107,11 @@ public class ArenaUserTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
+    public void create_unknownClass() throws Exception {
+        ArenaUser.create(UserClass.valueOf("nonExist"));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
     public void create_existed() throws Exception {
         ArenaUser.create(
                 Presets.WARRIOR_ID,
@@ -179,44 +184,62 @@ public class ArenaUserTest {
         Assert.assertEquals(1, ArenaUser.getStatus(warrior.getUserId()));
 
     }
-//    @Test
-//    public void getUserTeam() throws Exception {
-//    }
-//
+    @Test
+    public void getUserTeam() throws Exception {
+        Assert.assertEquals(ArenaUser.getUserTeamId(Presets.WARRIOR_ID), Presets.TEST_TEAM);
+    }
+
     @Test
     public void getClassName() throws Exception {
         Assert.assertEquals(Presets.WARRIOR_CLASS_NAME, warrior.getClassName());
     }
-//
-//    @Test
-//    public void getClassName1() throws Exception {
-//    }
-//
-//    @Test
-//    public void getClassesDescr() throws Exception {
-//    }
-//
+
+    @Test
+    public void getClassesDescr() throws Exception {
+        List<String> classesDescr = ArenaUser.getClassesDescr();
+        for (String classDescr : classesDescr) {
+            Assert.assertTrue(containsOneOf(classDescr, Presets.USER_CLASSES_NAMES));
+        }
+    }
+
+    private boolean containsOneOf(String text, List<String> tokens) {
+        for (String token : tokens) {
+            if (text.contains(token)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Test
     public void getRaceName() throws Exception {
         Assert.assertEquals(Presets.WARRIOR_RACE_NAME, warrior.getRaceName());
     }
-//
-//    @Test
-//    public void getRaceName1() throws Exception {
-//    }
-//
-//    @Test
-//    public void getRacesName() throws Exception {
-//    }
-//
-//    @Test
-//    public void getRacesId() throws Exception {
-//    }
-//
-//    @Test
-//    public void getRacesDescr() throws Exception {
-//    }
-//
+
+    @Test
+    public void getRacesName() throws Exception {
+        List<String> racesName = ArenaUser.getRacesName();
+        for (String raceName : racesName) {
+            Assert.assertTrue(containsOneOf(raceName, Presets.USER_RACES_NAMES));
+        }
+    }
+
+    @Test
+    public void getRacesId() throws Exception {
+        List<String> racesId = ArenaUser.getRacesId();
+        for (String raceId : racesId) {
+            Assert.assertTrue(containsOneOf(raceId, Presets.USER_RACES_ID));
+        }
+    }
+
+    @Test
+    public void getRacesDescr() throws Exception {
+        List<String> racesDescr = ArenaUser.getRacesDescr();
+        for (String raceDescr : racesDescr) {
+            Assert.assertTrue(containsOneOf(raceDescr, Presets.USER_RACES_NAMES));
+        }
+    }
+
 //    @Test
 //    public void putOn() throws Exception {
 //    }
