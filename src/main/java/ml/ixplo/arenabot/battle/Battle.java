@@ -9,10 +9,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * состоит из Rounds, в конце выводится Result
  * ixplo
  * 29.04.2017.
  */
-public class Battle extends Thread {//состоит из Rounds, в конце выводится Result
+public class Battle extends Thread {
     private List<Round> rounds = new ArrayList<>();
     private List<ArenaUser> members = new ArrayList<>();
     private List<Integer> curMembersId = new ArrayList<>();
@@ -41,6 +42,7 @@ public class Battle extends Thread {//состоит из Rounds, в конце 
         start();
     }
 
+    @Override
     public void run() {
         Thread.currentThread().setName("Battle");
         Messages.sendChannelMsg(PropertiesLoader.getChannelId(), "<a href=\"" + Config.BOT_PRIVATE + "\">БИТВА НАЧАЛАСЬ!</a>");

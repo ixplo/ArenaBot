@@ -561,7 +561,7 @@ public class DatabaseManager {
         return resultInt;
     }
 
-    public int getIntFrom(String tableName, String id, String columnName) {//overload
+    public int getIntFrom(String tableName, String id, String columnName) {
         int resultInt = -1;
         String queryText = "Select " + columnName + " FROM " + tableName + " WHERE id=?;";
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
@@ -591,6 +591,22 @@ public class DatabaseManager {
             BotLogger.error(LOGTAG, e.getMessage());
         }
         return resultInt;
+    }
+
+    public long getLongFrom(String tableName, Integer id, String columnName) {
+        long resultLong = -1;
+        String queryText = "Select " + columnName + " FROM " + tableName + " WHERE id=?;";
+        try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
+            preparedStatement.setInt(1, id);
+            try (final ResultSet result = preparedStatement.executeQuery()) {
+                if (result.next()) {
+                    resultLong = result.getLong(columnName);
+                }
+            }
+        } catch (SQLException e) {
+            BotLogger.error(LOGTAG, e.getMessage());
+        }
+        return resultLong;
     }
 
     public double getDoubleFrom(String tableName, Integer id, String columnName) {

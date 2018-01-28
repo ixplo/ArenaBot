@@ -47,6 +47,8 @@ public class Presets {
     public static final double MAGE_SPELL_GRADE_TWO_BONUS = 1.5;
     public static final double MAGE_SPELL_GRADE_THREE_BONUS = 2.0;
     public static final double DELTA = 0.01;
+    public static final int ADD_EXP = 15;
+    public static final int MONEY = 50;
     public static final double ADD_HIT_POINTS = 1.5;
     public static final List<String> USER_CLASSES_NAMES = Arrays.asList("Воин", "Маг", "Жрец", "Лучник");
     public static final List<String> USER_RACES_NAMES = Arrays.asList(

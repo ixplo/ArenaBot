@@ -803,7 +803,7 @@ public abstract class ArenaUser implements IUser {
     }
 
     public long getLastGame() {
-        return lastGame;
+        return db.getLongFrom(Config.USERS, userId, "last_game");
     }
 
     public Integer getUserId() {

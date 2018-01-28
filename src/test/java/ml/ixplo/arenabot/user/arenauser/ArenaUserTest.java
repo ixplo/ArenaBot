@@ -192,12 +192,17 @@ public class ArenaUserTest {
     }
     @Test
     public void getUserTeam() throws Exception {
-        Assert.assertEquals(ArenaUser.getUserTeamId(Presets.WARRIOR_ID), Presets.TEST_TEAM);
+        Assert.assertEquals(Presets.TEST_TEAM, ArenaUser.getUserTeamId(Presets.WARRIOR_ID));
     }
 
     @Test
     public void getClassName() throws Exception {
         Assert.assertEquals(Presets.WARRIOR_CLASS_NAME, warrior.getClassName());
+    }
+
+    @Test
+    public void getClassNameByUserId() throws Exception {
+        Assert.assertEquals(Presets.WARRIOR_CLASS_NAME, ArenaUser.getClassName(Presets.WARRIOR_ID));
     }
 
     @Test
@@ -273,6 +278,53 @@ public class ArenaUserTest {
         warrior.addCurHitPoints(Presets.ADD_HIT_POINTS);
         curHitPoints += Presets.ADD_HIT_POINTS;
         Assert.assertEquals(curHitPoints, warrior.getCurHitPoints(), Presets.DELTA);
+    }
+
+    @Test
+    public void addCurExp() {
+        int curExp = warrior.getCurExp();
+        warrior.addCurExp(Presets.ADD_EXP);
+        curExp += Presets.ADD_EXP;
+        Assert.assertEquals(curExp, warrior.getCurExp());
+    }
+
+    @Test
+    public void addExperience() {
+        int experience = warrior.getExperience();
+        warrior.addExperience(Presets.ADD_EXP);
+        experience += Presets.ADD_EXP;
+        Assert.assertEquals(experience, warrior.getExperience());
+    }
+
+    @Test
+    public void addUserGames() {
+        int games = warrior.getUserGames();
+        warrior.addUserGames();
+        games++;
+        Assert.assertEquals(games, warrior.getUserGames());
+    }
+
+    @Test
+    public void addUserWins() {
+        int wins = warrior.getUserWins();
+        warrior.addUserWins();
+        wins++;
+        Assert.assertEquals(wins, warrior.getUserWins());
+    }
+
+    @Test
+    public void addMoney() {
+        int money = warrior.getMoney();
+        warrior.addMoney(Presets.MONEY);
+        money += Presets.MONEY;
+        Assert.assertEquals(money, warrior.getMoney());
+    }
+
+    @Test
+    public void setLastGame() {
+        long previous = warrior.getLastGame();
+        warrior.setLastGame();
+        Assert.assertTrue(warrior.getLastGame() > previous);
     }
 
 //    @Test
