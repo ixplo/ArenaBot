@@ -1,16 +1,20 @@
 package ml.ixplo.arenabot.user.classes;
 
-import ml.ixplo.arenabot.config.Config;
-import ml.ixplo.arenabot.messages.Messages;
 import ml.ixplo.arenabot.battle.Round;
 import ml.ixplo.arenabot.battle.actions.Action;
 import ml.ixplo.arenabot.battle.actions.Attack;
+import ml.ixplo.arenabot.config.Config;
+import ml.ixplo.arenabot.messages.Messages;
 import ml.ixplo.arenabot.user.ArenaUser;
 import ml.ixplo.arenabot.user.items.Item;
 import ml.ixplo.arenabot.user.spells.Spell;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
 
 import static ml.ixplo.arenabot.messages.Messages.fillWithSpaces;
 import static ml.ixplo.arenabot.user.spells.Spell.getSpell;
@@ -20,7 +24,6 @@ import static ml.ixplo.arenabot.user.spells.Spell.getSpell;
  * 28.04.2017.
  */
 public class Mage extends ArenaUser implements SpellCaster {
-
     List<Spell> spells;
     private double maxMana;
     private double curMana;
@@ -72,7 +75,7 @@ public class Mage extends ArenaUser implements SpellCaster {
 
     @Override
     public void putOffClassFeatures(Item item) {
-        //todo
+        LOGGER.error(Config.NOT_YET_IMPLEMENTED);
     }
 
     @Override
@@ -91,7 +94,7 @@ public class Mage extends ArenaUser implements SpellCaster {
 
     @Override
     public void doAction(String[] command) {
-
+        LOGGER.error(Config.NOT_YET_IMPLEMENTED);
     }
 
     @Override
@@ -251,12 +254,12 @@ public class Mage extends ArenaUser implements SpellCaster {
 
     @Override
     public void castSpell(String spellId) {
-
+        LOGGER.error(Config.NOT_YET_IMPLEMENTED);
     }
 
     @Override
     public void learnSpell(int spellLevel) {
-
+        LOGGER.error(Config.NOT_YET_IMPLEMENTED);
 
     }
 
@@ -268,7 +271,7 @@ public class Mage extends ArenaUser implements SpellCaster {
 
     @Override
     public void manaRegen() {
-
+        LOGGER.error(Config.NOT_YET_IMPLEMENTED);
     }
 
     public List<Spell> getSpells() {

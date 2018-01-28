@@ -109,15 +109,15 @@ public class Registration {
     }
 
     public int getTeamsCount() {
-        return db.getCountDistinct(Config.USERS, "team", "status", Config.REG);
+        return db.getCountDistinct(Config.USERS, "team", Config.STATUS, Config.REG);
     }
 
     public List<String> getTeamsName() {
-        return db.getStrings(Config.USERS, "status", Config.REG, "team");
+        return db.getStrings(Config.USERS, Config.STATUS, Config.REG, "team");
     }
 
     public int getMembersCount() {
-        return db.getCountDistinct(Config.USERS, "id", "status", Config.REG);
+        return db.getCountDistinct(Config.USERS, "id", Config.STATUS, Config.REG);
     }
 
     public String getMemberTeam(Integer userId) {
@@ -156,7 +156,7 @@ public class Registration {
     }
 
     private List<Integer> getMembersId() {
-        return db.getInts(Config.USERS, "status", Config.REG, "id");
+        return db.getInts(Config.USERS, Config.STATUS, Config.REG, "id");
     }
 
     public Member getLastMember() {
@@ -169,7 +169,7 @@ public class Registration {
     }
 
     public List<String> getMembersName() {
-        return db.getStrings(Config.USERS, "status", Config.REG, "name");
+        return db.getStrings(Config.USERS, Config.STATUS, Config.REG, "name");
     }
 
     public Team getTeam(String id) {

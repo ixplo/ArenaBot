@@ -113,7 +113,7 @@ public class Round {
                 return i;
             }
         }
-        throw new ArenaUserException("Invalid userId: " + userId);
+        throw new ArenaUserException(Config.INVALID_USER_ID + userId);
     }
 
     private int getIndex(List<Integer> users, int userId) {
@@ -123,7 +123,7 @@ public class Round {
                 return i;
             }
         }
-        throw new ArenaUserException("Invalid userId: " + userId);
+        throw new ArenaUserException(Config.INVALID_USER_ID + userId);
     }
 
     private int getIndex(List<Team> teams, String teamId) {
@@ -143,7 +143,7 @@ public class Round {
                 return i;
             }
         }
-        throw new ArenaUserException("Invalid userId: " + userId);
+        throw new ArenaUserException(Config.INVALID_USER_ID + userId);
     }
 
     public IUser getMember(Integer userId) {
@@ -152,7 +152,7 @@ public class Round {
                 return member;
             }
         }
-        throw new ArenaUserException("Invalid userId: " + userId);
+        throw new ArenaUserException(Config.INVALID_USER_ID + userId);
     }
 
     public List<Action> getActionsByTarget(int targetId) {

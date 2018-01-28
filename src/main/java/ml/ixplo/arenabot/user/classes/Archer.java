@@ -53,7 +53,7 @@ public class Archer extends ArenaUser implements SkillCaster {
 
     @Override
     public void putOffClassFeatures(Item item) {
-        //todo
+        LOGGER.error(Config.NOT_YET_IMPLEMENTED);
     }
 
     @Override
@@ -69,11 +69,12 @@ public class Archer extends ArenaUser implements SkillCaster {
 
     @Override
     public void doAction(String[] command) {
-
+        LOGGER.error(Config.NOT_YET_IMPLEMENTED);
     }
 
     @Override
     public String doCast(ArenaUser target, int percent, String castId) {
+        LOGGER.error(Config.NOT_YET_IMPLEMENTED);
         return null;
     }
 
@@ -97,7 +98,7 @@ public class Archer extends ArenaUser implements SkillCaster {
 
     @Override
     public void skillApply(String skillId) {
-
+        LOGGER.error(Config.NOT_YET_IMPLEMENTED);
     }
 
     @Override
@@ -120,7 +121,7 @@ public class Archer extends ArenaUser implements SkillCaster {
 
     @Override
     public void endBattleClassFeatures() {
-
+        LOGGER.error(Config.NOT_YET_IMPLEMENTED);
     }
 
     @Override
@@ -140,7 +141,7 @@ public class Archer extends ArenaUser implements SkillCaster {
 
     @Override
     public void learn(int level) {
-
+        LOGGER.error(Config.NOT_YET_IMPLEMENTED);
     }
 
     public void setMaxTarget(int maxTarget) {

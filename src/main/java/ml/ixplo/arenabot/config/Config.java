@@ -11,6 +11,8 @@ public class Config {
     public static final String BOT_NAME = "ArenaBot";
     public static final String BOT_CHANNEL_NAME = "#Arena";
     public static final String PROPERTIES_FILE = "arena.properties";
+    public static final String INVALID_USER_ID = "Invalid userId: ";
+    public static final String NOT_YET_IMPLEMENTED = "Not yet implemented";
     public final String rules = "rules.html";      //mc(rules)
     public static final long TEST_CHANNEL_ID = -161929436;
     public static final String TEST_CHANNEL_NAME = "arena";
@@ -25,6 +27,7 @@ public class Config {
     public static final String BOT_PRIVATE = "https://telegram.me/ArenaMBot";
     public static final String BOT_PHOTO_LINK = "http://www.wallpapermint.com/wp-content/uploads/2014/02/Fantasy-World-Pack3-21-280x158.jpg";
     public static final String BOT_TUMB_PHOTO_LINK = "http://pixs.ru/showimage/tumbjpg_5168201_25993141.jpg";
+    public static final String COUNTER = "counter";
     public static final String STATUS = "status";
     public static final String USERS = "users";
     public static final String CLASSES = "classes";

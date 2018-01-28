@@ -97,28 +97,28 @@ public abstract class Action {
         return db.getStringByBy(Config.ROUND_ACTIONS,
                 "action_type",
                 "id", userId,
-                "counter", counter);
+                Config.COUNTER, counter);
     }
 
     public static int getTargetId(int userId, int counter) {
         return db.getIntByBy(Config.ROUND_ACTIONS,
                 "target_id",
                 "id", userId,
-                "counter", counter);
+                Config.COUNTER, counter);
     }
 
     public static int getPercent(int userId, int counter) {
         return db.getIntByBy(Config.ROUND_ACTIONS,
                 "percent",
                 "id", userId,
-                "counter", counter);
+                Config.COUNTER, counter);
     }
 
     public static String getSpellId(int userId, int counter) {
         return db.getStringByBy(Config.ROUND_ACTIONS,
                 "cast_id",
                 "id", userId,
-                "counter", counter);
+                Config.COUNTER, counter);
     }
 
     public String getActionType() {

@@ -12,6 +12,8 @@ import ml.ixplo.arenabot.user.classes.Priest;
 import ml.ixplo.arenabot.user.classes.UserClass;
 import ml.ixplo.arenabot.user.classes.Warrior;
 import ml.ixplo.arenabot.user.items.Item;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.bots.AbsSender;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
@@ -33,7 +35,7 @@ import static com.google.common.math.IntMath.pow;
  * 24.04.2017.
  */
 public abstract class ArenaUser implements IUser {
-
+    protected static final Logger LOGGER = LoggerFactory.getLogger(ArenaUser.class);
     public static final String LOGTAG = "ARENAUSER";
 
     private static DatabaseManager db;

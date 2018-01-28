@@ -14,7 +14,7 @@ public class Protect extends Action {
     private double protect;
     private List<Action> attackOnTargetList;
 
-    Protect() {
+    public Protect() {
         actionId = "p";
     }
 

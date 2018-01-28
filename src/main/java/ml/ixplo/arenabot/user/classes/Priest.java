@@ -62,7 +62,7 @@ public class Priest extends ArenaUser implements SpellCaster {
 
     @Override
     public void putOffClassFeatures(Item item) {
-        //todo
+        LOGGER.error(Config.NOT_YET_IMPLEMENTED);
     }
 
     @Override
@@ -81,11 +81,12 @@ public class Priest extends ArenaUser implements SpellCaster {
 
     @Override
     public void doAction(String[] command) {
-
+        LOGGER.error(Config.NOT_YET_IMPLEMENTED);
     }
 
     @Override
     public String doCast(ArenaUser target, int percent, String castId) {
+        LOGGER.error(Config.NOT_YET_IMPLEMENTED);
         return null;
     }
 
@@ -116,22 +117,22 @@ public class Priest extends ArenaUser implements SpellCaster {
 
     @Override
     public void learn(int level) {
-
+        LOGGER.error(Config.NOT_YET_IMPLEMENTED);
     }
 
     @Override
     public void castSpell(String spellId) {
-
+        LOGGER.error(Config.NOT_YET_IMPLEMENTED);
     }
 
     @Override
     public void learnSpell(int spellLevel) {
-
+        LOGGER.error(Config.NOT_YET_IMPLEMENTED);
     }
 
     @Override
     public void manaRegen() {
-
+        LOGGER.error(Config.NOT_YET_IMPLEMENTED);
     }
 
     static int countReceivedSpellPoints(int curExp, int exp) {
@@ -177,6 +178,4 @@ public class Priest extends ArenaUser implements SpellCaster {
     public double getCurMana() {
         return curMana;
     }
-
-
 }
