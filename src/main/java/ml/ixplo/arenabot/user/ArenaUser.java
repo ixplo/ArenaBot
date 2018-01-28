@@ -381,15 +381,25 @@ public abstract class ArenaUser implements IUser {
     // **************************************************
 
     public Map<String, Object> getParams() {
+        try {
+            return getFields();
+        } catch (IllegalAccessException e) {
+            BotLogger.error(LOGTAG, e);
+            throw new ArenaUserException("Не удалось прочесть поля класса ArenaUser", e);
+        }
+    }
+
+    private Map<String, Object> getFields() throws IllegalAccessException {
         Map<String, Object> params = new HashMap<>();
-        for (Field field : ArenaUser.class.getDeclaredFields()) {
-            if (field.getModifiers() == Modifier.PRIVATE) {
-                try {
+        Class<?> aClass = this.getClass();
+        while (aClass.getSuperclass() != null) {
+            for (Field field : aClass.getDeclaredFields()) {
+                if (!Modifier.isStatic(field.getModifiers())) {
+                    field.setAccessible(true);
                     params.put(field.getName(), field.get(this));
-                } catch (IllegalAccessException e) {
-                    BotLogger.error(LOGTAG, e);
                 }
             }
+            aClass = aClass.getSuperclass();
         }
         return params;
     }

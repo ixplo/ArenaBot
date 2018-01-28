@@ -141,6 +141,12 @@ public class ArenaUserTest {
     }
 
     @Test
+    public void getParams() throws NoSuchFieldException {
+        Map<String, Object> params = warrior.getParams();
+        Map<String, Object> mageParams = mage.getParams();
+    }
+
+    @Test
     public void getUser_allGood() throws Exception {
         Map<String, Object> params1 = warrior.getParams();
         Map<String, Object> params2 = ArenaUser.getUser(warrior.getUserId()).getParams();
@@ -195,6 +201,11 @@ public class ArenaUserTest {
     }
 
     @Test
+    public void getClassNameById() throws Exception {
+        Assert.assertEquals(Presets.WARRIOR_CLASS_NAME, ArenaUser.getClassName(Presets.WARRIOR_CLASS));
+    }
+
+    @Test
     public void getClassesDescr() throws Exception {
         List<String> classesDescr = ArenaUser.getClassesDescr();
         for (String classDescr : classesDescr) {
@@ -214,6 +225,16 @@ public class ArenaUserTest {
     @Test
     public void getRaceName() throws Exception {
         Assert.assertEquals(Presets.WARRIOR_RACE_NAME, warrior.getRaceName());
+    }
+
+    @Test
+    public void getRaceNameByUserId() throws Exception {
+        Assert.assertEquals(Presets.WARRIOR_RACE_NAME, ArenaUser.getRaceName(Presets.WARRIOR_ID));
+    }
+
+    @Test
+    public void getRaceNameById() throws Exception {
+        Assert.assertEquals(Presets.WARRIOR_RACE_NAME, ArenaUser.getRaceName(Presets.WARRIOR_RACE));
     }
 
     @Test
@@ -238,6 +259,20 @@ public class ArenaUserTest {
         for (String raceDescr : racesDescr) {
             Assert.assertTrue(containsOneOf(raceDescr, Presets.USER_RACES_NAMES));
         }
+    }
+
+    @Test
+    public void doesUserEsists() throws Exception {
+        Assert.assertTrue(ArenaUser.doesUserExists(Presets.EXIST_USER_ID));
+        Assert.assertFalse(ArenaUser.doesUserExists(Presets.NON_EXIST_USER_ID));
+    }
+
+    @Test
+    public void addCurHitPoints() throws Exception {
+        double curHitPoints = warrior.getCurHitPoints();
+        warrior.addCurHitPoints(Presets.ADD_HIT_POINTS);
+        curHitPoints += Presets.ADD_HIT_POINTS;
+        Assert.assertEquals(curHitPoints, warrior.getCurHitPoints(), Presets.DELTA);
     }
 
 //    @Test
