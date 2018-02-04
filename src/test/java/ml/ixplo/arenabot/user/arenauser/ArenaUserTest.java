@@ -11,6 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -327,6 +328,15 @@ public class ArenaUserTest {
         Assert.assertTrue(warrior.getLastGame() > previous);
     }
 
+    @Test
+    public void getUsers() {
+        List<ArenaUser> users = ArenaUser.getUsers(Arrays.asList(Presets.WARRIOR_ID, Presets.MAGE_ID));
+        Assert.assertTrue(users.size() == 2);
+        Assert.assertTrue(users.get(0).getUserId().equals(Presets.WARRIOR_ID) ||
+                users.get(0).getUserId().equals(Presets.MAGE_ID));
+        Assert.assertTrue(users.get(1).getUserId().equals(Presets.WARRIOR_ID) ||
+                users.get(1).getUserId().equals(Presets.MAGE_ID));
+    }
 //    @Test
 //    public void putOn() throws Exception {
 //    }
