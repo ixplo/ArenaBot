@@ -34,6 +34,8 @@ public class MessagesTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(ItemTest.class);
 
     ArenaUser warrior;
+    ArenaUser mage;
+    ArenaUser existUser;
     private TestHelper testHelper = new TestHelper();
     private Bot bot = new Bot(testHelper.getDb());
 
@@ -41,6 +43,8 @@ public class MessagesTest {
     public void setUp() throws Exception {
         Messages.setBot(bot);
         warrior = TestHelper.WARRIOR;
+        mage = TestHelper.MAGE;
+        existUser = TestHelper.EXIST_USER;
     }
 
     @After
@@ -266,7 +270,23 @@ public class MessagesTest {
     }
 
     @Test
-    public void sendResultToAll() throws Exception {
+    public void getBattleResultMessage() throws Exception {
+        Team teamOne = new Team("idOne");
+        Team teamTwo = new Team("idTwo");
+        warrior.setStatus(2);
+        mage.setStatus(2);
+        teamOne.addMember(warrior);
+        teamTwo.addMember(mage);
+        teamTwo.addMember(existUser);
+        List<Team> teams = Arrays.asList(teamOne, teamTwo);
+        List<ArenaUser> users = Arrays.asList(warrior, mage, existUser);
+        List<Integer> live = Arrays.asList(1, 2);
+        String text = Messages.getBattleResultMessage(teams, users, live).getText();
+        Assert.assertTrue(text.contains(warrior.getName()));
+        Assert.assertTrue(text.contains(mage.getName()));
+        Assert.assertTrue(text.contains(teamOne.getName()));
+        Assert.assertTrue(text.contains(teamTwo.getName()));
+        Assert.assertFalse(text.contains(existUser.getName()));
     }
 
     @Test

@@ -5,7 +5,6 @@ import ml.ixplo.arenabot.battle.Registration;
 import ml.ixplo.arenabot.battle.Round;
 import ml.ixplo.arenabot.battle.Team;
 import ml.ixplo.arenabot.config.Config;
-import ml.ixplo.arenabot.exception.ArenaUserException;
 import ml.ixplo.arenabot.user.ArenaUser;
 import ml.ixplo.arenabot.user.IUser;
 import ml.ixplo.arenabot.user.items.Item;
@@ -504,46 +503,43 @@ public final class Messages {
         return message;
     }
 
-    public static void sendResultToAll(List<Team> teams, List<? extends IUser> members, List<Integer> membersLive) {
+    public static void sendResultToAll(List<Team> teams, List<ArenaUser> members, List<Integer> membersLive) {
+        SendMessage msg = getBattleResultMessage(teams, members, membersLive);
+        try {
+            for (ArenaUser arenaUser : members) {
+                msg.setChatId((long) arenaUser.getUserId());
+                bot.sendMessage(msg);
+            }
+        } catch (TelegramApiException e) {
+            BotLogger.error(LOGTAG, e);
+        }
+    }
 
+    public static SendMessage getBattleResultMessage(List<Team> teams, List<ArenaUser> members, List<Integer> membersLive) {
         SendMessage msg = new SendMessage();
         StringBuilder msgText = new StringBuilder();
-        List<Integer> membersId = new ArrayList<>();
         for (Team team : teams) {
             msgText.append("Команда ").append(team.getName()).append(": ");
-            for (IUser member : members) {
-                if (member instanceof ArenaUser) {
-                    ArenaUser arenaUser = (ArenaUser) member;
-                    if (team.getBattleMembersId().contains(member.getUserId())) {
-                        msgText.append(arenaUser.getName()).append("(опыт:+").append(arenaUser.getCurExp());
-                        msgText.append("/").append(arenaUser.getCurExp() + arenaUser.getExperience());
-                        msgText.append(", золото:+");
-                        if (membersLive.contains(arenaUser.getUserId())) {
-                            msgText.append(members.size() * Config.GOLD_FOR_MEMBER - Config.GOLD_FOR_MEMBER);
-                            msgText.append("/").append(arenaUser.getMoney()
-                                    + members.size() * Config.GOLD_FOR_MEMBER - Config.GOLD_FOR_MEMBER).append(")");
-                        } else {
-                            msgText.append("0");
-                            msgText.append("/").append(arenaUser.getMoney()).append(")");
-                        }
-                        membersId.add(member.getUserId());
+            for (ArenaUser arenaUser : members) {
+                if (team.getBattleMembersId().contains(arenaUser.getUserId())) {
+                    msgText.append(arenaUser.getName()).append("(опыт:+").append(arenaUser.getCurExp());
+                    msgText.append("/").append(arenaUser.getCurExp() + arenaUser.getExperience());
+                    msgText.append(", золото:+");
+                    if (membersLive.contains(arenaUser.getUserId())) {
+                        msgText.append(members.size() * Config.GOLD_FOR_MEMBER - Config.GOLD_FOR_MEMBER);
+                        msgText.append("/").append(arenaUser.getMoney()
+                                + members.size() * Config.GOLD_FOR_MEMBER - Config.GOLD_FOR_MEMBER).append(")");
+                    } else {
+                        msgText.append("0");
+                        msgText.append("/").append(arenaUser.getMoney()).append(")");
                     }
-                } else {
-                    throw new ArenaUserException("Invalid IUser type! Need ArenaUser");
                 }
             }
             msgText.append("\n");
         }
         msg.enableHtml(true);
         msg.setText(msgText.toString());
-        try {
-            for (Integer id : membersId) {
-                msg.setChatId((long) id);
-                bot.sendMessage(msg);
-            }
-        } catch (TelegramApiException e) {
-            BotLogger.error(LOGTAG, e);
-        }
+        return msg;
     }
 
     public static void sendDoMsg(AbsSender absSender, Long chatId, String action, int target, int percent) {
