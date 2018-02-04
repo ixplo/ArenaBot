@@ -280,9 +280,10 @@ public class MessagesTest {
         teamTwo.addMember(existUser);
         List<Team> teams = Arrays.asList(teamOne, teamTwo);
         List<ArenaUser> users = Arrays.asList(warrior, mage, existUser);
-        List<Integer> live = Arrays.asList(1, 2);
+        List<Integer> live = Arrays.asList(Presets.NON_EXIST_USER_ID, Presets.WARRIOR_ID);
         String text = Messages.getBattleResultMessage(teams, users, live).getText();
         Assert.assertTrue(text.contains(warrior.getName()));
+        Assert.assertTrue(text.contains("+20"));
         Assert.assertTrue(text.contains(mage.getName()));
         Assert.assertTrue(text.contains(teamOne.getName()));
         Assert.assertTrue(text.contains(teamTwo.getName()));
