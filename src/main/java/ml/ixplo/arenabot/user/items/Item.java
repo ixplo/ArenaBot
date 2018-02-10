@@ -109,6 +109,7 @@ public class Item {
             throw new IllegalArgumentException("Attempt to puton item that is already in slot");
         }
         Item item = getItem(getItemId(arenaUser.getUserId(), eqipIndex));
+        item.setEqipIndex(eqipIndex);
         //*** проверка, а не надета ли в этот слот другая вещь
         List<Item> itemsList = arenaUser.getItems();
         for (Item oneItem : itemsList) {
@@ -120,11 +121,11 @@ public class Item {
         }
         //todo проверка на соответствие требованиям (другие вещи тоже надо проверить, на случай если харки уменьшатся)
         //*** изменение характеристик перса
-        changeUserHarks(arenaUser, eqipIndex, item);
+        addUserHarks(arenaUser, eqipIndex, item);
         db.updateUser(arenaUser);
     }
 
-    private static void changeUserHarks(ArenaUser arenaUser, int eqipIndex, Item item) {
+    private static void addUserHarks(ArenaUser arenaUser, Item item) {
         arenaUser.setCurStr(arenaUser.getCurStr() + item.getStrBonus());
         arenaUser.setCurDex(arenaUser.getCurDex() + item.getDexBonus());
         arenaUser.setCurWis(arenaUser.getCurWis() + item.getWisBonus());
@@ -141,10 +142,10 @@ public class Item {
         arenaUser.setMagicProtect(arenaUser.getMagicProtect() + roundDouble(0.6 * item.getWisBonus() + 0.4 * item.getIntBonus()));
         arenaUser.setHeal(arenaUser.getHeal() + roundDouble(0.06 * item.getWisBonus() + 0.04 * item.getIntBonus()));
         //*** заносим in_slot
-        item.markAsPuttedOn(arenaUser.getUserId(), eqipIndex);
+        item.markAsPuttedOn(arenaUser.getUserId(), item.eqipIndex);
         arenaUser.putOnClassFeatures(item);
         if (item.isWeapon()) {
-            arenaUser.setCurWeapon(eqipIndex);
+            arenaUser.setCurWeapon(item.eqipIndex);
         }
     }
 
@@ -162,8 +163,21 @@ public class Item {
         //todo проверка на соответствие требованиям (другие вещи тоже надо проверить, на случай если харки уменьшатся)
 
         Item item = getItem(getItemId(arenaUser.getUserId(), eqipIndex));
-
+        item.setEqipIndex(eqipIndex);
         //*** изменение характеристик перса
+        minusUserHarks(arenaUser, item);
+        // если вещь - оружие, и не Ладошка, то надеваем Ладошку
+        if (item.isWeapon()) {
+            if (item.eqipIndex != 0) {
+                putOn(arenaUser, 0);
+            } else {
+                arenaUser.setCurWeapon(-1);
+            }
+        }
+        db.updateUser(arenaUser);
+    }
+
+    private static void minusUserHarks(ArenaUser arenaUser, Item item) {
         arenaUser.setCurStr(arenaUser.getCurStr() - item.getStrBonus());
         arenaUser.setCurDex(arenaUser.getCurDex() - item.getDexBonus());
         arenaUser.setCurWis(arenaUser.getCurWis() - item.getWisBonus());
@@ -180,18 +194,8 @@ public class Item {
         arenaUser.setMagicProtect(arenaUser.getMagicProtect() - roundDouble(0.6 * item.getWisBonus() + 0.4 * item.getIntBonus()));
         arenaUser.setHeal(arenaUser.getHeal() - roundDouble(0.06 * item.getWisBonus() + 0.04 * item.getIntBonus()));
         //*** заносим in_slot
-        item.markAsPuttedOff(arenaUser.getUserId(), eqipIndex);
+        item.markAsPuttedOff(arenaUser.getUserId(), item.eqipIndex);
         arenaUser.putOffClassFeatures(item);
-        // если вещь - оружие, и не Ладошка, то надеваем Ладошку
-        if (item.isWeapon()) {
-            if (item.eqipIndex != 0) {
-                putOn(arenaUser, 0);
-            } else {
-                arenaUser.setCurWeapon(-1);
-            }
-        }
-        db.updateUser(arenaUser);
-        //todo снова изменить характеристики из-за предыдущего пункта
     }
 
 

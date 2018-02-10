@@ -240,4 +240,18 @@ public class ItemTest {
         Assert.assertFalse(warrior.getItem(1).isWeapon());
         Assert.assertTrue(warrior.getCurWeapon() == Presets.ITEM_INDEX);
     }
+
+    @Test
+    public void putOnDefaultWeapon() {
+        warrior.addItem(Presets.FLAMBERG);
+        Item.putOn(warrior, 1);
+        Item.putOff(warrior, 1);
+        Assert.assertFalse(warrior.getItem(1).isInSlot());
+        Assert.assertTrue(warrior.getItem(0).isInSlot());
+    }
+
+    @Test
+    public void getItemSet() {
+        Assert.assertNull(warrior.getItem(0).getItemsSet());
+    }
 }
