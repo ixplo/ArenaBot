@@ -1,5 +1,6 @@
 package ml.ixplo.arenabot.user.items;
 
+import ml.ixplo.arenabot.exception.ArenaUserException;
 import ml.ixplo.arenabot.helper.Presets;
 import ml.ixplo.arenabot.helper.TestHelper;
 import ml.ixplo.arenabot.user.ArenaUser;
@@ -197,5 +198,35 @@ public class ItemTest {
         Assert.assertTrue(Presets.WARRIOR_ID == item.getOwner().getUserId());
         Assert.assertEquals(Presets.ITEM_INDEX, item.getEqipIndex());
         Assert.assertEquals(Presets.ITEM_SLOT, item.getInSlot());
+    }
+
+    @Test(expected = ArenaUserException.class)
+    public void getOwnerNull() {
+        Item item = new Item();
+        item.getOwner();
+    }
+
+    @Test
+    public void getShop() {
+        Assert.assertEquals(Presets.ITEM_SHOP, warrior.getItem(0).getShop());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void putOnWrongIndex() {
+        Item.putOn(warrior, 999);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void putOnAlreadyInSlot() {
+        Item.putOn(warrior, 0);
+    }
+
+    @Test
+    public void putOnWithPutOff() {
+        warrior.addItem(Presets.FLAMBERG);
+        Assert.assertTrue(warrior.getItem(0).isInSlot());
+        Item.putOn(warrior, 1);
+        Assert.assertFalse(warrior.getItem(0).isInSlot());
+        Assert.assertTrue(warrior.getItem(1).isInSlot());
     }
 }
