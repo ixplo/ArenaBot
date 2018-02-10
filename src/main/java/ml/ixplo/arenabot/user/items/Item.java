@@ -121,7 +121,7 @@ public class Item {
         }
         //todo проверка на соответствие требованиям (другие вещи тоже надо проверить, на случай если харки уменьшатся)
         //*** изменение характеристик перса
-        addUserHarks(arenaUser, eqipIndex, item);
+        addUserHarks(arenaUser, item);
         db.updateUser(arenaUser);
     }
 
