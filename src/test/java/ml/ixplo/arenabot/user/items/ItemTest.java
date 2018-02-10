@@ -101,8 +101,14 @@ public class ItemTest {
     }
 
     @Test
+    // проверить тест
     public void getEqipIndex() throws Exception {
         Assert.assertEquals(0, warrior.getItems().get(0).getEqipIndex());
+    }
+
+    @Test
+    public void getEqipIndexStatic() {
+        Assert.assertEquals(1, Item.getEqipIndex(Presets.WARRIOR_ID, Presets.ITEM_ID));
     }
 
     @Test
