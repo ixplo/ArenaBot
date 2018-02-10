@@ -2,6 +2,7 @@ package ml.ixplo.arenabot.user.items;
 
 import ml.ixplo.arenabot.config.Config;
 import ml.ixplo.arenabot.database.DatabaseManager;
+import ml.ixplo.arenabot.exception.ArenaUserException;
 import ml.ixplo.arenabot.user.ArenaUser;
 
 import java.math.BigDecimal;
@@ -75,7 +76,7 @@ public class Item {
     }
 
     public static int getEqipIndex(Integer userId, String itemId) {
-        return db.getIntByBy(Config.EQIP, "counter", "id", itemId, Config.USER_ID, userId);
+        return db.getIntByBy(Config.EQIP, "counter", "id", itemId, Config.USER_ID, userId) - 1;
     }
 
     public static boolean isItemInSlot(int userId, int eqipIndex) {
@@ -84,6 +85,10 @@ public class Item {
 
     public static String getItemId(int userId, int eqipIndex) {
         return db.getStringByBy(Config.EQIP, "id", "counter", eqipIndex + 1, Config.USER_ID, userId);
+    }
+
+    public static String getItemInSlot(int userId, int eqipIndex) {
+        return db.getStringsBy(Config.INVENTORY, Config.IN_SLOT, "user_Id", userId, "counter", eqipIndex + 1).get(0);
     }
 
     public static void add(int userId, String itemId) {
@@ -193,7 +198,11 @@ public class Item {
     }
 
     public static Item getItem(Integer userId, Integer eqipIndex) {
-        return db.getItem(Item.getItemId(userId, eqipIndex));
+        Item item = db.getItem(Item.getItemId(userId, eqipIndex));
+        item.setOwnerId(userId);
+        item.setInSlot(getItemInSlot(userId, eqipIndex));
+        item.setEqipIndex(eqipIndex);
+        return item;
     }
 
     public static Item getItem(String itemId) {
@@ -265,8 +274,12 @@ public class Item {
      ********* Instance ********************************
      ***************************************************/
 
-    public void drop(int eqipIndex) {
+    public void drop() {
         drop(ownerId, eqipIndex);
+    }
+
+    public void putOn() {
+        Item.putOn(db.getUser(ownerId), eqipIndex);
     }
 
     public void putOff() {
@@ -310,7 +323,7 @@ public class Item {
 
     public ArenaUser getOwner() {
         if (ownerId == null) {
-            return null;
+            throw new ArenaUserException("Wrong item owner");
         }
         return db.getUser(ownerId);
     }
@@ -505,6 +518,10 @@ public class Item {
 
     public void setItemsSet(String itemsSet) {
         this.itemsSet = itemsSet;
+    }
+
+    public String getInSlot() {
+        return inSlot;
     }
 
     @Override

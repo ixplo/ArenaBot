@@ -13,6 +13,8 @@ public class Config {
     public static final String PROPERTIES_FILE = "arena.properties";
     public static final String INVALID_USER_ID = "Invalid userId: ";
     public static final String NOT_YET_IMPLEMENTED = "Not yet implemented";
+    public static final String INVENTORY = "inventory";
+    public static final String IN_SLOT = "in_slot";
     public final String rules = "rules.html";      //mc(rules)
     public static final long TEST_CHANNEL_ID = -161929436;
     public static final String TEST_CHANNEL_NAME = "arena";

@@ -818,7 +818,7 @@ public class DatabaseManager {
      * SELECT name FROM users WHERE status='1' AND team='findById';
      ***/
     public List<String> getStringsBy(String tableName, String columnName,
-                                          String firstColumn, String firstId, String secondColumn, Integer secondId) {
+                                     String firstColumn, String firstId, String secondColumn, Integer secondId) {
         List<String> resultStringArr = new ArrayList<>();
         String queryText = "Select " + columnName
                 + " FROM " + tableName
@@ -842,7 +842,7 @@ public class DatabaseManager {
      * SELECT name FROM users WHERE status='1' AND team='findById';
      ***/
     public List<String> getStringsBy(String tableName, String columnName,
-                                          String firstColumn, int firstId, String secondColumn, Integer secondId) {
+                                     String firstColumn, int firstId, String secondColumn, Integer secondId) {
         List<String> resultStringArr = new ArrayList<>();
         String queryText = "Select " + columnName
                 + " FROM " + tableName
@@ -866,7 +866,7 @@ public class DatabaseManager {
      * SELECT name FROM users WHERE status='1' AND team='findById';
      ***/
     public List<Integer> getIntsBy(String tableName, String columnName,
-                                        String firstColumn, String firstId, String secondColumn, Integer secondId) {
+                                   String firstColumn, String firstId, String secondColumn, Integer secondId) {
         List<Integer> resultStringArr = new ArrayList<>();
         String queryText = "Select " + columnName
                 + " FROM " + tableName
@@ -1054,7 +1054,7 @@ public class DatabaseManager {
         String queryText = "Select count(" + columnName + ") FROM " + tableName + " WHERE " + columnName + "=?;";
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setDouble(1, value);
-            try (final ResultSet result = preparedStatement.executeQuery()){
+            try (final ResultSet result = preparedStatement.executeQuery()) {
                 if (result.next()) {
                     return result.getInt("count(" + columnName + ")");
                 }
@@ -1069,7 +1069,7 @@ public class DatabaseManager {
         List<String> column = new LinkedList<>();
         String queryText = "Select " + columnName + " FROM " + tableName + " order by rowid;";
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText);
-            final ResultSet result = preparedStatement.executeQuery()) {
+             final ResultSet result = preparedStatement.executeQuery()) {
             while (result.next()) {
                 column.add(result.getString(columnName));
             }

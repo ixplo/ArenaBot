@@ -668,6 +668,10 @@ public abstract class ArenaUser implements IUser {
         return db.getItems(userId);
     }
 
+    public Item getItem(int eqipIndex) {
+        return Item.getItem(userId, eqipIndex);
+    }
+
     public String getUserTitle() {
         return userTitle;
     }

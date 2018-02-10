@@ -337,6 +337,13 @@ public class ArenaUserTest {
         Assert.assertTrue(users.get(1).getUserId().equals(Presets.WARRIOR_ID) ||
                 users.get(1).getUserId().equals(Presets.MAGE_ID));
     }
+
+    @Test
+    public void getItem() {
+        warrior.addItem(Presets.FLAMBERG);
+        Assert.assertEquals(Presets.FLAMBERG, warrior.getItem(1).getItemId());
+    }
+
 //    @Test
 //    public void putOn() throws Exception {
 //    }

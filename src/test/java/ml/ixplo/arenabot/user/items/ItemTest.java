@@ -101,14 +101,13 @@ public class ItemTest {
     }
 
     @Test
-    // проверить тест
     public void getEqipIndex() throws Exception {
         Assert.assertEquals(0, warrior.getItems().get(0).getEqipIndex());
     }
 
     @Test
     public void getEqipIndexStatic() {
-        Assert.assertEquals(1, Item.getEqipIndex(Presets.WARRIOR_ID, Presets.ITEM_ID));
+        Assert.assertEquals(0, Item.getEqipIndex(Presets.WARRIOR_ID, Presets.ITEM_ID));
     }
 
     @Test
@@ -167,5 +166,36 @@ public class ItemTest {
     @Test(expected = IllegalArgumentException.class)
     public void drop_wrongItemId() {
         Item.drop(warrior.getUserId(), Presets.WRONG_ITEM_INDEX);
+    }
+
+    @Test
+    public void getItemStatic() {
+        Assert.assertEquals(Presets.ITEM_ID, Item.getItem(Presets.WARRIOR_ID, 0).getItemId());
+    }
+
+    @Test
+    public void drop() {
+        Assert.assertEquals(1, warrior.getItems().size());
+        warrior.addItem(Presets.FLAMBERG);
+        warrior.getItems().get(1).drop();
+        Assert.assertEquals(1, warrior.getItems().size());
+    }
+
+    @Test
+    public void putOff() {
+        warrior.addItem(Presets.FLAMBERG);
+        Assert.assertFalse(warrior.getItems().get(1).isInSlot());
+        warrior.getItems().get(1).putOn();
+        Assert.assertTrue(warrior.getItems().get(1).isInSlot());
+        warrior.getItems().get(1).putOff();
+        Assert.assertFalse(warrior.getItems().get(1).isInSlot());
+    }
+
+    @Test
+    public void getItem() {
+        Item item = warrior.getItem(Presets.ITEM_INDEX);
+        Assert.assertTrue(Presets.WARRIOR_ID == item.getOwner().getUserId());
+        Assert.assertEquals(Presets.ITEM_INDEX, item.getEqipIndex());
+        Assert.assertEquals(Presets.ITEM_SLOT, item.getInSlot());
     }
 }
