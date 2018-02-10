@@ -26,6 +26,7 @@ public class Presets {
     public static final String MAGE_NAME = "test_mage";
     public static final String MAGE_RACE = "e";
     public static final String FLAMBERG = "wba";
+    public static final String ITEM_SHIRT = "aaa";
     public static final CharSequence FLAMBERG_NAME = "Фламберг";
     public static final int TEST_DB_VERSION = 999;
     public static final int TARGET_ID = 1;

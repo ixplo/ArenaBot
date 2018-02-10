@@ -229,4 +229,15 @@ public class ItemTest {
         Assert.assertFalse(warrior.getItem(0).isInSlot());
         Assert.assertTrue(warrior.getItem(1).isInSlot());
     }
+
+    @Test
+    public void putOnNotWeapon() {
+        warrior.addItem(Presets.ITEM_SHIRT);
+        warrior.putOn(1);
+        Assert.assertTrue(warrior.getItem(Presets.ITEM_INDEX).isInSlot());
+        Assert.assertTrue(warrior.getItem(1).isInSlot());
+        Assert.assertTrue(warrior.getItem(Presets.ITEM_INDEX).isWeapon());
+        Assert.assertFalse(warrior.getItem(1).isWeapon());
+        Assert.assertTrue(warrior.getCurWeapon() == Presets.ITEM_INDEX);
+    }
 }

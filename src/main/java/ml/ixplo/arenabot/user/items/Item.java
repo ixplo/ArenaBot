@@ -100,7 +100,6 @@ public class Item {
     }
 
     public static void putOn(ArenaUser arenaUser, int eqipIndex) {
-
         //*** проверка на наличие в инвентаре
         if (eqipIndex + 1 > getEqipAmount(arenaUser.getUserId())) {
             throw new IllegalArgumentException("Invalid eqip index: " + eqipIndex);
@@ -112,8 +111,8 @@ public class Item {
         Item item = getItem(getItemId(arenaUser.getUserId(), eqipIndex));
         //*** проверка, а не надета ли в этот слот другая вещь
         List<Item> itemsList = arenaUser.getItems();
-        // проверкa, пустой ли слот и освобождение его
         for (Item oneItem : itemsList) {
+            // проверкa, пустой ли слот и освобождение его
             if (oneItem.getSlot().equals(item.getSlot()) && oneItem.isInSlot()) {
                 // сделать putOff вещи, которая тут раньше была надета
                 Item.putOff(arenaUser, oneItem.getEqipIndex());
@@ -121,6 +120,11 @@ public class Item {
         }
         //todo проверка на соответствие требованиям (другие вещи тоже надо проверить, на случай если харки уменьшатся)
         //*** изменение характеристик перса
+        changeUserHarks(arenaUser, eqipIndex, item);
+        db.updateUser(arenaUser);
+    }
+
+    private static void changeUserHarks(ArenaUser arenaUser, int eqipIndex, Item item) {
         arenaUser.setCurStr(arenaUser.getCurStr() + item.getStrBonus());
         arenaUser.setCurDex(arenaUser.getCurDex() + item.getDexBonus());
         arenaUser.setCurWis(arenaUser.getCurWis() + item.getWisBonus());
@@ -142,8 +146,6 @@ public class Item {
         if (item.isWeapon()) {
             arenaUser.setCurWeapon(eqipIndex);
         }
-        db.updateUser(arenaUser);
-        //todo снова изменить характеристики из-за предыдущего пункта
     }
 
 
