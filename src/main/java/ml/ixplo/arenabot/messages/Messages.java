@@ -224,12 +224,12 @@ public final class Messages {
             }
         }
         out.append("\nОружие: <b>");
-        if (arenaUser.getCurWeapon() < 0) {
+        if (arenaUser.getCurWeaponIndex() < 0) {
             out.append("без оружия</b>");
         } else {
-            out.append(Item.getItem(Item.getItemId(arenaUser.getUserId(), arenaUser.getCurWeapon())).getName());
+            out.append(Item.getItem(Item.getItemId(arenaUser.getUserId(), arenaUser.getCurWeaponIndex())).getName());
             out.append("</b>(");
-            out.append(Item.getItem(Item.getItemId(arenaUser.getUserId(), arenaUser.getCurWeapon())).getPrice());
+            out.append(Item.getItem(Item.getItemId(arenaUser.getUserId(), arenaUser.getCurWeaponIndex())).getPrice());
             out.append(")");
         }
         SendMessage msg = new SendMessage();

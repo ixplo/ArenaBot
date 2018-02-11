@@ -22,7 +22,7 @@ public class Attack extends Action {
         target.addCurHitPoints(-hit);
         user.addCurExp(experience);
         message = "<pre>" + user.getName() + " напал на " + target.getName() +
-                " с оружием [" + Item.getItemName(user.getUserId(), user.getCurWeapon()) + "] и ранил его на " +
+                " с оружием [" + Item.getItemName(user.getUserId(), user.getCurWeaponIndex()) + "] и ранил его на " +
                 hit + "\n(жизни:-" + hit + "/" + target.getCurHitPoints() + " \\\\ опыт:+" + experience + "/" + user.getCurExp() + ")</pre>";
     }
 

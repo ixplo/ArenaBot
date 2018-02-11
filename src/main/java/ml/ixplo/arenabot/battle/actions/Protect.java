@@ -34,7 +34,7 @@ public class Protect extends Action {
             user.addCurExp(experience);
             ((Attack) attackAction).unDo();
             attackAction.message = "<pre>" + attackAction.user.getName() + " пытался ударить " + target.getName() +
-                    " оружием [" + Item.getItemName(attackAction.user.getUserId(), attackAction.user.getCurWeapon()) + "], но ему не удалось " +
+                    " оружием [" + Item.getItemName(attackAction.user.getUserId(), attackAction.user.getCurWeaponIndex()) + "], но ему не удалось " +
                     "\n(" + user.getName() + "[опыт:+" + experience + "/" + user.getCurExp() + ")</pre>";
         }
     }

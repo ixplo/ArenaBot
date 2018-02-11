@@ -215,7 +215,9 @@ public class ItemTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void putOnAlreadyInSlot() {
-        Item.putOn(warrior, 0);
+        warrior.addItem(Presets.FLAMBERG);
+        warrior.putOn(Presets.NEW_ITEM_INDEX);
+        warrior.putOn(Presets.NEW_ITEM_INDEX);
     }
 
     @Test
@@ -235,18 +237,18 @@ public class ItemTest {
         Assert.assertTrue(warrior.getItem(1).isInSlot());
         Assert.assertTrue(warrior.getItem(Presets.ITEM_INDEX).isWeapon());
         Assert.assertFalse(warrior.getItem(1).isWeapon());
-        Assert.assertTrue(warrior.getCurWeapon() == Presets.ITEM_INDEX);
+        Assert.assertTrue(warrior.getCurWeaponIndex() == Presets.ITEM_INDEX);
         warrior.putOff(Presets.NEW_ITEM_INDEX);
-        Assert.assertTrue(warrior.getCurWeapon() == Presets.ITEM_INDEX);
+        Assert.assertTrue(warrior.getCurWeaponIndex() == Presets.ITEM_INDEX);
     }
 
     @Test
-    public void notPutOnDefaultWeapon() {
+    public void putOnDefaultWeapon() {
         warrior.addItem(Presets.FLAMBERG);
         Item.putOn(warrior, 1);
         Item.putOff(warrior, 1);
         Assert.assertFalse(warrior.getItem(1).isInSlot());
-        Assert.assertFalse(warrior.getItem(0).isInSlot());
+        Assert.assertTrue(warrior.getItem(0).isInSlot());
     }
 
     @Test
@@ -277,5 +279,13 @@ public class ItemTest {
         String itemInfo = warrior.getItem(Presets.NEW_ITEM_INDEX).getInfo();
         Assert.assertTrue(itemInfo.contains("Ятаган черного пламени"));
         Assert.assertTrue(itemInfo.contains("Только для расы:       Орк"));
+    }
+
+    @Test
+    public void changeHarksPutOnWeaponToDefault() {
+        warrior.addItem(Presets.FLAMBERG);
+        warrior.putOn(Presets.NEW_ITEM_INDEX);
+        warrior.putOn(Presets.ITEM_INDEX);
+        Assert.assertTrue(warrior.getMaxHit() == 2.5);
     }
 }

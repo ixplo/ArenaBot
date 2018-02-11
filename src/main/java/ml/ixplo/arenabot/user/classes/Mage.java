@@ -146,7 +146,7 @@ public class Mage extends ArenaUser implements SpellCaster {
                 addCurExp(experience);
                 ((Attack) attackAction).unDo();
                 attackAction.setMessage("<pre>" + attackAction.getUser().getName() + " пытался ударить " + target.getName() +
-                        " оружием [" + Item.getItemName(attackAction.getUser().getUserId(), attackAction.getUser().getCurWeapon()) + "], но ему не удалось " +
+                        " оружием [" + Item.getItemName(attackAction.getUser().getUserId(), attackAction.getUser().getCurWeaponIndex()) + "], но ему не удалось " +
                         "\n(" + getName() + "[опыт:+" + experience + "/" + getCurExp() + ")</pre>");
             }
         }

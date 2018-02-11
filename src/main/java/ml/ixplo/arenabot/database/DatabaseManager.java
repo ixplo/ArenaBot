@@ -273,7 +273,7 @@ public class DatabaseManager {
             preparedStatement.setDouble(33, arenaUser.getCurHitPoints());
             preparedStatement.setInt(34, arenaUser.getCurExp());
             preparedStatement.setLong(35, arenaUser.getLastGame());
-            preparedStatement.setInt(36, arenaUser.getCurWeapon());
+            preparedStatement.setInt(36, arenaUser.getCurWeaponIndex());
             preparedStatement.setInt(37, arenaUser.getStatus());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {

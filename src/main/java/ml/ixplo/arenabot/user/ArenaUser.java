@@ -135,6 +135,7 @@ public abstract class ArenaUser implements IUser {
         generateCommonHarks();
         arenaUser.setClassFeatures();
         arenaUser.addItem("waa");
+        arenaUser.setCurWeapon(-1);
         arenaUser.putOn(0);
         db.updateUser(arenaUser);
         return arenaUser;
@@ -772,7 +773,7 @@ public abstract class ArenaUser implements IUser {
         return curCon;
     }
 
-    public int getCurWeapon() {
+    public int getCurWeaponIndex() {
         return curWeapon;
     }
 

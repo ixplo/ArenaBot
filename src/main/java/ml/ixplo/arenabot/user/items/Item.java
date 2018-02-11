@@ -100,13 +100,17 @@ public class Item {
     }
 
     public static void putOn(ArenaUser arenaUser, int eqipIndex) {
+        if (eqipIndex == 0) {
+            putOnDefaultWeapon(arenaUser);
+            return;
+        }
         //*** проверка на наличие в инвентаре
         if (eqipIndex + 1 > getEqipAmount(arenaUser.getUserId())) {
             throw new IllegalArgumentException("Invalid eqip index: " + eqipIndex);
         }
         //*** проверка, а не надета ли уже она
         if (isItemInSlot(arenaUser.getUserId(), eqipIndex)) {
-            throw new IllegalArgumentException("Attempt to puton item that is already in slot");
+            throw new IllegalArgumentException("Attempt to putOn item that is already in slot");
         }
         Item item = getItem(getItemId(arenaUser.getUserId(), eqipIndex));
         item.setEqipIndex(eqipIndex);
@@ -128,7 +132,21 @@ public class Item {
         db.updateUser(arenaUser);
     }
 
-
+    private static void putOnDefaultWeapon(ArenaUser arenaUser) {
+        int curWeaponIndex = arenaUser.getCurWeaponIndex();
+        if (curWeaponIndex == 0) {
+            return;
+        }
+        if (curWeaponIndex > 0) {
+            Item curWeapon = Item.getItem(arenaUser.getUserId(), curWeaponIndex);
+            if (curWeapon.isInSlot()) {
+                minusUserHarks(arenaUser, curWeapon);
+            }
+        }
+        addUserHarks(arenaUser, Item.getItem(arenaUser.getUserId(), 0));
+        arenaUser.setCurWeapon(0);
+        db.updateUser(arenaUser);
+    }
 
     public static void putOff(ArenaUser arenaUser, int eqipIndex) {
 
@@ -146,13 +164,9 @@ public class Item {
         item.setEqipIndex(eqipIndex);
         //*** изменение характеристик перса
         minusUserHarks(arenaUser, item);
-        // если вещь - оружие, и не Ладошка, то надеваем Ладошку
+        // если вещь - оружие, то надеваем Ладошку
         if (item.isWeapon()) {
-            arenaUser.setCurWeapon(-1);
-            // пока не решил, что делать с увеличением хар-к. Если меняешь оружие на ладошку, то они увеличиваются дважды
-//            if (item.eqipIndex != 0) {
-//                putOn(arenaUser, 0);
-//            }
+            putOnDefaultWeapon(arenaUser);
         }
         db.updateUser(arenaUser);
     }
