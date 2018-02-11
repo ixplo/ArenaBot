@@ -264,7 +264,7 @@ public class Item {
             out.append(fillWithSpaces("<code>Телосложение:", item.getConNeeded() + "</code>\n", Config.WIDTH));
         }
         if (item.getRace() != null) {
-            out.append(fillWithSpaces("<code>Только для расы:", item.getRace() + "</code>\n", Config.WIDTH));
+            out.append(fillWithSpaces("<code>Только для расы:", ArenaUser.getRaceName(item.getRace()) + "</code>\n", Config.WIDTH));
         }
         out.append(fillWithSpaces("<code>Слот:", Item.getSlotName(item.getSlot()) + "</code>\n", Config.WIDTH));
         String isInSlot = Item.isItemInSlot(eqipIndex, userId) ? "Надето" : "Не надето";

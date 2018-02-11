@@ -270,4 +270,12 @@ public class ItemTest {
         Assert.assertTrue(itemInfo.contains("Радужный браслет"));
         Assert.assertTrue(itemInfo.contains("Бонус к Телосложению:    2"));
     }
+
+    @Test
+    public void getItemInfoRace() {
+        warrior.addItem("zac");
+        String itemInfo = warrior.getItem(Presets.NEW_ITEM_INDEX).getInfo();
+        Assert.assertTrue(itemInfo.contains("Ятаган черного пламени"));
+        Assert.assertTrue(itemInfo.contains("Только для расы:       Орк"));
+    }
 }
