@@ -230,11 +230,13 @@ public class ItemTest {
     @Test
     public void putOnNotWeapon() {
         warrior.addItem(Presets.ITEM_SHIRT);
-        warrior.putOn(1);
+        warrior.putOn(Presets.NEW_ITEM_INDEX);
         Assert.assertTrue(warrior.getItem(Presets.ITEM_INDEX).isInSlot());
         Assert.assertTrue(warrior.getItem(1).isInSlot());
         Assert.assertTrue(warrior.getItem(Presets.ITEM_INDEX).isWeapon());
         Assert.assertFalse(warrior.getItem(1).isWeapon());
+        Assert.assertTrue(warrior.getCurWeapon() == Presets.ITEM_INDEX);
+        warrior.putOff(Presets.NEW_ITEM_INDEX);
         Assert.assertTrue(warrior.getCurWeapon() == Presets.ITEM_INDEX);
     }
 
@@ -259,5 +261,13 @@ public class ItemTest {
         warrior.addItem(Presets.FLAMBERG);
         warrior.putOn(Presets.NEW_ITEM_INDEX);
         Assert.assertNotEquals(warrior.getCurHitPoints(), warrior.getMaxHitPoints());
+    }
+
+    @Test
+    public void getItemInfo() {
+        warrior.addItem("bad");
+        String itemInfo = warrior.getItem(Presets.NEW_ITEM_INDEX).getInfo();
+        Assert.assertTrue(itemInfo.contains("Радужный браслет"));
+        Assert.assertTrue(itemInfo.contains("Бонус к Телосложению:    2"));
     }
 }
