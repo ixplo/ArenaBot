@@ -168,11 +168,11 @@ public class Item {
         minusUserHarks(arenaUser, item);
         // если вещь - оружие, и не Ладошка, то надеваем Ладошку
         if (item.isWeapon()) {
-            if (item.eqipIndex != 0) {
-                putOn(arenaUser, 0);
-            } else {
-                arenaUser.setCurWeapon(-1);
-            }
+            arenaUser.setCurWeapon(-1);
+            // пока не решил, что делать с увеличением хар-к. Если меняешь оружие на ладошку, то они увеличиваются дважды
+//            if (item.eqipIndex != 0) {
+//                putOn(arenaUser, 0);
+//            }
         }
         db.updateUser(arenaUser);
     }

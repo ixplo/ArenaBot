@@ -13,6 +13,7 @@ public class Presets {
     public static final String ITEM_ID = "waa";
     public static final String ITEM_NAME = "Ладошка";
     public static final int ITEM_INDEX = 0;
+    public static final int NEW_ITEM_INDEX = 1;
     public static final String ITEM_SLOT = "a";
     public static final String ITEM_SHOP = "a";
     public static final int WRONG_ITEM_INDEX = -1;

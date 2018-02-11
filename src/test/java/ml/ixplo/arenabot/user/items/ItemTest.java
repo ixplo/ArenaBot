@@ -49,18 +49,14 @@ public class ItemTest {
         }
         LOGGER.info("Тестовый персонаж: {}", warrior);
         Map<String, Object> startParams = warrior.getParams();
-        LOGGER.info("Надеваем вещь {} {}",
-                warrior.getItems().get(eqipIndex).getEqipIndex(),
-                warrior.getItems().get(eqipIndex).getName());
+        LOGGER.info("Надеваем вещь {} {}", Presets.NEW_ITEM_INDEX, Presets.FLAMBERG_NAME);
         warrior.putOn(eqipIndex);
         Map<String, Object> params1 = warrior.getParams();
         LOGGER.info("Тестовый персонаж: {}", warrior);
         Assert.assertNotEquals("Характеристики не изменились ", startParams, params1);
 
-        LOGGER.info("Надеваем вещь: {} {}",
-                warrior.getItems().get(0).getEqipIndex(),
-                warrior.getItems().get(0).getName());
-        warrior.putOn(warrior.getItems().get(0).getEqipIndex());
+        LOGGER.info("Надеваем вещь: {} {}", Presets.ITEM_INDEX, Presets.ITEM_NAME);
+        warrior.putOn(Presets.ITEM_INDEX);
         Map<String, Object> params2 = warrior.getParams();
         LOGGER.info("Тестовый персонаж: {}", warrior);
         LOGGER.info("Инвентарь: {}", warrior.getItems());
@@ -242,12 +238,12 @@ public class ItemTest {
     }
 
     @Test
-    public void putOnDefaultWeapon() {
+    public void notPutOnDefaultWeapon() {
         warrior.addItem(Presets.FLAMBERG);
         Item.putOn(warrior, 1);
         Item.putOff(warrior, 1);
         Assert.assertFalse(warrior.getItem(1).isInSlot());
-        Assert.assertTrue(warrior.getItem(0).isInSlot());
+        Assert.assertFalse(warrior.getItem(0).isInSlot());
     }
 
     @Test
