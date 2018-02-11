@@ -1,5 +1,6 @@
 package ml.ixplo.arenabot.user.items;
 
+import ml.ixplo.arenabot.config.Config;
 import ml.ixplo.arenabot.exception.ArenaUserException;
 import ml.ixplo.arenabot.helper.Presets;
 import ml.ixplo.arenabot.helper.TestHelper;
@@ -249,5 +250,14 @@ public class ItemTest {
     @Test
     public void getItemSet() {
         Assert.assertNull(warrior.getItem(0).getItemsSet());
+    }
+
+    @Test
+    public void putOnInBattle() {
+        warrior.setCurHitPoints(warrior.getMaxHitPoints() - 1);
+        warrior.setStatus(Config.IN_BATTLE);
+        warrior.addItem(Presets.FLAMBERG);
+        warrior.putOn(Presets.NEW_ITEM_INDEX);
+        Assert.assertNotEquals(warrior.getCurHitPoints(), warrior.getMaxHitPoints());
     }
 }

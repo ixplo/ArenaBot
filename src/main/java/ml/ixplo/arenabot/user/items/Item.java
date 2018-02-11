@@ -122,32 +122,12 @@ public class Item {
         //todo проверка на соответствие требованиям (другие вещи тоже надо проверить, на случай если харки уменьшатся)
         //*** изменение характеристик перса
         addUserHarks(arenaUser, item);
-        db.updateUser(arenaUser);
-    }
-
-    private static void addUserHarks(ArenaUser arenaUser, Item item) {
-        arenaUser.setCurStr(arenaUser.getCurStr() + item.getStrBonus());
-        arenaUser.setCurDex(arenaUser.getCurDex() + item.getDexBonus());
-        arenaUser.setCurWis(arenaUser.getCurWis() + item.getWisBonus());
-        arenaUser.setCurInt(arenaUser.getCurInt() + item.getIntBonus());
-        arenaUser.setCurCon(arenaUser.getCurCon() + item.getConBonus());
-        arenaUser.setMinHit(arenaUser.getMinHit() + item.getMinHit() + (double) item.getStrBonus() / 4);
-        arenaUser.setMaxHit(arenaUser.getMaxHit() + item.getMaxHit() + (double) item.getStrBonus() / 4);
-        arenaUser.setAttack(arenaUser.getAttack().add(BigDecimal.valueOf(item.getAttack() + roundDouble(0.91 * item.getDexBonus() + 0.39 * item.getStrBonus()))));
-        arenaUser.setProtect(arenaUser.getProtect() + item.getProtect() + roundDouble(0.4 * item.getDexBonus() + 0.6 * item.getConBonus()));
-        arenaUser.setMaxHitPoints(arenaUser.getMaxHitPoints() + roundDouble(1.3333333 * item.getConBonus()));//todo переделать, иначе выскочит нецелое число
-        if (arenaUser.getStatus() != Config.IN_BATTLE) {
-            arenaUser.setCurHitPoints(arenaUser.getMaxHitPoints()); // not in battle
-        }
-        arenaUser.setMagicProtect(arenaUser.getMagicProtect() + roundDouble(0.6 * item.getWisBonus() + 0.4 * item.getIntBonus()));
-        arenaUser.setHeal(arenaUser.getHeal() + roundDouble(0.06 * item.getWisBonus() + 0.04 * item.getIntBonus()));
-        //*** заносим in_slot
-        item.markAsPuttedOn(arenaUser.getUserId(), item.eqipIndex);
-        arenaUser.putOnClassFeatures(item);
         if (item.isWeapon()) {
             arenaUser.setCurWeapon(item.eqipIndex);
         }
+        db.updateUser(arenaUser);
     }
+
 
 
     public static void putOff(ArenaUser arenaUser, int eqipIndex) {
@@ -175,6 +155,27 @@ public class Item {
 //            }
         }
         db.updateUser(arenaUser);
+    }
+
+    private static void addUserHarks(ArenaUser arenaUser, Item item) {
+        arenaUser.setCurStr(arenaUser.getCurStr() + item.getStrBonus());
+        arenaUser.setCurDex(arenaUser.getCurDex() + item.getDexBonus());
+        arenaUser.setCurWis(arenaUser.getCurWis() + item.getWisBonus());
+        arenaUser.setCurInt(arenaUser.getCurInt() + item.getIntBonus());
+        arenaUser.setCurCon(arenaUser.getCurCon() + item.getConBonus());
+        arenaUser.setMinHit(arenaUser.getMinHit() + item.getMinHit() + (double) item.getStrBonus() / 4);
+        arenaUser.setMaxHit(arenaUser.getMaxHit() + item.getMaxHit() + (double) item.getStrBonus() / 4);
+        arenaUser.setAttack(arenaUser.getAttack().add(BigDecimal.valueOf(item.getAttack() + roundDouble(0.91 * item.getDexBonus() + 0.39 * item.getStrBonus()))));
+        arenaUser.setProtect(arenaUser.getProtect() + item.getProtect() + roundDouble(0.4 * item.getDexBonus() + 0.6 * item.getConBonus()));
+        arenaUser.setMaxHitPoints(arenaUser.getMaxHitPoints() + roundDouble(1.3333333 * item.getConBonus()));//todo переделать, иначе выскочит нецелое число
+        if (arenaUser.getStatus() != Config.IN_BATTLE) {
+            arenaUser.setCurHitPoints(arenaUser.getMaxHitPoints()); // not in battle
+        }
+        arenaUser.setMagicProtect(arenaUser.getMagicProtect() + roundDouble(0.6 * item.getWisBonus() + 0.4 * item.getIntBonus()));
+        arenaUser.setHeal(arenaUser.getHeal() + roundDouble(0.06 * item.getWisBonus() + 0.04 * item.getIntBonus()));
+        //*** заносим in_slot
+        item.markAsPuttedOn(arenaUser.getUserId(), item.eqipIndex);
+        arenaUser.putOnClassFeatures(item);
     }
 
     private static void minusUserHarks(ArenaUser arenaUser, Item item) {
