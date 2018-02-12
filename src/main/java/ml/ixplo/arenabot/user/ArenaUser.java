@@ -12,6 +12,7 @@ import ml.ixplo.arenabot.user.classes.Priest;
 import ml.ixplo.arenabot.user.classes.UserClass;
 import ml.ixplo.arenabot.user.classes.Warrior;
 import ml.ixplo.arenabot.user.items.Item;
+import ml.ixplo.arenabot.utils.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
@@ -28,7 +29,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.google.common.math.IntMath.pow;
+import static ml.ixplo.arenabot.utils.Utils.roundDouble;
 
 /**
  * ixplo
@@ -213,17 +214,6 @@ public abstract class ArenaUser extends Member implements IUser {
         dropUser(user.userId);
     }
 
-    public static double roundDouble(double d) {
-        return roundDouble(d, 2);
-    }
-
-    protected static double roundDouble(double d, int precise) {
-        int prec = pow(10, precise);
-        double dWithPrecise = d * prec;
-        int i = (int) Math.round(dWithPrecise);
-        return (double) i / prec;
-    }
-
     public static ArenaUser getUser(Integer userId) {
         if (!db.doesUserExists(userId)) {
             throw new IllegalArgumentException("No such user in database: " + userId);
@@ -405,7 +395,7 @@ public abstract class ArenaUser extends Member implements IUser {
     // **************************************************
 
     public void addCurHitPoints(double hitPointsChange) {
-        this.curHitPoints = ArenaUser.roundDouble(this.curHitPoints + hitPointsChange);
+        this.curHitPoints = roundDouble(this.curHitPoints + hitPointsChange);
     }
 
     public void addHark(String harkId, int numberOfPoints) {

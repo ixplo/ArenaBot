@@ -5,6 +5,7 @@ import ml.ixplo.arenabot.helper.Presets;
 import ml.ixplo.arenabot.helper.TestHelper;
 import ml.ixplo.arenabot.user.ArenaUser;
 import ml.ixplo.arenabot.user.classes.UserClass;
+import ml.ixplo.arenabot.utils.Utils;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -55,7 +56,7 @@ public class ArenaUserTest {
         warrior.setCurCon(5);
         warrior.setMinHit(0);
         warrior.setAttack(new BigDecimal(0.91 * warrior.getCurDex() + 0.39 * warrior.getCurStr()));
-        warrior.setProtect(ArenaUser.roundDouble(0.4 * warrior.getCurDex() + 0.6 * warrior.getCurCon()));
+        warrior.setProtect(Utils.roundDouble(0.4 * warrior.getCurDex() + 0.6 * warrior.getCurCon()));
         warrior.addHark("nativeStr", 1);
         warrior.addHark("nativeCon", 1);
         assertEquals(4, warrior.getCurStr());

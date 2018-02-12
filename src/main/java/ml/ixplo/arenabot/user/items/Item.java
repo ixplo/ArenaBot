@@ -4,13 +4,14 @@ import ml.ixplo.arenabot.config.Config;
 import ml.ixplo.arenabot.database.DatabaseManager;
 import ml.ixplo.arenabot.exception.ArenaUserException;
 import ml.ixplo.arenabot.user.ArenaUser;
+import ml.ixplo.arenabot.utils.Utils;
 
 import java.math.BigDecimal;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.google.common.math.IntMath.pow;
 import static ml.ixplo.arenabot.messages.Messages.fillWithSpaces;
+import static ml.ixplo.arenabot.utils.Utils.roundDouble;
 
 /**
  * ixplo
@@ -323,23 +324,12 @@ public class Item {
         return getItemInfo(ownerId, eqipIndex);
     }
 
-    private boolean markAsPuttedOn(Integer userId, int eqipIndex) {
-        return db.setStringTo(Config.EQIP, userId, getItemId(userId, eqipIndex), "in_slot", slot);
+    private void markAsPuttedOn(Integer userId, int eqipIndex) {
+        db.setStringTo(Config.EQIP, userId, getItemId(userId, eqipIndex), "in_slot", slot);
     }
 
-    private boolean markAsPuttedOff(Integer userId, int eqipIndex) {
-        return db.setStringTo(Config.EQIP, userId, getItemId(userId, eqipIndex), "in_slot", null);
-    }
-
-    private static double roundDouble(double d) {
-        return roundDouble(d, 2);
-    }
-
-    private static double roundDouble(double d, int precise) {
-        int prec = pow(10, precise);
-        double di = d * prec;
-        int i = (int) Math.round(di);
-        return (double) i / prec;
+    private void markAsPuttedOff(Integer userId, int eqipIndex) {
+        db.setStringTo(Config.EQIP, userId, getItemId(userId, eqipIndex), "in_slot", null);
     }
 
     public ArenaUser getOwner() {

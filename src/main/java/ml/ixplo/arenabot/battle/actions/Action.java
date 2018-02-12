@@ -4,11 +4,6 @@ import ml.ixplo.arenabot.config.Config;
 import ml.ixplo.arenabot.database.DatabaseManager;
 import ml.ixplo.arenabot.exception.ArenaUserException;
 import ml.ixplo.arenabot.user.ArenaUser;
-import ml.ixplo.arenabot.battle.Round;
-
-import java.util.List;
-
-import static com.google.common.math.IntMath.pow;
 
 /**
  * ixplo
@@ -143,19 +138,6 @@ public abstract class Action {
 
     public void setPercent(int percent) {
         this.percent = percent;
-    }
-
-
-
-    static double roundDouble(double d) {
-        return roundDouble(d, 2);
-    }
-
-    private static double roundDouble(double d, int precise) {
-        precise = pow(10, precise);
-        d *= precise;
-        int i = (int) Math.round(d);
-        return (double) i / precise;
     }
 
     public ArenaUser getUser() {

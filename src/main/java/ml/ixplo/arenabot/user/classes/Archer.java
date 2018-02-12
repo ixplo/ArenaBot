@@ -4,6 +4,7 @@ import ml.ixplo.arenabot.config.Config;
 import ml.ixplo.arenabot.user.ArenaUser;
 import ml.ixplo.arenabot.user.items.Item;
 import ml.ixplo.arenabot.user.spells.Skill;
+import ml.ixplo.arenabot.utils.Utils;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -80,19 +81,19 @@ public class Archer extends ArenaUser implements SkillCaster {
 
 
     private void refreshMaxTargets() {
-        int maxArcherTargets = (int) roundDouble((0.7 * getCurWis() + 0.3 * getCurDex()) / 4, 0);
+        int maxArcherTargets = (int) Utils.roundDouble((0.7 * getCurWis() + 0.3 * getCurDex()) / 4, 0);
         setMaxTarget(maxArcherTargets < 1 ? 1 : maxArcherTargets);
     }
 
     private void doIntBonus(int numberOfPoints) {
-        setMinHit(roundDouble(getMinHit() + (double) numberOfPoints / 4));
-        setMaxHit(roundDouble(getMaxHit() + (double) numberOfPoints / 4));
+        setMinHit(Utils.roundDouble(getMinHit() + (double) numberOfPoints / 4));
+        setMaxHit(Utils.roundDouble(getMaxHit() + (double) numberOfPoints / 4));
         setAttack(getAttack().add(BigDecimal.valueOf(0.39 * numberOfPoints)));
     }
 
     private void undoStrBonus(int numberOfPoints) {
-        setMinHit(roundDouble(getMinHit() - (double) numberOfPoints / 4));
-        setMaxHit(roundDouble(getMaxHit() - (double) numberOfPoints / 4));
+        setMinHit(Utils.roundDouble(getMinHit() - (double) numberOfPoints / 4));
+        setMaxHit(Utils.roundDouble(getMaxHit() - (double) numberOfPoints / 4));
         setAttack(getAttack().subtract(BigDecimal.valueOf(0.39 * numberOfPoints)));
     }
 

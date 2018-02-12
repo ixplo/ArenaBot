@@ -8,6 +8,7 @@ import ml.ixplo.arenabot.messages.Messages;
 import ml.ixplo.arenabot.user.ArenaUser;
 import ml.ixplo.arenabot.user.items.Item;
 import ml.ixplo.arenabot.user.spells.Spell;
+import ml.ixplo.arenabot.utils.Utils;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -24,7 +25,7 @@ import static ml.ixplo.arenabot.user.spells.Spell.getSpell;
  * 28.04.2017.
  */
 public class Mage extends ArenaUser implements SpellCaster {
-    List<Spell> spells;
+    private List<Spell> spells;
     private double maxMana;
     private double curMana;
     private int spellPoints;
@@ -43,7 +44,7 @@ public class Mage extends ArenaUser implements SpellCaster {
         actionsName = Arrays.asList("Атака", "Защита", "Лечение", "Магия");
         setMaxMana(1.5 * getCurWis());
         setCurMana(maxMana);
-        setMagicAttack(roundDouble(0.6 * getCurWis() + 0.4 * getCurInt()));
+        setMagicAttack(Utils.roundDouble(0.6 * getCurWis() + 0.4 * getCurInt()));
         setSpell("1am");
     }
 
@@ -70,7 +71,7 @@ public class Mage extends ArenaUser implements SpellCaster {
         if (getStatus() != 2) { // not in battle
             setCurMana(getMaxMana());
         }
-        setMagicAttack(getMagicAttack() + roundDouble(0.6 * item.getWisBonus() + 0.4 * item.getIntBonus()));
+        setMagicAttack(getMagicAttack() + Utils.roundDouble(0.6 * item.getWisBonus() + 0.4 * item.getIntBonus()));
     }
 
     @Override
@@ -85,10 +86,10 @@ public class Mage extends ArenaUser implements SpellCaster {
             if (getStatus() != 2) { // not in battle
                 setCurMana(getMaxMana());
             }
-            setMagicAttack(getMagicAttack() + roundDouble(0.6 * numberOfPoints));
+            setMagicAttack(getMagicAttack() + Utils.roundDouble(0.6 * numberOfPoints));
         }
         if (harkToUpId.equals("nativeInt")) {
-            setMagicAttack(getMagicAttack() + roundDouble(0.4 * numberOfPoints));
+            setMagicAttack(getMagicAttack() + Utils.roundDouble(0.4 * numberOfPoints));
         }
     }
 
@@ -109,7 +110,7 @@ public class Mage extends ArenaUser implements SpellCaster {
                     + target.getName() + ", но у него не хватило маны.</code>";
         }
 
-        double damage = roundDouble(spell.getDamage() + spell.getSpellBonus(getUserId()));
+        double damage = Utils.roundDouble(spell.getDamage() + spell.getSpellBonus(getUserId()));
         if (spell.getEffect().equals("DAMAGE")) {
             target.addCurHitPoints(-damage);
             addCurMana(-spell.getManaCost());
@@ -120,7 +121,7 @@ public class Mage extends ArenaUser implements SpellCaster {
                     " \\\\ опыт:+" + damage * spell.getExpBonus() + "/" + getCurExp() + ")</pre>";
         } else if (spell.getEffect().equals("HEAL")) {
             if (target.getMaxHitPoints() - target.getCurHitPoints() < damage) {
-                damage = roundDouble(target.getMaxHitPoints() - target.getCurHitPoints());
+                damage = Utils.roundDouble(target.getMaxHitPoints() - target.getCurHitPoints());
             }
             target.addCurHitPoints(damage);
             addCurMana(-spell.getManaCost());
@@ -130,7 +131,7 @@ public class Mage extends ArenaUser implements SpellCaster {
                     "\n(жизни:" + damage + "/" + target.getCurHitPoints() +
                     " \\\\ опыт:+" + damage * spell.getExpBonus() + "/" + getCurExp() + ")</pre>";
         } else if (spell.getEffect().equals("ARMOR")) {
-            double armor = roundDouble(spell.getArmor() + spell.getSpellBonus(getUserId()));
+            double armor = Utils.roundDouble(spell.getArmor() + spell.getSpellBonus(getUserId()));
             List<Action> attackOnTargetList = Round.getCurrent().getAttackOnTargetList(target.getUserId());
             if (attackOnTargetList.isEmpty()) {
                 return "<pre>" + getName() + " использовал заклинание [" + spell.getName() + "] на " +

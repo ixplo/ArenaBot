@@ -5,6 +5,7 @@ import ml.ixplo.arenabot.messages.Messages;
 import ml.ixplo.arenabot.user.ArenaUser;
 import ml.ixplo.arenabot.user.items.Item;
 import ml.ixplo.arenabot.user.spells.Spell;
+import ml.ixplo.arenabot.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,7 +34,7 @@ public class Priest extends ArenaUser implements SpellCaster {
         actionsName = Arrays.asList("Атака","Защита","Лечение", "Магия");
         maxMana = 1.5 * getCurWis();
         curMana = maxMana;
-        magicAttack = roundDouble(0.6 * getCurWis() + 0.4 * getCurInt());
+        magicAttack = Utils.roundDouble(0.6 * getCurWis() + 0.4 * getCurInt());
         //todo learn first spell
     }
 
@@ -57,7 +58,7 @@ public class Priest extends ArenaUser implements SpellCaster {
         if (getStatus() != 2) { // not in battle
             setCurMana(getMaxMana());
         }
-        setMagicAttack(getMagicAttack() + roundDouble(0.6 * item.getWisBonus() + 0.4 * item.getIntBonus()));
+        setMagicAttack(getMagicAttack() + Utils.roundDouble(0.6 * item.getWisBonus() + 0.4 * item.getIntBonus()));
     }
 
     @Override
@@ -72,10 +73,10 @@ public class Priest extends ArenaUser implements SpellCaster {
             if (getStatus() != 2) { // not in battle
                 setCurMana(getMaxMana());
             }
-            setMagicAttack(getMagicAttack() + roundDouble(0.6 * numberOfPoints));
+            setMagicAttack(getMagicAttack() + Utils.roundDouble(0.6 * numberOfPoints));
         }
         if (harkToUpId.equals("nativeInt")) {
-            setMagicAttack(getMagicAttack() + roundDouble(0.4 * numberOfPoints));
+            setMagicAttack(getMagicAttack() + Utils.roundDouble(0.4 * numberOfPoints));
         }
     }
 

@@ -36,6 +36,7 @@ import java.util.List;
 public final class Messages {
 
     public static final String LOGTAG = "MESSAGES";
+    private static final String CLOSE_TAG = "</code>\n";
 
     /***** no instance for this class *****/
     private Messages() {
@@ -255,15 +256,15 @@ public final class Messages {
             stringDate = new SimpleDateFormat().format(new Date(arenaUser.getLastGame()));
         }
         out.append("Был в бою: ").append(stringDate).append("\n");
-        out.append(fillWithSpaces("<code>Опыт:", arenaUser.getExperience() + "</code>\n", Config.WIDTH));
-        out.append(fillWithSpaces("<code>Жизни:", arenaUser.getCurHitPoints() + "</code>\n", Config.WIDTH));
-        out.append(fillWithSpaces("<code>Золото:", arenaUser.getMoney() + "</code>\n", Config.WIDTH));
-        out.append(fillWithSpaces("<code>Сила:", arenaUser.getCurStr() + "</code>\n", Config.WIDTH));
-        out.append(fillWithSpaces("<code>Ловкость:", arenaUser.getCurDex() + "</code>\n", Config.WIDTH));
-        out.append(fillWithSpaces("<code>Мудрость:", arenaUser.getCurWis() + "</code>\n", Config.WIDTH));
-        out.append(fillWithSpaces("<code>Интеллект:", arenaUser.getCurInt() + "</code>\n", Config.WIDTH));
-        out.append(fillWithSpaces("<code>Телосложение:", arenaUser.getCurCon() + "</code>\n", Config.WIDTH));
-        out.append(fillWithSpaces("<code>Свободные очки:", arenaUser.getFreePoints() + "</code>\n", Config.WIDTH));
+        out.append(fillWithSpaces("<code>Опыт:", arenaUser.getExperience() + CLOSE_TAG, Config.WIDTH));
+        out.append(fillWithSpaces("<code>Жизни:", arenaUser.getCurHitPoints() + CLOSE_TAG, Config.WIDTH));
+        out.append(fillWithSpaces("<code>Золото:", arenaUser.getMoney() + CLOSE_TAG, Config.WIDTH));
+        out.append(fillWithSpaces("<code>Сила:", arenaUser.getCurStr() + CLOSE_TAG, Config.WIDTH));
+        out.append(fillWithSpaces("<code>Ловкость:", arenaUser.getCurDex() + CLOSE_TAG, Config.WIDTH));
+        out.append(fillWithSpaces("<code>Мудрость:", arenaUser.getCurWis() + CLOSE_TAG, Config.WIDTH));
+        out.append(fillWithSpaces("<code>Интеллект:", arenaUser.getCurInt() + CLOSE_TAG, Config.WIDTH));
+        out.append(fillWithSpaces("<code>Телосложение:", arenaUser.getCurCon() + CLOSE_TAG, Config.WIDTH));
+        out.append(fillWithSpaces("<code>Свободные очки:", arenaUser.getFreePoints() + CLOSE_TAG, Config.WIDTH));
         SendMessage msg = new SendMessage();
         msg.setChatId((long) userId);
         msg.enableHtml(true);
@@ -276,10 +277,10 @@ public final class Messages {
         ArenaUser arenaUser = ArenaUser.getUser(userId);
         StringBuilder out = new StringBuilder();
         out.append("Ваши расширенные характеристики:\n");
-        out.append(fillWithSpaces("<code>Урон:", arenaUser.getMinHit() + "-" + arenaUser.getMaxHit() + "</code>\n", Config.WIDTH));
-        out.append(fillWithSpaces("<code>Атака:", arenaUser.getAttack() + "</code>\n", Config.WIDTH));
-        out.append(fillWithSpaces("<code>Защита:", arenaUser.getProtect() + "</code>\n", Config.WIDTH));
-        out.append(fillWithSpaces("<code>Лечение:", arenaUser.getHeal() + "</code>\n", Config.WIDTH));
+        out.append(fillWithSpaces("<code>Урон:", arenaUser.getMinHit() + "-" + arenaUser.getMaxHit() + CLOSE_TAG, Config.WIDTH));
+        out.append(fillWithSpaces("<code>Атака:", arenaUser.getAttack() + CLOSE_TAG, Config.WIDTH));
+        out.append(fillWithSpaces("<code>Защита:", arenaUser.getProtect() + CLOSE_TAG, Config.WIDTH));
+        out.append(fillWithSpaces("<code>Лечение:", arenaUser.getHeal() + CLOSE_TAG, Config.WIDTH));
         out.append(fillWithSpaces("<code>Защ. от магии:", arenaUser.getMagicProtect() + "</code>", Config.WIDTH));
         arenaUser.appendClassXstatMsg(out);
         SendMessage msg = new SendMessage();
