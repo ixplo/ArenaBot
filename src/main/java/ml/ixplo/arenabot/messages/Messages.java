@@ -29,6 +29,8 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import static ml.ixplo.arenabot.config.Config.CLOSE_TAG;
+
 /**
  * ixplo
  * 29.04.2017.
@@ -36,7 +38,6 @@ import java.util.List;
 public final class Messages {
 
     public static final String LOGTAG = "MESSAGES";
-    private static final String CLOSE_TAG = "</code>\n";
 
     /***** no instance for this class *****/
     private Messages() {
@@ -401,10 +402,10 @@ public final class Messages {
     }
 
 
-    //todo переделать все под один универсальный метод, а текст сообщения хранить в xml
-    //todo конкретный результат определять по коду
-    //todo getAnswerCallbackQuery(String code, Map<String, Object> inParams)
-    //todo вынести callbackquery в отдельный класс
+    /*todo переделать все под один универсальный метод, а текст сообщения хранить в xml
+    конкретный результат определять по коду
+    getAnswerCallbackQuery(String code, Map<String, Object> inParams)
+    вынести callbackquery в отдельный класс*/
     public static AnswerCallbackQuery getAnswerCallbackQuery(String queryId, String queryText) {
         if (queryText == null) {
             return new AnswerCallbackQuery().setCallbackQueryId(queryId);

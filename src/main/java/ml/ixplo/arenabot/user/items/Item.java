@@ -4,7 +4,6 @@ import ml.ixplo.arenabot.config.Config;
 import ml.ixplo.arenabot.database.DatabaseManager;
 import ml.ixplo.arenabot.exception.ArenaUserException;
 import ml.ixplo.arenabot.user.ArenaUser;
-import ml.ixplo.arenabot.utils.Utils;
 
 import java.math.BigDecimal;
 import java.util.LinkedList;
@@ -77,7 +76,7 @@ public class Item {
     }
 
     public static int getEqipIndex(Integer userId, String itemId) {
-        return db.getIntByBy(Config.EQIP, "counter", "id", itemId, Config.USER_ID, userId) - 1;
+        return db.getIntByBy(Config.EQIP, Config.COUNTER, "id", itemId, Config.USER_ID, userId) - 1;
     }
 
     public static boolean isItemInSlot(int userId, int eqipIndex) {
@@ -85,11 +84,11 @@ public class Item {
     }
 
     public static String getItemId(int userId, int eqipIndex) {
-        return db.getStringByBy(Config.EQIP, "id", "counter", eqipIndex + 1, Config.USER_ID, userId);
+        return db.getStringByBy(Config.EQIP, "id", Config.COUNTER, eqipIndex + 1, Config.USER_ID, userId);
     }
 
     public static String getItemInSlot(int userId, int eqipIndex) {
-        return db.getStringsBy(Config.INVENTORY, Config.IN_SLOT, "user_Id", userId, "counter", eqipIndex + 1).get(0);
+        return db.getStringsBy(Config.INVENTORY, Config.IN_SLOT, Config.USER_ID, userId, Config.COUNTER, eqipIndex + 1).get(0);
     }
 
     public static void add(int userId, String itemId) {
@@ -237,24 +236,24 @@ public class Item {
         out.append("Вещь: <b>").append(item.getName()).append("</b> \nЦена [").append(item.getPrice());
         out.append("]\n\n").append(item.getDescr()).append("\n\n");
         if (item.isWeapon()) {
-            out.append(fillWithSpaces("<code>Урон:", item.getMinHit() + "-" + item.getMaxHit() + "</code>\n", Config.WIDTH));
+            out.append(fillWithSpaces("<code>Урон:", item.getMinHit() + "-" + item.getMaxHit() + Config.CLOSE_TAG, Config.WIDTH));
         }
-        out.append(fillWithSpaces("<code>Атака:", item.getAttack() + "</code>\n", Config.WIDTH));
-        out.append(fillWithSpaces("<code>Защита:", item.getProtect() + "</code>\n", Config.WIDTH));
+        out.append(fillWithSpaces("<code>Атака:", item.getAttack() + Config.CLOSE_TAG, Config.WIDTH));
+        out.append(fillWithSpaces("<code>Защита:", item.getProtect() + Config.CLOSE_TAG, Config.WIDTH));
         if (item.getStrBonus() != 0) {
-            out.append(fillWithSpaces("<code>Бонус к Силе:", item.getStrBonus() + "</code>\n", Config.WIDTH));
+            out.append(fillWithSpaces("<code>Бонус к Силе:", item.getStrBonus() + Config.CLOSE_TAG, Config.WIDTH));
         }
         if (item.getDexBonus() != 0) {
-            out.append(fillWithSpaces("<code>Бонус к Ловкости:", item.getDexBonus() + "</code>\n", Config.WIDTH));
+            out.append(fillWithSpaces("<code>Бонус к Ловкости:", item.getDexBonus() + Config.CLOSE_TAG, Config.WIDTH));
         }
         if (item.getWisBonus() != 0) {
-            out.append(fillWithSpaces("<code>Бонус к Мудрости:", item.getWisBonus() + "</code>\n", Config.WIDTH));
+            out.append(fillWithSpaces("<code>Бонус к Мудрости:", item.getWisBonus() + Config.CLOSE_TAG, Config.WIDTH));
         }
         if (item.getIntBonus() != 0) {
-            out.append(fillWithSpaces("<code>Бонус к Интеллекту:", item.getIntBonus() + "</code>\n", Config.WIDTH));
+            out.append(fillWithSpaces("<code>Бонус к Интеллекту:", item.getIntBonus() + Config.CLOSE_TAG, Config.WIDTH));
         }
         if (item.getConBonus() != 0) {
-            out.append(fillWithSpaces("<code>Бонус к Телосложению:", item.getConBonus() + "</code>\n", Config.WIDTH));
+            out.append(fillWithSpaces("<code>Бонус к Телосложению:", item.getConBonus() + Config.CLOSE_TAG, Config.WIDTH));
         }
         if (item.getStrNeeded() != 0
                 || item.getDexNeeded() != 0
@@ -264,27 +263,27 @@ public class Item {
             out.append("\n\nТребования к характеристикам:\n");
         }
         if (item.getStrNeeded() != 0) {
-            out.append(fillWithSpaces("<code>Сила:", item.getStrNeeded() + "</code>\n", Config.WIDTH));
+            out.append(fillWithSpaces("<code>Сила:", item.getStrNeeded() + Config.CLOSE_TAG, Config.WIDTH));
         }
         if (item.getDexNeeded() != 0) {
-            out.append(fillWithSpaces("<code>Ловкость:", item.getDexNeeded() + "</code>\n", Config.WIDTH));
+            out.append(fillWithSpaces("<code>Ловкость:", item.getDexNeeded() + Config.CLOSE_TAG, Config.WIDTH));
         }
         if (item.getWisNeeded() != 0) {
-            out.append(fillWithSpaces("<code>Мудрость:", item.getWisNeeded() + "</code>\n", Config.WIDTH));
+            out.append(fillWithSpaces("<code>Мудрость:", item.getWisNeeded() + Config.CLOSE_TAG, Config.WIDTH));
         }
         if (item.getIntNeeded() != 0) {
-            out.append(fillWithSpaces("<code>Интеллект:", item.getIntNeeded() + "</code>\n", Config.WIDTH));
+            out.append(fillWithSpaces("<code>Интеллект:", item.getIntNeeded() + Config.CLOSE_TAG, Config.WIDTH));
         }
         if (item.getConNeeded() != 0) {
-            out.append(fillWithSpaces("<code>Телосложение:", item.getConNeeded() + "</code>\n", Config.WIDTH));
+            out.append(fillWithSpaces("<code>Телосложение:", item.getConNeeded() + Config.CLOSE_TAG, Config.WIDTH));
         }
         if (item.getRace() != null) {
-            out.append(fillWithSpaces("<code>Только для расы:", ArenaUser.getRaceName(item.getRace()) + "</code>\n", Config.WIDTH));
+            out.append(fillWithSpaces("<code>Только для расы:", ArenaUser.getRaceName(item.getRace()) + Config.CLOSE_TAG, Config.WIDTH));
         }
-        out.append(fillWithSpaces("<code>Слот:", Item.getSlotName(item.getSlot()) + "</code>\n", Config.WIDTH));
+        out.append(fillWithSpaces("<code>Слот:", Item.getSlotName(item.getSlot()) + Config.CLOSE_TAG, Config.WIDTH));
         String isInSlot = Item.isItemInSlot(eqipIndex, userId) ? "Надето" : "Не надето";
         out.append(fillWithSpaces("<code>Состояние:",
-                isInSlot + "</code>\n", Config.WIDTH));
+                isInSlot + Config.CLOSE_TAG, Config.WIDTH));
         return out.toString();
     }
 
@@ -325,11 +324,11 @@ public class Item {
     }
 
     private void markAsPuttedOn(Integer userId, int eqipIndex) {
-        db.setStringTo(Config.EQIP, userId, getItemId(userId, eqipIndex), "in_slot", slot);
+        db.setStringTo(Config.EQIP, userId, getItemId(userId, eqipIndex), Config.IN_SLOT, slot);
     }
 
     private void markAsPuttedOff(Integer userId, int eqipIndex) {
-        db.setStringTo(Config.EQIP, userId, getItemId(userId, eqipIndex), "in_slot", null);
+        db.setStringTo(Config.EQIP, userId, getItemId(userId, eqipIndex), Config.IN_SLOT, null);
     }
 
     public ArenaUser getOwner() {

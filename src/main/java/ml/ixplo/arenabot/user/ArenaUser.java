@@ -12,7 +12,6 @@ import ml.ixplo.arenabot.user.classes.Priest;
 import ml.ixplo.arenabot.user.classes.UserClass;
 import ml.ixplo.arenabot.user.classes.Warrior;
 import ml.ixplo.arenabot.user.items.Item;
-import ml.ixplo.arenabot.utils.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
@@ -177,7 +176,7 @@ public abstract class ArenaUser extends Member implements IUser {
 
     public static ArenaUser create(UserClass userClassId) {
         if (userClassId == null) {
-            throw new IllegalArgumentException("userClassId is invalid: " + userClassId);
+            throw new IllegalArgumentException("userClassId is invalid");
         }
         ArenaUser hero;
         switch (userClassId) {
@@ -198,8 +197,6 @@ public abstract class ArenaUser extends Member implements IUser {
         }
         return hero;
     }
-
-    //todo save user to db public static void updateUser(Integer userId){common + abstract}
 
     public static void dropUser(int userId) {
         if (!db.doesUserExists(userId)) {

@@ -11,7 +11,10 @@ import java.util.Properties;
 
 public class PropertiesLoader {
 
-    private static String LOGTAG = "PropertiesLoader";
+    private PropertiesLoader() {
+    }
+
+    private static final String LOGTAG = "PropertiesLoader";
     private static Map<String, String> settings = new HashMap<>();
 
     public static Map<String, String> getProperties() {
@@ -34,6 +37,7 @@ public class PropertiesLoader {
     public static String getVersion() {
         return getProperties().get("version");
     }
+
     private static void loadSettingsFrom(String fileName) throws IOException {
         Properties properties = new Properties();
         FileInputStream fis = new FileInputStream(fileName);

@@ -188,7 +188,7 @@ public class DatabaseManager {
                     arenaUser.setCurExp(result.getInt("cur_exp"));
                     arenaUser.setLastGame(result.getLong("last_game"));
                     arenaUser.setCurWeapon(result.getInt("cur_weapon"));
-                    arenaUser.setStatus(result.getInt("status"));
+                    arenaUser.setStatus(result.getInt(Config.STATUS));
                 }
             }
         } catch (SQLException e) {

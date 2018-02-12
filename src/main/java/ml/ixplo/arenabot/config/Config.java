@@ -14,6 +14,9 @@ public class Config {
     public static final String INVALID_USER_ID = "Invalid userId: ";
     public static final String NOT_YET_IMPLEMENTED = "Not yet implemented";
     public static final String INVENTORY = "inventory";
+    public static final String COUNTER = "counter";
+    public static final String USER_ID = "user_Id";
+    public static final String CLOSE_TAG = "</code>\n";
     public static final String IN_SLOT = "in_slot";
     public final String rules = "rules.html";      //mc(rules)
     public static final long TEST_CHANNEL_ID = -161929436;
@@ -29,7 +32,6 @@ public class Config {
     public static final String BOT_PRIVATE = "https://telegram.me/ArenaMBot";
     public static final String BOT_PHOTO_LINK = "http://www.wallpapermint.com/wp-content/uploads/2014/02/Fantasy-World-Pack3-21-280x158.jpg";
     public static final String BOT_TUMB_PHOTO_LINK = "http://pixs.ru/showimage/tumbjpg_5168201_25993141.jpg";
-    public static final String COUNTER = "counter";
     public static final String STATUS = "status";
     public static final String USERS = "users";
     public static final String CLASSES = "classes";
@@ -39,7 +41,6 @@ public class Config {
     public static final String AVAILABLE_SPELLS = "available_spells";
     public static final String SPELLS = "spells";
     public static final String TEAMS = "teams";
-    public static final String USER_ID = "user_Id";
     public static final int BOT_PHOTO_WIDTH = 280;
     public static final int BOT_PHOTO_HEIGHT = 178;
     public static final boolean DO_NOT_COMMAND_UPDATE = false;

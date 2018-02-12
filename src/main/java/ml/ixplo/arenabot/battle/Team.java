@@ -104,7 +104,7 @@ public class Team {
         member.setTeamId(id);
     }
 
-    static public void refreshTeamsId(List<? extends IUser> members, List<Integer> curMembersId, List<String> teamsId){
+    public static void refreshTeamsId(List<? extends IUser> members, List<Integer> curMembersId, List<String> teamsId){
         teamsId.clear();
         for (IUser member: members){
             if (curMembersId.contains(member.getUserId())) {
@@ -125,9 +125,9 @@ public class Team {
         return Registration.db.getTeam(id);
     }
 
-    static boolean addTeam(String id) {
+    static void addTeam(String id) {
         Team team = new Team(id);
-        return Registration.db.setTeam(team);
+        Registration.db.setTeam(team);
     }
 
     boolean addTeam() {
@@ -139,12 +139,12 @@ public class Team {
     }
 
     public static void addMember(int userId, String teamId) {
-        Registration.db.setIntTo(Config.USERS, userId, "status", Config.REG);
+        Registration.db.setIntTo(Config.USERS, userId, Config.STATUS, Config.REG);
         Registration.db.setStringTo(Config.USERS, userId, "team", teamId);
     }
 
     public static void removeMember(int userId) {
-        Registration.db.setIntTo(Config.USERS, userId, "status", Config.UNREG);
+        Registration.db.setIntTo(Config.USERS, userId, Config.STATUS, Config.UNREG);
         if (Team.getTeam(getMember(userId).getTeamId()).isRegisteredTeam())
             Registration.db.setStringTo(Config.USERS, userId, "team", "");
     }
@@ -154,11 +154,19 @@ public class Team {
         return new Member(userId, teamId);
     }
 
-    public List<String> getRegisteredMembersName() {//работает только для регистрации
-        return Registration.db.getStringsBy(Config.USERS, "name", "team", name, "status", 1);
+    /**
+     * работает только для регистрации
+     * @return список всех участников, которые зарегистрировались
+     */
+    public List<String> getRegisteredMembersName() {
+        return Registration.db.getStringsBy(Config.USERS, "name", "team", name, Config.STATUS, 1);
     }
 
-    public List<Integer> getBattleMembersId() {//работает только для боя
-        return Registration.db.getIntsBy(Config.USERS, "id", "team", name, "status", 2);
+    /**
+     * работает только для боя
+     * @return список всех участников, которые находятся в бою
+     */
+    public List<Integer> getBattleMembersId() {
+        return Registration.db.getIntsBy(Config.USERS, "id", "team", name, Config.STATUS, 2);
     }
 }
