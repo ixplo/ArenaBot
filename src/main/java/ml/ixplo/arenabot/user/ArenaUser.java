@@ -1,9 +1,9 @@
 package ml.ixplo.arenabot.user;
 
 import ml.ixplo.arenabot.battle.Battle;
+import ml.ixplo.arenabot.battle.Member;
 import ml.ixplo.arenabot.battle.Round;
 import ml.ixplo.arenabot.config.Config;
-import ml.ixplo.arenabot.database.DatabaseManager;
 import ml.ixplo.arenabot.exception.ArenaUserException;
 import ml.ixplo.arenabot.messages.Messages;
 import ml.ixplo.arenabot.user.classes.Archer;
@@ -34,18 +34,12 @@ import static com.google.common.math.IntMath.pow;
  * ixplo
  * 24.04.2017.
  */
-public abstract class ArenaUser implements IUser {
+public abstract class ArenaUser extends Member implements IUser {
     protected static final Logger LOGGER = LoggerFactory.getLogger(ArenaUser.class);
     public static final String LOGTAG = "ARENAUSER";
 
-    private static DatabaseManager db;
-
-    private int userId;
-    private String name;
     private String userTitle;
     private String userPostTitle;
-    private String teamId;
-    private String teamRank;
     private String race;
     private String userClass;
     private String descr;
@@ -77,7 +71,6 @@ public abstract class ArenaUser implements IUser {
     private double curHitPoints;
     private int curExp;
     private long lastGame;
-    private int status;
     protected List<String> actionsName = Arrays.asList("Атака", "Защита", "Лечение");
 
     // instance
@@ -207,18 +200,6 @@ public abstract class ArenaUser implements IUser {
 
     //todo save user to db public static void updateUser(Integer userId){common + abstract}
 
-    public static void setDb(DatabaseManager dbManager) {
-        db = dbManager;
-    }
-
-    public static boolean doesUserExists(Integer userId) {
-        return db.doesUserExists(userId);
-    }
-
-    public static int getStatus(int userId) {
-        return db.getIntFrom(Config.USERS, userId, Config.STATUS);
-    }
-
     public static void dropUser(int userId) {
         if (!db.doesUserExists(userId)) {
             throw new ArenaUserException("No such user in database: " + userId);
@@ -236,7 +217,7 @@ public abstract class ArenaUser implements IUser {
         return roundDouble(d, 2);
     }
 
-    public static double roundDouble(double d, int precise) {
+    protected static double roundDouble(double d, int precise) {
         int prec = pow(10, precise);
         double dWithPrecise = d * prec;
         int i = (int) Math.round(dWithPrecise);
@@ -327,14 +308,6 @@ public abstract class ArenaUser implements IUser {
         return users;
     }
 
-    public static String getUserName(Integer userId) {
-        return db.getStringFrom(Config.USERS, userId, "name");
-    }
-
-    public static String getUserTeamId(Integer userId) {
-        return db.getStringFrom(Config.USERS, userId, "team");
-    }
-
     public static String getClassName(String classId) {
         return db.getStringFrom(Config.CLASSES, classId, "name");
     }
@@ -373,10 +346,6 @@ public abstract class ArenaUser implements IUser {
 
     public static List<String> getClassesDescr() {
         return db.getColumn(Config.CLASSES, "descr");
-    }
-
-    public static DatabaseManager getDb() {
-        return db;
     }
 
 // **************************************************
@@ -510,30 +479,12 @@ public abstract class ArenaUser implements IUser {
         this.curHitPoints = curHitPoints;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-        db.setStringTo(Config.USERS, userId, "name", name);
-    }
-
     public void setUserTitle(String userTitle) {
         this.userTitle = userTitle;
     }
 
     public void setUserPostTitle(String userPostTitle) {
         this.userPostTitle = userPostTitle;
-    }
-
-    public void setTeamId(String teamId) {
-        this.teamId = teamId;
-        db.setStringTo(Config.USERS, userId, "team", teamId);
-    }
-
-    public void setTeamRank(String teamRank) {
-        this.teamRank = teamRank;
     }
 
     public void setRace(String race) {
@@ -656,11 +607,6 @@ public abstract class ArenaUser implements IUser {
         this.lastGame = lastGame;
     }
 
-    public void setStatus(int status) {
-        this.status = status;
-        db.setIntTo(Config.USERS, userId, Config.STATUS, status);
-    }
-
     // **************************************************
     // ******** getters *********************************
     // **************************************************
@@ -679,14 +625,6 @@ public abstract class ArenaUser implements IUser {
 
     public String getUserPostTitle() {
         return userPostTitle;
-    }
-
-    public String getTeamId() {
-        return teamId;
-    }
-
-    public String getTeamRank() {
-        return teamRank;
     }
 
     public String getRace() {
@@ -813,20 +751,8 @@ public abstract class ArenaUser implements IUser {
         return db.getLongFrom(Config.USERS, userId, "last_game");
     }
 
-    public Integer getUserId() {
-        return userId;
-    }
-
     public boolean doesUserExists() {
         return db.doesUserExists(userId);
-    }
-
-    public int getStatus() {
-        return db.getIntFrom(Config.USERS, userId, Config.STATUS);
-    }
-
-    public String getName() {
-        return name;
     }
 
     public String getClassName() {
@@ -881,7 +807,7 @@ public abstract class ArenaUser implements IUser {
                 ", curHitPoints=" + curHitPoints +
                 ", curExp=" + curExp +
                 ", lastGame=" + lastGame +
-                ", status=" + status +
+                ", status=" + getStatus() +
                 '}';
     }
 
