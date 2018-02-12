@@ -69,7 +69,7 @@ public class Registration {
         } else {
             teamId = addNextUnregistered();
         }
-        Member.addMember(userId, teamId);
+        Team.addMember(userId, teamId);
         if (getTeamsCount() > 1) {
             if (regTimer != null) {
                 regTimer.cancel();
@@ -81,7 +81,7 @@ public class Registration {
     }
 
     public void unregMember(Integer userId) {
-        Member.removeMember(userId);
+        Team.removeMember(userId);
         if (!Team.isRegisteredTeam(ArenaUser.getUserTeamId(userId))) {
             ArenaUser.getUser(userId).setTeamId("");
         }
@@ -125,7 +125,7 @@ public class Registration {
     }
 
     public Member getMember(Integer userId) {
-        return Member.getMember(userId);
+        return Team.getMember(userId);
     }
 
     public List<Member> getMembers() {

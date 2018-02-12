@@ -138,6 +138,22 @@ public class Team {
         return Registration.db.getIntFrom(Config.TEAMS, teamId, "registered") > 0;
     }
 
+    public static void addMember(int userId, String teamId) {
+        Registration.db.setIntTo(Config.USERS, userId, "status", Config.REG);
+        Registration.db.setStringTo(Config.USERS, userId, "team", teamId);
+    }
+
+    public static void removeMember(int userId) {
+        Registration.db.setIntTo(Config.USERS, userId, "status", Config.UNREG);
+        if (Team.getTeam(getMember(userId).getTeamId()).isRegisteredTeam())
+            Registration.db.setStringTo(Config.USERS, userId, "team", "");
+    }
+
+    public static Member getMember(int userId) {
+        String teamId = Registration.db.getStringFrom(Config.USERS, userId, "team");
+        return new Member(userId, teamId);
+    }
+
     public List<String> getRegisteredMembersName() {//работает только для регистрации
         return Registration.db.getStringsBy(Config.USERS, "name", "team", name, "status", 1);
     }
