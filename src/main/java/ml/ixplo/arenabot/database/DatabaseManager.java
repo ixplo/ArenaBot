@@ -159,7 +159,7 @@ public class DatabaseManager {
                     arenaUser.setTeamId(result.getString("team"));
                     arenaUser.setTeamRank(result.getString("team_rank"));
                     arenaUser.setRace(result.getString("race"));
-                    arenaUser.setDescr(result.getString("descr"));
+                    arenaUser.setDescr(result.getString(Config.DESCR));
                     arenaUser.setSex(result.getInt("sex"));
                     arenaUser.setUserGames(result.getInt("games"));
                     arenaUser.setUserWins(result.getInt("wins"));
@@ -422,7 +422,7 @@ public class DatabaseManager {
                     item.setSlot(result.getString("slot"));
                     item.setShop(result.getString("shop"));
                     item.setRace(result.getString("race"));
-                    item.setDescr(result.getString("descr"));
+                    item.setDescr(result.getString(Config.DESCR));
                     item.setItemsSet(result.getString("items_set"));
                     itemsList.add(item);
                 }
@@ -460,7 +460,7 @@ public class DatabaseManager {
                     item.setSlot(result.getString("slot"));
                     item.setShop(result.getString("shop"));
                     item.setRace(result.getString("race"));
-                    item.setDescr(result.getString("descr"));
+                    item.setDescr(result.getString(Config.DESCR));
                     item.setItemsSet(result.getString("items_set"));
                 } else {
                     throw new IllegalArgumentException("No item exist with item_id: " + itemId);
@@ -512,7 +512,7 @@ public class DatabaseManager {
                     team.setPublic(result.getInt("is_public") > 0);
                     team.setGames(result.getInt("games"));
                     team.setWins(result.getInt("wins"));
-                    team.setDescr(result.getString("descr"));
+                    team.setDescr(result.getString(Config.DESCR));
                     team.setHtmlName(result.getString("html_name"));
                 }
             }
