@@ -134,10 +134,6 @@ public class Spell { //todo add implements Durable в потомка - клас�
         ArenaUser.getDb().setIntTo(Config.AVAILABLE_SPELLS, id, Config.SPELL_GRADE, grade);
     }
 
-    public void setOwnerId(int ownerId) {
-        this.ownerId = ownerId;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -145,7 +141,6 @@ public class Spell { //todo add implements Durable в потомка - клас�
 
         Spell spell = (Spell) o;
 
-        if (level != spell.level) return false;
         if (grade != spell.grade) return false;
         return id.equals(spell.id);
     }

@@ -86,4 +86,18 @@ public class SpellTest {
         Assert.assertEquals(Presets.MAGE_SPELL_GRADE_THREE_BONUS, mageSpell.getBonus(), Presets.DELTA);
     }
 
+    @Test
+    public void equalsTest() {
+        Spell first = mage.getSpell(Presets.MAGIC_ARROW_SPELL_ID);
+        Spell second = first;
+        Assert.assertEquals(first, second);
+        Assert.assertNotEquals(first, null);
+        Assert.assertNotEquals(first, mage);
+        second = mage.getSpell(Presets.MAGIC_ARROW_SPELL_ID);
+        Assert.assertEquals(first, second);
+        Assert.assertEquals(first.hashCode(), second.hashCode());
+        second.setGrade(Presets.SPELL_GRADE_THREE);
+        Assert.assertNotEquals(first, second);
+
+    }
 }
