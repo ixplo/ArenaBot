@@ -39,6 +39,7 @@ public class Config {
     public static final String EQIP = "inventory";
     public static final String ROUND_ACTIONS = "ROUND_ACTIONS";
     public static final String AVAILABLE_SPELLS = "available_spells";
+    public static final String SPELL_GRADE = "spell_grade";
     public static final String SPELLS = "spells";
     public static final String TEAMS = "teams";
     public static final int BOT_PHOTO_WIDTH = 280;

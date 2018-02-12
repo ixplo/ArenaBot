@@ -3,6 +3,7 @@ package ml.ixplo.arenabot.battle;
 import ml.ixplo.arenabot.helper.Presets;
 import ml.ixplo.arenabot.helper.TestHelper;
 import ml.ixplo.arenabot.user.ArenaUser;
+import ml.ixplo.arenabot.user.classes.Mage;
 import ml.ixplo.arenabot.user.spells.Spell;
 import org.junit.After;
 import org.junit.Assert;
@@ -16,7 +17,7 @@ public class SpellTest {
 
     private TestHelper testHelper = new TestHelper();
     private ArenaUser warrior = TestHelper.WARRIOR;
-    private ArenaUser mage = TestHelper.MAGE;
+    private Mage mage = (Mage) TestHelper.MAGE;
 
     @After
     public void tearDown() {
@@ -40,6 +41,7 @@ public class SpellTest {
 
 
     }
+
     @Test
     public void getSpell() {
         Spell spell = Spell.getSpell(Presets.MAGIC_ARROW_SPELL_ID);
@@ -56,7 +58,32 @@ public class SpellTest {
         Assert.assertEquals(Presets.MAGE_SPELL_GRADE_TWO_BONUS, spell.getGradeTwoBonus(), Presets.DELTA);
         Assert.assertEquals(Presets.MAGE_SPELL_GRADE_THREE_BONUS, spell.getGradeThreeBonus(), Presets.DELTA);
         Assert.assertEquals(Presets.MAGE_SPELL_PROBABILITY, spell.getProbability());
-        spell.setLevel(Presets.MAGE_SPELL_SECOND_LEVEL);
-        Assert.assertEquals(Presets.MAGE_SPELL_SECOND_LEVEL, spell.getLevel());
     }
+
+    @Test
+    public void getSpellTest() {
+        Spell expectedSpell = Spell.getSpell(Presets.MAGIC_ARROW_SPELL_ID);
+        Spell mageSpell = mage.getSpell(Presets.MAGIC_ARROW_SPELL_ID);
+        Assert.assertEquals(expectedSpell, mageSpell);
+    }
+
+    @Test
+    public void getSpellGradeTest() {
+        Spell mageSpell = mage.getSpell(Presets.MAGIC_ARROW_SPELL_ID);
+        Assert.assertEquals(Presets.SPELL_GRADE_ONE, mageSpell.getGrade());
+
+        mageSpell.setGrade(Presets.SPELL_GRADE_TWO);
+        Assert.assertEquals(Presets.SPELL_GRADE_TWO, mageSpell.getGrade());
+    }
+
+    @Test
+    public void spellGradesTest() {
+        Spell mageSpell = mage.getSpell(Presets.MAGIC_ARROW_SPELL_ID);
+        Assert.assertEquals(Presets.MAGE_SPELL_GRADE_ONE_BONUS, mageSpell.getBonus(), Presets.DELTA);
+        mageSpell.setGrade(2);
+        Assert.assertEquals(Presets.MAGE_SPELL_GRADE_TWO_BONUS, mageSpell.getBonus(), Presets.DELTA);
+        mageSpell.setGrade(3);
+        Assert.assertEquals(Presets.MAGE_SPELL_GRADE_THREE_BONUS, mageSpell.getBonus(), Presets.DELTA);
+    }
+
 }

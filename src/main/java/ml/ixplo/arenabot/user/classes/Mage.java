@@ -222,7 +222,6 @@ public class Mage extends ArenaUser implements SpellCaster {
     }
 
     private void setSpell(String spellId) {
-
         getDb().addSpell(getUserId(), spellId, Spell.getSpellGrade(getUserId(), spellId) + 1);
     }
 
@@ -265,6 +264,10 @@ public class Mage extends ArenaUser implements SpellCaster {
     @Override
     public void manaRegen() {
         LOGGER.error(Config.NOT_YET_IMPLEMENTED);
+    }
+
+    public Spell getSpell(String spellId) {
+        return Spell.getSpell(userId, spellId);
     }
 
     public List<Spell> getSpells() {

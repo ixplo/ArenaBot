@@ -37,8 +37,11 @@ public class Presets {
     public static final String QUERY_TEXT = "query_text";
     public static final String MAGIC_ARROW_SPELL_ID = "1am";
     public static final String PRIEST_SPELL_ID = "1ap";
-    public static final int MAGE_SPELL_DAMAGE = 3;
     public static final String MAGE_SPELL_NAME = "Магическая стрела";
+    public static final int SPELL_GRADE_ONE = 1;
+    public static final int SPELL_GRADE_TWO = 2;
+    public static final int SPELL_GRADE_THREE = 3;
+    public static final int MAGE_SPELL_DAMAGE = 3;
     public static final int MAGE_SPELL_MANACOST = 3;
     public static final int MAGE_SPELL_EXP_BONUS = 10;
     public static final String MAGE_SPELL_EFFECT = "DAMAGE";

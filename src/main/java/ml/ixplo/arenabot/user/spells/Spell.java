@@ -18,9 +18,18 @@ public class Spell { //todo add implements Durable в потомка - клас�
     private int armor;
     private int expBonus;
     private int probability;
+    private int grade;
     private double gradeOneBonus;
     private double gradeTwoBonus;
     private double gradeThreeBonus;
+    private int ownerId;
+
+    public static Spell getSpell(int ownerId, String spellId) {
+        Spell spell = getSpell(spellId);
+        spell.ownerId = ownerId;
+        spell.grade = getSpellGrade(ownerId, spellId);
+        return spell;
+    }
 
     public static Spell getSpell(String id) {
         Spell spell = new Spell();
@@ -37,6 +46,7 @@ public class Spell { //todo add implements Durable в потомка - клас�
         spell.gradeOneBonus = ArenaUser.getDb().getDoubleFrom(Config.SPELLS, id, "bonus_g1");
         spell.gradeTwoBonus = ArenaUser.getDb().getDoubleFrom(Config.SPELLS, id, "bonus_g2");
         spell.gradeThreeBonus = ArenaUser.getDb().getDoubleFrom(Config.SPELLS, id, "bonus_g3");
+        spell.grade = 1;
         return spell;
     }
 
@@ -45,6 +55,14 @@ public class Spell { //todo add implements Durable в потомка - клас�
                 "spell_grade",
                 "id", spellId,
                 "user_id", userId);
+    }
+
+    public int getGrade() {
+        return grade;
+    }
+
+    public  double getBonus() {
+        return getSpellBonus(ownerId);
     }
 
     public double getSpellBonus(int userId) {
@@ -67,16 +85,8 @@ public class Spell { //todo add implements Durable в потомка - клас�
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public int getManaCost() {
@@ -85,10 +95,6 @@ public class Spell { //todo add implements Durable в потомка - клас�
 
     public int getLevel() {
         return level;
-    }
-
-    public void setLevel(int level) {
-        this.level = level;
     }
 
     public int getDuration() {
@@ -121,5 +127,34 @@ public class Spell { //todo add implements Durable в потомка - клас�
 
     public int getArmor() {
         return armor;
+    }
+
+    public void setGrade(int grade) {
+        this.grade = grade;
+        ArenaUser.getDb().setIntTo(Config.AVAILABLE_SPELLS, id, Config.SPELL_GRADE, grade);
+    }
+
+    public void setOwnerId(int ownerId) {
+        this.ownerId = ownerId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Spell spell = (Spell) o;
+
+        if (level != spell.level) return false;
+        if (grade != spell.grade) return false;
+        return id.equals(spell.id);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id.hashCode();
+        result = 31 * result + level;
+        result = 31 * result + grade;
+        return result;
     }
 }
