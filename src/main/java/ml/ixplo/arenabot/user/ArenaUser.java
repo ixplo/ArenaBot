@@ -34,7 +34,7 @@ import static ml.ixplo.arenabot.utils.Utils.roundDouble;
  * ixplo
  * 24.04.2017.
  */
-public abstract class ArenaUser extends Member implements IUser {
+public abstract class ArenaUser extends Member {
     protected static final Logger LOGGER = LoggerFactory.getLogger(ArenaUser.class);
     public static final String LOGTAG = "ARENAUSER";
 

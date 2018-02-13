@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.Random;
 
 import static ml.ixplo.arenabot.messages.Messages.fillWithSpaces;
-import static ml.ixplo.arenabot.user.spells.Spell.getSpell;
 
 /**
  * ixplo
