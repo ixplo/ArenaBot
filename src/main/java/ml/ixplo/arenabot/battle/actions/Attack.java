@@ -15,6 +15,7 @@ public class Attack extends Action {
 
     Attack() {
         actionId = "a";
+        setPriority(FIRST);
     }
 
     @Override

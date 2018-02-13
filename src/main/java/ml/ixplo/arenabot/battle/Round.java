@@ -10,6 +10,8 @@ import org.telegram.telegrambots.logging.BotLogger;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.PriorityQueue;
+import java.util.Queue;
 import java.util.Timer;
 
 /**
@@ -24,7 +26,7 @@ public class Round {
     private List<? extends IUser> members;
     private List<Team> teams;
     private List<Order> orders;
-
+    private Queue<Action> priorityQueue;
 
     //todo убрать лишние параметры
     //todo не изменять передаваемые параметры
@@ -34,6 +36,7 @@ public class Round {
         this.curMembersId = new ArrayList<>(curMembersId);
         this.curTeamsId = new ArrayList<>(curTeamsId);
         orders = new ArrayList<>();
+        priorityQueue = new PriorityQueue<>();
         round = this;
     }
 
@@ -59,10 +62,13 @@ public class Round {
         }
         timer.cancel();
         Messages.sendToAll(members, "<b>Результаты раунда:</b>");
-        for (Order order : orders) { //todo queue with priority 1.attack 2.protect 3.magic 4.heal
-            for (Action action : order.getActions()) {
-                action.doAction();
-            }
+        for (Order order : orders) {
+            priorityQueue.addAll(order.getActions());
+        }
+        //todo переделать получение заказа тоже на priorityQueue
+        while (!priorityQueue.isEmpty()) {
+            Action action = priorityQueue.peek();
+            action.doAction();
         }
         for (Order order : orders) {
             for (Action action : order.getActions()) {
@@ -72,7 +78,6 @@ public class Round {
             }
         }
         takeOutCorpses();
-
     }
 
     public void stop() {

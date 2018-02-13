@@ -9,13 +9,18 @@ import ml.ixplo.arenabot.user.ArenaUser;
  * ixplo
  * 01.05.2017.
  */
-public abstract class Action {
+public abstract class Action implements Comparable<Action>{
+    public static final int FIRST = 1;
+    public static final int SECOND = 2;
+    public static final int THIRD = 3;
+    public static final int FOURTH = 4;
     ArenaUser user;
     ArenaUser target;
     String actionId;
     private int percent;    //from 1 to 100
     int experience;
     String message;
+    private int priority;
     private static DatabaseManager db;
 
     /******* constructor **********
@@ -151,4 +156,16 @@ public abstract class Action {
         db.dropActions(userId);
     }
 
+    @Override
+    public int compareTo(Action o) {
+        return priority - o.priority;
+    }
+
+    public int getPriority() {
+        return priority;
+    }
+
+    public void setPriority(int priority) {
+        this.priority = priority;
+    }
 }

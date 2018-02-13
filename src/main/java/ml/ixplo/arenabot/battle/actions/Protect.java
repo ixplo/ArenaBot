@@ -16,6 +16,7 @@ public class Protect extends Action {
 
     public Protect() {
         actionId = "p";
+        setPriority(SECOND);
     }
 
     @Override

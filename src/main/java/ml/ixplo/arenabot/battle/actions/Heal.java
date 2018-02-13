@@ -11,6 +11,7 @@ public class Heal extends Action {
 
     Heal() {
         actionId = "h";
+        setPriority(FOURTH);
     }
 
     @Override
