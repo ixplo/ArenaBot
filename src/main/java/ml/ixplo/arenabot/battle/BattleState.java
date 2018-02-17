@@ -6,19 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BattleState {
-    private List<Round> rounds = new ArrayList<>();
     private List<ArenaUser> members = new ArrayList<>();
     private List<Integer> curMembersId = new ArrayList<>();
     private List<Team> teams = new ArrayList<>();
     private List<String> curTeamsId = new ArrayList<>();
-
-    public List<Round> getRounds() {
-        return rounds;
-    }
-
-    public void setRounds(List<Round> rounds) {
-        this.rounds = rounds;
-    }
 
     public List<ArenaUser> getMembers() {
         return members;
