@@ -12,6 +12,6 @@ public class RemindAboutEndRound extends TimerTask {
 
     @Override
     public void run() {
-        Messages.sendToAll(round.getMembers(), "<b>Осталось 15 секунд до конца раунда!</b>");
+        Messages.sendToAll(round.getMembers(), Messages.END_OF_ROUND_REMINDER);
     }
 }

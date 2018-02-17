@@ -4,7 +4,9 @@ import ml.ixplo.arenabot.config.Config;
 import ml.ixplo.arenabot.user.IUser;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * ixplo
@@ -104,13 +106,14 @@ public class Team {
         member.setTeamId(id);
     }
 
-    public static void refreshTeamsId(List<? extends IUser> members, List<Integer> curMembersId, List<String> teamsId){
-        teamsId.clear();
-        for (IUser member: members){
+    public static Set<String> getTeamsId(List<? extends IUser> allMembers, List<Integer> curMembersId){
+        Set<String> teamsId = new HashSet<>();
+        for (IUser member: allMembers){
             if (curMembersId.contains(member.getUserId())) {
                 teamsId.add(member.getTeamId());
             }
         }
+        return teamsId;
     }
 
     public boolean isRegisteredTeam() {

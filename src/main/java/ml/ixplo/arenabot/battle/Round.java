@@ -1,5 +1,6 @@
 package ml.ixplo.arenabot.battle;
 
+import com.google.common.collect.Sets;
 import ml.ixplo.arenabot.battle.actions.Action;
 import ml.ixplo.arenabot.config.Config;
 import ml.ixplo.arenabot.exception.ArenaUserException;
@@ -9,9 +10,12 @@ import ml.ixplo.arenabot.user.IUser;
 import org.telegram.telegrambots.logging.BotLogger;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
+import java.util.Set;
 import java.util.Timer;
 
 /**
@@ -19,39 +23,48 @@ import java.util.Timer;
  * 29.04.2017.
  */
 public class Round {
-    public static final String LOGTAG = "MESSAGES";
-    private static Round round;
+    public static final String LOGTAG = "ROUND";
+    private static Round current;
     private List<Integer> curMembersId;
-    private List<String> curTeamsId;
+    private Set<String> curTeamsId;
     private List<? extends IUser> members;
     private List<Team> teams;
     private List<Order> orders;
-    private Queue<Action> priorityQueue;
-
-    //todo убрать лишние параметры
-    //todo не изменять передаваемые параметры
-    Round(List<Integer> curMembersId, List<String> curTeamsId, List<? extends IUser> members, List<Team> teams) {
-        this.members = new ArrayList<>(members);
-        this.teams = new ArrayList<>(teams);
-        this.curMembersId = new ArrayList<>(curMembersId);
-        this.curTeamsId = new ArrayList<>(curTeamsId);
-        orders = new ArrayList<>();
-        priorityQueue = new PriorityQueue<>();
-        round = this;
-    }
 
     public static Round getCurrent() {
-        return round;
+        return current;
     }
 
-    void begin() {
+    public static BattleState execute(BattleState battleState) {
+        current = new Round(battleState);
+        return current.execute();
+    }
+
+    Round(BattleState battleState) {
+        this.members = new ArrayList<>(battleState.getMembers());
+        this.teams = new ArrayList<>(battleState.getTeams());
+        this.curMembersId = new ArrayList<>(battleState.getCurMembersId());
+        this.curTeamsId = new HashSet<>(battleState.getCurTeamsId());
+        orders = new ArrayList<>();
+    }
+
+    private BattleState  execute() {
         Timer timer = new Timer();
         timer.schedule(new EndRound(this), Config.ROUND_TIME);
         timer.schedule(new RemindAboutEndRound(this), Config.ROUND_REMIND);
         Messages.sendListToAll(teams);
         for (IUser member : members) {
-            orders.add(new Order(member.getUserId(), round));
+            orders.add(new Order(member.getUserId(), this));
         }
+        waitForAllOrdersAccepted();
+        timer.cancel();
+        handleActions();
+        printResults();
+        takeOutCorpses();
+        return getBattleState();
+    }
+
+    private void waitForAllOrdersAccepted() {
         while (!isOrdersDone()) {
             try {
                 Thread.sleep(Config.DELAY_TIME);
@@ -60,16 +73,10 @@ public class Round {
                 BotLogger.info(LOGTAG, "Получен заказ");
             }
         }
-        timer.cancel();
+    }
+
+    private void printResults() {
         Messages.sendToAll(members, "<b>Результаты раунда:</b>");
-        for (Order order : orders) {
-            priorityQueue.addAll(order.getActions());
-        }
-        //todo переделать получение заказа тоже на priorityQueue
-        while (!priorityQueue.isEmpty()) {
-            Action action = priorityQueue.peek();
-            action.doAction();
-        }
         for (Order order : orders) {
             for (Action action : order.getActions()) {
                 if (action.getMessage() != null) {
@@ -77,7 +84,17 @@ public class Round {
                 }
             }
         }
-        takeOutCorpses();
+    }
+
+    private void handleActions() {
+        Queue<Action> priorityQueue = new PriorityQueue<>();
+        for (Order order : orders) {
+            priorityQueue.addAll(order.getActions());
+        }
+        while (!priorityQueue.isEmpty()) {
+            Action action = priorityQueue.peek();
+            action.doAction();
+        }
     }
 
     public void stop() {
@@ -92,7 +109,7 @@ public class Round {
                 if (arenaUser.getCurHitPoints() <= 0) {
                     Messages.sendToAll(members, "<b>" + arenaUser.getName() + "</b> потерял возможность продолжать бой.");
                     curMembersId.remove(getIndex(curMembersId, arenaUser.getUserId()));
-                    Team.refreshTeamsId(members, curMembersId, curTeamsId);
+                    curTeamsId = Team.getTeamsId(members, curMembersId);
                 }
         }
     }
@@ -129,16 +146,6 @@ public class Round {
             }
         }
         throw new ArenaUserException(Config.INVALID_USER_ID + userId);
-    }
-
-    private int getIndex(List<Team> teams, String teamId) {
-        int size = teams.size();
-        for (int i = 0; i < size; i++) {
-            if (teams.get(i).getId().equals(teamId)) {
-                return i;
-            }
-        }
-        throw new ArenaUserException("Invalid teamId: " + teamId);
     }
 
     public int getIndex(int userId) {
@@ -195,4 +202,12 @@ public class Round {
         return (List<IUser>) members;
     }
 
+    public BattleState getBattleState() {
+        BattleState battleState = new BattleState();
+        battleState.setMembers((List<ArenaUser>) members);
+        battleState.setCurMembersId(curMembersId);
+        battleState.setTeams(teams);
+        battleState.setCurTeamsId(new ArrayList<>(curTeamsId));
+        return battleState;
+    }
 }

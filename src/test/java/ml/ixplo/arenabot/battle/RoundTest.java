@@ -8,14 +8,24 @@ import ml.ixplo.arenabot.user.items.ItemTest;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.telegram.telegrambots.bots.AbsSender;
+import org.telegram.telegrambots.exceptions.TelegramApiException;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class RoundTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(ItemTest.class);
@@ -38,8 +48,13 @@ public class RoundTest {
         members.add(warrior);
         teams = new ArrayList<>();
         teams.add(new Team(warrior.getTeamId()));
-        round = new Round(curMembersId, curTeamsId, members, teams);
-        Messages.setBot(new Bot());
+        BattleState battleState = new BattleState();
+        battleState.setMembers(members);
+        battleState.setCurMembersId(curMembersId);
+        battleState.setTeams(teams);
+        battleState.setCurTeamsId(curTeamsId);
+        round = new Round(battleState);
+        Messages.setBot(testHelper.getTestBot());
     }
 
     @After
@@ -57,6 +72,7 @@ public class RoundTest {
     }
 
     @Test
+    @Ignore("доделать мок бота. Не мокаются final методы")
     public void startRound() throws Exception {
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
@@ -65,7 +81,20 @@ public class RoundTest {
                 round.stop();
             }
         }, 1000);
-        round.begin();
+        Round.execute(round.getBattleState());
+        Assert.assertEquals(round, Round.getCurrent());
+    }
+
+    @Test
+    public void botMock() throws TelegramApiException {
+        //arrange
+        Bot i = mock(Bot.class);
+        when(i.getBotUsername()).thenReturn("FakeBot");
+
+        //act
+        String result = i.getBotUsername();
+        //assert
+        Assert.assertEquals("FakeBot", result);
     }
 
     @Test
@@ -93,10 +122,4 @@ public class RoundTest {
     @Test
     public void getOrders() throws Exception {
     }
-
-    @Test
-    public void getCurrent() throws Exception {
-        Assert.assertEquals(round, Round.getCurrent());
-    }
-
 }

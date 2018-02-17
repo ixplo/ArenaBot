@@ -41,6 +41,8 @@
             **/src/test/**/*
         </sonar.coverage.exclusions>
         <jdk.version>1.8</jdk.version>
+        <mockito-all.version>1.10.19</mockito-all.version>
+        <powermock.version>1.7.3</powermock.version>
     </properties>
     <dependencies>
         <dependency>
@@ -70,6 +72,27 @@
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <version>${mockito-all.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-api-mockito</artifactId>
+            <version>${powermock.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-module-junit4</artifactId>
+            <version>${powermock.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+
+
     </dependencies>
 
     <build>
@@ -96,7 +119,7 @@
                     <skip>true</skip>
                     <configLocation>src/config/sun_checks.xml</configLocation>
                     <consoleOutput>true</consoleOutput>
-                    <faisOnError>true</faisOnError>
+                    <failsOnError>true</failsOnError>
                 </configuration>
                 <executions>
                     <execution>

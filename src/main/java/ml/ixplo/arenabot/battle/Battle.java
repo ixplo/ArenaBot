@@ -5,7 +5,7 @@ import ml.ixplo.arenabot.user.ArenaUser;
 import ml.ixplo.arenabot.config.Config;
 import ml.ixplo.arenabot.messages.Messages;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -14,12 +14,7 @@ import java.util.List;
  * 29.04.2017.
  */
 public class Battle extends Thread {
-    private List<Round> rounds = new ArrayList<>();
-    private List<ArenaUser> members = new ArrayList<>();
-    private List<Integer> curMembersId = new ArrayList<>();
-    private List<Team> teams = new ArrayList<>();
-    private List<String> curTeamsId = new ArrayList<>();
-    private BattleResult battleResult;
+    private BattleState battleState;
     private static Battle battle;
 
     public static Battle getBattle() {
@@ -27,16 +22,17 @@ public class Battle extends Thread {
     }
 
     Battle(List<Team> teams, List<ArenaUser> members) {
-        this.members = members;
-        this.teams = teams;
+        battleState = new BattleState();
+        battleState.setMembers(members);
+        battleState.setTeams(teams);
         int size = members.size();
         for (int i = 0; i < size; i++) {
-            curMembersId.add(members.get(i).getUserId());
+            battleState.getCurMembersId().add(members.get(i).getUserId());
             members.get(i).setStatus(2);
         }
         int teamsSize = teams.size();
         for (int i = 0; i < teamsSize; i++) {
-            curTeamsId.add(teams.get(i).getId());
+            battleState.getCurTeamsId().add(teams.get(i).getId());
         }
         battle = this;
         start();
@@ -44,51 +40,51 @@ public class Battle extends Thread {
 
     @Override
     public void run() {
-        Thread.currentThread().setName("Battle");
         Messages.sendChannelMsg(PropertiesLoader.getChannelId(), "<a href=\"" + Config.BOT_PRIVATE + "\">БИТВА НАЧАЛАСЬ!</a>");
         int roundsCounter = 0;
-        while (!isAlone()) {
-            Messages.sendToAll(members, "Раунд " + ++roundsCounter);
-            Round round = new Round(curMembersId, curTeamsId, members, teams);
-            round.begin();
+        while (severalTeamsPresent()) {
+            Messages.sendToAll(battleState.getMembers(), "Раунд " + ++roundsCounter);
+            battleState = Round.execute(battleState);
         }
-        BattleResult battleResult = new BattleResult();
-        battleResult.resultBattle(curMembersId, curTeamsId, members, teams);
+        calculateAndPrintResult();
     }
 
-    private boolean isAlone() {
-        return curTeamsId.size() < 2;
-    }
-
-    public List<Round> getRounds() {
-        return rounds;
-    }
-
-    public void setRounds(List<Round> rounds) {
-        this.rounds = rounds;
+    private boolean severalTeamsPresent() {
+        return battleState.getCurTeamsId().size() > 1;
     }
 
     public List<Team> getTeams() {
-        return teams;
+        return battleState.getTeams();
     }
 
-    public void setTeams(List<Team> teams) {
-        this.teams = teams;
-    }
-
-    public BattleResult getBattleResult() {
-        return battleResult;
-    }
-
-    public void setBattleResult(BattleResult battleResult) {
-        this.battleResult = battleResult;
-    }
-
-    public void setMembers(List<ArenaUser> members) {
-        this.members = members;
-    }
-
-    public List<ArenaUser> getMembers() {
-        return members;
+    private void calculateAndPrintResult() {
+        List<ArenaUser> allMembers = battleState.getMembers();
+        String winnerTeamId = battleState.getCurTeamsId().get(0);
+        int firstWinnerId = battleState.getCurMembersId().get(0);
+        if (battleState.getCurMembersId().isEmpty()) {
+            Messages.sendToAll(allMembers, "Победителей нет");
+        } else {
+            int moneyBonus = allMembers.size() * Config.GOLD_FOR_MEMBER - Config.GOLD_FOR_MEMBER;
+            //todo исправить случай, если победителей несколько (в одной команде)
+            Messages.sendToAll(allMembers, "<b>Битва окончена</b>, победила команда: "
+                    + winnerTeamId + ":" + ArenaUser.getUserName(firstWinnerId));
+            ArenaUser.getUser(firstWinnerId).addUserWins();
+            ArenaUser.getUser(firstWinnerId).addMoney(moneyBonus);
+        }
+        Messages.sendResultToAll(battleState.getTeams(), allMembers, battleState.getCurMembersId());
+        int count = allMembers.size();
+        for (int i = 0; i < count; i++) {
+            ArenaUser user = allMembers.get(i);
+            user.setStatus(Config.UNREG);
+            user.endBattleClassFeatures();
+            user.setCurHitPoints(user.getMaxHitPoints());
+            user.addExperience(user.getCurExp());
+            user.addCurExp(-user.getCurExp());
+            user.addUserGames();
+            user.setLastGame();
+        }
+        Messages.sendToAll(allMembers,
+                Messages.getInlineKeyboardMsg(PropertiesLoader.getChannelId(), "Регистрация началась:",
+                        Collections.singletonList("Сыграть снова"), Collections.singletonList("reg_user")));
     }
 }

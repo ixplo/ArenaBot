@@ -1,19 +1,32 @@
 package ml.ixplo.arenabot.helper;
 
+import ml.ixplo.arenabot.Bot;
 import ml.ixplo.arenabot.config.Config;
 import ml.ixplo.arenabot.database.ConnectionDB;
 import ml.ixplo.arenabot.database.DatabaseManager;
+import ml.ixplo.arenabot.messages.Messages;
 import ml.ixplo.arenabot.user.ArenaUser;
 import ml.ixplo.arenabot.user.classes.UserClass;
 import ml.ixplo.arenabot.user.items.Item;
+import org.mockito.Mockito;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.telegram.telegrambots.api.methods.send.SendMessage;
+import org.telegram.telegrambots.api.objects.Message;
+import org.telegram.telegrambots.bots.AbsSender;
+import org.telegram.telegrambots.bots.DefaultAbsSender;
+import org.telegram.telegrambots.exceptions.TelegramApiException;
 
 import java.util.HashSet;
 import java.util.Set;
 
 import static ml.ixplo.arenabot.config.Config.TEST_DB_LINK;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyObject;
+import static org.mockito.Mockito.when;
 
 public class TestHelper {
-
+    private static final Logger LOGGER = LoggerFactory.getLogger(TestHelper.class);
 
     private DatabaseManager db;
     public static ArenaUser WARRIOR;
@@ -26,6 +39,18 @@ public class TestHelper {
         fillSetOfUsersId();
         clearData();
         generateData();
+    }
+
+    public Bot getTestBot() {
+        Bot mock = Mockito.mock(Bot.class);
+//        SendMessage message = Messages.getSendToAllMessage(Messages.END_OF_ROUND_REMINDER);
+//        message.setChatId((long)Presets.WARRIOR_ID);
+//        try {
+//            when(mock.sendMessage(message)).thenReturn(new Message());
+//        } catch (TelegramApiException e) {
+//            LOGGER.error("Send message error from test bot");
+//        }
+        return mock;
     }
 
     private void initDb() {

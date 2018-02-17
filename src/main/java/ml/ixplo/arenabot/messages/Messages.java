@@ -38,6 +38,7 @@ import static ml.ixplo.arenabot.config.Config.CLOSE_TAG;
 public final class Messages {
 
     public static final String LOGTAG = "MESSAGES";
+    public static final String END_OF_ROUND_REMINDER = "<b>Осталось 15 секунд до конца раунда!</b>";
 
     /***** no instance for this class *****/
     private Messages() {
@@ -122,9 +123,7 @@ public final class Messages {
 
     public static void sendToAll(List<? extends IUser> members, String msgText) {
 
-        SendMessage msg = new SendMessage();
-        msg.enableHtml(true);
-        msg.setText(msgText);
+        SendMessage msg = getSendToAllMessage(msgText);
         try {
             for (IUser user : members) {
                 msg.setChatId((long) user.getUserId());
@@ -133,6 +132,13 @@ public final class Messages {
         } catch (TelegramApiException e) {
             BotLogger.error(LOGTAG, e);
         }
+    }
+
+    public static SendMessage getSendToAllMessage(String msgText) {
+        SendMessage msg = new SendMessage();
+        msg.enableHtml(true);
+        msg.setText(msgText);
+        return msg;
     }
 
     public static void sendToAll(List<? extends IUser> members, SendMessage msg) {
