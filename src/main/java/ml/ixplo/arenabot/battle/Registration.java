@@ -173,7 +173,7 @@ public class Registration {
     }
 
     public Team getTeam(String id) {
-        Team team = db.getTeam(id);
+        Team team = Team.getTeam(id);
         List<IUser> teamMembers = new ArrayList<>();
         List<Member> allMembers = getMembers();
         int allMembersCount = getMembersCount();

@@ -3,7 +3,7 @@ package ml.ixplo.arenabot.commands;
 import ml.ixplo.arenabot.messages.Messages;
 import ml.ixplo.arenabot.user.ArenaUser;
 import ml.ixplo.arenabot.user.items.Item;
-import ml.ixplo.arenabot.validate.Validation;
+import ml.ixplo.arenabot.utils.Utils;
 import org.telegram.telegrambots.api.objects.Chat;
 import org.telegram.telegrambots.api.objects.User;
 import org.telegram.telegrambots.bots.AbsSender;
@@ -32,7 +32,7 @@ public class CmdEx extends BotCommand {
             return;
         }
         // проверка, что введенный параметр - это число
-        if (strings.length == 0 || !Validation.isInteger(strings[0])) {
+        if (strings.length == 0 || !Utils.isInteger(strings[0])) {
             Messages.sendMessage(chat.getId(),"Формат: <i>/ex 1</i> - посмотреть предмет в инвентаре под номером 1");
             return;
         }

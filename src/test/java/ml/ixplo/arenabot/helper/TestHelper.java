@@ -1,6 +1,7 @@
 package ml.ixplo.arenabot.helper;
 
 import ml.ixplo.arenabot.Bot;
+import ml.ixplo.arenabot.battle.Team;
 import ml.ixplo.arenabot.config.Config;
 import ml.ixplo.arenabot.database.ConnectionDB;
 import ml.ixplo.arenabot.database.DatabaseManager;
@@ -58,6 +59,7 @@ public class TestHelper {
         db = DatabaseManager.getInstance();
         ArenaUser.setDb(db);
         Item.setDb(db);
+        Team.setDb(db);
     }
 
     private void fillSetOfUsersId() {

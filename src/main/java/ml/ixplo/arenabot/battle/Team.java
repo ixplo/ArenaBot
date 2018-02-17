@@ -1,6 +1,7 @@
 package ml.ixplo.arenabot.battle;
 
 import ml.ixplo.arenabot.config.Config;
+import ml.ixplo.arenabot.database.DatabaseManager;
 import ml.ixplo.arenabot.user.IUser;
 
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ import java.util.Set;
  * 29.04.2017.
  */
 public class Team {
+    private static DatabaseManager db;
     private String id;
     private String name;
     private boolean isRegistered;
@@ -29,11 +31,16 @@ public class Team {
         setName(id);
     }
 
+    public static void setDb(DatabaseManager db) {
+        Team.db = db;
+    }
+
     public boolean isRegistered() {
         return isRegistered;
     }
 
     public void setRegistered(boolean registered) {
+        db.setIntTo(Config.TEAMS, id, Config.REGISTERED, registered ? 1 : 0);
         isRegistered = registered;
     }
 
@@ -106,9 +113,9 @@ public class Team {
         member.setTeamId(id);
     }
 
-    public static Set<String> getTeamsId(List<? extends IUser> allMembers, List<Integer> curMembersId){
+    public static Set<String> getTeamsId(List<? extends IUser> allMembers, List<Integer> curMembersId) {
         Set<String> teamsId = new HashSet<>();
-        for (IUser member: allMembers){
+        for (IUser member : allMembers) {
             if (curMembersId.contains(member.getUserId())) {
                 teamsId.add(member.getTeamId());
             }
@@ -117,59 +124,62 @@ public class Team {
     }
 
     public boolean isRegisteredTeam() {
-        return Registration.db.getIntFrom(Config.TEAMS, id, "registered") > 0;
+        return db.getIntFrom(Config.TEAMS, id, "registered") > 0;
     }
 
     public static Team getTeam(String id) {
-        if (Registration.db.getTeam(id) == null) {
+        Team team = db.getTeam(id);
+        if (team == null) {
             addTeam(id);
             return new Team(id);
         }
-        return Registration.db.getTeam(id);
+        return team;
     }
 
     static void addTeam(String id) {
         Team team = new Team(id);
-        Registration.db.setTeam(team);
-    }
-
-    boolean addTeam() {
-        return Registration.db.setTeam(this);
+        db.setTeam(team);
     }
 
     public static boolean isRegisteredTeam(String teamId) {
-        return Registration.db.getIntFrom(Config.TEAMS, teamId, "registered") > 0;
+        return db.getIntFrom(Config.TEAMS, teamId, "registered") > 0;
     }
 
     public static void addMember(int userId, String teamId) {
-        Registration.db.setIntTo(Config.USERS, userId, Config.STATUS, Config.REG);
-        Registration.db.setStringTo(Config.USERS, userId, "team", teamId);
+        db.setIntTo(Config.USERS, userId, Config.STATUS, Config.REG);
+        db.setStringTo(Config.USERS, userId, "team", teamId);
     }
 
     public static void removeMember(int userId) {
-        Registration.db.setIntTo(Config.USERS, userId, Config.STATUS, Config.UNREG);
+        db.setIntTo(Config.USERS, userId, Config.STATUS, Config.UNREG);
         if (Team.getTeam(getMember(userId).getTeamId()).isRegisteredTeam())
-            Registration.db.setStringTo(Config.USERS, userId, "team", "");
+            db.setStringTo(Config.USERS, userId, "team", "");
     }
 
     public static Member getMember(int userId) {
-        String teamId = Registration.db.getStringFrom(Config.USERS, userId, "team");
+        String teamId = db.getStringFrom(Config.USERS, userId, "team");
         return new Member(userId, teamId);
     }
 
     /**
      * работает только для регистрации
+     *
      * @return список всех участников, которые зарегистрировались
      */
     public List<String> getRegisteredMembersName() {
-        return Registration.db.getStringsBy(Config.USERS, "name", "team", name, Config.STATUS, 1);
+        return db.getStringsBy(Config.USERS, "name", "team", name, Config.STATUS, 1);
     }
 
     /**
      * работает только для боя
+     *
      * @return список всех участников, которые находятся в бою
      */
     public List<Integer> getBattleMembersId() {
-        return Registration.db.getIntsBy(Config.USERS, "id", "team", name, Config.STATUS, 2);
+        return db.getIntsBy(Config.USERS, "id", "team", name, Config.STATUS, 2);
+    }
+
+    public void drop() {
+        db.dropTeam(id);
     }
 }

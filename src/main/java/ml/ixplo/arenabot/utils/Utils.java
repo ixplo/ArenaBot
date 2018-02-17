@@ -17,4 +17,13 @@ public class Utils {
         int i = (int) Math.round(dWithPrecise);
         return (double) i / prec;
     }
+
+    public static boolean isInteger(String s) {
+        try {
+            Integer.parseInt(s);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
 }

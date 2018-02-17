@@ -34,6 +34,7 @@ public class Presets {
     public static final String QUERY_ID = "AnyQueryId";
     public static final Integer MESSAGE_ID = 5353;
     public static final String TEST_TEAM = "test_team";
+    public static final String WRONG_TEAM_ID = "wrongTeamId";
     public static final String QUERY_TEXT = "query_text";
     public static final String MAGIC_ARROW_SPELL_ID = "1am";
     public static final String PRIEST_SPELL_ID = "1ap";

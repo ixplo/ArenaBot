@@ -19,6 +19,7 @@ public class Config {
     public static final String CLOSE_TAG = "</code>\n";
     public static final String IN_SLOT = "in_slot";
     public static final String DESCR = "descr";
+    public static final String REGISTERED = "registered";
     public final String rules = "rules.html";      //mc(rules)
     public static final long TEST_CHANNEL_ID = -161929436;
     public static final String TEST_CHANNEL_NAME = "arena";

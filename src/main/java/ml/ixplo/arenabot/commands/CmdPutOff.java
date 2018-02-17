@@ -2,7 +2,7 @@ package ml.ixplo.arenabot.commands;
 
 import ml.ixplo.arenabot.messages.Messages;
 import ml.ixplo.arenabot.user.ArenaUser;
-import ml.ixplo.arenabot.validate.Validation;
+import ml.ixplo.arenabot.utils.Utils;
 import org.telegram.telegrambots.api.objects.Chat;
 import org.telegram.telegrambots.api.objects.User;
 import org.telegram.telegrambots.bots.AbsSender;
@@ -30,7 +30,7 @@ public class CmdPutOff extends BotCommand {
             Messages.sendMessage(absSender, chat.getId(), "После команды введите один номер. Пример использования: /putoff 1");
             return;
         }
-        if (!Validation.isInteger(strings[0])) {
+        if (!Utils.isInteger(strings[0])) {
             Messages.sendMessage(absSender, chat.getId(), "Вводите номер вещи. Пример использования: /putoff 1");
             return;
         }

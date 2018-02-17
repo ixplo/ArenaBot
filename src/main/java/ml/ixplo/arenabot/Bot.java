@@ -1,6 +1,7 @@
 package ml.ixplo.arenabot;
 
 import ml.ixplo.arenabot.battle.Registration;
+import ml.ixplo.arenabot.battle.Team;
 import ml.ixplo.arenabot.battle.actions.Action;
 import ml.ixplo.arenabot.callbacks.Callbacks;
 import ml.ixplo.arenabot.commands.CmdDo;
@@ -89,6 +90,7 @@ public class Bot extends TelegramLongPollingCommandBot {
         Item.setDb(db);
         Registration.setDb(db);
         Action.setDb(db);
+        Team.setDb(db);
     }
 
     public static Registration getRegistration() {

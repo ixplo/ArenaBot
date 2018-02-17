@@ -501,12 +501,13 @@ public class DatabaseManager {
     }
 
     public Team getTeam(String id) {
-        Team team = new Team(id);
+        Team team = null;
         String queryText = "Select * FROM teams WHERE Id=?";
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setString(1, id);
             try (final ResultSet result = preparedStatement.executeQuery()) {
                 if (result.next()) {
+                    team = new Team(id);
                     team.setName(result.getString("name"));
                     team.setRegistered(result.getInt("registered") > 0);
                     team.setPublic(result.getInt("is_public") > 0);
@@ -1079,4 +1080,13 @@ public class DatabaseManager {
         return column;
     }
 
+    public void dropTeam(String id) {
+        String queryText = "DELETE FROM teams WHERE Id=?;";
+        try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
+            preparedStatement.setString(1, id);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            BotLogger.error(LOGTAG, e.getMessage());
+        }
+    }
 }
