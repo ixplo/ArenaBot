@@ -2,7 +2,6 @@ package ml.ixplo.arenabot.battle;
 
 import ml.ixplo.arenabot.Bot;
 import ml.ixplo.arenabot.battle.actions.Action;
-import ml.ixplo.arenabot.config.Config;
 import ml.ixplo.arenabot.helper.Presets;
 import ml.ixplo.arenabot.helper.TestHelper;
 import ml.ixplo.arenabot.messages.Messages;
@@ -134,22 +133,17 @@ public class RoundTest {
 
     @Test
     public void priorityTest() {
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Round.execute(round.getBattleState());
-            }
-        });
-        thread.start();
-        addOrders(thread);
+        Thread round = new Thread(() -> Round.execute(this.round.getBattleState()));
+        round.start();
+        addOrdersTo(round);
         try {
-            thread.join();
+            round.join();
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            LOGGER.error("Ошибка в priorityTest");
         }
     }
 
-    private void addOrders(Thread thread) {
+    private void addOrdersTo(Thread thread) {
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
