@@ -26,6 +26,15 @@ public class BattleStateTest {
         instance.setMembers(members);
         instance.setCurMembersId(membersId);
 
+
+        BattleState secondInstance = new BattleState();
+        secondInstance.setTeams(teams);
+        secondInstance.setCurTeamsId(teamsId);
+        secondInstance.setMembers(members);
+        secondInstance.setCurMembersId(membersId);
+        Assert.assertEquals(instance, secondInstance);
+        Assert.assertEquals(instance.hashCode(), secondInstance.hashCode());
+
         Assert.assertEquals(teams, instance.getTeams());
         Assert.assertEquals(teamsId, instance.getCurTeamsId());
         Assert.assertEquals(members, instance.getMembers());

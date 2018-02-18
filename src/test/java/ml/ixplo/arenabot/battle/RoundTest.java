@@ -12,6 +12,8 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.telegram.telegrambots.api.methods.send.SendMessage;
+import org.telegram.telegrambots.api.objects.Message;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
 
 import java.util.ArrayList;
@@ -19,6 +21,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -67,29 +70,29 @@ public class RoundTest {
     }
 
     @Test
-    @Ignore("доделать мок бота. Не мокаются final методы")
+//    @Ignore("доделать мок бота. Не мокаются final методы")
     public void startRound() throws Exception {
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                round.stop();
+                Round.getCurrent().stop();
             }
-        }, 1000);
-        Round.execute(round.getBattleState());
-        Assert.assertEquals(round, Round.getCurrent());
+        }, 500);
+        BattleState state = Round.execute(round.getBattleState());
+        Assert.assertEquals(state, Round.getCurrent().getBattleState());
     }
 
     @Test
     public void botMock() throws TelegramApiException {
         //arrange
         Bot i = mock(Bot.class);
-        when(i.getBotUsername()).thenReturn("FakeBot");
+        when(i.sendMessage(any(SendMessage.class))).thenReturn(null);
 
         //act
-        String result = i.getBotUsername();
+        Message result = i.sendMessage(new SendMessage());
         //assert
-        Assert.assertEquals("FakeBot", result);
+        Assert.assertNull(result);
     }
 
     @Test

@@ -42,4 +42,26 @@ public class BattleState {
     public void setCurTeamsId(List<String> curTeamsId) {
         this.curTeamsId = curTeamsId;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        BattleState that = (BattleState) o;
+
+        if (members != null ? !members.equals(that.members) : that.members != null) return false;
+        if (curMembersId != null ? !curMembersId.equals(that.curMembersId) : that.curMembersId != null) return false;
+        if (teams != null ? !teams.equals(that.teams) : that.teams != null) return false;
+        return curTeamsId != null ? curTeamsId.equals(that.curTeamsId) : that.curTeamsId == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = members != null ? members.hashCode() : 0;
+        result = 31 * result + (curMembersId != null ? curMembersId.hashCode() : 0);
+        result = 31 * result + (teams != null ? teams.hashCode() : 0);
+        result = 31 * result + (curTeamsId != null ? curTeamsId.hashCode() : 0);
+        return result;
+    }
 }

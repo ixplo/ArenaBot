@@ -5,17 +5,17 @@ import ml.ixplo.arenabot.battle.Team;
 import ml.ixplo.arenabot.config.Config;
 import ml.ixplo.arenabot.database.ConnectionDB;
 import ml.ixplo.arenabot.database.DatabaseManager;
-import ml.ixplo.arenabot.messages.Messages;
 import ml.ixplo.arenabot.user.ArenaUser;
 import ml.ixplo.arenabot.user.classes.UserClass;
 import ml.ixplo.arenabot.user.items.Item;
+import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Message;
-import org.telegram.telegrambots.bots.AbsSender;
-import org.telegram.telegrambots.bots.DefaultAbsSender;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
 
 import java.util.HashSet;
@@ -23,9 +23,10 @@ import java.util.Set;
 
 import static ml.ixplo.arenabot.config.Config.TEST_DB_LINK;
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyObject;
-import static org.mockito.Mockito.when;
+import static org.powermock.api.mockito.PowerMockito.when;
 
+//@RunWith(PowerMockRunner.class)
+//@PrepareForTest(Bot.class)
 public class TestHelper {
     private static final Logger LOGGER = LoggerFactory.getLogger(TestHelper.class);
 
@@ -44,13 +45,11 @@ public class TestHelper {
 
     public Bot getTestBot() {
         Bot mock = Mockito.mock(Bot.class);
-//        SendMessage message = Messages.getSendToAllMessage(Messages.END_OF_ROUND_REMINDER);
-//        message.setChatId((long)Presets.WARRIOR_ID);
-//        try {
-//            when(mock.sendMessage(message)).thenReturn(new Message());
-//        } catch (TelegramApiException e) {
-//            LOGGER.error("Send message error from test bot");
-//        }
+        try {
+            when(mock.sendMessage(any(SendMessage.class))).thenReturn(new Message());
+        } catch (TelegramApiException e) {
+            LOGGER.error("Send message error from test bot");
+        }
         return mock;
     }
 
