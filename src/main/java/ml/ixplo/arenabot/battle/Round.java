@@ -1,6 +1,5 @@
 package ml.ixplo.arenabot.battle;
 
-import com.google.common.collect.Sets;
 import ml.ixplo.arenabot.battle.actions.Action;
 import ml.ixplo.arenabot.config.Config;
 import ml.ixplo.arenabot.exception.ArenaUserException;
@@ -10,7 +9,6 @@ import ml.ixplo.arenabot.user.IUser;
 import org.telegram.telegrambots.logging.BotLogger;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.PriorityQueue;
@@ -40,6 +38,7 @@ public class Round {
         return current.execute();
     }
 
+    //todo members, curMembers, teamsId - не нужны. А нужны просто Teams (и в них можно хранить начальное состояние)
     Round(BattleState battleState) {
         this.members = new ArrayList<>(battleState.getMembers());
         this.teams = new ArrayList<>(battleState.getTeams());
@@ -92,7 +91,7 @@ public class Round {
             priorityQueue.addAll(order.getActions());
         }
         while (!priorityQueue.isEmpty()) {
-            Action action = priorityQueue.peek();
+            Action action = priorityQueue.poll();
             action.doAction();
         }
     }

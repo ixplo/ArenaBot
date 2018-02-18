@@ -14,6 +14,10 @@ public abstract class Action implements Comparable<Action>{
     public static final int SECOND = 2;
     public static final int THIRD = 3;
     public static final int FOURTH = 4;
+    public static final String ATTACK = "a";
+    public static final String PROTECT = "p";
+    public static final String HEAL = "h";
+    public static final String MAGIC = "m";
     ArenaUser user;
     ArenaUser target;
     String actionId;
@@ -28,19 +32,23 @@ public abstract class Action implements Comparable<Action>{
      ******************************/
     Action() {}
 
+    public static Action create(int userId, String actionId, int targetId, int percent) {
+        return create(userId, actionId, targetId, percent, null);
+    }
+
     public static Action create(int userId, String actionId, int targetId, int percent, String spellId) {
         Action action;
         switch (actionId) {
-            case "a":
+            case ATTACK:
                 action = new Attack();
                 break;
-            case "p":
+            case PROTECT:
                 action = new Protect();
                 break;
-            case "h":
+            case HEAL:
                 action = new Heal();
                 break;
-            case "m":
+            case MAGIC:
                 action = new CastSpell(spellId);
                 break;
             default:
@@ -72,16 +80,16 @@ public abstract class Action implements Comparable<Action>{
         String action;
         switch (actionType) {
             case "Атака":
-                action = "a";
+                action = ATTACK;
                 break;
             case "Защита":
-                action = "p";
+                action = PROTECT;
                 break;
             case "Лечение":
-                action = "h";
+                action = HEAL;
                 break;
             case "Магия":
-                action = "m";
+                action = MAGIC;
                 break;
             default:
                 throw new ArenaUserException("Unknown action actionId: " + actionType);

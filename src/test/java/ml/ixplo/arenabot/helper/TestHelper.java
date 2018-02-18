@@ -10,6 +10,8 @@ import ml.ixplo.arenabot.user.classes.UserClass;
 import ml.ixplo.arenabot.user.items.Item;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.slf4j.Logger;
@@ -23,6 +25,7 @@ import java.util.Set;
 
 import static ml.ixplo.arenabot.config.Config.TEST_DB_LINK;
 import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.doAnswer;
 import static org.powermock.api.mockito.PowerMockito.when;
 
 //@RunWith(PowerMockRunner.class)
@@ -46,7 +49,10 @@ public class TestHelper {
     public Bot getTestBot() {
         Bot mock = Mockito.mock(Bot.class);
         try {
-            when(mock.sendMessage(any(SendMessage.class))).thenReturn(new Message());
+            doAnswer(invocation -> {
+                LOGGER.info(((SendMessage) invocation.getArguments()[0]).getText());
+                return null;
+            }).when(mock).sendMessage(any(SendMessage.class));
         } catch (TelegramApiException e) {
             LOGGER.error("Send message error from test bot");
         }
@@ -88,6 +94,7 @@ public class TestHelper {
                 Presets.MAGE_NAME,
                 UserClass.MAGE,
                 Presets.MAGE_RACE);
+        MAGE.setTeamId(Presets.TEAM_OF_MAGE);
         db.updateUser(MAGE);
     }
 

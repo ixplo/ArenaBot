@@ -3,7 +3,6 @@ package ml.ixplo.arenabot.battle;
 
 import ml.ixplo.arenabot.helper.Presets;
 import ml.ixplo.arenabot.user.ArenaUser;
-import ml.ixplo.arenabot.user.IUser;
 import ml.ixplo.arenabot.user.classes.UserClass;
 import org.junit.Assert;
 import org.junit.Test;
