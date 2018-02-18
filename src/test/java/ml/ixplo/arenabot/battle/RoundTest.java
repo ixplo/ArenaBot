@@ -142,7 +142,6 @@ public class RoundTest {
         });
         thread.start();
         addOrders(thread);
-        stopRoundInMillis(1000);
         try {
             thread.join();
         } catch (InterruptedException e) {
@@ -157,6 +156,7 @@ public class RoundTest {
             public void run() {
                 addWarriorOrder();
                 addMageOrder();
+                stopRoundInMillis(0);
                 thread.interrupt();
             }
         }, 500);
