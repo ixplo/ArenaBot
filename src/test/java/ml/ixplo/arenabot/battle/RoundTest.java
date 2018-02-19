@@ -172,7 +172,4 @@ public class RoundTest {
         Round.getCurrent().getOrders().get(1).getActions().addAll(Arrays.asList(spell, protect, attack, heal));
     }
 
-    @Test
-    public void getOrders() throws Exception {
-    }
 }
