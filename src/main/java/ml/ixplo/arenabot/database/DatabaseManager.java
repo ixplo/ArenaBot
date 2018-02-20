@@ -1,5 +1,6 @@
 package ml.ixplo.arenabot.database;
 
+import ml.ixplo.arenabot.config.Constants;
 import ml.ixplo.arenabot.exception.ArenaUserException;
 import ml.ixplo.arenabot.user.ArenaUser;
 import ml.ixplo.arenabot.config.Config;
@@ -164,10 +165,10 @@ public class DatabaseManager {
                     arenaUser.setUserGames(result.getInt("games"));
                     arenaUser.setUserWins(result.getInt("wins"));
                     arenaUser.setNativeStr(result.getInt("strangth"));//strength
-                    arenaUser.setNativeDex(result.getInt("dexterity"));
-                    arenaUser.setNativeWis(result.getInt("wisdom"));
-                    arenaUser.setNativeInt(result.getInt("intellect"));
-                    arenaUser.setNativeCon(result.getInt("const"));
+                    arenaUser.setNativeDex(result.getInt(Config.DEXTERITY));
+                    arenaUser.setNativeWis(result.getInt(Config.WISDOM));
+                    arenaUser.setNativeInt(result.getInt(Config.INTELLECT));
+                    arenaUser.setNativeCon(result.getInt(Config.CONST));
                     arenaUser.setFreePoints(result.getInt("free_points"));
                     arenaUser.setMaxHitPoints(result.getDouble("hp"));
                     arenaUser.setMoney(result.getInt("money"));
@@ -180,8 +181,8 @@ public class DatabaseManager {
                     arenaUser.setCurCon(result.getInt("cur_con"));
                     arenaUser.setMinHit(result.getDouble("min_hit"));
                     arenaUser.setMaxHit(result.getDouble("max_hit"));
-                    arenaUser.setAttack(result.getBigDecimal("attack"));
-                    arenaUser.setProtect(result.getDouble("protect"));
+                    arenaUser.setAttack(result.getBigDecimal(Config.ATTACK));
+                    arenaUser.setProtect(result.getDouble(Config.PROTECT));
                     arenaUser.setHeal(result.getDouble("heal"));
                     arenaUser.setMagicProtect(result.getDouble("m_protect"));
                     arenaUser.setCurHitPoints(result.getDouble("cur_hp"));
@@ -406,13 +407,13 @@ public class DatabaseManager {
                     item.setPrice(result.getInt("price"));
                     item.setMinHit(result.getInt("hit_min"));
                     item.setMaxHit(result.getInt("hit_max"));
-                    item.setAttack(result.getInt("attack"));
-                    item.setProtect(result.getInt("protect"));
+                    item.setAttack(result.getInt(Config.ATTACK));
+                    item.setProtect(result.getInt(Config.PROTECT));
                     item.setStrBonus(result.getInt("strength"));
-                    item.setDexBonus(result.getInt("dexterity"));
-                    item.setWisBonus(result.getInt("wisdom"));
-                    item.setIntBonus(result.getInt("intellect"));
-                    item.setConBonus(result.getInt("const"));
+                    item.setDexBonus(result.getInt(Config.DEXTERITY));
+                    item.setWisBonus(result.getInt(Config.WISDOM));
+                    item.setIntBonus(result.getInt(Config.INTELLECT));
+                    item.setConBonus(result.getInt(Config.CONST));
                     item.setStrNeeded(result.getInt("need_str"));
                     item.setDexNeeded(result.getInt("need_dex"));
                     item.setWisNeeded(result.getInt("need_wis"));
@@ -444,13 +445,13 @@ public class DatabaseManager {
                     item.setPrice(result.getInt("price"));
                     item.setMinHit(result.getInt("hit_min"));
                     item.setMaxHit(result.getInt("hit_max"));
-                    item.setAttack(result.getInt("attack"));
-                    item.setProtect(result.getInt("protect"));
+                    item.setAttack(result.getInt(Config.ATTACK));
+                    item.setProtect(result.getInt(Config.PROTECT));
                     item.setStrBonus(result.getInt("strength"));
-                    item.setDexBonus(result.getInt("dexterity"));
-                    item.setWisBonus(result.getInt("wisdom"));
-                    item.setIntBonus(result.getInt("intellect"));
-                    item.setConBonus(result.getInt("const"));
+                    item.setDexBonus(result.getInt(Config.DEXTERITY));
+                    item.setWisBonus(result.getInt(Config.WISDOM));
+                    item.setIntBonus(result.getInt(Config.INTELLECT));
+                    item.setConBonus(result.getInt(Config.CONST));
                     item.setStrNeeded(result.getInt("need_str"));
                     item.setDexNeeded(result.getInt("need_dex"));
                     item.setWisNeeded(result.getInt("need_wis"));

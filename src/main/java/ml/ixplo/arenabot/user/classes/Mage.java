@@ -24,6 +24,7 @@ import static ml.ixplo.arenabot.messages.Messages.fillWithSpaces;
  * 28.04.2017.
  */
 public class Mage extends ArenaUser implements SpellCaster {
+
     private List<Spell> spells;
     private double maxMana;
     private double curMana;
@@ -51,8 +52,8 @@ public class Mage extends ArenaUser implements SpellCaster {
     public void getClassFeatures() {
         actionsName = Arrays.asList("Атака", "Защита", "Лечение", "Магия");
         maxMana = getDb().getDoubleFrom(Config.USERS, getUserId(), "mana");
-        curMana = getDb().getDoubleFrom(Config.USERS, getUserId(), "cur_mana");
-        spellPoints = getDb().getIntFrom(Config.USERS, getUserId(), "s_points");
+        curMana = getDb().getDoubleFrom(Config.USERS, getUserId(), CUR_MANA);
+        spellPoints = getDb().getIntFrom(Config.USERS, getUserId(), S_POINTS);
         magicAttack = getDb().getDoubleFrom(Config.USERS, getUserId(), "m_attack");
         spells = getSpells();
     }
@@ -285,7 +286,7 @@ public class Mage extends ArenaUser implements SpellCaster {
 
     public void addSpellPoints(int spellPoints) {
 
-        getDb().setIntTo(Config.USERS, getUserId(), "s_points", getSpellPoints() + spellPoints);
+        getDb().setIntTo(Config.USERS, getUserId(), S_POINTS, getSpellPoints() + spellPoints);
     }
 
     public void setMagicAttack(double magicAttack) {
@@ -295,12 +296,12 @@ public class Mage extends ArenaUser implements SpellCaster {
 
     public void setCurMana(double curMana) {
         this.curMana = curMana;
-        getDb().setDoubleTo(Config.USERS, getUserId(), "cur_mana", curMana);
+        getDb().setDoubleTo(Config.USERS, getUserId(), CUR_MANA, curMana);
     }
 
     public void addCurMana(double manaChange) {
         this.curMana += manaChange;
-        getDb().setDoubleTo(Config.USERS, getUserId(), "cur_mana", curMana);
+        getDb().setDoubleTo(Config.USERS, getUserId(), CUR_MANA, curMana);
     }
 
     public double getMaxMana() {
@@ -309,7 +310,7 @@ public class Mage extends ArenaUser implements SpellCaster {
     }
 
     public int getSpellPoints() {
-        spellPoints = getDb().getIntFrom(Config.USERS, getUserId(), "s_points");
+        spellPoints = getDb().getIntFrom(Config.USERS, getUserId(), S_POINTS);
         return spellPoints;
     }
 

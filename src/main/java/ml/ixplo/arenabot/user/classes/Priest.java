@@ -41,9 +41,9 @@ public class Priest extends ArenaUser implements SpellCaster {
     @Override
     public void getClassFeatures() {
         maxMana = getDb().getDoubleFrom(Config.USERS, getUserId(), "mana");
-        spellPoints = getDb().getIntFrom(Config.USERS, getUserId(), "s_points");
+        spellPoints = getDb().getIntFrom(Config.USERS, getUserId(), S_POINTS);
         magicAttack = getDb().getDoubleFrom(Config.USERS, getUserId(), "m_attack");
-        curMana = getDb().getDoubleFrom(Config.USERS, getUserId(), "cur_mana");
+        curMana = getDb().getDoubleFrom(Config.USERS, getUserId(), CUR_MANA);
     }
 
     @Override
@@ -146,7 +146,7 @@ public class Priest extends ArenaUser implements SpellCaster {
 
     public void addSpellPoints(int spellPoints) {
         this.spellPoints += spellPoints;
-        getDb().setIntTo(Config.USERS, getUserId(), "s_points", spellPoints);
+        getDb().setIntTo(Config.USERS, getUserId(), S_POINTS, spellPoints);
     }
 
     public void setMagicAttack(double magicAttack) {
@@ -156,11 +156,11 @@ public class Priest extends ArenaUser implements SpellCaster {
 
     public void setCurMana(double curMana) {
         this.curMana = curMana;
-        getDb().setDoubleTo(Config.USERS, getUserId(), "cur_mana", curMana);
+        getDb().setDoubleTo(Config.USERS, getUserId(), CUR_MANA, curMana);
     }
     public void addCurMana(double curMana) {
         this.curMana += curMana;
-        getDb().setDoubleTo(Config.USERS, getUserId(), "cur_mana", curMana);
+        getDb().setDoubleTo(Config.USERS, getUserId(), CUR_MANA, curMana);
     }
 
     public double getMaxMana() {

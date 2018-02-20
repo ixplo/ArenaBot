@@ -20,6 +20,12 @@ public class Config {
     public static final String IN_SLOT = "in_slot";
     public static final String DESCR = "descr";
     public static final String REGISTERED = "registered";
+    public static final String DEXTERITY = "dexterity";
+    public static final String WISDOM = "wisdom";
+    public static final String INTELLECT = "intellect";
+    public static final String CONST = "const";
+    public static final String ATTACK = "attack";
+    public static final String PROTECT = "protect";
     public final String rules = "rules.html";      //mc(rules)
     public static final long TEST_CHANNEL_ID = -161929436;
     public static final String TEST_CHANNEL_NAME = "arena";
