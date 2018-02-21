@@ -2,6 +2,7 @@ package ml.ixplo.arenabot.commands;
 
 import ml.ixplo.arenabot.battle.Round;
 import ml.ixplo.arenabot.battle.actions.Action;
+import ml.ixplo.arenabot.config.Config;
 import ml.ixplo.arenabot.messages.Messages;
 import ml.ixplo.arenabot.user.ArenaUser;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
@@ -15,77 +16,104 @@ import org.telegram.telegrambots.logging.BotLogger;
 public class CmdDo extends BotCommand {
     public static final String LOGTAG = "DOCOMMAND";
 
+    private AbsSender sender;
+    private int percent;
+    private String spellId;
+    private int userId;
+    int stringsCount;
+    private int target;
+    private int targetIndex;
+    private String actionType;
+    private Long chatId;
+
     public CmdDo() {
         super("do", "&lt a,p,h,m &gt &ltномер&gt &lt%&gt - действовать на цель под указанным номером");
     }
 
     @Override
     public void execute(AbsSender absSender, User user, Chat chat, String[] strings) {
+        this.sender = absSender;
+        this.userId = user.getId();
+        this.chatId = chat.getId();
+        parse(strings);
+        if (!chat.isUserChat() || badUser() || badStrings()) {
+            return;
+        }
+        Messages.sendDoMsg(sender, chatId, actionType, target, percent);
+        takeAction();
+    }
 
-        if (!chat.isUserChat()) {
-            return;
-        }
-        if (!ArenaUser.doesUserExists(user.getId())) {
-            return;
-        }
-        if (ArenaUser.getStatus(user.getId()) != 2) {
-            return;
-        }
-        int target;
-        int percent;
-        String spellId;
+    private void takeAction() {
+        Integer targetId = Round.getCurrent().getMembers().get(target).getUserId();
+        Action action = Action.create(userId, actionType, targetId, percent, spellId);
+        ArenaUser.takeAction(action);
+    }
 
-        if (strings.length < 4) {
+    private boolean badStrings() {
+        SendMessage msg = getSendMessage();
+        if (percent > 100) {
+            msg.setText("Больше 100% быть не может. Инфа 146%!");
+            try {
+                sender.sendMessage(msg);
+            } catch (TelegramApiException e) {
+                BotLogger.error(LOGTAG, e);
+            }
+            return true;
+        }
+        if (stringsCount == 0) {
+            msg.setText("Формат: <i>/do a 1 100</i> - атаковать цель под номером 1 на 100%");
+            try {
+                sender.sendMessage(msg);
+            } catch (TelegramApiException e) {
+                BotLogger.error(LOGTAG, e);
+            }
+            return true;
+        }
+        int membersCount = Round.getCurrent().getCurMembersId().size();
+        if (target > membersCount - 1) {
+            msg.setText("Цель под номером " + targetIndex +
+                    " не найдена. Всего есть целей: " + membersCount);
+            try {
+                sender.sendMessage(msg);
+            } catch (TelegramApiException e) {
+                BotLogger.error(LOGTAG, e);
+            }
+            return true;
+        }
+        return false;
+    }
+
+    private SendMessage getSendMessage() {
+        SendMessage msg = new SendMessage();
+        msg.setChatId(chatId);
+        msg.enableHtml(true);
+        return msg;
+    }
+
+    private void parse(String[] strings) {
+        stringsCount = strings.length;
+        if (stringsCount < 4) {
             spellId = "";
         } else {
             spellId = strings[3];
         }
-        if (strings.length < 3) {
+        if (stringsCount < 3) {
             percent = 100;
         } else {
             percent = Integer.parseInt(strings[2]);
         }
-        if (strings.length < 2) {
-            target = Round.getCurrent().getIndex(user.getId());
+        if (stringsCount < 2) {
+            target = Round.getCurrent().getIndex(userId);
         } else {
-            target = Integer.parseInt(strings[1]) - 1;
+            targetIndex = Integer.parseInt(strings[1]);
+            target = targetIndex - 1;
         }
-        SendMessage msg = new SendMessage();
-        msg.setChatId(chat.getId());
-        msg.enableHtml(true);
-        if (percent > 100) {
-            msg.setText("Больше 100% быть не может. Инфа 146%!");
-            try {
-                absSender.sendMessage(msg);
-            } catch (TelegramApiException e) {
-                BotLogger.error(LOGTAG, e);
-            }
-            return;
+        if (stringsCount > 0) {
+            actionType = strings[0];
         }
-        if (strings.length == 0) {
-            msg.setText("Формат: <i>/do a 1 100</i> - атаковать цель под номером 1 на 100%");
-            try {
-                absSender.sendMessage(msg);
-            } catch (TelegramApiException e) {
-                BotLogger.error(LOGTAG, e);
-            }
-            return;
-        }
-        if (target > Round.getCurrent().getCurMembersId().size() - 1) {
-            msg.setText("Цель под номером " + Integer.parseInt(strings[1]) +
-                    " не найдена. Всего есть целей: " + Round.getCurrent().getCurMembersId().size());
-            try {
-                absSender.sendMessage(msg);
-            } catch (TelegramApiException e) {
-                BotLogger.error(LOGTAG, e);
-            }
-            return;
-        }
-        String actionType = strings[0];
-        Messages.sendDoMsg(absSender, chat.getId(), actionType, target, percent);
+    }
 
-        Integer targetId = Round.getCurrent().getMembers().get(target).getUserId();
-        Action action = Action.create(user.getId(), actionType, targetId, percent, spellId);
-        ArenaUser.takeAction(action);
+    private boolean badUser() {
+        return !ArenaUser.doesUserExists(userId) || ArenaUser.getStatus(userId) != Config.IN_BATTLE;
     }
 }

@@ -6,7 +6,6 @@ import ml.ixplo.arenabot.battle.Round;
 import ml.ixplo.arenabot.battle.actions.Action;
 import ml.ixplo.arenabot.config.Config;
 import ml.ixplo.arenabot.exception.ArenaUserException;
-import ml.ixplo.arenabot.messages.Messages;
 import ml.ixplo.arenabot.user.classes.Archer;
 import ml.ixplo.arenabot.user.classes.Mage;
 import ml.ixplo.arenabot.user.classes.Priest;
@@ -15,9 +14,6 @@ import ml.ixplo.arenabot.user.classes.Warrior;
 import ml.ixplo.arenabot.user.items.Item;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.telegram.telegrambots.api.methods.send.SendMessage;
-import org.telegram.telegrambots.bots.AbsSender;
-import org.telegram.telegrambots.exceptions.TelegramApiException;
 import org.telegram.telegrambots.logging.BotLogger;
 
 import java.lang.reflect.Field;

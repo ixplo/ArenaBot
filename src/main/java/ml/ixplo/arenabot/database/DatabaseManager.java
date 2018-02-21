@@ -1,12 +1,11 @@
 package ml.ixplo.arenabot.database;
 
-import ml.ixplo.arenabot.config.Constants;
+import ml.ixplo.arenabot.battle.Team;
+import ml.ixplo.arenabot.config.Config;
 import ml.ixplo.arenabot.exception.ArenaUserException;
 import ml.ixplo.arenabot.user.ArenaUser;
-import ml.ixplo.arenabot.config.Config;
 import ml.ixplo.arenabot.user.classes.UserClass;
 import ml.ixplo.arenabot.user.items.Item;
-import ml.ixplo.arenabot.battle.Team;
 import org.telegram.telegrambots.logging.BotLogger;
 
 import java.math.BigDecimal;
