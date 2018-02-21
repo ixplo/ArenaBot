@@ -26,6 +26,7 @@ public class Config {
     public static final String CONST = "const";
     public static final String ATTACK = "attack";
     public static final String PROTECT = "protect";
+    public static final String ACTIONS = "actions";
     public final String rules = "rules.html";      //mc(rules)
     public static final long TEST_CHANNEL_ID = -161929436;
     public static final String TEST_CHANNEL_NAME = "arena";

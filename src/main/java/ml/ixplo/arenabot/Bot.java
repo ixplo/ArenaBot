@@ -86,9 +86,9 @@ public class Bot extends TelegramLongPollingCommandBot {
     }
 
     public void setDb(DatabaseManager db) {
+        Registration.setDb(db);
         ArenaUser.setDb(db);
         Item.setDb(db);
-        Registration.setDb(db);
         Action.setDb(db);
         Team.setDb(db);
     }

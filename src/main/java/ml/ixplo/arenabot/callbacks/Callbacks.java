@@ -64,11 +64,12 @@ public class Callbacks {
     private static void handlePercent() throws TelegramApiException {
         Action.setPercent(userId, Integer.parseInt(entry));
         Battle.getBattle().interrupt();
-        Round.getCurrent().takeAction(userId,
+        Action action = Action.create(userId,
                 Action.getActionType(userId, 1),
                 Action.getTargetId(userId, 1),
                 Action.getPercent(userId, 1),
                 Action.getSpellId(userId, 1));
+        Round.getCurrent().takeAction(action);
         bot.answerCallbackQuery(Messages.getEmptyQuery(queryId));
         bot.editMessageText(Messages.getActionTakenEditMsg(userId, messageId));
         Action.clearActions(userId);

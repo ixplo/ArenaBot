@@ -710,6 +710,22 @@ public class DatabaseManager {
         return resultString;
     }
 
+    public String getStringBy(String tableName, String findByColumn, String id, String selectedColumn) {
+        String resultString = "";
+        String queryText = "Select " + selectedColumn + " FROM " + tableName + " WHERE " + findByColumn + "=?;";
+        try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
+            preparedStatement.setString(1, id);
+            try (final ResultSet result = preparedStatement.executeQuery()) {
+                if (result.next()) {
+                    resultString = result.getString(selectedColumn);
+                }
+            }
+        } catch (SQLException e) {
+            BotLogger.error(LOGTAG, e.getMessage());
+        }
+        return resultString;
+    }
+
     /***
      * SELECT counter FROM inventory WHERE id='waa' AND userId='362812407';
      ***/

@@ -129,6 +129,10 @@ public abstract class Action implements Comparable<Action>{
                 Config.COUNTER, counter);
     }
 
+    public String getName() {
+        return db.getStringBy(Config.ACTIONS, "id", actionId, "name");
+    }
+
     public String getActionType() {
         return actionId;
     }
@@ -175,5 +179,14 @@ public abstract class Action implements Comparable<Action>{
 
     public void setPriority(int priority) {
         this.priority = priority;
+    }
+
+    @Override
+    public String toString() {
+        return "Action{" + percent + "% " +
+                getName() +
+                ", users:[" + user.getUserId() +
+                "->" + target.getUserId() +
+                "]}";
     }
 }

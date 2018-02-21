@@ -29,6 +29,7 @@ import static org.mockito.Mockito.when;
 
 public class RoundTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(ItemTest.class);
+    private static final int PERCENT = 85;
 
     private TestHelper testHelper = new TestHelper();
     private ArenaUser warrior = TestHelper.WARRIOR;
@@ -69,7 +70,6 @@ public class RoundTest {
         battleState.setTeams(teams);
         battleState.setCurTeamsId(curTeamsId);
         round = new Round(battleState);
-
         Messages.setBot(testHelper.getTestBot());
     }
 
@@ -115,6 +115,17 @@ public class RoundTest {
 
     @Test
     public void takeAction() throws Exception {
+        Action action1 = getMageActions().get(0);
+        Action action2 = getMageActions().get(1);
+        round.takeAction(action1);
+        round.takeAction(action2);
+        Assert.assertTrue(round.getOrders().get(1).getActions().get(0).equals(action1));
+    }
+
+    @Test
+    public void actionToString() {
+        Action action = getMageActions().get(0);
+        Assert.assertTrue(action.toString().contains(String.valueOf(Presets.WARRIOR_ID)));
     }
 
     @Test
@@ -158,18 +169,28 @@ public class RoundTest {
     }
 
     private void addWarriorOrder() {
+        List<Action> actions = getWarriorActions();
+        Round.getCurrent().getOrders().get(0).getActions().addAll(actions);
+    }
+
+    private List<Action> getWarriorActions() {
         Action protect = Action.create(warrior.getUserId(), Action.PROTECT, warrior.getUserId(), 50);
         Action attack = Action.create(warrior.getUserId(), Action.ATTACK, mage.getUserId(), 25);
         Action heal = Action.create(warrior.getUserId(), Action.HEAL, warrior.getUserId(), 25);
-        Round.getCurrent().getOrders().get(0).getActions().addAll(Arrays.asList(protect, attack, heal));
+        return Arrays.asList(protect, attack, heal);
     }
 
     private void addMageOrder() {
-        Action spell = Action.create(mage.getUserId(), Action.MAGIC, warrior.getUserId(), 85, Presets.MAGIC_ARROW_SPELL_ID);
+        List<Action> actions = getMageActions();
+        Round.getCurrent().getOrders().get(1).getActions().addAll(actions);
+    }
+
+    private List<Action> getMageActions() {
+        Action spell = Action.create(mage.getUserId(), Action.MAGIC, warrior.getUserId(), PERCENT, Presets.MAGIC_ARROW_SPELL_ID);
         Action protect = Action.create(mage.getUserId(), Action.PROTECT, mage.getUserId(), 5);
         Action attack = Action.create(mage.getUserId(), Action.ATTACK, warrior.getUserId(), 5);
         Action heal = Action.create(mage.getUserId(), Action.HEAL, mage.getUserId(), 5);
-        Round.getCurrent().getOrders().get(1).getActions().addAll(Arrays.asList(spell, protect, attack, heal));
+        return Arrays.asList(spell, protect, attack, heal);
     }
 
 }

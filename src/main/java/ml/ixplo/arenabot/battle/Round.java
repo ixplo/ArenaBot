@@ -45,22 +45,27 @@ public class Round {
         this.curMembersId = new ArrayList<>(battleState.getCurMembersId());
         this.curTeamsId = new HashSet<>(battleState.getCurTeamsId());
         orders = new ArrayList<>();
-    }
-
-    private BattleState  execute() {
-        Timer timer = new Timer();
-        timer.schedule(new EndRound(this), Config.ROUND_TIME);
-        timer.schedule(new RemindAboutEndRound(this), Config.ROUND_REMIND);
-        Messages.sendListToAll(teams);
         for (IUser member : members) {
             orders.add(new Order(member.getUserId(), this));
         }
+    }
+
+    private BattleState execute() {
+        Timer timer = startTimer();
+        Messages.sendListToAll(teams);
         waitForAllOrdersAccepted();
         timer.cancel();
         handleActions();
         printResults();
         takeOutCorpses();
         return getBattleState();
+    }
+
+    private Timer startTimer() {
+        Timer timer = new Timer();
+        timer.schedule(new EndRound(this), Config.ROUND_TIME);
+        timer.schedule(new RemindAboutEndRound(this), Config.ROUND_REMIND);
+        return timer;
     }
 
     private void waitForAllOrdersAccepted() {
@@ -122,9 +127,9 @@ public class Round {
         return true;
     }
 
-    public void takeAction(int userId, String actionId, int targetId, int percent, String spellId) {
-        int index = getIndex(orders, userId);
-        orders.get(index).addAction(Action.create(userId, actionId, targetId, percent, spellId));
+    public void takeAction(Action action) {
+        int index = getIndex(orders, action.getUser().getUserId());
+        orders.get(index).addAction(action);
     }
 
     private int getIndex(List<Order> orders, Integer userId) {
@@ -208,5 +213,13 @@ public class Round {
         battleState.setTeams(teams);
         battleState.setCurTeamsId(new ArrayList<>(curTeamsId));
         return battleState;
+    }
+
+    @Override
+    public String toString() {
+        return "Round{" +
+                "curMembersId=" + curMembersId +
+                ", curTeamsId=" + curTeamsId +
+                '}';
     }
 }
