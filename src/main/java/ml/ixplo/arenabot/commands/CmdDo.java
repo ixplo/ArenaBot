@@ -50,37 +50,30 @@ public class CmdDo extends BotCommand {
     }
 
     private boolean badStrings() {
+        boolean isBad = false;
         SendMessage msg = getSendMessage();
         if (percent > 100) {
             msg.setText("Больше 100% быть не может. Инфа 146%!");
-            try {
-                sender.sendMessage(msg);
-            } catch (TelegramApiException e) {
-                BotLogger.error(LOGTAG, e);
-            }
-            return true;
+            isBad = true;
         }
         if (stringsCount == 0) {
             msg.setText("Формат: <i>/do a 1 100</i> - атаковать цель под номером 1 на 100%");
-            try {
-                sender.sendMessage(msg);
-            } catch (TelegramApiException e) {
-                BotLogger.error(LOGTAG, e);
-            }
-            return true;
+            isBad = true;
         }
         int membersCount = Round.getCurrent().getCurMembersId().size();
         if (target > membersCount - 1) {
             msg.setText("Цель под номером " + targetIndex +
                     " не найдена. Всего есть целей: " + membersCount);
+            isBad = true;
+        }
+        if (isBad) {
             try {
                 sender.sendMessage(msg);
             } catch (TelegramApiException e) {
                 BotLogger.error(LOGTAG, e);
             }
-            return true;
         }
-        return false;
+        return isBad;
     }
 
     private SendMessage getSendMessage() {
