@@ -22,6 +22,7 @@ import java.util.List;
  ***/
 public class DatabaseManager {
     private static final String LOGTAG = "DATABASEMANAGER";
+    public static final String NO_SUCH_USER = "No such user in database: ";
 
     private static volatile DatabaseManager instance;
     private static volatile ConnectionDB connection;
@@ -529,12 +530,13 @@ public class DatabaseManager {
                 "LEFT JOIN (SELECT id FROM available_spells " +
                 "WHERE user_id=? AND spell_grade >2) s2 " +
                 "ON s1.id=s2.id " +
-                "WHERE class=(SELECT class FROM users WHERE id=362812407) " + //todo что за дерьмо?
+                "WHERE class=(SELECT class FROM users WHERE id=?) " +
                 "AND level=? " +
                 "AND s2.id IS NULL;";
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setInt(1, userId);
-            preparedStatement.setInt(2, spellLevel);
+            preparedStatement.setInt(2, userId);
+            preparedStatement.setInt(3, spellLevel);
             try (final ResultSet result = preparedStatement.executeQuery()) {
                 while (result.next()) {
                     resultStringArr.add(result.getString("id"));

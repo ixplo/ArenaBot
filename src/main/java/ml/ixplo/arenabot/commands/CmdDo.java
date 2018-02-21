@@ -20,7 +20,7 @@ public class CmdDo extends BotCommand {
     private int percent;
     private String spellId;
     private int userId;
-    int stringsCount;
+    private int stringsCount;
     private int target;
     private int targetIndex;
     private String actionType;

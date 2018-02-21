@@ -5,6 +5,7 @@ import ml.ixplo.arenabot.battle.Member;
 import ml.ixplo.arenabot.battle.Round;
 import ml.ixplo.arenabot.battle.actions.Action;
 import ml.ixplo.arenabot.config.Config;
+import ml.ixplo.arenabot.database.DatabaseManager;
 import ml.ixplo.arenabot.exception.ArenaUserException;
 import ml.ixplo.arenabot.user.classes.Archer;
 import ml.ixplo.arenabot.user.classes.Mage;
@@ -197,7 +198,7 @@ public abstract class ArenaUser extends Member {
 
     public static void dropUser(int userId) {
         if (!db.doesUserExists(userId)) {
-            throw new ArenaUserException("No such user in database: " + userId);
+            throw new ArenaUserException(DatabaseManager.NO_SUCH_USER + userId);
         }
         db.dropItems(userId);
         db.dropSpells(userId);
@@ -210,7 +211,7 @@ public abstract class ArenaUser extends Member {
 
     public static ArenaUser getUser(Integer userId) {
         if (!db.doesUserExists(userId)) {
-            throw new IllegalArgumentException("No such user in database: " + userId);
+            throw new IllegalArgumentException(DatabaseManager.NO_SUCH_USER + userId);
         }
         ArenaUser arenaUser = db.getUser(userId);
         arenaUser.getClassFeatures();
