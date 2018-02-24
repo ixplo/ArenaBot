@@ -2,6 +2,7 @@ package ml.ixplo.arenabot.battle;
 
 import ml.ixplo.arenabot.Bot;
 import ml.ixplo.arenabot.battle.actions.Action;
+import ml.ixplo.arenabot.exception.ArenaUserException;
 import ml.ixplo.arenabot.helper.Presets;
 import ml.ixplo.arenabot.helper.TestHelper;
 import ml.ixplo.arenabot.messages.Messages;
@@ -133,9 +134,19 @@ public class RoundTest {
         Assert.assertEquals(0, round.getIndex(warrior.getUserId()));
     }
 
+    @Test(expected = ArenaUserException.class)
+    public void getIndexInvalidUser() {
+        round.getIndex(Presets.NON_EXIST_USER_ID);
+    }
+
     @Test
     public void getMember() throws Exception {
         Assert.assertEquals(warrior, round.getMember(warrior.getUserId()));
+    }
+
+    @Test(expected = ArenaUserException.class)
+    public void getMemberInvalidUser() {
+        round.getMember(Presets.NON_EXIST_USER_ID);
     }
 
     @Test
@@ -152,6 +163,11 @@ public class RoundTest {
         } catch (InterruptedException e) {
             LOGGER.error("Ошибка в priorityTest");
         }
+    }
+
+    @Test
+    public void toStringTest() {
+        Assert.assertTrue(round.toString().contains("curTeams"));
     }
 
     private void addOrdersTo(Thread thread) {
@@ -192,5 +208,6 @@ public class RoundTest {
         Action heal = Action.create(mage.getUserId(), Action.HEAL, mage.getUserId(), 5);
         return Arrays.asList(spell, protect, attack, heal);
     }
+
 
 }
