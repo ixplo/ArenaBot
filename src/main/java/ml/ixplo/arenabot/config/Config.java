@@ -7,6 +7,9 @@ import java.math.BigDecimal;
  * 25.04.2017.
  */
 public class Config {
+    public static final String PRE_TAG = "<pre>";
+    public static final String CLOSE_PRE_TAG = "</pre>";
+
     private Config() {
     }
     public static final String BOT_NAME = "ArenaBot";

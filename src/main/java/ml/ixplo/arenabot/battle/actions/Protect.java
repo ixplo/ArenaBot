@@ -11,8 +11,6 @@ import java.util.List;
  * 08.05.2017.
  */
 public class Protect extends Action {
-    private double protect;
-    private List<Action> attackOnTargetList;
 
     public Protect() {
         actionId = "p";
@@ -21,14 +19,14 @@ public class Protect extends Action {
 
     @Override
     public void doAction() {
-        protect = user.getProtect() * getPercent() / 100;
-        attackOnTargetList = Round.getCurrent().getAttackOnTargetList(getTarget().getUserId());
-        if (attackOnTargetList.size() == 0) {
+        double protectValue = user.getProtect() * getPercent() / 100;
+        List<Action> attackOnTargetList = Round.getCurrent().getAttackOnTargetList(getTarget().getUserId());
+        if (attackOnTargetList.isEmpty()) {
             return;
         }
         for (Action attackAction : attackOnTargetList) {
             BigDecimal attack = attackAction.user.getAttack().multiply(new BigDecimal(attackAction.getPercent() / 100));
-            if (attack.doubleValue() > protect) {
+            if (attack.doubleValue() > protectValue) {
                 return;
             }
             experience = (int) (4 * ((Attack) attackAction).getHit());
