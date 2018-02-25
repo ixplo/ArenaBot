@@ -37,7 +37,7 @@
         </sonar.junit.reportPaths>
         <sonar.coverage.exclusions>
             **/*Exception.java,
-            **/config/**/*.java,
+            **/Config.java,
             **/src/test/**/*
         </sonar.coverage.exclusions>
         <jdk.version>1.8</jdk.version>
