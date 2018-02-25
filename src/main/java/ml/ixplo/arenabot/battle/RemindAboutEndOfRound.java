@@ -4,9 +4,9 @@ import ml.ixplo.arenabot.messages.Messages;
 
 import java.util.TimerTask;
 
-public class RemindAboutEndRound extends TimerTask {
-    Round round;
-    RemindAboutEndRound(Round round) {
+public class RemindAboutEndOfRound extends TimerTask {
+    private Round round;
+    RemindAboutEndOfRound(Round round) {
         this.round = round;
     }
 

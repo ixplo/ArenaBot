@@ -2,6 +2,8 @@ package ml.ixplo.arenabot.battle;
 
 import ml.ixplo.arenabot.Bot;
 import ml.ixplo.arenabot.battle.actions.Action;
+import ml.ixplo.arenabot.config.Config;
+import ml.ixplo.arenabot.config.PropertiesLoader;
 import ml.ixplo.arenabot.exception.ArenaUserException;
 import ml.ixplo.arenabot.helper.Presets;
 import ml.ixplo.arenabot.helper.TestHelper;
@@ -163,6 +165,21 @@ public class RoundTest {
         } catch (InterruptedException e) {
             LOGGER.error("Ошибка в priorityTest");
         }
+    }
+
+    @Test
+    public void reminderTest() {
+        StringBuilder log = new StringBuilder();
+        Messages.setBot(testHelper.getTestBot(log));
+        PropertiesLoader.setPropertiesLoader(testHelper.getTestPropertiesLoader());
+        Thread round = new Thread(() -> Round.execute(this.round.getBattleState()));
+        round.start();
+        try {
+            round.join();
+        } catch (InterruptedException e) {
+            LOGGER.error("Ошибка в reminderTest");
+        }
+        Assert.assertTrue(log.toString().contains(Messages.END_OF_ROUND_REMINDER));
     }
 
     @Test

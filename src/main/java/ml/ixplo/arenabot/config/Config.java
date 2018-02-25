@@ -27,10 +27,10 @@ public class Config {
     public static final String ATTACK = "attack";
     public static final String PROTECT = "protect";
     public static final String ACTIONS = "actions";
-    public final String rules = "rules.html";      //mc(rules)
+    public static final String rules = "rules.html";      //mc(rules)
     public static final long TEST_CHANNEL_ID = -161929436;
     public static final String TEST_CHANNEL_NAME = "arena";
-    public static final long CHANNEL_ID = Long.parseLong(PropertiesLoader.getProperties().get("channel.id"));
+    public static final long CHANNEL_ID = Long.parseLong(PropertiesLoader.getInstance().getProperties().get("channel.id"));
     public static final String CHANNEL_NAME = "#arena";
     public static final Integer ADMIN_ID = 362812407;
     public static final String BOT_TOKEN = "298781231:AAHDBJLNCjRpxmT7aazDhh5Hr7t6xNLCwr0";
@@ -59,9 +59,9 @@ public class Config {
     public static final int REG = 1;
     public static final int IN_BATTLE = 2;
     public static final int DELAY = 15;
-    public static final int ROUND_TIME = 45000;
+    public static final String ROUND_DURATION = "round.duration";
     public static final int DELAY_TIME = 1000;
-    public static final int ROUND_REMIND = 30000;
+    public static final String END_OF_ROUND_REMIND = "end.of.round.remind";
     public static final int GOLD_FOR_MEMBER = 10;
     public static final int SCALE = 2;
     public static final int ROUNDED = BigDecimal.ROUND_DOWN;

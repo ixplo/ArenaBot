@@ -1,5 +1,6 @@
 package ml.ixplo.arenabot.config;
 
+import ml.ixplo.arenabot.exception.ArenaUserException;
 import ml.ixplo.arenabot.helper.Presets;
 import org.junit.Assert;
 import org.junit.Test;
@@ -10,14 +11,19 @@ public class PropertiesLoaderTest {
 
     @Test
     public void getProperties() throws Exception {
-        Map<String, String> settings = PropertiesLoader.getProperties(Presets.TEST_PROPERTIES);
+        Map<String, String> settings = new PropertiesLoader(Presets.TEST_PROPERTIES).getProperties();
         Assert.assertTrue(settings.containsKey("warrior.id"));
         Assert.assertEquals(Presets.WARRIOR_NAME, settings.get("warrior.name"));
     }
 
     @Test
     public void getPropertiesDefault() throws Exception {
-        Map<String, String> settings = PropertiesLoader.getProperties();
+        Map<String, String> settings = new PropertiesLoader().getProperties();
         Assert.assertTrue(settings.containsKey("channel.id"));
+    }
+
+    @Test(expected = ArenaUserException.class)
+    public void badPropertyTest() {
+        PropertiesLoader.getInstance().getLong("bad.property");
     }
 }

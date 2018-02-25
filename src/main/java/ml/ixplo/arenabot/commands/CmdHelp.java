@@ -25,7 +25,7 @@ public class CmdHelp extends BotCommand {
     public void execute(AbsSender absSender, User user, Chat chat, String[] strings) {
 
         StringBuilder helpMessageBuilder = new StringBuilder("<b>Help</b>\n");
-        helpMessageBuilder.append("Версия бота: ").append(PropertiesLoader.getVersion());
+        helpMessageBuilder.append("Версия бота: ").append(PropertiesLoader.getInstance().getVersion());
         helpMessageBuilder.append("\nСписок команд:\n\n");
         for (BotCommand botCommand : commandRegistry.getRegisteredCommands()) {
             helpMessageBuilder.append(botCommand.toString()).append("\n\n");

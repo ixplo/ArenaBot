@@ -71,7 +71,7 @@ public abstract class ArenaUser extends Member {
     private long lastGame;
     protected List<String> actionsName = Arrays.asList("Атака", "Защита", "Лечение");
 
-    // instance
+    // getInstance
     private static ArenaUser arenaUser;
 
     /****** constructor ******

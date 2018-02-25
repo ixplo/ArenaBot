@@ -86,7 +86,7 @@ public class Registration {
             ArenaUser.getUser(userId).setTeamId("");
         }
         if (regTimer != null) {
-            Messages.editChannelMsg(PropertiesLoader.getChannelId(), regTimerTask.getMessageId(), "Таймер остановлен");
+            Messages.editChannelMsg(PropertiesLoader.getInstance().getChannelId(), regTimerTask.getMessageId(), "Таймер остановлен");
             regTimer.cancel();
         }
     }

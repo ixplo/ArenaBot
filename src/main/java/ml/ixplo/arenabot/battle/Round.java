@@ -2,6 +2,7 @@ package ml.ixplo.arenabot.battle;
 
 import ml.ixplo.arenabot.battle.actions.Action;
 import ml.ixplo.arenabot.config.Config;
+import ml.ixplo.arenabot.config.PropertiesLoader;
 import ml.ixplo.arenabot.exception.ArenaUserException;
 import ml.ixplo.arenabot.messages.Messages;
 import ml.ixplo.arenabot.user.ArenaUser;
@@ -63,8 +64,8 @@ public class Round {
 
     private Timer startTimer() {
         Timer timer = new Timer();
-        timer.schedule(new EndRound(this), Config.ROUND_TIME);
-        timer.schedule(new RemindAboutEndRound(this), Config.ROUND_REMIND);
+        timer.schedule(new EndRound(this), PropertiesLoader.getInstance().getLong(Config.ROUND_DURATION));
+        timer.schedule(new RemindAboutEndOfRound(this), PropertiesLoader.getInstance().getLong(Config.END_OF_ROUND_REMIND));
         return timer;
     }
 

@@ -21,7 +21,7 @@ public class Callbacks {
     private static String queryId;
     private static String callbackCommand;
 
-    /***** no instance for this class *****/
+    /***** no getInstance for this class *****/
     private Callbacks() {
         throw new UnsupportedOperationException();
     }

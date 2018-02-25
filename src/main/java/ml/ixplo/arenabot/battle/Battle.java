@@ -40,7 +40,7 @@ public class Battle extends Thread {
 
     @Override
     public void run() {
-        Messages.sendChannelMsg(PropertiesLoader.getChannelId(), "<a href=\"" + Config.BOT_PRIVATE + "\">БИТВА НАЧАЛАСЬ!</a>");
+        Messages.sendChannelMsg(PropertiesLoader.getInstance().getChannelId(), "<a href=\"" + Config.BOT_PRIVATE + "\">БИТВА НАЧАЛАСЬ!</a>");
         int roundsCounter = 0;
         while (severalTeamsPresent()) {
             Messages.sendToAll(battleState.getMembers(), "Раунд " + ++roundsCounter);
@@ -84,7 +84,7 @@ public class Battle extends Thread {
             user.setLastGame();
         }
         Messages.sendToAll(allMembers,
-                Messages.getInlineKeyboardMsg(PropertiesLoader.getChannelId(), "Регистрация началась:",
+                Messages.getInlineKeyboardMsg(PropertiesLoader.getInstance().getChannelId(), "Регистрация началась:",
                         Collections.singletonList("Сыграть снова"), Collections.singletonList("reg_user")));
     }
 }

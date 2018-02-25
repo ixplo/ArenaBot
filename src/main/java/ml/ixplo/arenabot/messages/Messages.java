@@ -40,7 +40,7 @@ public final class Messages {
     public static final String LOGTAG = "MESSAGES";
     public static final String END_OF_ROUND_REMINDER = "<b>Осталось 15 секунд до конца раунда!</b>";
 
-    /***** no instance for this class *****/
+    /***** no getInstance for this class *****/
     private Messages() {
         throw new UnsupportedOperationException();
     }

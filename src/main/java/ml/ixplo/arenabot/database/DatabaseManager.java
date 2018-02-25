@@ -39,9 +39,9 @@ public class DatabaseManager {
     }
 
     /***
-     * Get Singleton instance
+     * Get Singleton getInstance
      *
-     * @return instance of the class
+     * @return getInstance of the class
      ***/
     public static DatabaseManager getInstance() {
         final DatabaseManager currentInstance;

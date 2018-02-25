@@ -4,21 +4,16 @@ import ml.ixplo.arenabot.Bot;
 import ml.ixplo.arenabot.battle.Team;
 import ml.ixplo.arenabot.battle.actions.Action;
 import ml.ixplo.arenabot.config.Config;
+import ml.ixplo.arenabot.config.PropertiesLoader;
 import ml.ixplo.arenabot.database.ConnectionDB;
 import ml.ixplo.arenabot.database.DatabaseManager;
 import ml.ixplo.arenabot.user.ArenaUser;
 import ml.ixplo.arenabot.user.classes.UserClass;
 import ml.ixplo.arenabot.user.items.Item;
-import org.junit.runner.RunWith;
 import org.mockito.Mockito;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
-import org.telegram.telegrambots.api.objects.Message;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
 
 import java.util.HashSet;
@@ -27,13 +22,13 @@ import java.util.Set;
 import static ml.ixplo.arenabot.config.Config.TEST_DB_LINK;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doAnswer;
-import static org.powermock.api.mockito.PowerMockito.when;
 
 //@RunWith(PowerMockRunner.class)
 //@PrepareForTest(Bot.class)
 public class TestHelper {
     private static final Logger LOGGER = LoggerFactory.getLogger(TestHelper.class);
 
+    private PropertiesLoader propertiesLoader;
     private DatabaseManager db;
     public static ArenaUser WARRIOR;
     public static ArenaUser MAGE;
@@ -41,10 +36,15 @@ public class TestHelper {
     private static Set<Integer> USERS_ID = new HashSet<>();
 
     public TestHelper() {
+        initPropertiesLoader();
         initDb();
         fillSetOfUsersId();
         clearData();
         generateData();
+    }
+
+    private void initPropertiesLoader() {
+        propertiesLoader = new PropertiesLoader(Presets.TEST_PROPERTIES);
     }
 
     public Bot getTestBot() {
@@ -58,6 +58,23 @@ public class TestHelper {
             LOGGER.error("Send message error from test bot");
         }
         return mock;
+    }
+
+    public Bot getTestBot(StringBuilder appender) {
+        Bot mock = Mockito.mock(Bot.class);
+        try {
+            doAnswer(invocation -> {
+                appender.append(((SendMessage) invocation.getArguments()[0]).getText());
+                return null;
+            }).when(mock).sendMessage(any(SendMessage.class));
+        } catch (TelegramApiException e) {
+            LOGGER.error("Send message error from test bot");
+        }
+        return mock;
+    }
+
+    public PropertiesLoader getTestPropertiesLoader() {
+        return propertiesLoader;
     }
 
     private void initDb() {

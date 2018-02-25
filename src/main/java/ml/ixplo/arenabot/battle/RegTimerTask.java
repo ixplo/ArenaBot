@@ -28,16 +28,16 @@ public class RegTimerTask extends TimerTask {
     public void run() {
         long passedTime = System.currentTimeMillis() - startTime;
         if (passedTime < 1000) {
-            messageId = Messages.sendChannelMsgReturnId(PropertiesLoader.getChannelId(), registration.getList() +
+            messageId = Messages.sendChannelMsgReturnId(PropertiesLoader.getInstance().getChannelId(), registration.getList() +
                     "\nДо начала боя осталось: " + leftToReg + " сек");
             return;
         }
-        Messages.editChannelMsg(PropertiesLoader.getChannelId(), messageId, registration.getList() +
+        Messages.editChannelMsg(PropertiesLoader.getInstance().getChannelId(), messageId, registration.getList() +
                 "\nДо начала боя осталось: " + (leftToReg - passedTime / 1000) + " сек");
         if (leftToReg * 1000 - passedTime <= 0) {
             regTimer.cancel();
             registration.startBattle();
-            Messages.editChannelMsg(PropertiesLoader.getChannelId(), messageId, "Битва началась!");
+            Messages.editChannelMsg(PropertiesLoader.getInstance().getChannelId(), messageId, "Битва началась!");
         }
     }
 
