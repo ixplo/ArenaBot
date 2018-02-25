@@ -70,7 +70,9 @@ public class DatabaseManager {
     }
 
     public boolean doesUserExists(Integer userId) {
-        try (final ResultSet result = connection.runSqlQuery("Select id FROM users WHERE Id=" + userId)) {
+        String queryText = "Select id FROM users WHERE Id=" + userId;
+        try (final PreparedStatement statement = connection.getPreparedStatement(queryText);
+             final ResultSet result = statement.executeQuery()) {
             if (result.next()) {
                 return true;
             }

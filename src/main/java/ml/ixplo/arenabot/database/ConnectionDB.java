@@ -3,7 +3,13 @@ package ml.ixplo.arenabot.database;
 import ml.ixplo.arenabot.config.Config;
 import org.telegram.telegrambots.logging.BotLogger;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 /**
  * ixplo
@@ -16,6 +22,7 @@ public class ConnectionDB {
     public ConnectionDB() {
         this.currentConnection = openConnection(Config.DB_LINK);
     }
+
     public ConnectionDB(String dbLink) {
         currentConnection = openConnection(dbLink);
     }
@@ -40,35 +47,17 @@ public class ConnectionDB {
 
     }
 
-    public ResultSet runSqlQuery(String query) {
-        ResultSet resultSet = null;
-        try {
-            Statement statement = this.currentConnection.createStatement();
-            resultSet = statement.executeQuery(query);
-        } catch (SQLException e) {
-            BotLogger.error(LOGTAG, e.getMessage());
-            throw new DbException(e.getMessage(), e);
-        }
-        return resultSet;
-    }
-
-    public Boolean executeQuery(String query) {
-        boolean executeResult;
+    public void executeQuery(String query) {
         try (final Statement statement = this.currentConnection.createStatement()) {
-            executeResult = statement.execute(query);
+            statement.execute(query);
         } catch (SQLException e) {
             BotLogger.error(LOGTAG, e.getMessage());
             throw new DbException(e.getMessage(), e);
         }
-        return executeResult;
     }
 
     public PreparedStatement getPreparedStatement(String query) throws SQLException {
         return this.currentConnection.prepareStatement(query);
-    }
-
-    public PreparedStatement getPreparedStatement(String query, int flags) throws SQLException {
-        return this.currentConnection.prepareStatement(query, flags);
     }
 
     public int checkVersion() {
@@ -79,9 +68,11 @@ public class ConnectionDB {
                     new String[]{"TABLE"});
             while (res.next()) {
                 if (res.getString("TABLE_NAME").compareTo("Versions") == 0) {
-                    final ResultSet result = runSqlQuery("SELECT Max(Version) FROM Versions");
-                    while (result.next()) {
-                        max = (max > result.getInt(1)) ? max : result.getInt(1);
+                    try (PreparedStatement preparedStatement = getPreparedStatement("SELECT Max(Version) FROM Versions");
+                         ResultSet result = preparedStatement.executeQuery()) {
+                        while (result.next()) {
+                            max = (max > result.getInt(1)) ? max : result.getInt(1);
+                        }
                     }
                 }
             }
@@ -93,6 +84,7 @@ public class ConnectionDB {
 
     /**
      * Initilize a transaction in database
+     *
      * @throws SQLException If initialization fails
      */
     public void initTransaction() throws SQLException {
@@ -101,6 +93,7 @@ public class ConnectionDB {
 
     /**
      * Finish a transaction in database and commit changes
+     *
      * @throws SQLException If a rollback fails
      */
     public void commitTransaction() throws SQLException {
