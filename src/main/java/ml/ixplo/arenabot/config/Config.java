@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 public class Config {
     public static final String PRE_TAG = "<pre>";
     public static final String CLOSE_PRE_TAG = "</pre>";
+    public static final String CLASS_COLUMN = "class";
 
     private Config() {
     }

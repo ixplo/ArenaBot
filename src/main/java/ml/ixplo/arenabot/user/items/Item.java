@@ -54,10 +54,6 @@ public class Item {
     public Item() {
     }
 
-    public Item(String itemId) {
-        this.itemId = itemId;
-    }
-
     // items count in eq
     public static int getEqipAmount(Integer userId) {
         return db.getCount(Config.EQIP, Config.USER_ID, userId);
