@@ -7,7 +7,8 @@ import java.math.BigDecimal;
  * 25.04.2017.
  */
 public class Config {
-
+    private Config() {
+    }
     public static final String BOT_NAME = "ArenaBot";
     public static final String BOT_CHANNEL_NAME = "#Arena";
     public static final String PROPERTIES_FILE = "arena.properties";
@@ -27,10 +28,12 @@ public class Config {
     public static final String ATTACK = "attack";
     public static final String PROTECT = "protect";
     public static final String ACTIONS = "actions";
-    public static final String rules = "rules.html";      //mc(rules)
+    public static final String RULES = "rules.html";      //mc(rules)
     public static final long TEST_CHANNEL_ID = -161929436;
     public static final String TEST_CHANNEL_NAME = "arena";
-    public static final long CHANNEL_ID = Long.parseLong(PropertiesLoader.getInstance().getProperties().get("channel.id"));
+    public static final String VERSION_PROPERTY = "version";
+    public static final String CHANNEL_ID_PROPERTY = "channel.id";
+    public static final long CHANNEL_ID = Long.parseLong(PropertiesLoader.getInstance().getProperties().get(CHANNEL_ID_PROPERTY));
     public static final String CHANNEL_NAME = "#arena";
     public static final Integer ADMIN_ID = 362812407;
     public static final String BOT_TOKEN = "298781231:AAHDBJLNCjRpxmT7aazDhh5Hr7t6xNLCwr0";
@@ -66,6 +69,4 @@ public class Config {
     public static final int SCALE = 2;
     public static final int ROUNDED = BigDecimal.ROUND_DOWN;
 
-    public static final String VERSION_PROPERTY = "version";
-    public static final String CHANNEL_ID_PROPERTY = "channel.id";
 }

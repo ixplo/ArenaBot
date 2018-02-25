@@ -1,9 +1,9 @@
 package ml.ixplo.arenabot.commands;
 
 import ml.ixplo.arenabot.Bot;
+import ml.ixplo.arenabot.battle.Team;
 import ml.ixplo.arenabot.config.Config;
 import ml.ixplo.arenabot.messages.Messages;
-import ml.ixplo.arenabot.battle.Registration;
 import ml.ixplo.arenabot.user.ArenaUser;
 import org.telegram.telegrambots.api.objects.Chat;
 import org.telegram.telegrambots.api.objects.User;
@@ -27,11 +27,12 @@ public class CmdReg extends BotCommand {
         if (!ArenaUser.doesUserExists(user.getId())) {
             return;
         }
-        if (!Registration.isOn() || Bot.getRegistration().getMemberStatus(user.getId()) != Config.UNREG) {
+        //todo переделать
+        if (!((Bot)absSender).getRegistration().isOn() || Team.getMember(user.getId()).getStatus() != Config.UNREG) {
             return;
         }
-        Bot.getRegistration().regMember(user.getId());
-        Messages.sendToAll(Bot.getRegistration().getMembers(),
+        ((Bot)absSender).getRegistration().regMember(user.getId());
+        Messages.sendToAll(((Bot)absSender).getRegistration().getMembers(),
                 Messages.getRegMemberMsg(user.getId(), ArenaUser.getUser(user.getId()).getTeamId()));
     }
 }

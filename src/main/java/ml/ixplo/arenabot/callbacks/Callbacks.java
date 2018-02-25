@@ -9,11 +9,10 @@ import ml.ixplo.arenabot.messages.Messages;
 import ml.ixplo.arenabot.user.ArenaUser;
 import ml.ixplo.arenabot.user.classes.UserClass;
 import org.telegram.telegrambots.api.objects.CallbackQuery;
-import org.telegram.telegrambots.bots.AbsSender;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
 
 public class Callbacks {
-    private static AbsSender bot;
+    private static Bot bot;
     private static CallbackQuery query;
     private static String entry;
     private static Integer userId;
@@ -26,8 +25,8 @@ public class Callbacks {
         throw new UnsupportedOperationException();
     }
 
-    public static void handleCallbackCommand(CallbackQuery callbackQuery, AbsSender absSender) throws TelegramApiException {
-        initStaticVariables(callbackQuery, absSender);
+    public static void handleCallbackCommand(CallbackQuery callbackQuery, Bot bot) throws TelegramApiException {
+        initStaticVariables(callbackQuery, bot);
         switch (callbackCommand) {
             case "newClassIs":
                 handleNewClassIs();
@@ -104,11 +103,11 @@ public class Callbacks {
     }
 
     private static void handleReg() throws TelegramApiException {
-        Bot.getRegistration().regMember(userId);
+        bot.getRegistration().regMember(userId);
         bot.answerCallbackQuery(Messages.getEmptyQuery(queryId));
         Messages.sendToAll(
-                Bot.getRegistration().getMembers(),
-                Messages.getRegMemberMsg(userId, Bot.getRegistration().getMember(userId).getTeamId())
+                bot.getRegistration().getMembers(),
+                Messages.getRegMemberMsg(userId, bot.getRegistration().getMember(userId).getTeamId())
         );
     }
 
@@ -143,8 +142,8 @@ public class Callbacks {
         bot.sendMessage(Messages.getChooseRaceMsg(query.getMessage().getChatId(), entry));
     }
 
-    private static void initStaticVariables(CallbackQuery callbackQuery, AbsSender absSender) {
-        bot = absSender;
+    private static void initStaticVariables(CallbackQuery callbackQuery, Bot bot) {
+        Callbacks.bot = bot;
         query = callbackQuery;
         callbackCommand = query.getData().substring(0, query.getData().indexOf('_'));
         entry = query.getData().substring(query.getData().indexOf('_') + 1);

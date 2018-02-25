@@ -16,13 +16,10 @@ import java.util.List;
  * 29.04.2017.
  */
 public class Registration {
-    private static boolean isOn;
-    private static Timer regTimer;
-    private static RegTimerTask regTimerTask;
-    private List<Member> members;
-    private List<Team> teams;
-
-    static DatabaseManager db;
+    private static DatabaseManager db;
+    private boolean isOn;
+    private Timer regTimer;
+    private RegTimerTask regTimerTask;
 
     public static void setDb(DatabaseManager dbManager) {
         db = dbManager;
@@ -30,16 +27,14 @@ public class Registration {
 
     public Registration() {
         isOn = true;
-        members = new ArrayList<>();
-        teams = new ArrayList<>();
     }
 
-    public static boolean isOn() {
+    public boolean isOn() {
         return isOn;
     }
 
-    public static void setIsOn(boolean isOn) {
-        Registration.isOn = isOn;
+    public void setIsOn(boolean isOn) {
+        this.isOn = isOn;
     }
 
     public static void dropStatus() {
@@ -108,20 +103,16 @@ public class Registration {
         return nextId;
     }
 
-    public int getTeamsCount() {
+    private int getTeamsCount() {
         return db.getCountDistinct(Config.USERS, "team", Config.STATUS, Config.REG);
     }
 
-    public List<String> getTeamsName() {
+    private List<String> getTeamsName() {
         return db.getStrings(Config.USERS, Config.STATUS, Config.REG, "team");
     }
 
     public int getMembersCount() {
         return db.getCountDistinct(Config.USERS, "id", Config.STATUS, Config.REG);
-    }
-
-    public String getMemberTeam(Integer userId) {
-        return getMember(userId).getTeamId();
     }
 
     public Member getMember(Integer userId) {
@@ -130,12 +121,12 @@ public class Registration {
 
     public List<Member> getMembers() {
         int count = getMembersCount();
-        List<Member> members = new ArrayList<>();
+        List<Member> membersList = new ArrayList<>();
         List<Integer> membersId = getMembersId();
         for (int i = 0; i < count; i++) {
-            members.add(getMember(membersId.get(i)));
+            membersList.add(getMember(membersId.get(i)));
         }
-        return members;
+        return membersList;
     }
 
     public String getList() {
@@ -159,20 +150,7 @@ public class Registration {
         return db.getInts(Config.USERS, Config.STATUS, Config.REG, "id");
     }
 
-    public Member getLastMember() {
-        int lastCount = members.size() - 1;
-        return members.get(lastCount);
-    }
-
-    public int getMemberStatus(Integer userId) {
-        return getMember(userId).getStatus();
-    }
-
-    public List<String> getMembersName() {
-        return db.getStrings(Config.USERS, Config.STATUS, Config.REG, "name");
-    }
-
-    public Team getTeam(String id) {
+    private Team getTeam(String id) {
         Team team = Team.getTeam(id);
         List<IUser> teamMembers = new ArrayList<>();
         List<Member> allMembers = getMembers();

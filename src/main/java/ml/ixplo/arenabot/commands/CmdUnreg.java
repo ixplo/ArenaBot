@@ -1,6 +1,7 @@
 package ml.ixplo.arenabot.commands;
 
 import ml.ixplo.arenabot.Bot;
+import ml.ixplo.arenabot.battle.Team;
 import ml.ixplo.arenabot.config.Config;
 import ml.ixplo.arenabot.user.ArenaUser;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
@@ -31,12 +32,13 @@ public class CmdUnreg extends BotCommand {
 
         StringBuilder messageBuilder = new StringBuilder();
         String userName = ArenaUser.getUserName(user.getId());
-        if(Bot.getRegistration().isOn() && Bot.getRegistration().getMemberStatus(user.getId()) != Config.REG){
+        //todo переделать
+        if(((Bot)absSender).getRegistration().isOn() && Team.getMember(user.getId()).getStatus() != Config.REG){
             return;
         }
-        Bot.getRegistration().unregMember(user.getId());
+        ((Bot)absSender).getRegistration().unregMember(user.getId());
         messageBuilder.append("<b>").append(userName).append("</b> вышел из команды ").
-                append(Bot.getRegistration().getMemberTeam(user.getId()));
+                append(Team.getMember(user.getId()).getTeamId());
         SendMessage answer = new SendMessage();
         answer.enableHtml(true);
         answer.setChatId(chat.getId().toString());

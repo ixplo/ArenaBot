@@ -1,8 +1,8 @@
 package ml.ixplo.arenabot.commands;
 
-import ml.ixplo.arenabot.messages.Messages;
+import ml.ixplo.arenabot.Bot;
 import ml.ixplo.arenabot.battle.Battle;
-import ml.ixplo.arenabot.battle.Registration;
+import ml.ixplo.arenabot.messages.Messages;
 import ml.ixplo.arenabot.user.ArenaUser;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Chat;
@@ -19,6 +19,7 @@ import org.telegram.telegrambots.logging.BotLogger;
 public class CmdList extends BotCommand {
 
     public static final String LOGTAG = "LISTCOMMAND";
+    private Bot bot;
 
     public CmdList() {
         super("list", "Список участников.");
@@ -26,6 +27,7 @@ public class CmdList extends BotCommand {
 
     @Override
     public void execute(AbsSender absSender, User user, Chat chat, String[] strings) {
+        bot = (Bot) absSender;
         if (ArenaUser.doesUserExists(user.getId())) {
             try {
                 absSender.sendMessage(getListMessage(chat.getId()));
@@ -36,7 +38,7 @@ public class CmdList extends BotCommand {
     }
 
     private SendMessage getListMessage(Long chatId) {
-        if (Registration.isOn()) {
+        if (bot.getRegistration().isOn()) {
             return Messages.getRegistrationListMsg(chatId);
         } else {
             return Messages.getRoundTeamsList(chatId, Battle.getBattle().getTeams());

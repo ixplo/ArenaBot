@@ -41,7 +41,7 @@ import org.telegram.telegrambots.logging.BotLogger;
 public class Bot extends TelegramLongPollingCommandBot {
 
     private static final String LOGTAG = "ARENABOT";
-    private static Registration registration = new Registration();
+    private Registration registration = new Registration();
 
     public Bot() {
         this(DatabaseManager.getInstance());
@@ -93,7 +93,7 @@ public class Bot extends TelegramLongPollingCommandBot {
         Team.setDb(db);
     }
 
-    public static Registration getRegistration() {
+    public Registration getRegistration() {
         return registration;
     }
 

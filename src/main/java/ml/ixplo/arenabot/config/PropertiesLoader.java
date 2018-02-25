@@ -1,7 +1,6 @@
 package ml.ixplo.arenabot.config;
 
 import ml.ixplo.arenabot.exception.ArenaUserException;
-import org.telegram.telegrambots.logging.BotLogger;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -17,7 +16,6 @@ public class PropertiesLoader {
         propertiesLoader = new PropertiesLoader();
     }
 
-    private static final String LOGTAG = "PropertiesLoader";
     private static Map<String, String> settings = new HashMap<>();
 
     private String propertiesFile = Config.PROPERTIES_FILE;

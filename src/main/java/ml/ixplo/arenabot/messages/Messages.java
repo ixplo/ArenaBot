@@ -46,10 +46,10 @@ public final class Messages {
     }
 
     /***** uses for send messages ******/
-    private static AbsSender bot;
+    private static Bot bot;
 
     /***** DI *****/
-    public static void setBot(AbsSender bot) {
+    public static void setBot(Bot bot) {
         Messages.bot = bot;
     }
 
@@ -322,8 +322,9 @@ public final class Messages {
         SendMessage msg = new SendMessage();
         msg.setChatId(chatId);
         msg.enableHtml(true);
-        int membersCount = Bot.getRegistration().getMembersCount();
-        if (!Registration.isOn()) {
+        Registration registration = bot.getRegistration();
+        int membersCount = registration.getMembersCount();
+        if (!registration.isOn()) {
             msg.setText("Бой уже идет");
             return msg;
         }
@@ -331,7 +332,7 @@ public final class Messages {
             msg.setText("Еще никто не зарегистрировался");
             return msg;
         }
-        msg.setText(Bot.getRegistration().getList());
+        msg.setText(registration.getList());
         return msg;
     }
 

@@ -33,9 +33,9 @@ public class MessagesTest {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ItemTest.class);
 
-    ArenaUser warrior;
-    ArenaUser mage;
-    ArenaUser existUser;
+    private ArenaUser warrior;
+    private ArenaUser mage;
+    private ArenaUser existUser;
     private TestHelper testHelper = new TestHelper();
     private Bot bot = new Bot(testHelper.getDb());
 
@@ -128,12 +128,12 @@ public class MessagesTest {
         Assert.assertEquals(Config.ADMIN_ID.toString(), message.getChatId());
         Assert.assertEquals("Еще никто не зарегистрировался", message.getText());
 
-        Registration registration = new Registration();
-        Bot.getRegistration().regMember(warrior.getUserId());
+        Registration registration = bot.getRegistration();
+        registration.regMember(warrior.getUserId());
         message = Messages.getRegistrationListMsg((long) warrior.getUserId());
         Assert.assertTrue(message.getText().contains(warrior.getName()));
 
-        Registration.setIsOn(false);
+        registration.setIsOn(false);
         message = Messages.getRegistrationListMsg((long) warrior.getUserId());
         Assert.assertEquals("Бой уже идет", message.getText());
     }
