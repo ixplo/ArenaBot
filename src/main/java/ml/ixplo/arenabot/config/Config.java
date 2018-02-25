@@ -66,4 +66,6 @@ public class Config {
     public static final int SCALE = 2;
     public static final int ROUNDED = BigDecimal.ROUND_DOWN;
 
+    public static final String VERSION_PROPERTY = "version";
+    public static final String CHANNEL_ID_PROPERTY = "channel.id";
 }

@@ -38,6 +38,7 @@
         <sonar.coverage.exclusions>
             **/*Exception.java,
             **/Config.java,
+            **/Constants.java,
             **/src/test/**/*
         </sonar.coverage.exclusions>
         <jdk.version>1.8</jdk.version>

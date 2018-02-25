@@ -1,5 +1,6 @@
 package ml.ixplo.arenabot.commands;
 
+import ml.ixplo.arenabot.config.Config;
 import ml.ixplo.arenabot.config.PropertiesLoader;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Chat;
@@ -25,7 +26,7 @@ public class CmdHelp extends BotCommand {
     public void execute(AbsSender absSender, User user, Chat chat, String[] strings) {
 
         StringBuilder helpMessageBuilder = new StringBuilder("<b>Help</b>\n");
-        helpMessageBuilder.append("Версия бота: ").append(PropertiesLoader.getInstance().getVersion());
+        helpMessageBuilder.append("Версия бота: ").append(PropertiesLoader.getInstance().getProperty(Config.VERSION_PROPERTY));
         helpMessageBuilder.append("\nСписок команд:\n\n");
         for (BotCommand botCommand : commandRegistry.getRegisteredCommands()) {
             helpMessageBuilder.append(botCommand.toString()).append("\n\n");

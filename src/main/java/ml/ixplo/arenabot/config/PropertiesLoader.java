@@ -41,7 +41,7 @@ public class PropertiesLoader {
         try {
             loadSettingsFrom(file);
         } catch (IOException e) {
-            BotLogger.error(LOGTAG, e);
+            throw new ArenaUserException("Не удалось найти файл " + file);
         }
         return settings;
     }
@@ -63,18 +63,14 @@ public class PropertiesLoader {
 
 
     public long getChannelId() {
-        return getLong("channel.id");
-    }
-
-    public String getVersion() {
-        return getProperty("version");
+        return getLong(Config.CHANNEL_ID_PROPERTY);
     }
 
     public long getLong(String key) {
         return Long.parseLong(getProperty(key));
     }
 
-    private String getProperty(String key) {
+    public String getProperty(String key) {
         String value = getProperties().get(key);
         if (value == null) {
             throw new ArenaUserException(String.format("Нет такого параметра %s в файле настроек %s", key, propertiesFile));

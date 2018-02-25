@@ -5,6 +5,7 @@ import ml.ixplo.arenabot.helper.Presets;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.Map;
 
 public class PropertiesLoaderTest {
@@ -25,5 +26,15 @@ public class PropertiesLoaderTest {
     @Test(expected = ArenaUserException.class)
     public void badPropertyTest() {
         PropertiesLoader.getInstance().getLong("bad.property");
+    }
+
+    @Test(expected = ArenaUserException.class)
+    public void badPropertyFileTest() {
+        new PropertiesLoader("badProperty.file").getProperties();
+    }
+
+    @Test
+    public void getChannelIdPropertyTest() {
+        Assert.assertEquals(Presets.CHANNEL_ID, PropertiesLoader.getInstance().getChannelId());
     }
 }

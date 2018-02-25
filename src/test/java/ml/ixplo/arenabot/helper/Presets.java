@@ -83,4 +83,5 @@ public class Presets {
             "i",
             "t",
             "k");
+    public static final long CHANNEL_ID = -202049243;
 }
