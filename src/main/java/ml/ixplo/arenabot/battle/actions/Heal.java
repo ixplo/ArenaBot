@@ -7,7 +7,7 @@ import static ml.ixplo.arenabot.utils.Utils.roundDouble;
  * 08.05.2017.
  */
 public class Heal extends Action {
-    private double heal;
+    private double healValue;
 
     Heal() {
         actionId = "h";
@@ -16,20 +16,20 @@ public class Heal extends Action {
 
     @Override
     public void doAction() {
-        heal = roundDouble(user.getHeal() * getPercent() / 100);
-        if (target.getCurHitPoints() + heal > target.getMaxHitPoints()) {
-            heal = roundDouble(target.getMaxHitPoints() - target.getCurHitPoints());
+        healValue = roundDouble(user.getHeal() * getPercent() / 100);
+        if (target.getCurHitPoints() + healValue > target.getMaxHitPoints()) {
+            healValue = roundDouble(target.getMaxHitPoints() - target.getCurHitPoints());
         }
-        experience = (int) (20 * heal);
-        target.addCurHitPoints(heal);
+        experience = (int) (20 * healValue);
+        target.addCurHitPoints(healValue);
         user.addCurExp(experience);
         message = "<pre>" + user.getName() + " вылечил " + target.getName() +
-                " на " + heal + "\n(жизни:+" + heal + "/" + target.getCurHitPoints() +
+                " на " + healValue + "\n(жизни:+" + healValue + "/" + target.getCurHitPoints() +
                 " \\\\ опыт:+" + experience + "/" + user.getCurExp() + ")</pre>";
     }
 
     public void unDo(){
-        target.addCurHitPoints(-heal);
+        target.addCurHitPoints(-healValue);
         user.addCurExp(-experience);
         message = null;
     }
