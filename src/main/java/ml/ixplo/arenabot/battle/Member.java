@@ -33,7 +33,7 @@ public class Member implements IUser{
     }
 
     public static String getUserTeamId(Integer userId) {
-        return db.getStringFrom(Config.USERS, userId, "team");
+        return db.getStringFrom(Config.USERS, userId, DatabaseManager.TEAM_COLUMN);
     }
 
     public static String getUserName(Integer userId) {
@@ -63,7 +63,7 @@ public class Member implements IUser{
     @Override
     public void setTeamId(String teamId) {
         this.teamId = teamId;
-        db.setStringTo(Config.USERS, userId, "team", teamId);
+        db.setStringTo(Config.USERS, userId, DatabaseManager.TEAM_COLUMN, teamId);
     }
 
     public int getStatus() {

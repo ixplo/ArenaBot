@@ -35,6 +35,10 @@ public class Team {
         Team.db = db;
     }
 
+    public static String getTeamId(Integer userId) {
+        return getMember(userId).getTeamId();
+    }
+
     public boolean isRegistered() {
         return isRegistered;
     }
@@ -146,14 +150,15 @@ public class Team {
     }
 
     public static void addMember(int userId, String teamId) {
-        db.setIntTo(Config.USERS, userId, Config.STATUS, Config.REG);
-        db.setStringTo(Config.USERS, userId, "team", teamId);
+        db.setIntTo(Config.USERS, userId, Config.STATUS, Config.REGISTERED_STATUS);
+        db.setStringTo(Config.USERS, userId, DatabaseManager.TEAM_COLUMN, teamId);
     }
 
     public static void removeMember(int userId) {
-        db.setIntTo(Config.USERS, userId, Config.STATUS, Config.UNREG);
-        if (Team.getTeam(getMember(userId).getTeamId()).isRegisteredTeam())
-            db.setStringTo(Config.USERS, userId, "team", "");
+        db.setIntTo(Config.USERS, userId, Config.STATUS, Config.UNREGISTERED_STATUS);
+        if (Team.getTeam(getMember(userId).getTeamId()).isRegisteredTeam()) {
+            db.setStringTo(Config.USERS, userId, DatabaseManager.TEAM_COLUMN, null);
+        }
     }
 
     public static Member getMember(int userId) {
@@ -182,4 +187,5 @@ public class Team {
     public void drop() {
         db.dropTeam(id);
     }
+
 }

@@ -62,9 +62,9 @@ public class Config {
     public static final int BOT_PHOTO_HEIGHT = 178;
     public static final boolean DO_NOT_COMMAND_UPDATE = false;
     public static final int WIDTH = 27;
-    public static final int UNREG = 0;
-    public static final int REG = 1;
-    public static final int IN_BATTLE = 2;
+    public static final int UNREGISTERED_STATUS = 0;
+    public static final int REGISTERED_STATUS = 1;
+    public static final int IN_BATTLE_STATUS = 2;
     public static final int DELAY = 15;
     public static final String ROUND_DURATION = "round.duration";
     public static final int DELAY_TIME = 1000;

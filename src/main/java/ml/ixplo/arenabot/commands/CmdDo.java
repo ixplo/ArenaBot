@@ -107,6 +107,6 @@ public class CmdDo extends BotCommand {
     }
 
     private boolean badUser() {
-        return !ArenaUser.doesUserExists(userId) || ArenaUser.getStatus(userId) != Config.IN_BATTLE;
+        return !ArenaUser.doesUserExists(userId) || ArenaUser.getStatus(userId) != Config.IN_BATTLE_STATUS;
     }
 }

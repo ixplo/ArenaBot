@@ -28,11 +28,11 @@ public class RegTimerTask extends TimerTask {
     public void run() {
         long passedTime = System.currentTimeMillis() - startTime;
         if (passedTime < 1000) {
-            messageId = Messages.sendChannelMsgReturnId(PropertiesLoader.getInstance().getChannelId(), registration.getList() +
+            messageId = Messages.sendChannelMsgReturnId(PropertiesLoader.getInstance().getChannelId(), registration.getListOfMembersToString() +
                     "\nДо начала боя осталось: " + leftToReg + " сек");
             return;
         }
-        Messages.editChannelMsg(PropertiesLoader.getInstance().getChannelId(), messageId, registration.getList() +
+        Messages.editChannelMsg(PropertiesLoader.getInstance().getChannelId(), messageId, registration.getListOfMembersToString() +
                 "\nДо начала боя осталось: " + (leftToReg - passedTime / 1000) + " сек");
         if (leftToReg * 1000 - passedTime <= 0) {
             regTimer.cancel();

@@ -259,7 +259,7 @@ public class ItemTest {
     @Test
     public void putOnInBattle() {
         warrior.setCurHitPoints(warrior.getMaxHitPoints() - 1);
-        warrior.setStatus(Config.IN_BATTLE);
+        warrior.setStatus(Config.IN_BATTLE_STATUS);
         warrior.addItem(Presets.FLAMBERG);
         warrior.putOn(Presets.NEW_ITEM_INDEX);
         Assert.assertNotEquals(warrior.getCurHitPoints(), warrior.getMaxHitPoints());

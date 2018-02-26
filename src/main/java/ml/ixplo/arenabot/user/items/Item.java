@@ -51,9 +51,6 @@ public class Item {
     private int eqipIndex;
     private String inSlot;
 
-    public Item() {
-    }
-
     // items count in eq
     public static int getEqipAmount(Integer userId) {
         return db.getCount(Config.EQIP, Config.USER_ID, userId);
@@ -178,7 +175,7 @@ public class Item {
         arenaUser.setAttack(arenaUser.getAttack().add(BigDecimal.valueOf(item.getAttack() + roundDouble(0.91 * item.getDexBonus() + 0.39 * item.getStrBonus()))));
         arenaUser.setProtect(arenaUser.getProtect() + item.getProtect() + roundDouble(0.4 * item.getDexBonus() + 0.6 * item.getConBonus()));
         arenaUser.setMaxHitPoints(arenaUser.getMaxHitPoints() + roundDouble(1.3333333 * item.getConBonus()));//todo переделать, иначе выскочит нецелое число
-        if (arenaUser.getStatus() != Config.IN_BATTLE) {
+        if (arenaUser.getStatus() != Config.IN_BATTLE_STATUS) {
             arenaUser.setCurHitPoints(arenaUser.getMaxHitPoints()); // not in battle
         }
         arenaUser.setMagicProtect(arenaUser.getMagicProtect() + roundDouble(0.6 * item.getWisBonus() + 0.4 * item.getIntBonus()));
@@ -199,7 +196,7 @@ public class Item {
         arenaUser.setAttack(arenaUser.getAttack().subtract(BigDecimal.valueOf(item.getAttack() - roundDouble(0.91 * item.getDexBonus() + 0.39 * item.getStrBonus()))));
         arenaUser.setProtect(arenaUser.getProtect() - item.getProtect() - roundDouble(0.4 * item.getDexBonus() + 0.6 * item.getConBonus()));
         arenaUser.setMaxHitPoints(arenaUser.getMaxHitPoints() - roundDouble(1.3333333 * item.getConBonus()));//todo переделать на BigDecimal, иначе выскочит нецелое число
-        if (arenaUser.getStatus() != Config.IN_BATTLE) {
+        if (arenaUser.getStatus() != Config.IN_BATTLE_STATUS) {
             arenaUser.setCurHitPoints(arenaUser.getMaxHitPoints());
         }
         arenaUser.setMagicProtect(arenaUser.getMagicProtect() - roundDouble(0.6 * item.getWisBonus() + 0.4 * item.getIntBonus()));

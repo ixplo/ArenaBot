@@ -28,7 +28,7 @@ public class CmdReg extends BotCommand {
             return;
         }
         //todo переделать
-        if (!((Bot)absSender).getRegistration().isOn() || Team.getMember(user.getId()).getStatus() != Config.UNREG) {
+        if (!((Bot)absSender).getRegistration().isOn() || Team.getMember(user.getId()).getStatus() != Config.UNREGISTERED_STATUS) {
             return;
         }
         ((Bot)absSender).getRegistration().regMember(user.getId());

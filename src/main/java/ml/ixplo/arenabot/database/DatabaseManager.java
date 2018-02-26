@@ -26,14 +26,16 @@ public class DatabaseManager {
     public static final String SELECT = "Select ";
     public static final String FROM = " FROM ";
     public static final String WHERE = " WHERE ";
-    public static final String $ = "=?";
-    public static final String END_QUERY = ";";
+    public static final String VAR = "=?";
+    public static final String SEMICOLON = ";";
     public static final String AND = " AND ";
     public static final String UPDATE = "UPDATE ";
     public static final String SET = " SET ";
     public static final String ID = "id";
     public static final String GAMES = "games";
     public static final String EMPTY = "";
+    public static final String TEAM_COLUMN = "team";
+    public static final String COUNT = "count(";
 
     private static volatile DatabaseManager instance;
     private static volatile ConnectionDB connection;
@@ -99,7 +101,7 @@ public class DatabaseManager {
     }
 
     public void dropUser(Integer userId) {
-        String queryText = "DELETE FROM users WHERE Id" + $ + END_QUERY;
+        String queryText = "DELETE FROM users WHERE Id" + VAR + SEMICOLON;
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setInt(1, userId);
             preparedStatement.executeUpdate();
@@ -110,7 +112,7 @@ public class DatabaseManager {
 
     public boolean dropItems(Integer userId) {
         int deletedRows = 0;
-        String queryText = "DELETE FROM inventory WHERE user_Id" + $ + END_QUERY;
+        String queryText = "DELETE FROM inventory WHERE user_Id" + VAR + SEMICOLON;
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setInt(1, userId);
             deletedRows = preparedStatement.executeUpdate();
@@ -122,7 +124,7 @@ public class DatabaseManager {
 
     public boolean dropItem(Integer userId, String itemId) {
         int deletedRows = 0;
-        String queryText = "DELETE FROM inventory WHERE user_Id" + $ + AND + ID + $ + END_QUERY;
+        String queryText = "DELETE FROM inventory WHERE user_Id" + VAR + AND + ID + VAR + SEMICOLON;
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setInt(1, userId);
             preparedStatement.setString(2, itemId);
@@ -138,7 +140,7 @@ public class DatabaseManager {
     }
 
     public void dropActions(Integer userId) {
-        String queryText = "DELETE FROM round_actions WHERE " + ID + $ + END_QUERY;
+        String queryText = "DELETE FROM round_actions WHERE " + ID + VAR + SEMICOLON;
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setInt(1, userId);
             preparedStatement.executeUpdate();
@@ -148,7 +150,7 @@ public class DatabaseManager {
     }
 
     public void dropSpells(int userId) {
-        String queryText = "DELETE FROM available_spells WHERE user_" + ID + $ + END_QUERY;
+        String queryText = "DELETE FROM available_spells WHERE user_" + ID + VAR + SEMICOLON;
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setInt(1, userId);
             preparedStatement.executeUpdate();
@@ -159,7 +161,7 @@ public class DatabaseManager {
 
     public ArenaUser getUser(Integer userId) {
         ArenaUser arenaUser = null;
-        String queryText = "Select * FROM users WHERE Id" + $;
+        String queryText = "Select * FROM users WHERE Id" + VAR;
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setInt(1, userId);
             try (final ResultSet result = preparedStatement.executeQuery()) {
@@ -170,7 +172,7 @@ public class DatabaseManager {
                     arenaUser.setName(result.getString("name"));
                     arenaUser.setUserTitle(result.getString("title"));
                     arenaUser.setUserPostTitle(result.getString("post_title"));
-                    arenaUser.setTeamId(result.getString("team"));
+                    arenaUser.setTeamId(result.getString(TEAM_COLUMN));
                     arenaUser.setTeamRank(result.getString("team_rank"));
                     arenaUser.setRace(result.getString("race"));
                     arenaUser.setDescr(result.getString(Config.DESCR));
@@ -213,43 +215,43 @@ public class DatabaseManager {
 
     public void updateUser(ArenaUser arenaUser) {
         String queryText = "UPDATE users SET " +
-                "name" + $ + "," +
-                "title" + $ + "," +
-                "post_Title" + $ + "," +
-                "team" + $ + "," +
-                "team_Rank" + $ + "," +
-                "race" + $ + "," +
-                Config.CLASS_COLUMN + $ + "," +
-                "descr" + $ + "," +
-                "sex" + $ + "," +
-                GAMES + $ + "," +
-                "wins" + $ + "," +
-                "strangth" + $ + "," +
-                "dexterity" + $ + "," +
-                "wisdom" + $ + "," +
-                "intellect" + $ + "," +
-                "const" + $ + "," +
-                "free_points" + $ + "," +
-                "hp" + $ + "," +
-                "money" + $ + "," +
-                "exp" + $ + "," +
-                "level" + $ + "," +
-                "cur_str" + $ + "," +
-                "cur_dex" + $ + "," +
-                "cur_wis" + $ + "," +
-                "cur_int" + $ + "," +
-                "cur_con" + $ + "," +
-                "min_hit" + $ + "," +
-                "max_hit" + $ + "," +
-                "attack" + $ + "," +
-                "protect" + $ + "," +
-                "heal" + $ + "," +
-                "m_protect" + $ + "," +
-                "cur_hp" + $ + "," +
-                "cur_exp" + $ + "," +
-                "last_game" + $ + "," +
-                "cur_weapon" + $ + "," +
-                "status" + $ + WHERE + ID + $ + END_QUERY;
+                "name" + VAR + "," +
+                "title" + VAR + "," +
+                "post_Title" + VAR + "," +
+                TEAM_COLUMN + VAR + "," +
+                "team_Rank" + VAR + "," +
+                "race" + VAR + "," +
+                Config.CLASS_COLUMN + VAR + "," +
+                "descr" + VAR + "," +
+                "sex" + VAR + "," +
+                GAMES + VAR + "," +
+                "wins" + VAR + "," +
+                "strangth" + VAR + "," +
+                "dexterity" + VAR + "," +
+                "wisdom" + VAR + "," +
+                "intellect" + VAR + "," +
+                "const" + VAR + "," +
+                "free_points" + VAR + "," +
+                "hp" + VAR + "," +
+                "money" + VAR + "," +
+                "exp" + VAR + "," +
+                "level" + VAR + "," +
+                "cur_str" + VAR + "," +
+                "cur_dex" + VAR + "," +
+                "cur_wis" + VAR + "," +
+                "cur_int" + VAR + "," +
+                "cur_con" + VAR + "," +
+                "min_hit" + VAR + "," +
+                "max_hit" + VAR + "," +
+                "attack" + VAR + "," +
+                "protect" + VAR + "," +
+                "heal" + VAR + "," +
+                "m_protect" + VAR + "," +
+                "cur_hp" + VAR + "," +
+                "cur_exp" + VAR + "," +
+                "last_game" + VAR + "," +
+                "cur_weapon" + VAR + "," +
+                "status" + VAR + WHERE + ID + VAR + SEMICOLON;
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setInt(38, arenaUser.getUserId());
             preparedStatement.setString(1, arenaUser.getName());
@@ -297,7 +299,7 @@ public class DatabaseManager {
 
     public String getSlot(int userId, Integer eqipIndex) {
         String resultString = EMPTY;
-        String queryText = "Select in_slot FROM inventory WHERE user_id" + $ + " AND counter=?;";
+        String queryText = "Select in_slot FROM inventory WHERE user_id" + VAR + " AND counter=?;";
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setInt(1, userId);
             preparedStatement.setInt(2, eqipIndex + 1);
@@ -406,7 +408,7 @@ public class DatabaseManager {
                 "INVENTORY.IN_SLOT," +
                 "items.* " +
                 "FROM inventory, items " +
-                "WHERE inventory.user_id" + $ + " and inventory.id=items.id";
+                "WHERE inventory.user_id" + VAR + " and inventory.id=items.id";
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setInt(1, userId);
             try (final ResultSet result = preparedStatement.executeQuery()) {
@@ -428,7 +430,7 @@ public class DatabaseManager {
 
     public Item getItem(String itemId) {
         Item item = new Item();
-        String queryText = "Select * FROM items WHERE id" + $;
+        String queryText = "Select * FROM items WHERE id" + VAR;
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setString(1, itemId);
             try (final ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -500,7 +502,7 @@ public class DatabaseManager {
 
     public Team getTeam(String id) {
         Team team = null;
-        String queryText = "Select * FROM teams WHERE Id" + $;
+        String queryText = "Select * FROM teams WHERE Id" + VAR;
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setString(1, id);
             try (final ResultSet result = preparedStatement.executeQuery()) {
@@ -525,10 +527,10 @@ public class DatabaseManager {
         ArrayList<String> resultStringArr = new ArrayList<>();
         String queryText = "SELECT s1.id FROM spells s1 " +
                 "LEFT JOIN (SELECT id FROM available_spells " +
-                "WHERE user_id" + $ + " AND spell_grade >2) s2 " +
+                "WHERE user_id" + VAR + " AND spell_grade >2) s2 " +
                 "ON s1.id=s2.id " +
-                "WHERE class=(SELECT class FROM users WHERE id" + $ + ") " +
-                "AND level" + $ + " " +
+                "WHERE class=(SELECT class FROM users WHERE id" + VAR + ") " +
+                "AND level" + VAR + " " +
                 "AND s2.id IS NULL;";
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setInt(1, userId);
@@ -547,7 +549,7 @@ public class DatabaseManager {
 
     public int getIntFrom(String tableName, Integer id, String columnName) {
         int resultInt = -1;
-        String queryText = SELECT + columnName + FROM + tableName + WHERE + ID + $ + END_QUERY;
+        String queryText = SELECT + columnName + FROM + tableName + WHERE + ID + VAR + SEMICOLON;
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setInt(1, id);
             try (final ResultSet result = preparedStatement.executeQuery()) {
@@ -563,7 +565,7 @@ public class DatabaseManager {
 
     public int getIntFrom(String tableName, String id, String columnName) {
         int resultInt = -1;
-        String queryText = SELECT + columnName + FROM + tableName + WHERE + ID + $ + END_QUERY;
+        String queryText = SELECT + columnName + FROM + tableName + WHERE + ID + VAR + SEMICOLON;
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setString(1, id);
             try (final ResultSet result = preparedStatement.executeQuery()) {
@@ -579,7 +581,7 @@ public class DatabaseManager {
 
     public int getIntBy(String tableName, String findByColumn, Integer id, String selectedColumn) {
         int resultInt = -1;
-        String queryText = SELECT + selectedColumn + FROM + tableName + WHERE + findByColumn + $ + END_QUERY;
+        String queryText = SELECT + selectedColumn + FROM + tableName + WHERE + findByColumn + VAR + SEMICOLON;
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setInt(1, id);
             try (final ResultSet result = preparedStatement.executeQuery()) {
@@ -595,7 +597,7 @@ public class DatabaseManager {
 
     public long getLongFrom(String tableName, Integer id, String columnName) {
         long resultLong = -1;
-        String queryText = SELECT + columnName + FROM + tableName + WHERE + ID + $ + END_QUERY;
+        String queryText = SELECT + columnName + FROM + tableName + WHERE + ID + VAR + SEMICOLON;
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setInt(1, id);
             try (final ResultSet result = preparedStatement.executeQuery()) {
@@ -611,7 +613,7 @@ public class DatabaseManager {
 
     public double getDoubleFrom(String tableName, Integer id, String columnName) {
         double resultDouble = -1;
-        String queryText = SELECT + columnName + FROM + tableName + WHERE + ID + $ + END_QUERY;
+        String queryText = SELECT + columnName + FROM + tableName + WHERE + ID + VAR + SEMICOLON;
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setInt(1, id);
             try (final ResultSet result = preparedStatement.executeQuery()) {
@@ -627,7 +629,7 @@ public class DatabaseManager {
 
     public double getDoubleFrom(String tableName, String id, String columnName) {
         double resultDouble = -1;
-        String queryText = SELECT + columnName + FROM + tableName + WHERE + ID + $ + END_QUERY;
+        String queryText = SELECT + columnName + FROM + tableName + WHERE + ID + VAR + SEMICOLON;
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setString(1, id);
             try (final ResultSet result = preparedStatement.executeQuery()) {
@@ -646,7 +648,7 @@ public class DatabaseManager {
      ***/
     public List<Integer> getInts(String tableName, String columnId, Integer id, String columnName) {
         List<Integer> resultIntArr = new ArrayList<>();
-        String queryText = SELECT + columnName + FROM + tableName + WHERE + columnId + $ + END_QUERY;
+        String queryText = SELECT + columnName + FROM + tableName + WHERE + columnId + VAR + SEMICOLON;
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setInt(1, id);
             try (final ResultSet result = preparedStatement.executeQuery()) {
@@ -662,7 +664,7 @@ public class DatabaseManager {
 
     public String getStringFrom(String tableName, String id, String columnName) {
         String resultString = EMPTY;
-        String queryText = SELECT + columnName + FROM + tableName + WHERE + ID + $ + END_QUERY;
+        String queryText = SELECT + columnName + FROM + tableName + WHERE + ID + VAR + SEMICOLON;
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setString(1, id);
             try (final ResultSet result = preparedStatement.executeQuery()) {
@@ -678,7 +680,7 @@ public class DatabaseManager {
 
     public String getStringFrom(String tableName, Integer id, String columnName) {//overload
         String resultString = EMPTY;
-        String queryText = SELECT + columnName + FROM + tableName + WHERE + ID + $ + END_QUERY;
+        String queryText = SELECT + columnName + FROM + tableName + WHERE + ID + VAR + SEMICOLON;
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setInt(1, id);
             try (final ResultSet result = preparedStatement.executeQuery()) {
@@ -694,7 +696,7 @@ public class DatabaseManager {
 
     public String getStringBy(String tableName, String findByColumn, Integer id, String selectedColumn) {
         String resultString = EMPTY;
-        String queryText = SELECT + selectedColumn + FROM + tableName + WHERE + findByColumn + $ + END_QUERY;
+        String queryText = SELECT + selectedColumn + FROM + tableName + WHERE + findByColumn + VAR + SEMICOLON;
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setInt(1, id);
             try (final ResultSet result = preparedStatement.executeQuery()) {
@@ -710,7 +712,7 @@ public class DatabaseManager {
 
     public String getStringBy(String tableName, String findByColumn, String id, String selectedColumn) {
         String resultString = EMPTY;
-        String queryText = SELECT + selectedColumn + FROM + tableName + WHERE + findByColumn + $ + END_QUERY;
+        String queryText = SELECT + selectedColumn + FROM + tableName + WHERE + findByColumn + VAR + SEMICOLON;
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setString(1, id);
             try (final ResultSet result = preparedStatement.executeQuery()) {
@@ -732,8 +734,8 @@ public class DatabaseManager {
         int resultInt = 0;
         String queryText = SELECT + columnName
                 + FROM + tableName
-                + WHERE + firstColumn + $
-                + AND + secondColumn + $ + END_QUERY;
+                + WHERE + firstColumn + VAR
+                + AND + secondColumn + VAR + SEMICOLON;
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setString(1, firstId);
             preparedStatement.setInt(2, secondId);
@@ -755,8 +757,8 @@ public class DatabaseManager {
         int resultInt = -1;
         String queryText = SELECT + columnName
                 + FROM + tableName
-                + WHERE + firstColumn + $
-                + AND + secondColumn + $ + END_QUERY;
+                + WHERE + firstColumn + VAR
+                + AND + secondColumn + VAR + SEMICOLON;
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setInt(1, firstId);
             preparedStatement.setInt(2, secondId);
@@ -780,8 +782,8 @@ public class DatabaseManager {
         String resultString = EMPTY;
         String queryText = SELECT + columnName
                 + FROM + tableName
-                + WHERE + firstColumn + $
-                + AND + secondColumn + $ + END_QUERY;
+                + WHERE + firstColumn + VAR
+                + AND + secondColumn + VAR + SEMICOLON;
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setInt(1, firstId);
             preparedStatement.setInt(2, secondId);
@@ -800,7 +802,7 @@ public class DatabaseManager {
 
     public List<String> getStrings(String tableName, String columnId, Integer id, String columnName) {
         List<String> resultStringArr = new ArrayList<>();
-        String queryText = SELECT + columnName + FROM + tableName + WHERE + columnId + $ + END_QUERY;
+        String queryText = SELECT + columnName + FROM + tableName + WHERE + columnId + VAR + SEMICOLON;
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setInt(1, id);
             try (final ResultSet result = preparedStatement.executeQuery()) {
@@ -816,7 +818,7 @@ public class DatabaseManager {
 
     public List<String> getStrings(String tableName, String columnId, String id, String columnName) {
         List<String> resultStringArr = new ArrayList<>();
-        String queryText = SELECT + columnName + FROM + tableName + WHERE + columnId + $ + END_QUERY;
+        String queryText = SELECT + columnName + FROM + tableName + WHERE + columnId + VAR + SEMICOLON;
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setString(1, id);
             try (final ResultSet result = preparedStatement.executeQuery()) {
@@ -838,8 +840,8 @@ public class DatabaseManager {
         List<String> resultStringArr = new ArrayList<>();
         String queryText = SELECT + columnName
                 + FROM + tableName
-                + WHERE + firstColumn + $
-                + AND + secondColumn + $ + END_QUERY;
+                + WHERE + firstColumn + VAR
+                + AND + secondColumn + VAR + SEMICOLON;
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setString(1, firstId);
             preparedStatement.setInt(2, secondId);
@@ -862,8 +864,8 @@ public class DatabaseManager {
         List<String> resultStringArr = new ArrayList<>();
         String queryText = SELECT + columnName
                 + FROM + tableName
-                + WHERE + firstColumn + $
-                + AND + secondColumn + $ + END_QUERY;
+                + WHERE + firstColumn + VAR
+                + AND + secondColumn + VAR + SEMICOLON;
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setInt(1, firstId);
             preparedStatement.setInt(2, secondId);
@@ -886,8 +888,8 @@ public class DatabaseManager {
         List<Integer> resultStringArr = new ArrayList<>();
         String queryText = SELECT + columnName
                 + FROM + tableName
-                + WHERE + firstColumn + $
-                + AND + secondColumn + $ + END_QUERY;
+                + WHERE + firstColumn + VAR
+                + AND + secondColumn + VAR + SEMICOLON;
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setString(1, firstId);
             preparedStatement.setInt(2, secondId);
@@ -907,7 +909,7 @@ public class DatabaseManager {
      ***/
     public boolean setLongTo(String tableName, Integer id, String recordColumn, long recordValue) {
         int updatedRows = 0;
-        String queryText = UPDATE + tableName + SET + recordColumn + $ + WHERE + ID + $ + END_QUERY;
+        String queryText = UPDATE + tableName + SET + recordColumn + VAR + WHERE + ID + VAR + SEMICOLON;
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setLong(1, recordValue);
             preparedStatement.setInt(2, id);
@@ -923,7 +925,7 @@ public class DatabaseManager {
      ***/
     public boolean setDoubleTo(String tableName, Integer id, String recordColumn, double recordValue) {
         int updatedRows = 0;
-        String queryText = UPDATE + tableName + SET + recordColumn + $ + WHERE + ID + $ + END_QUERY;
+        String queryText = UPDATE + tableName + SET + recordColumn + VAR + WHERE + ID + VAR + SEMICOLON;
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setDouble(1, recordValue);
             preparedStatement.setInt(2, id);
@@ -939,7 +941,7 @@ public class DatabaseManager {
      ***/
     public boolean setBigDecimalTo(String tableName, Integer id, String recordColumn, BigDecimal recordValue) {
         int updatedRows = 0;
-        String queryText = UPDATE + tableName + SET + recordColumn + $ + WHERE + ID + $ + END_QUERY;
+        String queryText = UPDATE + tableName + SET + recordColumn + VAR + WHERE + ID + VAR + SEMICOLON;
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setBigDecimal(1, recordValue);
             preparedStatement.setInt(2, id);
@@ -955,7 +957,7 @@ public class DatabaseManager {
      ***/
     public boolean setIntTo(String tableName, Integer id, String recordColumn, Integer recordValue) {
         int updatedRows = 0;
-        String queryText = UPDATE + tableName + SET + recordColumn + $ + WHERE + ID + $ + END_QUERY;
+        String queryText = UPDATE + tableName + SET + recordColumn + VAR + WHERE + ID + VAR + SEMICOLON;
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setInt(1, recordValue);
             preparedStatement.setInt(2, id);
@@ -971,7 +973,7 @@ public class DatabaseManager {
      ***/
     public boolean setIntTo(String tableName, String id, String recordColumn, Integer recordValue) {//overload
         int updatedRows = 0;
-        String queryText = UPDATE + tableName + SET + recordColumn + $ + WHERE + ID + $ + END_QUERY;
+        String queryText = UPDATE + tableName + SET + recordColumn + VAR + WHERE + ID + VAR + SEMICOLON;
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setInt(1, recordValue);
             preparedStatement.setString(2, id);
@@ -987,7 +989,7 @@ public class DatabaseManager {
      ***/
     public boolean setStringTo(String tableName, Integer id, String recordColumn, String recordValue) {
         int updatedRows = 0;
-        String queryText = UPDATE + tableName + SET + recordColumn + $ + WHERE + ID + $ + END_QUERY;
+        String queryText = UPDATE + tableName + SET + recordColumn + VAR + WHERE + ID + VAR + SEMICOLON;
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setString(1, recordValue);
             preparedStatement.setInt(2, id);
@@ -1003,7 +1005,7 @@ public class DatabaseManager {
      ***/
     public boolean setStringTo(String tableName, Integer userId, String id, String recordColumn, String recordValue) {
         int updatedRows = 0;
-        String queryText = UPDATE + tableName + SET + recordColumn + $ + " WHERE id=? and user_" + ID + $ + END_QUERY;
+        String queryText = UPDATE + tableName + SET + recordColumn + VAR + " WHERE id=? and user_" + ID + VAR + SEMICOLON;
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setString(1, recordValue);
             preparedStatement.setString(2, id);
@@ -1018,7 +1020,7 @@ public class DatabaseManager {
     public int getCountDistinct(String tableName, String columnOfCount, String columnName, Integer value) {
         String queryText = "Select count(distinct " + columnOfCount + ")"
                 + FROM + tableName
-                + WHERE + columnName + $ + END_QUERY;
+                + WHERE + columnName + VAR + SEMICOLON;
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setInt(1, value);
             try (final ResultSet result = preparedStatement.executeQuery()) {
@@ -1033,14 +1035,14 @@ public class DatabaseManager {
     }
 
     public int getCount(String tableName, String columnName, Integer value) {
-        String queryText = "Select count(" + columnName + ") "
+        String queryText = SELECT + COUNT + columnName + ") "
                 + FROM + tableName
-                + WHERE + columnName + $ + END_QUERY;
+                + WHERE + columnName + VAR + SEMICOLON;
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setInt(1, value);
             try (final ResultSet result = preparedStatement.executeQuery()) {
                 if (result.next()) {
-                    return result.getInt("count(" + columnName + ")");
+                    return result.getInt(COUNT + columnName + ")");
                 }
             }
         } catch (SQLException e) {
@@ -1051,12 +1053,12 @@ public class DatabaseManager {
 
     // overload
     public int getCount(String tableName, String columnName, String value) {
-        String queryText = "Select count(" + columnName + ") FROM " + tableName + WHERE + columnName + $ + END_QUERY;
+        String queryText = SELECT + COUNT + columnName + ") FROM " + tableName + WHERE + columnName + VAR + SEMICOLON;
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setString(1, value);
             try (final ResultSet result = preparedStatement.executeQuery()) {
                 if (result.next()) {
-                    return result.getInt("count(" + columnName + ")");
+                    return result.getInt(COUNT + columnName + ")");
                 }
             }
         } catch (SQLException e) {
@@ -1067,12 +1069,12 @@ public class DatabaseManager {
 
     // overload
     public int getCount(String tableName, String columnName, Double value) {
-        String queryText = "Select count(" + columnName + ") FROM " + tableName + WHERE + columnName + $ + END_QUERY;
+        String queryText = SELECT + COUNT + columnName + ") FROM " + tableName + WHERE + columnName + VAR + SEMICOLON;
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setDouble(1, value);
             try (final ResultSet result = preparedStatement.executeQuery()) {
                 if (result.next()) {
-                    return result.getInt("count(" + columnName + ")");
+                    return result.getInt(COUNT + columnName + ")");
                 }
             }
         } catch (SQLException e) {
@@ -1096,7 +1098,7 @@ public class DatabaseManager {
     }
 
     public void dropTeam(String id) {
-        String queryText = "DELETE FROM teams WHERE Id" + $ + END_QUERY;
+        String queryText = "DELETE FROM teams WHERE Id" + VAR + SEMICOLON;
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setString(1, id);
             preparedStatement.executeUpdate();

@@ -33,7 +33,7 @@ public class CmdUnreg extends BotCommand {
         StringBuilder messageBuilder = new StringBuilder();
         String userName = ArenaUser.getUserName(user.getId());
         //todo переделать
-        if(((Bot)absSender).getRegistration().isOn() && Team.getMember(user.getId()).getStatus() != Config.REG){
+        if(((Bot)absSender).getRegistration().isOn() && Team.getMember(user.getId()).getStatus() != Config.REGISTERED_STATUS){
             return;
         }
         ((Bot)absSender).getRegistration().unregMember(user.getId());

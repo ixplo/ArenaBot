@@ -75,7 +75,7 @@ public class Battle extends Thread {
         int count = allMembers.size();
         for (int i = 0; i < count; i++) {
             ArenaUser user = allMembers.get(i);
-            user.setStatus(Config.UNREG);
+            user.setStatus(Config.UNREGISTERED_STATUS);
             user.endBattleClassFeatures();
             user.setCurHitPoints(user.getMaxHitPoints());
             user.addExperience(user.getCurExp());

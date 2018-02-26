@@ -3,6 +3,7 @@ package ml.ixplo.arenabot.callbacks;
 import ml.ixplo.arenabot.Bot;
 import ml.ixplo.arenabot.battle.Battle;
 import ml.ixplo.arenabot.battle.Round;
+import ml.ixplo.arenabot.battle.Team;
 import ml.ixplo.arenabot.battle.actions.Action;
 import ml.ixplo.arenabot.exception.ArenaUserException;
 import ml.ixplo.arenabot.messages.Messages;
@@ -107,7 +108,7 @@ public class Callbacks {
         bot.answerCallbackQuery(Messages.getEmptyQuery(queryId));
         Messages.sendToAll(
                 bot.getRegistration().getMembers(),
-                Messages.getRegMemberMsg(userId, bot.getRegistration().getMember(userId).getTeamId())
+                Messages.getRegMemberMsg(userId, Team.getTeamId(userId))
         );
     }
 

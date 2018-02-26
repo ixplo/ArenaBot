@@ -62,9 +62,7 @@ public final class Messages {
         return new AnswerInlineQuery().setInlineQueryId(inlineQuery.getId()).setResults(article);
     }
 
-    //todo наверное, надо вынести в отдельный класс
     public static String fillWithSpaces(String first, String second, int width) {
-
         String s1 = first.replaceAll("<.*?>", "");
         String s2 = second.replaceAll("<.*?>", "");
         int neededSpaces = width - s1.length() - s2.length();
@@ -318,21 +316,19 @@ public final class Messages {
     }
 
     public static SendMessage getRegistrationListMsg(Long chatId) {
-
         SendMessage msg = new SendMessage();
         msg.setChatId(chatId);
         msg.enableHtml(true);
         Registration registration = bot.getRegistration();
-        int membersCount = registration.getMembersCount();
         if (!registration.isOn()) {
             msg.setText("Бой уже идет");
             return msg;
         }
-        if (membersCount == 0) {
+        if (registration.getMembersCount() == 0) {
             msg.setText("Еще никто не зарегистрировался");
             return msg;
         }
-        msg.setText(registration.getList());
+        msg.setText(registration.getListOfMembersToString());
         return msg;
     }
 
