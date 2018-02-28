@@ -271,12 +271,11 @@ public class Mage extends ArenaUser implements SpellCaster {
     }
 
     public List<Spell> getSpells() {
-        List<Spell> spells = new ArrayList<>();
-        List<String> spellsId = getSpellsId();
-        for (String spellId : spellsId) {
-            spells.add(Spell.getSpell(spellId));
+        List<Spell> spellList = new ArrayList<>();
+        for (String spellId : getSpellsId()) {
+            spellList.add(Spell.getSpell(spellId));
         }
-        return spells;
+        return spellList;
     }
 
     public void setMaxMana(double maxMana) {
