@@ -21,21 +21,21 @@ import java.util.List;
  * 24.04.2017.
  ***/
 public class DatabaseManager {
-    private static final String LOGTAG = "DATABASEMANAGER";
     public static final String NO_SUCH_USER = "No such user in database: ";
-    public static final String SELECT = "Select ";
-    public static final String FROM = " FROM ";
-    public static final String WHERE = " WHERE ";
-    public static final String VAR = "=?";
-    public static final String SEMICOLON = ";";
-    public static final String AND = " AND ";
-    public static final String UPDATE = "UPDATE ";
-    public static final String SET = " SET ";
     public static final String ID = "id";
-    public static final String GAMES = "games";
-    public static final String EMPTY = "";
     public static final String TEAM_COLUMN = "team";
-    public static final String COUNT = "count(";
+    private static final String LOGTAG = "DATABASEMANAGER";
+    private static final String SELECT = "Select ";
+    private static final String FROM = " FROM ";
+    private static final String WHERE = " WHERE ";
+    private static final String VAR = "=?";
+    private static final String SEMICOLON = ";";
+    private static final String AND = " AND ";
+    private static final String UPDATE = "UPDATE ";
+    private static final String SET = " SET ";
+    private static final String GAMES = "games";
+    private static final String EMPTY = "";
+    private static final String COUNT = "count(";
 
     private static volatile DatabaseManager instance;
     private static volatile ConnectionDB connection;
