@@ -4,6 +4,7 @@ import ml.ixplo.arenabot.battle.Round;
 import ml.ixplo.arenabot.battle.actions.Action;
 import ml.ixplo.arenabot.battle.actions.Attack;
 import ml.ixplo.arenabot.config.Config;
+import ml.ixplo.arenabot.database.DatabaseManager;
 import ml.ixplo.arenabot.messages.Messages;
 import ml.ixplo.arenabot.user.ArenaUser;
 import ml.ixplo.arenabot.user.items.Item;
@@ -25,6 +26,7 @@ import static ml.ixplo.arenabot.messages.Messages.fillWithSpaces;
  */
 public class Mage extends ArenaUser implements SpellCaster {
 
+    public static final String NA = "] на ";
     private List<Spell> spells;
     private double maxMana;
     private double curMana;
@@ -52,8 +54,8 @@ public class Mage extends ArenaUser implements SpellCaster {
     public void getClassFeatures() {
         actionsName = Arrays.asList("Атака", "Защита", "Лечение", "Магия");
         maxMana = getDb().getDoubleFrom(Config.USERS, getUserId(), "mana");
-        curMana = getDb().getDoubleFrom(Config.USERS, getUserId(), CUR_MANA);
-        spellPoints = getDb().getIntFrom(Config.USERS, getUserId(), S_POINTS);
+        curMana = getDb().getDoubleFrom(Config.USERS, getUserId(), DatabaseManager.CUR_MANA);
+        spellPoints = getDb().getIntFrom(Config.USERS, getUserId(), DatabaseManager.S_POINTS);
         magicAttack = getDb().getDoubleFrom(Config.USERS, getUserId(), "m_attack");
         spells = getSpells();
     }
@@ -102,11 +104,11 @@ public class Mage extends ArenaUser implements SpellCaster {
     public String doCast(ArenaUser target, int percent, String spellId) {
         Spell spell = getSpell(spellId);
         if (!isHappened(spell.getProbability() * percent / 100)) { //(Math.log(getMagicAttack()/target.getMagicProtect() + 4.6)/7)
-            return "<code>" + getName() + " пытался создать заклинание [" + spell.getName() + "] на "
+            return "<code>" + getName() + " пытался создать заклинание [" + spell.getName() + NA
                     + target.getName() + ", но заклинание провалилось.</code>";
         }
         if (spell.getManaCost() > curMana) {
-            return "<code>" + getName() + " пытался создать заклинание [" + spell.getName() + "] на "
+            return "<code>" + getName() + " пытался создать заклинание [" + spell.getName() + NA
                     + target.getName() + ", но у него не хватило маны.</code>";
         }
 
@@ -134,7 +136,7 @@ public class Mage extends ArenaUser implements SpellCaster {
             double armor = Utils.roundDouble(spell.getArmor() + spell.getSpellBonus(getUserId()));
             List<Action> attackOnTargetList = Round.getCurrent().getAttackOnTargetList(target.getUserId());
             if (attackOnTargetList.isEmpty()) {
-                return Config.PRE_TAG + getName() + " использовал заклинание [" + spell.getName() + "] на " +
+                return Config.PRE_TAG + getName() + " использовал заклинание [" + spell.getName() + NA +
                         target.getName() + " и поднял защиту на " + armor +
                         "\n(опыт:+" + spell.getExpBonus() + "/" + getCurExp() + ")" + Config.CLOSE_PRE_TAG;
             }
@@ -285,7 +287,7 @@ public class Mage extends ArenaUser implements SpellCaster {
 
     public void addSpellPoints(int spellPoints) {
 
-        getDb().setIntTo(Config.USERS, getUserId(), S_POINTS, getSpellPoints() + spellPoints);
+        getDb().setIntTo(Config.USERS, getUserId(), DatabaseManager.S_POINTS, getSpellPoints() + spellPoints);
     }
 
     public void setMagicAttack(double magicAttack) {
@@ -295,12 +297,12 @@ public class Mage extends ArenaUser implements SpellCaster {
 
     public void setCurMana(double curMana) {
         this.curMana = curMana;
-        getDb().setDoubleTo(Config.USERS, getUserId(), CUR_MANA, curMana);
+        getDb().setDoubleTo(Config.USERS, getUserId(), DatabaseManager.CUR_MANA, curMana);
     }
 
     public void addCurMana(double manaChange) {
         this.curMana += manaChange;
-        getDb().setDoubleTo(Config.USERS, getUserId(), CUR_MANA, curMana);
+        getDb().setDoubleTo(Config.USERS, getUserId(), DatabaseManager.CUR_MANA, curMana);
     }
 
     public double getMaxMana() {
@@ -309,7 +311,7 @@ public class Mage extends ArenaUser implements SpellCaster {
     }
 
     public int getSpellPoints() {
-        spellPoints = getDb().getIntFrom(Config.USERS, getUserId(), S_POINTS);
+        spellPoints = getDb().getIntFrom(Config.USERS, getUserId(), DatabaseManager.S_POINTS);
         return spellPoints;
     }
 

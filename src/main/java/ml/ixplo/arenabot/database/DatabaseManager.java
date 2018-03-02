@@ -24,6 +24,8 @@ public class DatabaseManager {
     public static final String NO_SUCH_USER = "No such user in database: ";
     public static final String ID = "id";
     public static final String TEAM_COLUMN = "team";
+    public static final String CUR_MANA = "cur_mana";
+    public static final String S_POINTS = "s_points";
     private static final String LOGTAG = "DATABASEMANAGER";
     private static final String SELECT = "Select ";
     private static final String FROM = " FROM ";

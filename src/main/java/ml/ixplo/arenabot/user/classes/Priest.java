@@ -1,6 +1,7 @@
 package ml.ixplo.arenabot.user.classes;
 
 import ml.ixplo.arenabot.config.Config;
+import ml.ixplo.arenabot.database.DatabaseManager;
 import ml.ixplo.arenabot.messages.Messages;
 import ml.ixplo.arenabot.user.ArenaUser;
 import ml.ixplo.arenabot.user.items.Item;
@@ -41,9 +42,9 @@ public class Priest extends ArenaUser implements SpellCaster {
     @Override
     public void getClassFeatures() {
         maxMana = getDb().getDoubleFrom(Config.USERS, getUserId(), "mana");
-        spellPoints = getDb().getIntFrom(Config.USERS, getUserId(), S_POINTS);
+        spellPoints = getDb().getIntFrom(Config.USERS, getUserId(), DatabaseManager.S_POINTS);
         magicAttack = getDb().getDoubleFrom(Config.USERS, getUserId(), "m_attack");
-        curMana = getDb().getDoubleFrom(Config.USERS, getUserId(), CUR_MANA);
+        curMana = getDb().getDoubleFrom(Config.USERS, getUserId(), DatabaseManager.CUR_MANA);
     }
 
     @Override
@@ -146,7 +147,7 @@ public class Priest extends ArenaUser implements SpellCaster {
 
     public void addSpellPoints(int spellPoints) {
         this.spellPoints += spellPoints;
-        getDb().setIntTo(Config.USERS, getUserId(), S_POINTS, spellPoints);
+        getDb().setIntTo(Config.USERS, getUserId(), DatabaseManager.S_POINTS, spellPoints);
     }
 
     public void setMagicAttack(double magicAttack) {
@@ -156,11 +157,11 @@ public class Priest extends ArenaUser implements SpellCaster {
 
     public void setCurMana(double curMana) {
         this.curMana = curMana;
-        getDb().setDoubleTo(Config.USERS, getUserId(), CUR_MANA, curMana);
+        getDb().setDoubleTo(Config.USERS, getUserId(), DatabaseManager.CUR_MANA, curMana);
     }
     public void addCurMana(double curMana) {
         this.curMana += curMana;
-        getDb().setDoubleTo(Config.USERS, getUserId(), CUR_MANA, curMana);
+        getDb().setDoubleTo(Config.USERS, getUserId(), DatabaseManager.CUR_MANA, curMana);
     }
 
     public double getMaxMana() {
