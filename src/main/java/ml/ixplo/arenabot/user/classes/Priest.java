@@ -18,13 +18,8 @@ import static ml.ixplo.arenabot.messages.Messages.fillWithSpaces;
  * ixplo
  * 28.04.2017.
  */
-public class Priest extends ArenaUser implements SpellCaster {
+public class Priest extends SpellCaster {
     ArrayList<Spell> spells;
-
-    private double maxMana;
-    private int spellPoints;
-    private double magicAttack;
-    private double curMana;
 
     public Priest() {
         setUserClass("PRIEST");

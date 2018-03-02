@@ -83,7 +83,7 @@ public class ArenaUserTest {
 
     @Test
     public void getUserName() throws Exception {
-        assertEquals(ArenaUser.getUserName(Presets.WARRIOR_ID), Presets.WARRIOR_NAME);
+        assertEquals(Presets.WARRIOR_NAME, ArenaUser.getUserName(Presets.WARRIOR_ID));
         ArenaUser newUser = ArenaUser.create(UserClass.WARRIOR);
         assertNull(newUser.getName());
     }

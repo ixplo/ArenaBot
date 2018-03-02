@@ -24,14 +24,10 @@ import static ml.ixplo.arenabot.messages.Messages.fillWithSpaces;
  * ixplo
  * 28.04.2017.
  */
-public class Mage extends ArenaUser implements SpellCaster {
+public class Mage extends SpellCaster {
 
     public static final String NA = "] на ";
     private List<Spell> spells;
-    private double maxMana;
-    private double curMana;
-    private int spellPoints;
-    private double magicAttack;
 
     public Mage() {
         setUserClass("MAGE");
