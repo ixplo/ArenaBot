@@ -34,6 +34,7 @@ public class ConnectionDB {
             connection = DriverManager.getConnection(dbLink);
         } catch (SQLException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
             BotLogger.error(LOGTAG, e);
+            throw new DbException();
         }
         return connection;
     }

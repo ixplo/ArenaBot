@@ -74,7 +74,10 @@ public class ConnectionDBTest {
     public void newConnectionTest() throws Exception {
         ConnectionDB connectionDB = new ConnectionDB();
         Assert.assertNotEquals(Presets.TEST_DB_VERSION, connectionDB.checkVersion());
-
     }
 
+    @Test(expected = DbException.class)
+    public void wrongDataBaseLink() {
+        ConnectionDB connectionDB = new ConnectionDB("wrongLINK");
+    }
 }
