@@ -21,6 +21,7 @@ public class ConnectionDBTest {
 
     @After
     public void tearDown() throws Exception {
+        conn.closeConnection();
     }
 
     @Test
@@ -54,6 +55,7 @@ public class ConnectionDBTest {
         } catch (Exception e) {
             conn.rollBack();
         }
+
         check();
     }
 
