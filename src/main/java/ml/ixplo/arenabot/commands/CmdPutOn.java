@@ -2,7 +2,8 @@ package ml.ixplo.arenabot.commands;
 
 import ml.ixplo.arenabot.messages.Messages;
 import ml.ixplo.arenabot.user.ArenaUser;
-import ml.ixplo.arenabot.utils.Utils;
+import ml.ixplo.arenabot.validate.CheckResult;
+import ml.ixplo.arenabot.validate.Validate;
 import org.telegram.telegrambots.api.objects.Chat;
 import org.telegram.telegrambots.api.objects.User;
 import org.telegram.telegrambots.bots.AbsSender;
@@ -10,9 +11,10 @@ import org.telegram.telegrambots.bots.commands.BotCommand;
 
 public class CmdPutOn extends BotCommand {
     public static final String LOGTAG = "PUTONCOMMAND";
+    public static final String COMMAND_IDENTIFIER = "puton";
 
     public CmdPutOn() {
-        super("putOn", "&ltномер&gt - надеть вещь с указанным номером в инвентаре");
+        super(COMMAND_IDENTIFIER, "&ltномер&gt - надеть вещь с указанным номером в инвентаре");
     }
 
     @Override
@@ -20,19 +22,12 @@ public class CmdPutOn extends BotCommand {
 
         int eqipIndex;
 
-        if (!chat.isUserChat()) {
+        if (!Validate.check(user, chat).isGood()) {
             return;
         }
-        if (!ArenaUser.doesUserExists(user.getId())) {
-            return;
-        }
-        if (strings.length != 1) {
-            Messages.sendMessage(absSender, chat.getId(), "После команды введите один номер. Пример использования: /puton 1");
-            return;
-        }
-        if (!Utils.isInteger(strings[0])) {
-            Messages.sendMessage(absSender, chat.getId(), "Вводите номер вещи. Пример использования: /puton 1");
-            return;
+        CheckResult result = Validate.check(strings, COMMAND_IDENTIFIER);
+        if (!result.isGood()) {
+            Messages.sendMessage(absSender, chat.getId(), result.getErrorMessage());
         }
         eqipIndex = Integer.parseInt(strings[0]);
         if (eqipIndex + 1 > ArenaUser.getUser(user.getId()).getEqipAmount()) {
