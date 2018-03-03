@@ -46,6 +46,7 @@ public class ConnectionDBTest {
         final String beforeName = "\'Geeks\'";
         final String afterName = "\'afterName\'";
         final String last = ",1,1,100,100,\'Тестовая команда\',\'<b>team</b>\');";
+
         conn.executeQuery(first + beforeName + last);
         try {
             conn.initTransaction();
@@ -70,11 +71,10 @@ public class ConnectionDBTest {
     }
 
     @Test
-    public void initTransaction() throws Exception {
-    }
+    public void newConnectionTest() throws Exception {
+        ConnectionDB connectionDB = new ConnectionDB();
+        Assert.assertNotEquals(Presets.TEST_DB_VERSION, connectionDB.checkVersion());
 
-    @Test
-    public void commitTransaction() throws Exception {
     }
 
 }

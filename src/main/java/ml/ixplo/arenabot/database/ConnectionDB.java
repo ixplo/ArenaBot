@@ -100,9 +100,7 @@ public class ConnectionDB {
         try {
             this.currentConnection.commit();
         } catch (SQLException e) {
-            if (this.currentConnection != null) {
-                this.currentConnection.rollback();
-            }
+            this.currentConnection.rollback();
         } finally {
             this.currentConnection.setAutoCommit(false);
         }
