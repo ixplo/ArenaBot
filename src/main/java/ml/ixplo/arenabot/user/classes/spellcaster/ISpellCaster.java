@@ -1,4 +1,4 @@
-package ml.ixplo.arenabot.user.classes;
+package ml.ixplo.arenabot.user.classes.spellcaster;
 
 /**
  * ixplo

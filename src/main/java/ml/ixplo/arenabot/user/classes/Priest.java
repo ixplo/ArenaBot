@@ -1,6 +1,7 @@
 package ml.ixplo.arenabot.user.classes;
 
 import ml.ixplo.arenabot.config.Config;
+import ml.ixplo.arenabot.user.classes.spellcaster.SpellCaster;
 
 import java.util.List;
 

@@ -1,35 +1,27 @@
 package ml.ixplo.arenabot.user.classes;
 
 import ml.ixplo.arenabot.config.Config;
-import ml.ixplo.arenabot.user.ArenaUser;
+import ml.ixplo.arenabot.user.classes.skillcaster.SkillCaster;
 import ml.ixplo.arenabot.user.items.Item;
-import ml.ixplo.arenabot.user.spells.Skill;
 import ml.ixplo.arenabot.utils.Utils;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import static ml.ixplo.arenabot.messages.Messages.fillWithSpaces;
 
-
 /**
- * ixplo
- * 28.04.2017.
+ * Archer can attack multiple targets. Damage depends on intellect
  */
-public class Archer extends ArenaUser implements SkillCaster {
-    ArrayList<Skill> skills;
+public class Archer extends SkillCaster {
     private int maxTarget;
-    int energy;
 
     public Archer() {
-        setUserClass("ARCHER"); //todo is it necessary?
+        setUserClass("ARCHER");
     }
 
     @Override
     public void setClassFeatures() {
-        actionsName = Arrays.asList("Атака", "Защита", "Лечение");
+        super.setClassFeatures();
         refreshMaxTargets();
         undoStrBonus(getCurStr());
         doIntBonus(getCurInt());
@@ -54,7 +46,9 @@ public class Archer extends ArenaUser implements SkillCaster {
 
     @Override
     public void putOffClassFeatures(Item item) {
-        LOGGER.error(Config.NOT_YET_IMPLEMENTED);
+        refreshMaxTargets();
+        doStrBonus(item.getStrBonus());
+        undoIntBonus(item.getIntBonus());
     }
 
     @Override
@@ -73,13 +67,6 @@ public class Archer extends ArenaUser implements SkillCaster {
         LOGGER.error(Config.NOT_YET_IMPLEMENTED);
     }
 
-    @Override
-    public String doCast(ArenaUser target, int percent, String castId) {
-        LOGGER.error(Config.NOT_YET_IMPLEMENTED);
-        return null;
-    }
-
-
     private void refreshMaxTargets() {
         int maxArcherTargets = (int) Utils.roundDouble((0.7 * getCurWis() + 0.3 * getCurDex()) / 4, 0);
         setMaxTarget(maxArcherTargets < 1 ? 1 : maxArcherTargets);
@@ -97,9 +84,12 @@ public class Archer extends ArenaUser implements SkillCaster {
         setAttack(getAttack().subtract(BigDecimal.valueOf(0.39 * numberOfPoints)));
     }
 
-    @Override
-    public void skillApply(String skillId) {
-        LOGGER.error(Config.NOT_YET_IMPLEMENTED);
+    private void undoIntBonus(int numberOfPoints) {
+        doIntBonus(-numberOfPoints);
+    }
+
+    private void doStrBonus(int numberOfPoints) {
+        undoStrBonus(-numberOfPoints);
     }
 
     @Override
@@ -120,37 +110,12 @@ public class Archer extends ArenaUser implements SkillCaster {
         getDb().setBigDecimalTo(Config.USERS, getUserId(), "attack", attack);
     }
 
-    @Override
-    public void endBattleClassFeatures() {
-        LOGGER.error(Config.NOT_YET_IMPLEMENTED);
-    }
-
-    @Override
-    public String getClassActionId(String actionId) {
-        return actionId;
-    }
-
-    @Override
-    public List<String> getCastsName() {
-        return new ArrayList<>();
-    }
-
-    @Override
-    public List<String> getCastsId() {
-        return new ArrayList<>();
-    }
-
-    @Override
-    public void learn(int level) {
-        LOGGER.error(Config.NOT_YET_IMPLEMENTED);
-    }
-
-    public void setMaxTarget(int maxTarget) {
+    private void setMaxTarget(int maxTarget) {
         this.maxTarget = maxTarget;
         getDb().setIntTo(Config.USERS, getUserId(), "max_target", maxTarget);
     }
 
-    public int getMaxTarget() {
+    private int getMaxTarget() {
         return maxTarget;
     }
 

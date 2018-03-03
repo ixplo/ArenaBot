@@ -1,4 +1,4 @@
-package ml.ixplo.arenabot.user.classes;
+package ml.ixplo.arenabot.user.classes.spellcaster;
 
 import ml.ixplo.arenabot.battle.Round;
 import ml.ixplo.arenabot.battle.actions.Action;
