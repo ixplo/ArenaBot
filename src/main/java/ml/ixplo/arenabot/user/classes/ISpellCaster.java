@@ -6,6 +6,5 @@ package ml.ixplo.arenabot.user.classes;
  */
 public interface ISpellCaster {
     void castSpell(String spellId);
-    void learnSpell(int spellLevel);
     void manaRegen();
 }

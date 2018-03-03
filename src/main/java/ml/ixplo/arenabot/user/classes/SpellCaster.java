@@ -26,7 +26,6 @@ public abstract class SpellCaster extends ArenaUser implements ISpellCaster{
     private double curMana;
     private int spellPoints;
     private double magicAttack;
-    private List<Spell> spells;
 
     @Override
     public void setClassFeatures() {
@@ -47,7 +46,6 @@ public abstract class SpellCaster extends ArenaUser implements ISpellCaster{
         curMana = getDb().getDoubleFrom(Config.USERS, getUserId(), DatabaseManager.CUR_MANA);
         spellPoints = getDb().getIntFrom(Config.USERS, getUserId(), DatabaseManager.S_POINTS);
         magicAttack = getDb().getDoubleFrom(Config.USERS, getUserId(), "m_attack");
-        spells = getSpells();
     }
 
     @Override
@@ -122,12 +120,6 @@ public abstract class SpellCaster extends ArenaUser implements ISpellCaster{
     @Override
     public void castSpell(String spellId) {
         LOGGER.error(Config.NOT_YET_IMPLEMENTED);
-    }
-
-    @Override
-    public void learnSpell(int spellLevel) {
-        LOGGER.error(Config.NOT_YET_IMPLEMENTED);
-
     }
 
     private String getSpellToLearn(int spellLevel) {
@@ -220,8 +212,6 @@ public abstract class SpellCaster extends ArenaUser implements ISpellCaster{
     public List<String> getCastsName() {
         return getSpellsName();
     }
-
-
 
     @Override
     public void learn(int spellLevel) {
