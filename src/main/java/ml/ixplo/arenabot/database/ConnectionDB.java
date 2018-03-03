@@ -107,4 +107,8 @@ public class ConnectionDB {
             this.currentConnection.setAutoCommit(false);
         }
     }
+
+    public void rollBack() throws SQLException {
+        currentConnection.rollback();
+    }
 }

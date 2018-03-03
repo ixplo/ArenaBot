@@ -35,7 +35,7 @@ public class DatabaseManager {
     private static final String AND = " AND ";
     private static final String UPDATE = "UPDATE ";
     private static final String SET = " SET ";
-    private static final String GAMES = "games";
+    private static final String GAMES_COLUMN = "games";
     private static final String EMPTY = "";
     private static final String COUNT = "count(";
 
@@ -179,7 +179,7 @@ public class DatabaseManager {
                     arenaUser.setRace(result.getString("race"));
                     arenaUser.setDescr(result.getString(Config.DESCR));
                     arenaUser.setSex(result.getInt("sex"));
-                    arenaUser.setUserGames(result.getInt(GAMES));
+                    arenaUser.setUserGames(result.getInt(GAMES_COLUMN));
                     arenaUser.setUserWins(result.getInt("wins"));
                     arenaUser.setNativeStr(result.getInt("strangth"));//strength
                     arenaUser.setNativeDex(result.getInt(Config.DEXTERITY));
@@ -226,7 +226,7 @@ public class DatabaseManager {
                 Config.CLASS_COLUMN + VAR + "," +
                 "descr" + VAR + "," +
                 "sex" + VAR + "," +
-                GAMES + VAR + "," +
+                GAMES_COLUMN + VAR + "," +
                 "wins" + VAR + "," +
                 "strangth" + VAR + "," +
                 "dexterity" + VAR + "," +
@@ -513,7 +513,7 @@ public class DatabaseManager {
                     team.setName(result.getString("name"));
                     team.setRegistered(result.getInt("registered") > 0);
                     team.setPublic(result.getInt("is_public") > 0);
-                    team.setGames(result.getInt(GAMES));
+                    team.setGames(result.getInt(GAMES_COLUMN));
                     team.setWins(result.getInt("wins"));
                     team.setDescr(result.getString(Config.DESCR));
                     team.setHtmlName(result.getString("html_name"));
