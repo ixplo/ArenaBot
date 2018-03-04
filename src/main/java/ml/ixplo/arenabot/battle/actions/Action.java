@@ -143,10 +143,6 @@ public abstract class Action implements Comparable<Action>{
         return db.getStringBy(Config.ACTIONS, "id", actionId, "name");
     }
 
-    public String getActionType() {
-        return actionId;
-    }
-
     public String getMessage() {
         return message;
     }
@@ -178,10 +174,6 @@ public abstract class Action implements Comparable<Action>{
         db.dropActions(userId);
     }
 
-    @Override
-    public int compareTo(Action o) {
-        return priority - o.priority;
-    }
 
     protected void setPriority(int priority) {
         this.priority = priority;
@@ -217,6 +209,29 @@ public abstract class Action implements Comparable<Action>{
 
     public void setExperience(int experience) {
         this.experience = experience;
+    }
+
+    @Override
+    public int compareTo(Action o) {
+        return priority - o.priority;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Action action = (Action) o;
+
+        if (user != null ? !user.getUserId().equals(action.user.getUserId()) : action.user != null) return false;
+        return actionId != null ? actionId.equals(action.actionId) : action.actionId == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = user != null ? user.hashCode() : 0;
+        result = 31 * result + (actionId != null ? actionId.hashCode() : 0);
+        return result;
     }
 
     @Override

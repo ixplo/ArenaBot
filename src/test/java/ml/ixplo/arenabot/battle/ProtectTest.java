@@ -12,7 +12,7 @@ public class ProtectTest {
     @Test
     public void doAction() {
         Protect protect = new Protect();
-        String actionType = protect.getActionType();
+        String actionType = protect.getActionId();
         Assert.assertEquals("p", actionType);
     }
 }

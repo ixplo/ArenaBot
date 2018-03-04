@@ -4,7 +4,6 @@ import ml.ixplo.arenabot.battle.actions.Action;
 import ml.ixplo.arenabot.helper.Presets;
 import ml.ixplo.arenabot.helper.TestHelper;
 import ml.ixplo.arenabot.user.ArenaUser;
-import ml.ixplo.arenabot.user.classes.Warrior;
 import ml.ixplo.arenabot.user.items.ItemTest;
 import org.junit.After;
 import org.junit.Assert;
@@ -108,6 +107,17 @@ public class ActionTest {
         Action.setActionIdFromCallback(Presets.WARRIOR_ID, "Лечение");
         Assert.assertEquals(Action.HEAL, Action.getActionType(Presets.WARRIOR_ID, 1));
 
+    }
+
+    @Test
+    public void equalsTest() {
+        Action action1 = Action.create(Presets.WARRIOR_ID, Action.ATTACK, Presets.MAGE_ID, 0);
+        Action action2 = Action.create(Presets.WARRIOR_ID, Action.HEAL, Presets.MAGE_ID, 0);
+        Action action3 = Action.create(Presets.WARRIOR_ID, Action.HEAL, Presets.WARRIOR_ID, 100);
+        Action action4 = Action.create(Presets.MAGE_ID, Action.HEAL, Presets.WARRIOR_ID, 100);
+        Assert.assertNotEquals(action1, action2);
+        Assert.assertNotEquals(action3, action4);
+        Assert.assertEquals(action2, action3);
     }
 
     @Test (expected = IllegalArgumentException.class)

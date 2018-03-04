@@ -540,7 +540,7 @@ public class DatabaseManager {
                 "VALUES(?,?,?,?,?,?);";
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setInt(1, action.getUser().getUserId());
-            preparedStatement.setString(2, action.getActionType());
+            preparedStatement.setString(2, action.getActionId());
             preparedStatement.setInt(3, action.getTarget().getUserId());
             preparedStatement.setInt(4, action.getPercent());
             preparedStatement.setString(5, action.getCastId());
