@@ -128,8 +128,13 @@ public class TestHelper {
     }
 
     private void clearData() {
+        dropActions();
         dropUsers();
         dropItems();
+    }
+
+    private void dropActions() {
+        db.dropActions();
     }
 
     private void dropUsers() {

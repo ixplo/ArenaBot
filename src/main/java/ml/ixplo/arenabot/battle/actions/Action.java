@@ -68,7 +68,7 @@ public abstract class Action implements Comparable<Action>{
         db = databaseManager;
     }
 
-    public static void save(int userId, Action action) {
+    public static void save(Action action) {
         db.saveAction(action);
     }
 
@@ -84,7 +84,7 @@ public abstract class Action implements Comparable<Action>{
         db.setIntTo(Config.ROUND_ACTIONS, userId, "percent", percent);
     }
 
-    public static void setActionId(int userId, String actionType) {
+    public static void setActionIdFromCallback(int userId, String actionType) {
         String action;
         switch (actionType) {
             case "Атака":

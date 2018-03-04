@@ -76,7 +76,7 @@ public class Callbacks {
     }
 
     private static void handleAction() {
-        Action.setActionId(userId, entry);
+        Action.setActionIdFromCallback(userId, entry);
         Messages.sendAskPercent(query, entry);
     }
 
@@ -86,7 +86,7 @@ public class Callbacks {
             return;
         }
         Action.setCastId(userId, entry);
-        Action.setActionId(userId, "Магия");
+        Action.setActionIdFromCallback(userId, "Магия");
         Messages.sendAskPercent(query, "Магия");
     }
 

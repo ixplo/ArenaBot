@@ -152,6 +152,15 @@ public class DatabaseManager {
         }
     }
 
+    public void dropActions() {
+        String queryText = "DELETE FROM round_actions";
+        try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            BotLogger.error(LOGTAG, e.getMessage());
+        }
+    }
+
     public void dropSpells(int userId) {
         String queryText = "DELETE FROM available_spells WHERE user_" + ID + VAR + SEMICOLON;
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {

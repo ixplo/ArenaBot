@@ -38,7 +38,7 @@ public class ActionTest {
     @Test (expected = IllegalArgumentException.class)
     public void clearActions() throws Exception {
         Action.addAction(warrior.getUserId());
-        Action.setActionId(warrior.getUserId(),"Атака");
+        Action.setActionIdFromCallback(warrior.getUserId(),"Атака");
         String actionTypeBefore = Action.getActionType(warrior.getUserId(), 1);
         Assert.assertEquals("a", actionTypeBefore);
         Action.clearActions(warrior.getUserId());
@@ -48,22 +48,22 @@ public class ActionTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void nullActionIdTest() {
-        Action action = Action.create(0, null, 0, 0);
+        Action.create(0, null, 0, 0);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void userNotExistsActionTest() {
-        Action action = Action.create(0, Action.ATTACK, 0, 0);
+        Action.create(0, Action.ATTACK, 0, 0);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void targetUserNonExistsActionTest() {
-        Action action = Action.create(Presets.WARRIOR_ID, Action.ATTACK, 0, 0);
+        Action.create(Presets.WARRIOR_ID, Action.ATTACK, 0, 0);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void spellIdFromAttackActionTest() {
-        Action action = Action.create(Presets.WARRIOR_ID, Action.ATTACK, Presets.MAGE_ID, 0);
+        Action.create(Presets.WARRIOR_ID, Action.ATTACK, Presets.MAGE_ID, 0);
         Action.getCastId(Presets.WARRIOR_ID, 1);
     }
 
@@ -75,7 +75,7 @@ public class ActionTest {
         action.setPercent(EXPECTED);
         action.setMessage(expectedMessage);
         action.setCastId(Presets.MAGIC_ARROW_SPELL_ID);
-        Action.save(Presets.MAGE_ID, action);
+        Action.save(action);
 
         Assert.assertEquals(EXPECTED, Action.getPercent(Presets.MAGE_ID, 1));
         Assert.assertEquals(expectedMessage, action.getMessage());
@@ -84,8 +84,23 @@ public class ActionTest {
 
     }
 
+    @Test
+    public void setActionIdFromCallbackTest() {
+        Action action = Action.create(Presets.WARRIOR_ID, Action.MAGIC, Presets.MAGE_ID, 0);
+        Action.save(action);
+        Action.setActionIdFromCallback(Presets.WARRIOR_ID, "Атака");
+        Assert.assertEquals(Action.ATTACK, Action.getActionType(Presets.WARRIOR_ID, 1));
+        Action.setActionIdFromCallback(Presets.WARRIOR_ID, "Защита");
+        Assert.assertEquals(Action.PROTECT, Action.getActionType(Presets.WARRIOR_ID, 1));
+        Action.setActionIdFromCallback(Presets.WARRIOR_ID, "Магия");
+        Assert.assertEquals(Action.MAGIC, Action.getActionType(Presets.WARRIOR_ID, 1));
+        Action.setActionIdFromCallback(Presets.WARRIOR_ID, "Лечение");
+        Assert.assertEquals(Action.HEAL, Action.getActionType(Presets.WARRIOR_ID, 1));
+
+    }
+
     @Test (expected = IllegalArgumentException.class)
-    @Ignore("Переделать create без spellId")
+    @Ignore("Доделать проверку spellId")
     public void createAction() {
         Action.create(warrior.getUserId(), "a", Presets.MAGE_ID, EXPECTED, "1am");
     }
