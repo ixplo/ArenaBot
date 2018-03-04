@@ -84,4 +84,5 @@ public class Presets {
             "t",
             "k");
     public static final long CHANNEL_ID = -202049243;
+    public static final int DELAY_IN_SECONDS = 2;
 }

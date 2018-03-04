@@ -91,7 +91,7 @@ public class Registration {
                 regTimer.cancel();
             }
             regTimer = new Timer();
-            regTimerTask = new RegTimerTask(this, regTimer, Config.DELAY);
+            regTimerTask = new RegTimerTask(this, regTimer, Config.DELAY_IN_SECONDS);
             regTimer.schedule(regTimerTask, 0, 1000);
         }
     }

@@ -65,7 +65,7 @@ public class Config {
     public static final int UNREGISTERED_STATUS = 0;
     public static final int REGISTERED_STATUS = 1;
     public static final int IN_BATTLE_STATUS = 2;
-    public static final int DELAY = 15;
+    public static final int DELAY_IN_SECONDS = 15;
     public static final String ROUND_DURATION = "round.duration";
     public static final int DELAY_TIME = 1000;
     public static final String END_OF_ROUND_REMIND = "end.of.round.remind";

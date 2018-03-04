@@ -11,6 +11,7 @@ import java.util.TimerTask;
  * 03.05.2017.
  */
 public class RegTimerTask extends TimerTask {
+    private static final int SECOND = 1000;
     private int leftToReg;
     private long startTime;
     private Registration registration;
@@ -27,18 +28,29 @@ public class RegTimerTask extends TimerTask {
     @Override
     public void run() {
         long passedTime = System.currentTimeMillis() - startTime;
-        if (passedTime < 1000) {
-            messageId = Messages.sendChannelMsgReturnId(PropertiesLoader.getInstance().getChannelId(), registration.getListOfMembersToString() +
-                    "\nДо начала боя осталось: " + leftToReg + " сек");
+        if (rememberEveryMilliseconds(passedTime)) {
             return;
         }
-        Messages.editChannelMsg(PropertiesLoader.getInstance().getChannelId(), messageId, registration.getListOfMembersToString() +
-                "\nДо начала боя осталось: " + (leftToReg - passedTime / 1000) + " сек");
-        if (leftToReg * 1000 - passedTime <= 0) {
+        if (leftToReg * SECOND - passedTime <= 0) {
             regTimer.cancel();
             registration.startBattle();
             Messages.editChannelMsg(PropertiesLoader.getInstance().getChannelId(), messageId, "Битва началась!");
         }
+    }
+
+    private boolean rememberEveryMilliseconds(long passedTime) {
+        if (itIsAFirstTime(passedTime)) {
+            messageId = Messages.sendChannelMsgReturnId(PropertiesLoader.getInstance().getChannelId(), registration.getListOfMembersToString() +
+                    "\nДо начала боя осталось: " + leftToReg + " сек");
+            return true;
+        }
+        Messages.editChannelMsg(PropertiesLoader.getInstance().getChannelId(), messageId, registration.getListOfMembersToString() +
+                "\nДо начала боя осталось: " + (leftToReg - passedTime / SECOND) + " сек");
+        return false;
+    }
+
+    private boolean itIsAFirstTime(long passedTime) {
+        return passedTime < SECOND;
     }
 
     public void setLeftToReg(int leftToReg) {

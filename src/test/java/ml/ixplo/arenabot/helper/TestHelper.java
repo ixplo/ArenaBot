@@ -1,6 +1,7 @@
 package ml.ixplo.arenabot.helper;
 
 import ml.ixplo.arenabot.Bot;
+import ml.ixplo.arenabot.battle.Registration;
 import ml.ixplo.arenabot.battle.Team;
 import ml.ixplo.arenabot.battle.actions.Action;
 import ml.ixplo.arenabot.config.Config;
@@ -14,6 +15,8 @@ import org.mockito.Mockito;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
+import org.telegram.telegrambots.api.methods.updatingmessages.EditMessageText;
+import org.telegram.telegrambots.api.objects.Message;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
 
 import java.util.HashSet;
@@ -22,6 +25,7 @@ import java.util.Set;
 import static ml.ixplo.arenabot.config.Config.TEST_DB_LINK;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.when;
 
 //@RunWith(PowerMockRunner.class)
 //@PrepareForTest(Bot.class)
@@ -48,28 +52,40 @@ public class TestHelper {
     }
 
     public Bot getTestBot() {
-        Bot mock = Mockito.mock(Bot.class);
-        try {
-            doAnswer(invocation -> {
-                LOGGER.info(((SendMessage) invocation.getArguments()[0]).getText());
-                return null;
-            }).when(mock).sendMessage(any(SendMessage.class));
-        } catch (TelegramApiException e) {
-            LOGGER.error("Send message error from test bot");
-        }
-        return mock;
+        return getTestBot(null);
     }
 
     public Bot getTestBot(StringBuilder appender) {
         Bot mock = Mockito.mock(Bot.class);
         try {
             doAnswer(invocation -> {
-                appender.append(((SendMessage) invocation.getArguments()[0]).getText());
-                return null;
+                logMessageText(appender, ((SendMessage)invocation.getArguments()[0]).getText());
+                Message fakeAnswer = Mockito.mock(Message.class);
+                when(fakeAnswer.getMessageId()).thenReturn(111);
+                return fakeAnswer;
             }).when(mock).sendMessage(any(SendMessage.class));
+
+            doAnswer(invocation -> {
+                logMessageText(appender, ((EditMessageText)invocation.getArguments()[0]).getText());
+                return null;
+            }).when(mock).editMessageText(any(EditMessageText.class));
         } catch (TelegramApiException e) {
             LOGGER.error("Send message error from test bot");
         }
+        return mock;
+    }
+
+    private void logMessageText(StringBuilder appender, String text) {
+        if (appender == null) {
+            LOGGER.info(text);
+        } else {
+            appender.append(text);
+        }
+    }
+
+    public Registration getTestRegistration() {
+        Registration mock = Mockito.mock(Registration.class);
+        when(mock.getListOfMembersToString()).thenReturn("1. TestTeam 2. SecondTeam");
         return mock;
     }
 
