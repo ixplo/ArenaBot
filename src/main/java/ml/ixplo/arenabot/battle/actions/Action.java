@@ -56,7 +56,7 @@ public abstract class Action implements Comparable<Action>{
                 action = new CastSpell(spellId);
                 break;
             default:
-                throw new ArenaUserException("Unknown action actionId: " + actionId);
+                throw new IllegalArgumentException("Unknown action actionId: " + actionId);
         }
         action.user = ArenaUser.getUser(userId);
         action.target = ArenaUser.getUser(targetId);
