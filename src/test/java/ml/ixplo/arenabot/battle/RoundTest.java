@@ -189,7 +189,10 @@ public class RoundTest {
         Order order = round.getOrders().get(0);
         Assert.assertTrue(order.toString().contains("test_team"));
         Assert.assertTrue(order.toString().contains("commonPercent=100"));
-        order.addAction(Action.create(Presets.WARRIOR_ID, Action.MAGIC, Presets.WARRIOR_ID, 100, "1ma"));
+        order.addAction(Action.create(Presets.WARRIOR_ID, Action.MAGIC, Presets.WARRIOR_ID, 95, "1ma"));
+        order.addAction(Action.create(Presets.WARRIOR_ID, Action.HEAL, Presets.WARRIOR_ID, 15));
+        order.addAction(Action.create(Presets.WARRIOR_ID, Action.ATTACK, Presets.WARRIOR_ID, 15));
+        Assert.assertTrue(order.toString().contains("5"));
     }
 
     private void addOrdersTo(Thread thread) {

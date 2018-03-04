@@ -49,9 +49,9 @@ public class Order {
     public String toString() {
         StringBuilder txt = new StringBuilder();
         txt.append("user=").append(userId).append("round=").append(round);
-        txt.append("commonPercent=").append(commonPercent);
+        txt.append(", commonPercent=").append(commonPercent);
         for (Action action:actions){
-            txt.append(" ").append(action.getPercent()).append("]");
+            txt.append(" [").append(action.getActionType()).append(action.getPercent()).append("]");
         }
         return txt.toString();
     }
