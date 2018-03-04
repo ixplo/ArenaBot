@@ -191,7 +191,7 @@ public abstract class ArenaUser extends Member {
                 hero = new Priest();
                 break;
             default:
-                throw new ArenaUserException("Unknown userClass: " + userClassId);
+                throw new IllegalArgumentException("Unknown userClass: " + userClassId);
         }
         return hero;
     }

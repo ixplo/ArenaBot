@@ -1,6 +1,7 @@
 package ml.ixplo.arenabot.database;
 
 import ml.ixplo.arenabot.battle.Team;
+import ml.ixplo.arenabot.battle.actions.Action;
 import ml.ixplo.arenabot.config.Config;
 import ml.ixplo.arenabot.exception.ArenaUserException;
 import ml.ixplo.arenabot.user.ArenaUser;
@@ -523,6 +524,23 @@ public class DatabaseManager {
             BotLogger.error(LOGTAG, e.getMessage());
         }
         return team;
+    }
+
+    public void saveAction(Action action) {
+        String queryText = "INSERT OR REPLACE INTO round_actions (id,action_type,target_id,percent,cast_id,counter) " +
+                "VALUES(?,?,?,?,?,?);";
+        try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
+            preparedStatement.setInt(1, action.getUser().getUserId());
+            preparedStatement.setString(2, action.getActionType());
+            preparedStatement.setInt(3, action.getTarget().getUserId());
+            preparedStatement.setInt(4, action.getPercent());
+            preparedStatement.setString(5, action.getCastId());
+            int count = getCount("ROUND_ACTIONS", ID, action.getUser().getUserId()) + 1;
+            preparedStatement.setInt(6, count);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            BotLogger.error(LOGTAG, e.getMessage());
+        }
     }
 
     public List<String> getSpellsIdToLearn(int userId, int spellLevel) {

@@ -26,6 +26,7 @@ public abstract class Action implements Comparable<Action>{
     String message;
     private int priority;
     private static DatabaseManager db;
+    private String castId;
 
     /******* constructor **********
      * use Action create
@@ -37,6 +38,9 @@ public abstract class Action implements Comparable<Action>{
     }
 
     public static Action create(int userId, String actionId, int targetId, int percent, String spellId) {
+        if (actionId == null) {
+            actionId = "";
+        }
         Action action;
         switch (actionId) {
             case ATTACK:
@@ -62,6 +66,10 @@ public abstract class Action implements Comparable<Action>{
 
     public static void setDb(DatabaseManager databaseManager) {
         db = databaseManager;
+    }
+
+    public static void save(int userId, Action action) {
+        db.saveAction(action);
     }
 
     public static void addAction(int userId) {
@@ -122,7 +130,7 @@ public abstract class Action implements Comparable<Action>{
                 Config.COUNTER, counter);
     }
 
-    public static String getSpellId(int userId, int counter) {
+    public static String getCastId(int userId, int counter) {
         return db.getStringByBy(Config.ROUND_ACTIONS,
                 "cast_id",
                 "id", userId,
@@ -173,12 +181,16 @@ public abstract class Action implements Comparable<Action>{
         return priority - o.priority;
     }
 
-    public int getPriority() {
-        return priority;
+    protected void setPriority(int priority) {
+        this.priority = priority;
     }
 
-    public void setPriority(int priority) {
-        this.priority = priority;
+    public String getCastId() {
+        return castId;
+    }
+
+    public void setCastId(String castId) {
+        this.castId = castId;
     }
 
     @Override

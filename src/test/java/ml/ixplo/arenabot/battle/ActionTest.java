@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 public class ActionTest {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ItemTest.class);
+    private static final int EXPECTED = 100;
 
     private TestHelper testHelper = new TestHelper();
     private ArenaUser warrior = TestHelper.WARRIOR;
@@ -41,14 +42,52 @@ public class ActionTest {
         String actionTypeBefore = Action.getActionType(warrior.getUserId(), 1);
         Assert.assertEquals("a", actionTypeBefore);
         Action.clearActions(warrior.getUserId());
-        String actionTypeAfter = Action.getActionType(warrior.getUserId(), 1);
+        Action.getActionType(warrior.getUserId(), 1);
+
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void nullActionIdTest() {
+        Action action = Action.create(0, null, 0, 0);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void userNotExistsActionTest() {
+        Action action = Action.create(0, Action.ATTACK, 0, 0);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void targetUserNonExistsActionTest() {
+        Action action = Action.create(Presets.WARRIOR_ID, Action.ATTACK, 0, 0);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void spellIdFromAttackActionTest() {
+        Action action = Action.create(Presets.WARRIOR_ID, Action.ATTACK, Presets.MAGE_ID, 0);
+        Action.getCastId(Presets.WARRIOR_ID, 1);
+    }
+
+    @Test
+    public void settersActionTest() {
+        String expectedMessage = "Maг запустил стрелой в Мага на все 100";
+
+        Action action = Action.create(Presets.MAGE_ID, Action.MAGIC, Presets.MAGE_ID, 0);
+        action.setPercent(EXPECTED);
+        action.setMessage(expectedMessage);
+        action.setCastId(Presets.MAGIC_ARROW_SPELL_ID);
+        Action.save(Presets.MAGE_ID, action);
+
+        Assert.assertEquals(EXPECTED, Action.getPercent(Presets.MAGE_ID, 1));
+        Assert.assertEquals(expectedMessage, action.getMessage());
+        Assert.assertEquals(Presets.MAGE_ID, Action.getTargetId(Presets.MAGE_ID, 1));
+        Assert.assertEquals(Presets.MAGIC_ARROW_SPELL_ID, Action.getCastId(Presets.MAGE_ID, 1));
 
     }
 
     @Test (expected = IllegalArgumentException.class)
     @Ignore("Переделать create без spellId")
     public void createAction() {
-        Action.create(warrior.getUserId(), "a", Presets.MAGE_ID, 100, "1am");
+        Action.create(warrior.getUserId(), "a", Presets.MAGE_ID, EXPECTED, "1am");
     }
 
 }

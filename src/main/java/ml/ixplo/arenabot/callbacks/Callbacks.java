@@ -68,7 +68,7 @@ public class Callbacks {
                 Action.getActionType(userId, 1),
                 Action.getTargetId(userId, 1),
                 Action.getPercent(userId, 1),
-                Action.getSpellId(userId, 1));
+                Action.getCastId(userId, 1));
         Round.getCurrent().takeAction(action);
         bot.answerCallbackQuery(Messages.getEmptyQuery(queryId));
         bot.editMessageText(Messages.getActionTakenEditMsg(userId, messageId));
