@@ -61,7 +61,7 @@ public class TestHelper {
             doAnswer(invocation -> {
                 logMessageText(appender, ((SendMessage)invocation.getArguments()[0]).getText());
                 Message fakeAnswer = Mockito.mock(Message.class);
-                when(fakeAnswer.getMessageId()).thenReturn(111);
+                when(fakeAnswer.getMessageId()).thenReturn(Presets.MESSAGE_ID);
                 return fakeAnswer;
             }).when(mock).sendMessage(any(SendMessage.class));
 

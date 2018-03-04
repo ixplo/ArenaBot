@@ -1,6 +1,5 @@
 package ml.ixplo.arenabot.battle;
 
-import ml.ixplo.arenabot.config.Config;
 import ml.ixplo.arenabot.helper.Presets;
 import ml.ixplo.arenabot.helper.TestHelper;
 import ml.ixplo.arenabot.messages.Messages;
@@ -37,12 +36,14 @@ public class RegTimerTaskTest {
     public void run() throws Exception {
         regTimer = new Timer();
         regTimerTask = new RegTimerTask(registration, regTimer, Presets.DELAY_IN_SECONDS);
-        regTimer.schedule(regTimerTask, 0, 1000);
+        regTimerTask.setLeftToReg(Presets.ONE_SECOND);
+        regTimer.schedule(regTimerTask, 0, Presets.MILLIS_IN_SECOND);
         Thread.sleep(2500);
-        Assert.assertTrue(log.toString().contains("осталось: 2 сек"));
         Assert.assertTrue(log.toString().contains("осталось: 1 сек"));
         Assert.assertTrue(log.toString().contains("осталось: 0 сек"));
+        Assert.assertFalse(log.toString().contains("осталось: 2 сек"));
         Assert.assertFalse(log.toString().contains("осталось: 3 сек"));
+        Assert.assertTrue(Presets.MESSAGE_ID == regTimerTask.getMessageId());
     }
 
     @Test
