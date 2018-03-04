@@ -67,6 +67,26 @@ public class ActionTest {
         Action.getCastId(Presets.WARRIOR_ID, 1);
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void illegalActionIdTest() {
+        Action.create(Presets.WARRIOR_ID, "wrong", Presets.MAGE_ID, 0);
+    }
+
+    @Test
+
+    public void staticSettersTest() {
+        Action action = Action.create(Presets.MAGE_ID, Action.MAGIC, Presets.MAGE_ID, 0);
+        Action.save(action);
+
+        Action.setPercent(Presets.MAGE_ID, EXPECTED);
+        Action.setCastId(Presets.MAGE_ID, Presets.MAGIC_ARROW_SPELL_ID);
+        Action.setTargetId(Presets.MAGE_ID, Presets.WARRIOR_ID);
+
+        Assert.assertEquals(EXPECTED, Action.getPercent(Presets.MAGE_ID, 1));
+        Assert.assertEquals(Presets.MAGIC_ARROW_SPELL_ID, Action.getCastId(Presets.MAGE_ID, 1));
+        Assert.assertEquals(Presets.WARRIOR_ID, Action.getTargetId(Presets.MAGE_ID, 1));
+    }
+
     @Test
     public void settersActionTest() {
         String expectedMessage = "Maг запустил стрелой в Мага на все 100";
@@ -75,13 +95,20 @@ public class ActionTest {
         action.setPercent(EXPECTED);
         action.setMessage(expectedMessage);
         action.setCastId(Presets.MAGIC_ARROW_SPELL_ID);
+        action.setExperience(EXPECTED);
         Action.save(action);
 
         Assert.assertEquals(EXPECTED, Action.getPercent(Presets.MAGE_ID, 1));
         Assert.assertEquals(expectedMessage, action.getMessage());
         Assert.assertEquals(Presets.MAGE_ID, Action.getTargetId(Presets.MAGE_ID, 1));
         Assert.assertEquals(Presets.MAGIC_ARROW_SPELL_ID, Action.getCastId(Presets.MAGE_ID, 1));
+        Assert.assertEquals(EXPECTED, action.getExperience());
 
+        action.setTarget(warrior);
+        action.setUser(warrior);
+
+        Assert.assertTrue(Presets.WARRIOR_ID == action.getUser().getUserId());
+        Assert.assertTrue(Presets.WARRIOR_ID == action.getTarget().getUserId());
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -110,6 +137,7 @@ public class ActionTest {
     }
 
     @Test
+    @Ignore("Нужно переопределять в наследниках")
     public void equalsTest() {
         Action action1 = Action.create(Presets.WARRIOR_ID, Action.ATTACK, Presets.MAGE_ID, 0);
         Action action2 = Action.create(Presets.WARRIOR_ID, Action.HEAL, Presets.MAGE_ID, 0);

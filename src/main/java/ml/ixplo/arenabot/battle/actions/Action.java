@@ -217,24 +217,6 @@ public abstract class Action implements Comparable<Action>{
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Action action = (Action) o;
-
-        if (user != null ? !user.getUserId().equals(action.user.getUserId()) : action.user != null) return false;
-        return actionId != null ? actionId.equals(action.actionId) : action.actionId == null;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = user != null ? user.hashCode() : 0;
-        result = 31 * result + (actionId != null ? actionId.hashCode() : 0);
-        return result;
-    }
-
-    @Override
     public String toString() {
         return "Action{" + percent + "% " +
                 getName() +
