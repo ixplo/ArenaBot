@@ -91,7 +91,44 @@ public class BattleStateTest {
         secondInstance.setCurTeamsId(new ArrayList<>());
 
         Assert.assertNotEquals(instance, secondInstance);
+        Assert.assertNotEquals(secondInstance, instance);
     }
+
+    @Test
+    public void nullEqualsMembersIdTest() {
+        fillInstance(instance);
+        fillInstance(secondInstance);
+        instance.setCurMembersId(null);
+
+        Assert.assertNotEquals(instance, secondInstance);
+    }
+
+    @Test
+    public void nullEqualsMembersTest() {
+        fillInstance(instance);
+        fillInstance(secondInstance);
+        instance.setMembers(null);
+
+        Assert.assertNotEquals(instance, secondInstance);
+    }
+
+    @Test
+    public void nullEqualsTeamsTest() {
+        fillInstance(instance);
+        fillInstance(secondInstance);
+        instance.setTeams(null);
+
+        Assert.assertNotEquals(instance, secondInstance);
+    }
+
+    @Test
+    public void nullEqualsTest() {
+        fillInstance(instance);
+
+        Assert.assertNotEquals(instance, null);
+    }
+
+
 
     @Test
     public void hashCodeTest() {
