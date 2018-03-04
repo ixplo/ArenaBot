@@ -64,6 +64,7 @@ public class BattleStateTest {
         secondInstance.setCurMembersId(new ArrayList<>());
 
         Assert.assertNotEquals(instance, secondInstance);
+        Assert.assertNotEquals(secondInstance, instance);
     }
 
     @Test
@@ -73,6 +74,7 @@ public class BattleStateTest {
         secondInstance.setMembers(new ArrayList<>());
 
         Assert.assertNotEquals(instance, secondInstance);
+        Assert.assertNotEquals(secondInstance, instance);
     }
 
     @Test
@@ -82,17 +84,9 @@ public class BattleStateTest {
         secondInstance.setTeams(new ArrayList<>());
 
         Assert.assertNotEquals(instance, secondInstance);
-    }
-
-    @Test
-    public void notEqualsTeamsIdTest() {
-        fillInstance(instance);
-        fillInstance(secondInstance);
-        secondInstance.setCurTeamsId(new ArrayList<>());
-
-        Assert.assertNotEquals(instance, secondInstance);
         Assert.assertNotEquals(secondInstance, instance);
     }
+
 
     @Test
     public void nullEqualsMembersIdTest() {
@@ -101,6 +95,7 @@ public class BattleStateTest {
         instance.setCurMembersId(null);
 
         Assert.assertNotEquals(instance, secondInstance);
+        Assert.assertNotEquals(secondInstance, instance);
     }
 
     @Test
@@ -110,6 +105,7 @@ public class BattleStateTest {
         instance.setMembers(null);
 
         Assert.assertNotEquals(instance, secondInstance);
+        Assert.assertNotEquals(secondInstance, instance);
     }
 
     @Test
@@ -117,6 +113,16 @@ public class BattleStateTest {
         fillInstance(instance);
         fillInstance(secondInstance);
         instance.setTeams(null);
+
+        Assert.assertNotEquals(instance, secondInstance);
+        Assert.assertNotEquals(secondInstance, instance);
+    }
+
+    @Test
+    public void notEqualsTeamsIdTest() {
+        fillInstance(instance);
+        fillInstance(secondInstance);
+        secondInstance.setCurTeamsId(new ArrayList<>());
 
         Assert.assertNotEquals(instance, secondInstance);
         Assert.assertNotEquals(secondInstance, instance);
