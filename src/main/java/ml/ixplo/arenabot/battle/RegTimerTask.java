@@ -7,57 +7,72 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 /**
- * ixplo
- * 03.05.2017.
+ * Reminder of the time before the battle began
+ * Every one second from delayToRegistration edit message like this:
+ * "15 seconds left to start the battle"
  */
 public class RegTimerTask extends TimerTask {
-    private static final int SECOND = 1000;
-    private int leftToReg;
-    private long startTime;
+    private static final int MILLIS_IN_SECOND = 1000;
+    private static final long CHANNEL_ID = PropertiesLoader.getInstance().getChannelId();
     private Registration registration;
     private Timer regTimer;
+    private int delayToRegistration;
+    private long startTime;
+    private long passedTimeInMillis;
+    private long timeToBattleBegin;
     private int messageId;
+    private String msgText;
 
-    public RegTimerTask(Registration registration, Timer regTimer, int leftToReg) {
+    public RegTimerTask(Registration registration, Timer regTimer, int delay) {
         this.registration = registration;
         this.regTimer = regTimer;
-        this.leftToReg = leftToReg;
+        this.delayToRegistration = delay;
         startTime = System.currentTimeMillis();
     }
 
     @Override
     public void run() {
-        long passedTime = System.currentTimeMillis() - startTime;
-        if (rememberEveryMilliseconds(passedTime)) {
+        calculateTime();
+        prepareMessageText();
+        if (thisIsTheFirstTime()) {
+            messageId = Messages.sendChannelMsgReturnId(CHANNEL_ID, msgText);
             return;
         }
-        if (leftToReg * SECOND - passedTime <= 0) {
-            regTimer.cancel();
-            registration.startBattle();
-            Messages.editChannelMsg(PropertiesLoader.getInstance().getChannelId(), messageId, "Битва началась!");
+        if (timeIsOver()) {
+            startBattle();
         }
+        Messages.editChannelMsg(CHANNEL_ID, messageId, msgText);
     }
 
-    private boolean rememberEveryMilliseconds(long passedTime) {
-        if (itIsAFirstTime(passedTime)) {
-            messageId = Messages.sendChannelMsgReturnId(PropertiesLoader.getInstance().getChannelId(), registration.getListOfMembersToString() +
-                    "\nДо начала боя осталось: " + leftToReg + " сек");
-            return true;
-        }
-        Messages.editChannelMsg(PropertiesLoader.getInstance().getChannelId(), messageId, registration.getListOfMembersToString() +
-                "\nДо начала боя осталось: " + (leftToReg - passedTime / SECOND) + " сек");
-        return false;
+    private void calculateTime() {
+        passedTimeInMillis = System.currentTimeMillis() - startTime;
+        timeToBattleBegin = delayToRegistration - passedTimeInMillis / MILLIS_IN_SECOND;
     }
 
-    private boolean itIsAFirstTime(long passedTime) {
-        return passedTime < SECOND;
+    private void prepareMessageText() {
+        msgText = registration.getListOfMembersToString()
+                + "\nДо начала боя осталось: " + timeToBattleBegin + " сек";
     }
 
-    public void setLeftToReg(int leftToReg) {
-        this.leftToReg = leftToReg;
+    private boolean thisIsTheFirstTime() {
+        return passedTimeInMillis < MILLIS_IN_SECOND;
     }
 
-    public int getMessageId() {
+    private boolean timeIsOver() {
+        return delayToRegistration * MILLIS_IN_SECOND - passedTimeInMillis <= 0;
+    }
+
+    private void startBattle() {
+        regTimer.cancel();
+        registration.startBattle();
+        msgText = "Битва началась!";
+    }
+
+    void setDelayToRegistration(int delayToRegistration) {
+        this.delayToRegistration = delayToRegistration;
+    }
+
+    int getMessageId() {
         return messageId;
     }
 }

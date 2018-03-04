@@ -5,6 +5,7 @@ import ml.ixplo.arenabot.battle.Registration;
 import ml.ixplo.arenabot.battle.Round;
 import ml.ixplo.arenabot.battle.Team;
 import ml.ixplo.arenabot.config.Config;
+import ml.ixplo.arenabot.exception.ArenaUserException;
 import ml.ixplo.arenabot.user.ArenaUser;
 import ml.ixplo.arenabot.user.IUser;
 import ml.ixplo.arenabot.user.items.Item;
@@ -92,17 +93,16 @@ public final class Messages {
 
     public static int sendChannelMsgReturnId(Long chatId, String msgText) {
 
-        int id = 0;
         SendMessage msg = new SendMessage();
         msg.setChatId(chatId);
         msg.enableHtml(true);
         msg.setText(msgText);
         try {
-            id = bot.sendMessage(msg).getMessageId();
+            return bot.sendMessage(msg).getMessageId();
         } catch (TelegramApiException e) {
             BotLogger.error(LOGTAG, e);
+            throw new ArenaUserException("Error when sending a message");
         }
-        return id;
     }
 
     public static void editChannelMsg(long chatId, int msgId, String msgText) {
