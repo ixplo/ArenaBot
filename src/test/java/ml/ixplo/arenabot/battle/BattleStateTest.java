@@ -119,6 +119,7 @@ public class BattleStateTest {
         instance.setTeams(null);
 
         Assert.assertNotEquals(instance, secondInstance);
+        Assert.assertNotEquals(secondInstance, instance);
     }
 
     @Test
@@ -126,9 +127,21 @@ public class BattleStateTest {
         fillInstance(instance);
 
         Assert.assertNotEquals(instance, null);
+        Assert.assertNotEquals(null, instance);
     }
 
+    @Test
+    public void linkEqualsTest() {
+        fillInstance(instance);
+        BattleState copy = instance;
+        Assert.assertEquals(instance, copy);
+    }
 
+    @Test
+    public void differentClassEqualsTest() {
+        fillInstance(instance);
+        Assert.assertNotEquals(instance, "String");
+    }
 
     @Test
     public void hashCodeTest() {
