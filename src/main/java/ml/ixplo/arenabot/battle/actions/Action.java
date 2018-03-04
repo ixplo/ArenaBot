@@ -212,6 +212,7 @@ public abstract class Action implements Comparable<Action>{
     }
 
     @Override
+    @SuppressWarnings("squid:S1210")
     public int compareTo(Action o) {
         return priority - o.priority;
     }
