@@ -183,10 +183,13 @@ public class RoundTest {
     }
 
     @Test
+    //todo add check that magic can apply to spellCaster
     public void toStringTest() {
         Assert.assertTrue(round.toString().contains("curTeams"));
-        Assert.assertTrue(round.getOrders().get(0).toString().contains("test_team"));
-        Assert.assertTrue(round.getOrders().get(0).toString().contains("commonPercent=100"));
+        Order order = round.getOrders().get(0);
+        Assert.assertTrue(order.toString().contains("test_team"));
+        Assert.assertTrue(order.toString().contains("commonPercent=100"));
+        order.addAction(Action.create(Presets.WARRIOR_ID, Action.MAGIC, Presets.WARRIOR_ID, 100, "1ma"));
     }
 
     private void addOrdersTo(Thread thread) {
