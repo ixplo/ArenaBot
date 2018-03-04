@@ -2,7 +2,6 @@ package ml.ixplo.arenabot.battle.actions;
 
 import ml.ixplo.arenabot.config.Config;
 import ml.ixplo.arenabot.database.DatabaseManager;
-import ml.ixplo.arenabot.exception.ArenaUserException;
 import ml.ixplo.arenabot.user.ArenaUser;
 
 /**
@@ -20,10 +19,10 @@ public abstract class Action implements Comparable<Action>{
     public static final String MAGIC = "m";
     ArenaUser user;
     ArenaUser target;
-    String actionId;
-    private int percent;    //from 1 to 100
-    int experience;
     String message;
+    int experience;
+    private String actionId;
+    private int percent;    //from 1 to 100
     private int priority;
     private static DatabaseManager db;
     private String castId;
@@ -39,7 +38,7 @@ public abstract class Action implements Comparable<Action>{
 
     public static Action create(int userId, String actionId, int targetId, int percent, String spellId) {
         if (actionId == null) {
-            actionId = "";
+            throw new IllegalArgumentException("actionId cant be null");
         }
         Action action;
         switch (actionId) {
@@ -85,6 +84,9 @@ public abstract class Action implements Comparable<Action>{
     }
 
     public static void setActionIdFromCallback(int userId, String actionType) {
+        if (actionType == null) {
+            throw new IllegalArgumentException("actionId cant be null");
+        }
         String action;
         switch (actionType) {
             case "Атака":
@@ -100,7 +102,7 @@ public abstract class Action implements Comparable<Action>{
                 action = MAGIC;
                 break;
             default:
-                throw new ArenaUserException("Unknown action actionId: " + actionType);
+                throw new IllegalArgumentException("Unknown action actionId: " + actionType);
         }
         db.setStringTo(Config.ROUND_ACTIONS, userId, "action_type", action);
     }
@@ -191,6 +193,30 @@ public abstract class Action implements Comparable<Action>{
 
     public void setCastId(String castId) {
         this.castId = castId;
+    }
+
+    public void setUser(ArenaUser user) {
+        this.user = user;
+    }
+
+    public void setTarget(ArenaUser target) {
+        this.target = target;
+    }
+
+    public String getActionId() {
+        return actionId;
+    }
+
+    public void setActionId(String actionId) {
+        this.actionId = actionId;
+    }
+
+    public int getExperience() {
+        return experience;
+    }
+
+    public void setExperience(int experience) {
+        this.experience = experience;
     }
 
     @Override

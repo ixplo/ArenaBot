@@ -14,7 +14,7 @@ public class Attack extends Action {
     private double hit;
 
     Attack() {
-        actionId = "a";
+        setActionId(Action.ATTACK);
         setPriority(FIRST);
     }
 

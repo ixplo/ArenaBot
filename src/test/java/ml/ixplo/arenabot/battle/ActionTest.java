@@ -4,6 +4,7 @@ import ml.ixplo.arenabot.battle.actions.Action;
 import ml.ixplo.arenabot.helper.Presets;
 import ml.ixplo.arenabot.helper.TestHelper;
 import ml.ixplo.arenabot.user.ArenaUser;
+import ml.ixplo.arenabot.user.classes.Warrior;
 import ml.ixplo.arenabot.user.items.ItemTest;
 import org.junit.After;
 import org.junit.Assert;
@@ -82,6 +83,16 @@ public class ActionTest {
         Assert.assertEquals(Presets.MAGE_ID, Action.getTargetId(Presets.MAGE_ID, 1));
         Assert.assertEquals(Presets.MAGIC_ARROW_SPELL_ID, Action.getCastId(Presets.MAGE_ID, 1));
 
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void setNullActionIdFromCallbackTest() {
+        Action.setActionIdFromCallback(Presets.WARRIOR_ID, null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void setWrongActionIdFromCallbackTest() {
+        Action.setActionIdFromCallback(Presets.WARRIOR_ID, "wrongType");
     }
 
     @Test

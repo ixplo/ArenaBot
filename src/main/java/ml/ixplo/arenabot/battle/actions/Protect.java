@@ -13,7 +13,7 @@ import java.util.List;
 public class Protect extends Action {
 
     public Protect() {
-        actionId = "p";
+        setActionId(Action.PROTECT);
         setPriority(SECOND);
     }
 

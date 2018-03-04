@@ -10,7 +10,7 @@ public class CastSpell extends Action {
     String spellId;
 
     public CastSpell(String spellId) {
-        actionId = "m";
+        setActionId(Action.MAGIC);
         setPriority(THIRD);
         this.spellId = spellId;
         experience = Spell.getSpell(this.spellId).getExpBonus() * Spell.getSpell(this.spellId).getDamage();

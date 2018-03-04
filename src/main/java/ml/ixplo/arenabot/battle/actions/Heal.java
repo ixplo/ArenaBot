@@ -10,7 +10,7 @@ public class Heal extends Action {
     private double healValue;
 
     Heal() {
-        actionId = "h";
+        setActionId(Action.HEAL);
         setPriority(FOURTH);
     }
 
