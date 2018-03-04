@@ -76,6 +76,40 @@ public class ArenaUserTest {
     }
 
     @Test
+    public void addHarkSpellCaster() throws Exception {
+
+        mage.setNativeStr(3);
+        mage.setCurStr(3);
+        mage.setNativeDex(3);
+        mage.setCurDex(3);
+        mage.setNativeInt(3);
+        mage.setCurInt(3);
+        mage.setNativeWis(3);
+        mage.setCurWis(3);
+        mage.setNativeCon(5);
+        mage.setCurCon(5);
+        mage.setMinHit(0);
+        mage.setAttack(new BigDecimal(0.91 * mage.getCurDex() + 0.39 * mage.getCurStr()));
+        mage.setProtect(Utils.roundDouble(0.4 * mage.getCurDex() + 0.6 * mage.getCurCon()));
+        mage.addHark("nativeStr", 1);
+        mage.addHark("nativeCon", 1);
+        assertEquals(4, mage.getCurStr());
+        assertEquals(6, mage.getCurCon());
+        assertEquals(0.25, mage.getMinHit(), 0);
+        assertEquals(0, mage.getAttack().compareTo(new BigDecimal("4.28")));
+        assertEquals(4.8, mage.getProtect(), 0);
+        mage.addHark("nativeStr", 3);
+        assertEquals(7, mage.getNativeStr());
+        assertEquals(1, mage.getMinHit(), 0);
+        mage.addHark("nativeDex", 3);
+        assertEquals(6, mage.getNativeDex());
+        mage.addHark("nativeWis", 3);
+        assertEquals(6, mage.getNativeWis());
+        mage.addHark("nativeInt", 3);
+        assertEquals(6, mage.getNativeInt());
+    }
+
+    @Test
     public void doesUserExists() throws Exception {
         assertTrue(ArenaUser.doesUserExists(Presets.WARRIOR_ID));
         assertFalse(ArenaUser.doesUserExists(Presets.NON_EXIST_USER_ID));
