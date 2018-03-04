@@ -185,6 +185,8 @@ public class RoundTest {
     @Test
     public void toStringTest() {
         Assert.assertTrue(round.toString().contains("curTeams"));
+        Assert.assertTrue(round.getOrders().get(0).toString().contains("test_team"));
+        Assert.assertTrue(round.getOrders().get(0).toString().contains("commonPercent=100"));
     }
 
     private void addOrdersTo(Thread thread) {
