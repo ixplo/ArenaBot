@@ -61,30 +61,36 @@ public class BattleStateTest {
     public void notEqualsMembersIdTest() {
         fillInstance(instance);
         fillInstance(secondInstance);
-        secondInstance.setCurMembersId(new ArrayList<>());
 
+        instance.setCurMembersId(new ArrayList<>());
         Assert.assertNotEquals(instance, secondInstance);
-        Assert.assertNotEquals(secondInstance, instance);
+
+        secondInstance.setCurMembersId(new ArrayList<>());
+        Assert.assertEquals(instance, secondInstance);
     }
 
     @Test
     public void notEqualsMembersTest() {
         fillInstance(instance);
         fillInstance(secondInstance);
-        secondInstance.setMembers(new ArrayList<>());
 
+        instance.setMembers(new ArrayList<>());
         Assert.assertNotEquals(instance, secondInstance);
-        Assert.assertNotEquals(secondInstance, instance);
+
+        secondInstance.setMembers(new ArrayList<>());
+        Assert.assertEquals(instance, secondInstance);
     }
 
     @Test
     public void notEqualsTeamsTest() {
         fillInstance(instance);
         fillInstance(secondInstance);
-        secondInstance.setTeams(new ArrayList<>());
 
+        instance.setTeams(new ArrayList<>());
         Assert.assertNotEquals(instance, secondInstance);
-        Assert.assertNotEquals(secondInstance, instance);
+
+        secondInstance.setTeams(new ArrayList<>());
+        Assert.assertEquals(instance, secondInstance);
     }
 
 
@@ -92,40 +98,48 @@ public class BattleStateTest {
     public void nullEqualsMembersIdTest() {
         fillInstance(instance);
         fillInstance(secondInstance);
-        instance.setCurMembersId(null);
 
+        instance.setCurMembersId(null);
         Assert.assertNotEquals(instance, secondInstance);
-        Assert.assertNotEquals(secondInstance, instance);
+
+        secondInstance.setCurMembersId(null);
+        Assert.assertEquals(instance, secondInstance);
     }
 
     @Test
     public void nullEqualsMembersTest() {
         fillInstance(instance);
         fillInstance(secondInstance);
-        instance.setMembers(null);
 
+        instance.setMembers(null);
         Assert.assertNotEquals(instance, secondInstance);
-        Assert.assertNotEquals(secondInstance, instance);
+
+        secondInstance.setMembers(null);
+        Assert.assertEquals(instance, secondInstance);
     }
 
     @Test
     public void nullEqualsTeamsTest() {
         fillInstance(instance);
         fillInstance(secondInstance);
-        instance.setTeams(null);
 
+        instance.setTeams(null);
         Assert.assertNotEquals(instance, secondInstance);
-        Assert.assertNotEquals(secondInstance, instance);
+
+        secondInstance.setTeams(null);
+        Assert.assertEquals(secondInstance, instance);
     }
 
     @Test
     public void notEqualsTeamsIdTest() {
         fillInstance(instance);
         fillInstance(secondInstance);
-        secondInstance.setCurTeamsId(new ArrayList<>());
 
+        instance.setCurTeamsId(new ArrayList<>());
         Assert.assertNotEquals(instance, secondInstance);
-        Assert.assertNotEquals(secondInstance, instance);
+
+        secondInstance.setCurTeamsId(new ArrayList<>());
+        Assert.assertEquals(instance, secondInstance);
     }
 
     @Test
