@@ -144,7 +144,7 @@ public abstract class ArenaUser extends Member {
         arenaUser.nativeCon = db.getIntFrom(Config.CLASSES, arenaUser.userClass, "con_start") +
                 db.getIntFrom(Config.RACES, arenaUser.race, "con_bonus");
         arenaUser.freePoints = db.getIntFrom(Config.CLASSES, arenaUser.userClass, "free_bonus");
-        arenaUser.maxHitPoints = roundDouble(1.3333333 * arenaUser.curCon
+        arenaUser.maxHitPoints = roundDouble(1.3333333 * arenaUser.nativeCon
                 + db.getIntFrom(Config.CLASSES, arenaUser.userClass, "hp_bonus"));
         arenaUser.money = db.getIntFrom(Config.CLASSES, arenaUser.userClass, "money_start");
     }
@@ -271,6 +271,10 @@ public abstract class ArenaUser extends Member {
 
     public static List<String> getClassesDescr() {
         return db.getColumn(Config.CLASSES, "descr");
+    }
+
+    public static double getCurHitPoints(int userId) {
+        return db.getDoubleFrom(Config.USERS, userId, "cur_hp");
     }
 
 // **************************************************

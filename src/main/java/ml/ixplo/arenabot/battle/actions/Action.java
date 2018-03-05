@@ -32,6 +32,7 @@ public abstract class Action implements Comparable<Action>{
      ******************************/
     Action() {}
 
+    //todo сделать вариант, чтобы передавать не id, а сущность
     public static Action create(int userId, String actionId, int targetId, int percent) {
         return create(userId, actionId, targetId, percent, null);
     }
@@ -168,7 +169,7 @@ public abstract class Action implements Comparable<Action>{
     }
 
     public abstract void doAction();
-
+    public abstract void unDo();
 
     public static void clearActions(int userId) {
         db.dropActions(userId);

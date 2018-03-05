@@ -29,6 +29,7 @@ public class Attack extends Action {
                 hit + "\n(жизни:-" + hit + "/" + target.getCurHitPoints() + " \\\\ опыт:+" + experience + "/" + user.getCurExp() + ")</pre>";
     }
 
+    @Override
     public void unDo(){
         target.addCurHitPoints(hit);
         user.addCurExp(-experience);

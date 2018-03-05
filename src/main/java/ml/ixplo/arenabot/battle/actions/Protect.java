@@ -2,6 +2,7 @@ package ml.ixplo.arenabot.battle.actions;
 
 import ml.ixplo.arenabot.user.items.Item;
 import ml.ixplo.arenabot.battle.Round;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -36,5 +37,10 @@ public class Protect extends Action {
                     " оружием [" + Item.getItemName(attackAction.user.getUserId(), attackAction.user.getCurWeaponIndex()) + "], но ему не удалось " +
                     "\n(" + user.getName() + "[опыт:+" + experience + "/" + user.getCurExp() + ")</pre>";
         }
+    }
+
+    @Override
+    public void unDo() {
+        throw new NotImplementedException();
     }
 }

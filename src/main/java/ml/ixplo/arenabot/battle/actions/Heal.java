@@ -28,6 +28,7 @@ public class Heal extends Action {
                 " \\\\ опыт:+" + experience + "/" + user.getCurExp() + ")</pre>";
     }
 
+    @Override
     public void unDo(){
         target.addCurHitPoints(-healValue);
         user.addCurExp(-experience);
