@@ -1,7 +1,6 @@
 package ml.ixplo.arenabot.battle.actions;
 
 import ml.ixplo.arenabot.user.spells.Spell;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
  * ixplo
@@ -24,6 +23,6 @@ public class CastSpell extends Action {
 
     @Override
     public void unDo() {
-        throw new NotImplementedException();
+        // NotImplementedException
     }
 }
