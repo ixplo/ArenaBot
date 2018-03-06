@@ -62,11 +62,6 @@ public class Archer extends SkillCaster {
         }
     }
 
-    @Override
-    public void doAction(String[] command) {
-        LOGGER.error(Config.NOT_YET_IMPLEMENTED);
-    }
-
     private void refreshMaxTargets() {
         int maxArcherTargets = (int) Utils.roundDouble((0.7 * getCurWis() + 0.3 * getCurDex()) / 4, 0);
         setMaxTarget(maxArcherTargets < 1 ? 1 : maxArcherTargets);

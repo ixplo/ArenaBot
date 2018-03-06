@@ -88,4 +88,6 @@ public class Presets {
     public static final int ONE_SECOND = 1;
     public static final int MILLIS_IN_SECOND = 1000;
     public static final int FULL_PERCENT = 100;
+    public static final String RAINBOW_BRACELET = "bad";
+    public static final int RAINBOW_BRACELET_WIS_BONUS = 2;
 }

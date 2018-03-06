@@ -12,6 +12,7 @@ public abstract class BaseTest {
     protected static final Logger LOGGER = LoggerFactory.getLogger(BaseTest.class);
     protected TestHelper testHelper = new TestHelper();
     protected ArenaUser warrior = TestHelper.WARRIOR;
+    protected ArenaUser mage = TestHelper.MAGE;
 
     @Before
     public void setUp() throws Exception {

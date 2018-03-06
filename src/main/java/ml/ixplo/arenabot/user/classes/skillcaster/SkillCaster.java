@@ -46,11 +46,6 @@ public abstract class SkillCaster extends ArenaUser implements ISkillCaster{
     }
 
     @Override
-    public void doAction(String[] command) {
-        //no class features
-    }
-
-    @Override
     public void skillApply(String skillId) {
         LOGGER.error(Config.NOT_YET_IMPLEMENTED);
     }

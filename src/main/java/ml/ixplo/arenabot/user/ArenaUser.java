@@ -71,7 +71,7 @@ public abstract class ArenaUser extends Member {
     private long lastGame;
     protected List<String> actionsName = Arrays.asList("Атака", "Защита", "Лечение");
 
-    // getInstance
+    // instance for internal use
     private static ArenaUser arenaUser;
 
     /****** constructor ******
@@ -84,31 +84,29 @@ public abstract class ArenaUser extends Member {
     // ******** abstract ********************************
     // **************************************************
 
-    public abstract void setClassFeatures();
-
-    public abstract void getClassFeatures();
-
     public abstract void appendClassXstatMsg(StringBuilder out);
-
-    public abstract void putOnClassFeatures(Item item);
-
-    public abstract void putOffClassFeatures(Item item);
-
-    public abstract void addHarkClassFeatures(String harkToUpId, int numberOfPoints);
-
-    public abstract void doAction(String[] command);
 
     public abstract String doCast(ArenaUser target, int percent, String castId);
 
     public abstract void endBattleClassFeatures();
-
-    public abstract String getClassActionId(String actionId);
 
     public abstract List<String> getCastsName();
 
     public abstract List<String> getCastsId();
 
     public abstract void learn(int level);
+
+    public abstract void putOnClassFeatures(Item item);
+
+    public abstract void putOffClassFeatures(Item item);
+
+    protected abstract void setClassFeatures();
+
+    protected abstract void getClassFeatures();
+
+    protected abstract void addHarkClassFeatures(String harkToUpId, int numberOfPoints);
+
+    protected abstract String getClassActionId(String actionId);
 
     // **************************************************
     // ******** STATIC **********************************

@@ -8,6 +8,7 @@ import ml.ixplo.arenabot.database.DatabaseManager;
 import ml.ixplo.arenabot.messages.Messages;
 import ml.ixplo.arenabot.user.ArenaUser;
 import ml.ixplo.arenabot.user.items.Item;
+import ml.ixplo.arenabot.user.params.Hark;
 import ml.ixplo.arenabot.user.spells.Spell;
 import ml.ixplo.arenabot.utils.Utils;
 
@@ -22,17 +23,18 @@ import static ml.ixplo.arenabot.messages.Messages.fillWithSpaces;
 
 public abstract class SpellCaster extends ArenaUser implements ISpellCaster{
     private static final String NA = "] на ";
+    public static final double MANA_FACTOR = 1.5;
     private double maxMana;
     private double curMana;
     private int spellPoints;
     private double magicAttack;
 
     @Override
-    public void setClassFeatures() {
+    protected void setClassFeatures() {
         actionsName = Arrays.asList("Атака","Защита","Лечение", "Магия");
-        maxMana = 1.5 * getCurWis();
-        curMana = maxMana;
-        magicAttack = Utils.roundDouble(0.6 * getCurWis() + 0.4 * getCurInt());
+        setMaxMana(MANA_FACTOR * getCurWis());
+        setCurMana(maxMana);
+        setMagicAttack(Utils.roundDouble(0.6 * getCurWis() + 0.4 * getCurInt()));
     }
 
     public void setSpell(String spellId) {
@@ -40,7 +42,7 @@ public abstract class SpellCaster extends ArenaUser implements ISpellCaster{
     }
 
     @Override
-    public void getClassFeatures() {
+    protected void getClassFeatures() {
         actionsName = Arrays.asList("Атака", "Защита", "Лечение", "Магия");
         maxMana = getDb().getDoubleFrom(Config.USERS, getUserId(), "mana");
         curMana = getDb().getDoubleFrom(Config.USERS, getUserId(), DatabaseManager.CUR_MANA);
@@ -49,22 +51,22 @@ public abstract class SpellCaster extends ArenaUser implements ISpellCaster{
     }
 
     @Override
-    public void addHarkClassFeatures(String harkToUpId, int numberOfPoints) {
-        if (harkToUpId.equals("nativeWis")) {
-            setMaxMana(getMaxMana() + numberOfPoints * 1.5);
+    protected void addHarkClassFeatures(String harkToUpId, int numberOfPoints) {
+        if (harkToUpId.equals(Hark.NATIVE_WIS)) {
+            setMaxMana(getMaxMana() + numberOfPoints * MANA_FACTOR);
             if (getStatus() != Config.IN_BATTLE_STATUS) {
                 setCurMana(getMaxMana());
             }
             setMagicAttack(getMagicAttack() + Utils.roundDouble(0.6 * numberOfPoints));
         }
-        if (harkToUpId.equals("nativeInt")) {
+        if (harkToUpId.equals(Hark.NATIVE_INT)) {
             setMagicAttack(getMagicAttack() + Utils.roundDouble(0.4 * numberOfPoints));
         }
     }
 
     @Override
     public void putOnClassFeatures(Item item) {
-        setMaxMana(getMaxMana() + item.getWisBonus() * 1.5);
+        setMaxMana(getMaxMana() + item.getWisBonus() * MANA_FACTOR);
         if (getStatus() != Config.IN_BATTLE_STATUS) {
             setCurMana(getMaxMana());
         }
@@ -73,13 +75,14 @@ public abstract class SpellCaster extends ArenaUser implements ISpellCaster{
 
     @Override
     public void putOffClassFeatures(Item item) {
-        setMaxMana(getMaxMana() - item.getWisBonus() * 1.5);
+        setMaxMana(getMaxMana() - item.getWisBonus() * MANA_FACTOR);
         if (getStatus() != Config.IN_BATTLE_STATUS) {
             setCurMana(getMaxMana());
         }
         setMagicAttack(getMagicAttack() - Utils.roundDouble(0.6 * item.getWisBonus() + 0.4 * item.getIntBonus()));
     }
 
+    // пока не используется
     public List<Spell> getSpells() {
         List<Spell> spellList = new ArrayList<>();
         for (String spellId : getSpellsId()) {
@@ -126,11 +129,6 @@ public abstract class SpellCaster extends ArenaUser implements ISpellCaster{
         List<String> spellsId = getDb().getSpellsIdToLearn(getUserId(), spellLevel);
         Random rnd = new Random();
         return spellsId.get(rnd.nextInt(spellsId.size()));
-    }
-
-    @Override
-    public void doAction(String[] command) {
-        LOGGER.error(Config.NOT_YET_IMPLEMENTED);
     }
 
     @Override
@@ -201,7 +199,7 @@ public abstract class SpellCaster extends ArenaUser implements ISpellCaster{
     }
 
     @Override
-    public String getClassActionId(String actionId) {
+    protected String getClassActionId(String actionId) {
         if (actionId.equals("action_Магия")) {
             return "spell_spell";
         }
