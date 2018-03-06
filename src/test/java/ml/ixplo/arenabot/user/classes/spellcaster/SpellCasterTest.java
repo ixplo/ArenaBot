@@ -3,6 +3,7 @@ package ml.ixplo.arenabot.user.classes.spellcaster;
 import ml.ixplo.arenabot.BaseTest;
 import ml.ixplo.arenabot.config.Config;
 import ml.ixplo.arenabot.helper.Presets;
+import ml.ixplo.arenabot.messages.Messages;
 import ml.ixplo.arenabot.user.classes.Mage;
 import ml.ixplo.arenabot.user.params.Hark;
 import ml.ixplo.arenabot.user.spells.Spell;
@@ -105,10 +106,14 @@ public class SpellCasterTest extends BaseTest{
 
     @Test
     public void learnSpellTest() {
+        StringBuilder log = new StringBuilder();
+        Messages.setBot(testHelper.getTestBot(log));
+
         testMage.addSpellPoints(1);
         testMage.learn(1);
-
-        Assert.assertTrue(testMage.getSpells().size() == 2 || testMage.getSpells().stream().anyMatch(a -> a.getGrade() == Presets.SPELL_GRADE_TWO));
         Assert.assertTrue(0 == testMage.getSpellPoints());
+        Assert.assertTrue(log.toString().contains("ничему и не научились")
+                || log.toString().contains("Вы выучили заклинание")
+        || log.toString().contains("Уровень заклинания") && log.toString().contains("поднялся до"));
     }
 }
