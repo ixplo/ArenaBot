@@ -102,4 +102,13 @@ public class SpellCasterTest extends BaseTest{
         List<String> castsName = testMage.getCastsName();
         Assert.assertTrue(castsName.contains(Presets.MAGE_SPELL_NAME));
     }
+
+    @Test
+    public void learnSpellTest() {
+        testMage.addSpellPoints(1);
+        testMage.learn(1);
+
+        Assert.assertTrue(testMage.getSpells().size() == 2 || testMage.getSpells().stream().anyMatch(a -> a.getGrade() == Presets.SPELL_GRADE_TWO));
+        Assert.assertTrue(0 == testMage.getSpellPoints());
+    }
 }
