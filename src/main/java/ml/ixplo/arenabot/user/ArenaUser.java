@@ -92,7 +92,7 @@ public abstract class ArenaUser extends Member {
 
     public abstract List<String> getCastsName();
 
-    public abstract List<String> getCastsId();
+    public abstract List<String> getCastsIdForCallbacks();
 
     public abstract void learn(int level);
 

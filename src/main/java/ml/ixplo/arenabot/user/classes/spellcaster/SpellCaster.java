@@ -86,7 +86,7 @@ public abstract class SpellCaster extends ArenaUser implements ISpellCaster{
     public List<Spell> getSpells() {
         List<Spell> spellList = new ArrayList<>();
         for (String spellId : getSpellsId()) {
-            spellList.add(Spell.getSpell(spellId));
+            spellList.add(Spell.getSpell(userId, spellId));
         }
         return spellList;
     }
@@ -96,7 +96,7 @@ public abstract class SpellCaster extends ArenaUser implements ISpellCaster{
     }
 
     @Override
-    public List<String> getCastsId() {
+    public List<String> getCastsIdForCallbacks() {
         List<String> castsId = new ArrayList<>();
         for (String spellId : getSpellsId()) {
             castsId.add("spell_" + spellId);
@@ -132,6 +132,8 @@ public abstract class SpellCaster extends ArenaUser implements ISpellCaster{
     }
 
     @Override
+    //todo сделать классы для каждого заклинания и делать обработку внутри, а тут только вызывать
+    // у потомков Spell метод cast
     public String doCast(ArenaUser target, int percent, String spellId) {
         Spell spell = getSpell(spellId);
         if (!isHappened(spell.getProbability() * percent / 100)) { //(Math.log(getMagicAttack()/target.getMagicProtect() + 4.6)/7)

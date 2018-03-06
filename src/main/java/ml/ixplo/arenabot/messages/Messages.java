@@ -641,7 +641,7 @@ public final class Messages {
         EditMessageReplyMarkup markup = new EditMessageReplyMarkup();
         markup.setChatId(callbackQuery.getMessage().getChatId());
         markup.setMessageId(callbackQuery.getMessage().getMessageId());
-        markup.setReplyMarkup(getInlineKeyboardMarkup(ArenaUser.getUser(userId).getCastsName(), ArenaUser.getUser(userId).getCastsId()));
+        markup.setReplyMarkup(getInlineKeyboardMarkup(ArenaUser.getUser(userId).getCastsName(), ArenaUser.getUser(userId).getCastsIdForCallbacks()));
         try {
             bot.editMessageText(editText);
             bot.editMessageReplyMarkup(markup);

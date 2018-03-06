@@ -129,6 +129,10 @@ public class Spell { //todo add implements Durable в потомка - клас�
         return armor;
     }
 
+    public int getOwnerId() {
+        return ownerId;
+    }
+
     public void setGrade(int grade) {
         this.grade = grade;
         ArenaUser.getDb().setIntTo(Config.AVAILABLE_SPELLS, id, Config.SPELL_GRADE, grade);

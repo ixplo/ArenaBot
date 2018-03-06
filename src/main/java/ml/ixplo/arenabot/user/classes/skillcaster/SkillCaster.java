@@ -62,7 +62,7 @@ public abstract class SkillCaster extends ArenaUser implements ISkillCaster{
     }
 
     @Override
-    public List<String> getCastsId() {
+    public List<String> getCastsIdForCallbacks() {
         return new ArrayList<>();
     }
 

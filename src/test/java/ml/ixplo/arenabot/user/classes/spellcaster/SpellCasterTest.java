@@ -4,10 +4,12 @@ import ml.ixplo.arenabot.BaseTest;
 import ml.ixplo.arenabot.config.Config;
 import ml.ixplo.arenabot.helper.Presets;
 import ml.ixplo.arenabot.user.classes.Mage;
-import ml.ixplo.arenabot.user.items.Item;
 import ml.ixplo.arenabot.user.params.Hark;
+import ml.ixplo.arenabot.user.spells.Spell;
 import org.junit.Assert;
 import org.junit.Test;
+
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
@@ -80,7 +82,24 @@ public class SpellCasterTest extends BaseTest{
         testMage.putOff(Presets.NEW_ITEM_INDEX);
         double afterPutOffNotInBattle = testMage.getCurMana();
         Assert.assertEquals(9, afterPutOffNotInBattle, Presets.DELTA);
+    }
 
+    @Test
+    public void getCastsIdForCallbacksTest() throws Exception {
+        List<String> castsId = testMage.getCastsIdForCallbacks();
+        Assert.assertTrue(castsId.contains("spell_1am"));
+    }
 
+    @Test
+    public void getSpellsTest() throws Exception {
+        List<Spell> spells = testMage.getSpells();
+        Assert.assertTrue(spells.stream().anyMatch(a -> a.getId().equals(Presets.MAGIC_ARROW_SPELL_ID)));
+        Assert.assertTrue(spells.stream().anyMatch(a -> a.getOwnerId() == Presets.MAGE_ID));
+    }
+
+    @Test
+    public void getCastsNameTest() throws Exception {
+        List<String> castsName = testMage.getCastsName();
+        Assert.assertTrue(castsName.contains(Presets.MAGE_SPELL_NAME));
     }
 }
