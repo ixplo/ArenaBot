@@ -1,7 +1,9 @@
 package ml.ixplo.arenabot.helper;
 
 import ml.ixplo.arenabot.Bot;
+import ml.ixplo.arenabot.battle.BattleState;
 import ml.ixplo.arenabot.battle.Registration;
+import ml.ixplo.arenabot.battle.Round;
 import ml.ixplo.arenabot.battle.Team;
 import ml.ixplo.arenabot.battle.actions.Action;
 import ml.ixplo.arenabot.config.Config;
@@ -20,7 +22,9 @@ import org.telegram.telegrambots.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.api.objects.Message;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import static ml.ixplo.arenabot.config.Config.TEST_DB_LINK;
@@ -186,7 +190,41 @@ public class TestHelper {
         return db;
     }
 
-    public void setDb(DatabaseManager db) {
-        this.db = db;
+    public Round getTestRound() {
+        List<Integer> curMembersId;
+        List<String> curTeamsId;
+        List<ArenaUser> members;
+        List<Team> teams;
+        ArenaUser warrior = TestHelper.WARRIOR;
+        ArenaUser mage = TestHelper.MAGE;
+
+        curMembersId = new ArrayList<>();
+        curMembersId.add(warrior.getUserId());
+        curMembersId.add(mage.getUserId());
+
+        curTeamsId = new ArrayList<>();
+        curTeamsId.add(warrior.getTeamId());
+        curTeamsId.add(mage.getTeamId());
+
+        members = new ArrayList<>();
+        members.add(warrior);
+        members.add(mage);
+
+        Team teamOne = Team.getTeam(warrior.getTeamId());
+        teamOne.addMember(warrior);
+
+        Team teamTwo = Team.getTeam(mage.getTeamId());
+        teamTwo.addMember(mage);
+
+        teams = new ArrayList<>();
+        teams.add(teamOne);
+        teams.add(teamTwo);
+
+        BattleState battleState = new BattleState();
+        battleState.setMembers(members);
+        battleState.setCurMembersId(curMembersId);
+        battleState.setTeams(teams);
+        battleState.setCurTeamsId(curTeamsId);
+        return new Round(battleState);
     }
 }

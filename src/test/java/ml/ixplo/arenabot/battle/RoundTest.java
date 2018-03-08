@@ -2,7 +2,6 @@ package ml.ixplo.arenabot.battle;
 
 import ml.ixplo.arenabot.Bot;
 import ml.ixplo.arenabot.battle.actions.Action;
-import ml.ixplo.arenabot.config.Config;
 import ml.ixplo.arenabot.config.PropertiesLoader;
 import ml.ixplo.arenabot.exception.ArenaUserException;
 import ml.ixplo.arenabot.helper.Presets;
@@ -20,7 +19,6 @@ import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Message;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Timer;
@@ -37,42 +35,11 @@ public class RoundTest {
     private TestHelper testHelper = new TestHelper();
     private ArenaUser warrior = TestHelper.WARRIOR;
     private ArenaUser mage = TestHelper.MAGE;
-    private Round round;
-    private List<Integer> curMembersId;
-    private List<String> curTeamsId;
-    private List<ArenaUser> members;
-    private List<Team> teams;
+    private Round round = testHelper.getTestRound();
 
     @Before
     public void setUp() throws Exception {
-        curMembersId = new ArrayList<>();
-        curMembersId.add(warrior.getUserId());
-        curMembersId.add(mage.getUserId());
 
-        curTeamsId = new ArrayList<>();
-        curTeamsId.add(warrior.getTeamId());
-        curTeamsId.add(mage.getTeamId());
-
-        members = new ArrayList<>();
-        members.add(warrior);
-        members.add(mage);
-
-        Team teamOne = Team.getTeam(warrior.getTeamId());
-        teamOne.addMember(warrior);
-
-        Team teamTwo = Team.getTeam(mage.getTeamId());
-        teamTwo.addMember(mage);
-
-        teams = new ArrayList<>();
-        teams.add(teamOne);
-        teams.add(teamTwo);
-
-        BattleState battleState = new BattleState();
-        battleState.setMembers(members);
-        battleState.setCurMembersId(curMembersId);
-        battleState.setTeams(teams);
-        battleState.setCurTeamsId(curTeamsId);
-        round = new Round(battleState);
         Messages.setBot(testHelper.getTestBot());
     }
 
@@ -82,12 +49,12 @@ public class RoundTest {
 
     @Test
     public void getCurMembersId() throws Exception {
-        Assert.assertEquals(curMembersId, round.getCurMembersId());
+        Assert.assertTrue(round.getCurMembersId().contains(Presets.WARRIOR_ID));
     }
 
     @Test
     public void getMembers() throws Exception {
-        Assert.assertEquals(members, round.getMembers());
+        Assert.assertTrue(round.getMembers().stream().anyMatch(a -> a.getUserId().equals(Presets.MAGE_ID)));
     }
 
     @Test

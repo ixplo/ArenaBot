@@ -23,7 +23,7 @@ import java.util.Timer;
  */
 public class Round {
     public static final String LOGTAG = "ROUND";
-    private static Round current;
+    private static volatile Round current;
     private List<Integer> curMembersId;
     private Set<String> curTeamsId;
     private List<? extends IUser> members;
@@ -40,7 +40,7 @@ public class Round {
     }
 
     //todo members, curMembers, teamsId - не нужны. А нужны просто Teams (и в них можно хранить начальное состояние)
-    Round(BattleState battleState) {
+    public Round(BattleState battleState) {
         this.members = new ArrayList<>(battleState.getMembers());
         this.teams = new ArrayList<>(battleState.getTeams());
         this.curMembersId = new ArrayList<>(battleState.getCurMembersId());
@@ -189,7 +189,7 @@ public class Round {
         List<Action> attackOnTarget = new ArrayList<>();
         List<Action> onTargetList = getActionsByTarget(targetId);
         for (Action action : onTargetList) {
-            if(action.getActionId().equals("a")){
+            if(action.getActionId().equals(Action.ATTACK)){
                 attackOnTarget.add(action);
             }
         }

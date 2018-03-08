@@ -2,7 +2,9 @@ package ml.ixplo.arenabot.user.classes.spellcaster;
 
 import ml.ixplo.arenabot.BaseTest;
 import ml.ixplo.arenabot.battle.BattleState;
+import ml.ixplo.arenabot.battle.Order;
 import ml.ixplo.arenabot.battle.Round;
+import ml.ixplo.arenabot.battle.actions.Action;
 import ml.ixplo.arenabot.config.Config;
 import ml.ixplo.arenabot.helper.Presets;
 import ml.ixplo.arenabot.messages.Messages;
@@ -189,9 +191,28 @@ public class SpellCasterTest extends BaseTest {
     @Test
     public void armorEffectTest() {
         Round.execute(new BattleState());
+
         testMage.setSpell(Presets.ARMOR_SPELL_ID);
         String castMessage = testMage.doCast(warrior, 100, Presets.ARMOR_SPELL_ID);
 
         Assert.assertTrue(castMessage.contains("поднял защиту"));
+    }
+
+    @Test
+    public void armorEffectWithProtectTest() throws InterruptedException {
+        Thread round = new Thread(() -> Round.execute(testHelper.getTestRound().getBattleState()));
+        round.start();
+        Thread.sleep(500);
+        Round current = Round.getCurrent();
+        Action attack = Action.create(Presets.WARRIOR_ID, Action.ATTACK, Presets.WARRIOR_ID, 1);
+        current.takeAction(attack);
+
+        testMage.setSpell(Presets.ARMOR_SPELL_ID);
+        testMage.doCast(warrior, 100, Presets.ARMOR_SPELL_ID);
+
+        Assert.assertTrue(Round.getCurrent().getOrders().stream().filter(
+                a -> a.getActions().stream().anyMatch(
+                        b -> b.getUser().getUserId() == Presets.WARRIOR_ID))
+                .findFirst().get().getActions().get(0).getMessage().contains("пытался ударить"));
     }
 }
