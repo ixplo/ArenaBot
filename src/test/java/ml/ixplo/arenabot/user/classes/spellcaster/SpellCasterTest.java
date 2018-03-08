@@ -15,6 +15,8 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
@@ -184,15 +186,14 @@ public class SpellCasterTest extends BaseTest {
     @Test
     public void healEffectTest() {
         testMage.setSpell(Presets.HEAL_SPELL_ID);
-        String castMessage = testMage.doCast(warrior, 100, Presets.HEAL_SPELL_ID);
+        String castMessage = testMage.doCast(testMage, 100, Presets.HEAL_SPELL_ID);
 
         Assert.assertTrue(castMessage.contains("поднял здоровье"));
     }
 
     @Test
     public void armorEffectTest() {
-        Round.execute(new BattleState());
-
+        testHelper.getTestRound();
         testMage.setSpell(Presets.ARMOR_SPELL_ID);
         String castMessage = testMage.doCast(warrior, 100, Presets.ARMOR_SPELL_ID);
 
@@ -201,18 +202,14 @@ public class SpellCasterTest extends BaseTest {
 
     @Test
     public void armorEffectWithProtectTest() throws InterruptedException {
-        Thread round = new Thread(() -> Round.execute(testHelper.getTestRound().getBattleState()));
-        round.start();
-        Thread.sleep(500);
-        Round current = Round.getCurrent();
         Action attack = Action.create(Presets.WARRIOR_ID, Action.ATTACK, Presets.WARRIOR_ID, 1);
-        current.takeAction(attack);
+        testHelper.getTestRound().takeAction(attack);
 
         testMage.setSpell(Presets.ARMOR_SPELL_ID);
         testMage.doCast(warrior, 100, Presets.ARMOR_SPELL_ID);
 
         boolean check = false;
-        List<Order> orders = current.getOrders();
+        List<Order> orders = Round.getCurrent().getOrders();
         for (Order order : orders) {
             List<Action> actions = order.getActions();
             for (Action action : actions) {

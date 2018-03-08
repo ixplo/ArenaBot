@@ -22,6 +22,7 @@ import org.telegram.telegrambots.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.api.objects.Message;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -225,6 +226,18 @@ public class TestHelper {
         battleState.setCurMembersId(curMembersId);
         battleState.setTeams(teams);
         battleState.setCurTeamsId(curTeamsId);
-        return new Round(battleState);
+        Round round = new Round(battleState);
+        setCurrent(round);
+        return round;
+    }
+
+    private void setCurrent(Round round) {
+        try {
+            Field current = Round.class.getDeclaredField("current");
+            current.setAccessible(true);
+            current.set(Round.class, round);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            LOGGER.error("Error on reflection call");
+        }
     }
 }
