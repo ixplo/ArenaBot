@@ -1,14 +1,11 @@
 package ml.ixplo.arenabot.user.classes.spellcaster;
 
 import ml.ixplo.arenabot.BaseTest;
-import ml.ixplo.arenabot.battle.BattleState;
 import ml.ixplo.arenabot.battle.Order;
 import ml.ixplo.arenabot.battle.Round;
 import ml.ixplo.arenabot.battle.actions.Action;
 import ml.ixplo.arenabot.config.Config;
 import ml.ixplo.arenabot.helper.Presets;
-import ml.ixplo.arenabot.messages.Messages;
-import ml.ixplo.arenabot.user.ArenaUser;
 import ml.ixplo.arenabot.user.classes.Mage;
 import ml.ixplo.arenabot.user.params.Hark;
 import ml.ixplo.arenabot.user.spells.Spell;
@@ -17,9 +14,6 @@ import org.junit.Test;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
 
