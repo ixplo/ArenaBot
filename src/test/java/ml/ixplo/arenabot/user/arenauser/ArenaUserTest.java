@@ -317,6 +317,15 @@ public class ArenaUserTest {
     }
 
     @Test
+    public void getActionsId() throws Exception {
+        List<String> actionsId = mage.getActionsId();
+        Assert.assertTrue(actionsId.stream().anyMatch(a -> a.contains("Атака")));
+        Assert.assertTrue(actionsId.stream().anyMatch(a -> a.contains("Защита")));
+        Assert.assertTrue(actionsId.stream().anyMatch(a -> a.contains("Лечение")));
+        Assert.assertTrue(actionsId.stream().anyMatch(a -> a.contains("spell")));
+    }
+
+    @Test
     public void addCurExp() {
         int curExp = warrior.getCurExp();
         warrior.addCurExp(Presets.ADD_EXP);
