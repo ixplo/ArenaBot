@@ -127,6 +127,9 @@ public abstract class SpellCaster extends ArenaUser implements ISpellCaster{
 
     private String getSpellToLearn(int spellLevel) {
         List<String> spellsId = getDb().getSpellsIdToLearn(getUserId(), spellLevel);
+        if (spellsId.isEmpty()) {
+            return null;
+        }
         Random rnd = new Random();
         return spellsId.get(rnd.nextInt(spellsId.size()));
     }
@@ -226,9 +229,14 @@ public abstract class SpellCaster extends ArenaUser implements ISpellCaster{
                     "доступно: " + getSpellPoints());
             return;
         }
+        String spellId = getSpellToLearn(spellLevel);
+        if (spellId == null) {
+            Messages.sendMessage((long) getUserId(), "У вас уже есть все заклинания "
+                    + spellLevel + " уровня");
+            return;
+        }
         int probability = (getLevel() - spellLevel + 2) * 25;
         if (isHappened(probability)) {
-            String spellId = getSpellToLearn(spellLevel);
             setSpell(spellId);
             int spellGrade = Spell.getSpellGrade(getUserId(), spellId);
             if (spellGrade == 1) {

@@ -8,6 +8,7 @@ import ml.ixplo.arenabot.config.Config;
 import ml.ixplo.arenabot.config.PropertiesLoader;
 import ml.ixplo.arenabot.database.ConnectionDB;
 import ml.ixplo.arenabot.database.DatabaseManager;
+import ml.ixplo.arenabot.messages.Messages;
 import ml.ixplo.arenabot.user.ArenaUser;
 import ml.ixplo.arenabot.user.classes.UserClass;
 import ml.ixplo.arenabot.user.items.Item;
@@ -102,6 +103,11 @@ public class TestHelper {
         Team.setDb(db);
     }
 
+    public StringBuilder initLogger() {
+        StringBuilder log = new StringBuilder();
+        Messages.setBot(getTestBot(log));
+        return log;
+    }
     private void fillSetOfUsersId() {
         USERS_ID.add(Presets.WARRIOR_ID);
         USERS_ID.add(Presets.MAGE_ID);

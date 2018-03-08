@@ -18,10 +18,10 @@ import static org.junit.Assert.assertEquals;
  * ixplo
  * 09.05.2017.
  */
-public class SpellCasterTest extends BaseTest{
+public class SpellCasterTest extends BaseTest {
 
     private Mage testMage = (Mage) mage;
-    
+
     @Test
     public void countReceivedSpellPoints() throws Exception {
         assertEquals(0, SpellCaster.countReceivedSpellPoints(1, 98));
@@ -32,7 +32,7 @@ public class SpellCasterTest extends BaseTest{
 
     @Test
     public void addWisAndcurManaDontChangesInBattleTest() throws Exception {
-        
+
         double before = testMage.getCurMana();
 
         testMage.addHark(Hark.NATIVE_WIS, 1);
@@ -44,7 +44,7 @@ public class SpellCasterTest extends BaseTest{
         testMage.addHark(Hark.NATIVE_WIS, 1);
         Assert.assertEquals(expected, testMage.getCurMana(), Presets.DELTA);
     }
-    
+
     @Test
     public void addWisTest() {
         double before = testMage.getCurMana();
@@ -106,14 +106,46 @@ public class SpellCasterTest extends BaseTest{
 
     @Test
     public void learnSpellTest() {
-        StringBuilder log = new StringBuilder();
-        Messages.setBot(testHelper.getTestBot(log));
+        StringBuilder log = testHelper.initLogger();
 
         testMage.addSpellPoints(1);
         testMage.learn(1);
+
         Assert.assertTrue(0 == testMage.getSpellPoints());
         Assert.assertTrue(log.toString().contains("ничему и не научились")
                 || log.toString().contains("Вы выучили заклинание")
-        || log.toString().contains("Уровень заклинания") && log.toString().contains("поднялся до"));
+                || log.toString().contains("Уровень заклинания") && log.toString().contains("поднялся до"));
     }
+
+    @Test
+    public void learnNoSpellPointsTest() {
+        StringBuilder log = testHelper.initLogger();
+
+        testMage.learn(1);
+        Assert.assertTrue(log.toString().contains("Не хватает магических бонусов"));
+    }
+
+    @Test
+    public void learnAllSpellsTest() throws Exception {
+        StringBuilder log = testHelper.initLogger();
+
+        for (int i = 0; i < 30; i++) {
+            testMage.addSpellPoints(1);
+            testMage.learn(1);
+        }
+
+        Assert.assertTrue(log.toString().contains("У вас уже есть все заклинания 1 уровня"));
+    }
+
+    @Test
+    public void learnSpellInsufficientLevelTest() throws Exception {
+        StringBuilder log = testHelper.initLogger();
+
+        testMage.addSpellPoints(2);
+        testMage.learn(2);
+
+        Assert.assertTrue(log.toString().contains("Вы не достигли нужного уровня"));
+    }
+
+
 }
