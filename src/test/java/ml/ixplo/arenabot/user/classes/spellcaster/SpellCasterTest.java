@@ -8,12 +8,14 @@ import ml.ixplo.arenabot.battle.actions.Action;
 import ml.ixplo.arenabot.config.Config;
 import ml.ixplo.arenabot.helper.Presets;
 import ml.ixplo.arenabot.messages.Messages;
+import ml.ixplo.arenabot.user.ArenaUser;
 import ml.ixplo.arenabot.user.classes.Mage;
 import ml.ixplo.arenabot.user.params.Hark;
 import ml.ixplo.arenabot.user.spells.Spell;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -214,6 +216,31 @@ public class SpellCasterTest extends BaseTest {
             List<Action> actions = order.getActions();
             for (Action action : actions) {
                 if (action.getMessage().contains("пытался ударить")) {
+                    check = true;
+                    break;
+                }
+            }
+        }
+        Assert.assertTrue(check);
+    }
+
+    @Test
+    public void armorEffectButPenetrationTest() throws InterruptedException {
+        warrior.setAttack(BigDecimal.valueOf(12));
+        testHelper.getDb().updateUser(warrior);
+        Action attack = Action.create(Presets.WARRIOR_ID, Action.ATTACK, Presets.WARRIOR_ID, 100);
+        testHelper.getTestRound().takeAction(attack);
+        attack.doAction();
+
+        testMage.setSpell(Presets.ARMOR_SPELL_ID);
+        testMage.doCast(warrior, 100, Presets.ARMOR_SPELL_ID);
+
+        boolean check = false;
+        List<Order> orders = Round.getCurrent().getOrders();
+        for (Order order : orders) {
+            List<Action> actions = order.getActions();
+            for (Action action : actions) {
+                if (action.getMessage().contains("напал")) {
                     check = true;
                     break;
                 }
