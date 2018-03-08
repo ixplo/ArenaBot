@@ -148,7 +148,7 @@ public class SpellCasterTest extends BaseTest {
     }
 
     @Test
-    public void endBattleClassFeaturesTest() throws Exception {
+    public void endBattleClassFeaturesTest() {
         StringBuilder log = testHelper.initLogger();
 
         testMage.endBattleClassFeatures();
@@ -157,5 +157,22 @@ public class SpellCasterTest extends BaseTest {
         testMage.addCurExp(120);
         testMage.endBattleClassFeatures();
         Assert.assertTrue(log.toString().contains("Вы получили магические бонусы: 1"));
+    }
+
+    @Test
+    public void zeroPercentCastTest() {
+        String castMessage = testMage.doCast(warrior, 0, Presets.MAGIC_ARROW_SPELL_ID);
+        Assert.assertTrue(castMessage.contains("заклинание провалилось"));
+    }
+
+    @Test
+    public void zeroManaCastTest() {
+        testMage.setCurMana(0);
+        StringBuilder log = new StringBuilder();
+        for (int i = 0; i < 10; i++) {
+            String castMessage = testMage.doCast(warrior, 100, Presets.MAGIC_ARROW_SPELL_ID);
+            log.append(castMessage);
+        }
+        Assert.assertTrue(log.toString().contains("не хватило маны"));
     }
 }

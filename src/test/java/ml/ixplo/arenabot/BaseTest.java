@@ -16,8 +16,9 @@ public abstract class BaseTest {
 
     @Before
     public void setUp() throws Exception {
-        Messages.setBot(testHelper.getTestBot());
+
     }
+
 
     @After
     public void tearDown() {

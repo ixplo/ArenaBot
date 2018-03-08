@@ -46,6 +46,7 @@ public class TestHelper {
         fillSetOfUsersId();
         clearData();
         generateData();
+        Messages.setBot(getTestBot());
     }
 
     private void initPropertiesLoader() {
