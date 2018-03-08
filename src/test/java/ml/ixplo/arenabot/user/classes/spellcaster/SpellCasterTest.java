@@ -15,6 +15,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
 
@@ -210,9 +211,17 @@ public class SpellCasterTest extends BaseTest {
         testMage.setSpell(Presets.ARMOR_SPELL_ID);
         testMage.doCast(warrior, 100, Presets.ARMOR_SPELL_ID);
 
-        Assert.assertTrue(Round.getCurrent().getOrders().stream().filter(
-                a -> a.getActions().stream().anyMatch(
-                        b -> b.getUser().getUserId() == Presets.WARRIOR_ID))
-                .findFirst().get().getActions().get(0).getMessage().contains("пытался ударить"));
+        boolean check = false;
+        List<Order> orders = current.getOrders();
+        for (Order order : orders) {
+            List<Action> actions = order.getActions();
+            for (Action action : actions) {
+                if (action.getMessage().contains("пытался ударить")) {
+                    check = true;
+                    break;
+                }
+            }
+        }
+        Assert.assertTrue(check);
     }
 }
