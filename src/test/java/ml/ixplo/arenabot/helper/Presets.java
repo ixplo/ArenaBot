@@ -38,6 +38,8 @@ public class Presets {
     public static final String WRONG_TEAM_ID = "wrongTeamId";
     public static final String QUERY_TEXT = "query_text";
     public static final String MAGIC_ARROW_SPELL_ID = "1am";
+    public static final String ARMOR_SPELL_ID = "1bm";
+    public static final String HEAL_SPELL_ID = "1cm";
     public static final String PRIEST_SPELL_ID = "1ap";
     public static final String MAGE_SPELL_NAME = "Магическая стрела";
     public static final int SPELL_GRADE_ONE = 1;

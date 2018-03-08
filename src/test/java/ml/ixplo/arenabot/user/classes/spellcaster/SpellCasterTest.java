@@ -1,6 +1,8 @@
 package ml.ixplo.arenabot.user.classes.spellcaster;
 
 import ml.ixplo.arenabot.BaseTest;
+import ml.ixplo.arenabot.battle.BattleState;
+import ml.ixplo.arenabot.battle.Round;
 import ml.ixplo.arenabot.config.Config;
 import ml.ixplo.arenabot.helper.Presets;
 import ml.ixplo.arenabot.messages.Messages;
@@ -174,5 +176,22 @@ public class SpellCasterTest extends BaseTest {
             log.append(castMessage);
         }
         Assert.assertTrue(log.toString().contains("не хватило маны"));
+    }
+
+    @Test
+    public void healEffectTest() {
+        testMage.setSpell(Presets.HEAL_SPELL_ID);
+        String castMessage = testMage.doCast(warrior, 100, Presets.HEAL_SPELL_ID);
+
+        Assert.assertTrue(castMessage.contains("поднял здоровье"));
+    }
+
+    @Test
+    public void armorEffectTest() {
+        Round.execute(new BattleState());
+        testMage.setSpell(Presets.ARMOR_SPELL_ID);
+        String castMessage = testMage.doCast(warrior, 100, Presets.ARMOR_SPELL_ID);
+
+        Assert.assertTrue(castMessage.contains("поднял защиту"));
     }
 }
