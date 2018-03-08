@@ -204,8 +204,12 @@ public class Round {
         return curMembersId;
     }
 
-    public List<IUser> getMembers() {
-        return (List<IUser>) members;
+    public List<? extends IUser> getMembers() {
+        return members;
+    }
+
+    public List<Team> getTeams() {
+        return teams;
     }
 
     public BattleState getBattleState() {
@@ -224,4 +228,5 @@ public class Round {
                 ", curTeamsId=" + curTeamsId +
                 '}';
     }
+
 }
