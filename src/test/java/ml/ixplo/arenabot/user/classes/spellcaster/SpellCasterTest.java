@@ -147,5 +147,15 @@ public class SpellCasterTest extends BaseTest {
         Assert.assertTrue(log.toString().contains("Вы не достигли нужного уровня"));
     }
 
+    @Test
+    public void endBattleClassFeaturesTest() throws Exception {
+        StringBuilder log = testHelper.initLogger();
 
+        testMage.endBattleClassFeatures();
+        Assert.assertFalse(log.toString().contains("Вы получили магические бонусы: 1"));
+
+        testMage.addCurExp(120);
+        testMage.endBattleClassFeatures();
+        Assert.assertTrue(log.toString().contains("Вы получили магические бонусы: 1"));
+    }
 }

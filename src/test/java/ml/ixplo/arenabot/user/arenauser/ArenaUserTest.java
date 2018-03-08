@@ -318,7 +318,7 @@ public class ArenaUserTest {
 
     @Test
     public void getActionsId() throws Exception {
-        List<String> actionsId = mage.getActionsId();
+        List<String> actionsId = mage.getActionsIdForInlineKeyboard();
         Assert.assertTrue(actionsId.stream().anyMatch(a -> a.contains("Атака")));
         Assert.assertTrue(actionsId.stream().anyMatch(a -> a.contains("Защита")));
         Assert.assertTrue(actionsId.stream().anyMatch(a -> a.contains("Лечение")));

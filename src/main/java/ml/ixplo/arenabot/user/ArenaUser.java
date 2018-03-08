@@ -694,7 +694,7 @@ public abstract class ArenaUser extends Member {
         return actionsName;
     }
 
-    public List<String> getActionsId() {
+    public List<String> getActionsIdForInlineKeyboard() {
         List<String> actionsId = new ArrayList<>();
         for (String actionId : actionsName) {
             actionsId.add(getClassActionId("action_" + actionId));

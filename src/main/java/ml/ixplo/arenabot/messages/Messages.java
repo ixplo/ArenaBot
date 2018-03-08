@@ -401,7 +401,7 @@ public final class Messages {
 
     public static SendMessage getAskActionMsg(int userId) {
         return getInlineKeyboardMsg((long)userId, "Выберите действие:",
-                    ArenaUser.getUser(userId).getActionsName(), ArenaUser.getUser(userId).getActionsId());
+                    ArenaUser.getUser(userId).getActionsName(), ArenaUser.getUser(userId).getActionsIdForInlineKeyboard());
     }
 
 
