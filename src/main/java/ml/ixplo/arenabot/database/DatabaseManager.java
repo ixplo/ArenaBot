@@ -113,19 +113,17 @@ public class DatabaseManager {
         }
     }
 
-    public boolean dropItems(Integer userId) {
-        int deletedRows = 0;
+    public void dropItems(Integer userId) {
         String queryText = "DELETE FROM inventory WHERE user_Id" + VAR + SEMICOLON;
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setInt(1, userId);
-            deletedRows = preparedStatement.executeUpdate();
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             BotLogger.error(LOGTAG, e.getMessage());
         }
-        return deletedRows > 0;
     }
 
-    public boolean dropItem(Integer userId, String itemId) {
+    public void dropItem(Integer userId, String itemId) {
         int deletedRows = 0;
         String queryText = "DELETE FROM inventory WHERE user_Id" + VAR + AND + ID + VAR + SEMICOLON;
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
@@ -139,7 +137,6 @@ public class DatabaseManager {
             BotLogger.error(LOGTAG, e.getMessage());
             throw new DbException(e.getMessage(), e);
         }
-        return deletedRows > 0;
     }
 
     public void dropActions(Integer userId) {
@@ -337,34 +334,7 @@ public class DatabaseManager {
         }
     }
 
-    public boolean addInt(String tableName, String column, int record) {
-        int updatedRows = 0;
-        String queryText = "INSERT OR REPLACE INTO " + tableName + " (?) VALUES (?);";
-        try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
-            preparedStatement.setString(1, column);
-            preparedStatement.setInt(2, record);
-            updatedRows = preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            BotLogger.error(LOGTAG, e.getMessage());
-        }
-        return updatedRows > 0;
-    }
-
-    public boolean addString(String tableName, String column, String record) {
-        int updatedRows = 0;
-        String queryText = "INSERT OR REPLACE INTO " + tableName + " (?) VALUES (?);";
-        try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
-            preparedStatement.setString(1, column);
-            preparedStatement.setString(2, record);
-            updatedRows = preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            BotLogger.error(LOGTAG, e.getMessage());
-        }
-        return updatedRows > 0;
-    }
-
-    public boolean addSpell(Integer userId, String spellId, int spellGrade) {
-        int updatedRows = 0;
+    public void addSpell(Integer userId, String spellId, int spellGrade) {
         String queryText = "INSERT OR REPLACE INTO available_spells " +
                 "(id," +
                 "user_id," +
@@ -373,11 +343,10 @@ public class DatabaseManager {
             preparedStatement.setString(1, spellId);
             preparedStatement.setInt(2, userId);
             preparedStatement.setInt(3, spellGrade);
-            updatedRows = preparedStatement.executeUpdate();
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             BotLogger.error(LOGTAG, e.getMessage());
         }
-        return updatedRows > 0;
     }
 
     public void addAction(Integer userId) {
@@ -485,8 +454,7 @@ public class DatabaseManager {
         item.setItemsSet(result.getString("items_set"));
     }
 
-    public boolean setTeam(Team team) {
-        int updatedRows = 0;
+    public void setTeam(Team team) {
         String queryText = "INSERT OR REPLACE INTO teams (" +
                 "id," +
                 "name," +
@@ -505,11 +473,10 @@ public class DatabaseManager {
             preparedStatement.setInt(6, team.getWins());
             preparedStatement.setString(7, team.getDescr());
             preparedStatement.setString(8, team.getHtmlName());
-            updatedRows = preparedStatement.executeUpdate();
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             BotLogger.error(LOGTAG, e.getMessage());
         }
-        return updatedRows > 0;
     }
 
     public Team getTeam(String id) {
@@ -533,6 +500,16 @@ public class DatabaseManager {
             BotLogger.error(LOGTAG, e.getMessage());
         }
         return team;
+    }
+
+    public void dropTeam(String id) {
+        String queryText = "DELETE FROM teams WHERE Id" + VAR + SEMICOLON;
+        try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
+            preparedStatement.setString(1, id);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            BotLogger.error(LOGTAG, e.getMessage());
+        }
     }
 
     public void saveAction(Action action) {
@@ -600,22 +577,6 @@ public class DatabaseManager {
             try (final ResultSet result = preparedStatement.executeQuery()) {
                 if (result.next()) {
                     resultInt = result.getInt(columnName);
-                }
-            }
-        } catch (SQLException e) {
-            BotLogger.error(LOGTAG, e.getMessage());
-        }
-        return resultInt;
-    }
-
-    public int getIntBy(String tableName, String findByColumn, Integer id, String selectedColumn) {
-        int resultInt = -1;
-        String queryText = SELECT + selectedColumn + FROM + tableName + WHERE + findByColumn + VAR + SEMICOLON;
-        try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
-            preparedStatement.setInt(1, id);
-            try (final ResultSet result = preparedStatement.executeQuery()) {
-                if (result.next()) {
-                    resultInt = result.getInt(selectedColumn);
                 }
             }
         } catch (SQLException e) {
@@ -715,22 +676,6 @@ public class DatabaseManager {
             try (final ResultSet result = preparedStatement.executeQuery()) {
                 if (result.next()) {
                     resultString = result.getString(columnName);
-                }
-            }
-        } catch (SQLException e) {
-            BotLogger.error(LOGTAG, e.getMessage());
-        }
-        return resultString;
-    }
-
-    public String getStringBy(String tableName, String findByColumn, Integer id, String selectedColumn) {
-        String resultString = EMPTY;
-        String queryText = SELECT + selectedColumn + FROM + tableName + WHERE + findByColumn + VAR + SEMICOLON;
-        try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
-            preparedStatement.setInt(1, id);
-            try (final ResultSet result = preparedStatement.executeQuery()) {
-                if (result.next()) {
-                    resultString = result.getString(selectedColumn);
                 }
             }
         } catch (SQLException e) {
@@ -936,49 +881,43 @@ public class DatabaseManager {
     /***
      * "UPDATE users SET ?=? WHERE id=?;"
      ***/
-    public boolean setLongTo(String tableName, Integer id, String recordColumn, long recordValue) {
-        int updatedRows = 0;
+    public void setLongTo(String tableName, Integer id, String recordColumn, long recordValue) {
         String queryText = UPDATE + tableName + SET + recordColumn + VAR + WHERE + ID + VAR + SEMICOLON;
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setLong(1, recordValue);
             preparedStatement.setInt(2, id);
-            updatedRows = preparedStatement.executeUpdate();
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             BotLogger.error(LOGTAG, e.getMessage());
         }
-        return updatedRows > 0;
     }
 
     /***
      * "UPDATE users SET ?=? WHERE id=?;"
      ***/
-    public boolean setDoubleTo(String tableName, Integer id, String recordColumn, double recordValue) {
-        int updatedRows = 0;
+    public void setDoubleTo(String tableName, Integer id, String recordColumn, double recordValue) {
         String queryText = UPDATE + tableName + SET + recordColumn + VAR + WHERE + ID + VAR + SEMICOLON;
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setDouble(1, recordValue);
             preparedStatement.setInt(2, id);
-            updatedRows = preparedStatement.executeUpdate();
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             BotLogger.error(LOGTAG, e.getMessage());
         }
-        return updatedRows > 0;
     }
 
     /***
      * "UPDATE users SET ?=? WHERE id=?;"
      ***/
-    public boolean setBigDecimalTo(String tableName, Integer id, String recordColumn, BigDecimal recordValue) {
-        int updatedRows = 0;
+    public void setBigDecimalTo(String tableName, Integer id, String recordColumn, BigDecimal recordValue) {
         String queryText = UPDATE + tableName + SET + recordColumn + VAR + WHERE + ID + VAR + SEMICOLON;
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setBigDecimal(1, recordValue);
             preparedStatement.setInt(2, id);
-            updatedRows = preparedStatement.executeUpdate();
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             BotLogger.error(LOGTAG, e.getMessage());
         }
-        return updatedRows > 0;
     }
 
     /***
@@ -1016,34 +955,30 @@ public class DatabaseManager {
     /***
      * "UPDATE users SET ?=? WHERE id=?;"
      ***/
-    public boolean setStringTo(String tableName, Integer id, String recordColumn, String recordValue) {
-        int updatedRows = 0;
+    public void setStringTo(String tableName, Integer id, String recordColumn, String recordValue) {
         String queryText = UPDATE + tableName + SET + recordColumn + VAR + WHERE + ID + VAR + SEMICOLON;
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setString(1, recordValue);
             preparedStatement.setInt(2, id);
-            updatedRows = preparedStatement.executeUpdate();
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             BotLogger.error(LOGTAG, e.getMessage());
         }
-        return updatedRows > 0;
     }
 
     /***
      * "UPDATE users SET ?=? WHERE id=? and user_id=?;"
      ***/
-    public boolean setStringTo(String tableName, Integer userId, String id, String recordColumn, String recordValue) {
-        int updatedRows = 0;
+    public void setStringTo(String tableName, Integer userId, String id, String recordColumn, String recordValue) {
         String queryText = UPDATE + tableName + SET + recordColumn + VAR + " WHERE id=? and user_" + ID + VAR + SEMICOLON;
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setString(1, recordValue);
             preparedStatement.setString(2, id);
             preparedStatement.setInt(3, userId);
-            updatedRows = preparedStatement.executeUpdate();
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             BotLogger.error(LOGTAG, e.getMessage());
         }
-        return updatedRows > 0;
     }
 
     public int getCountDistinct(String tableName, String columnOfCount, String columnName, Integer value) {
@@ -1080,38 +1015,6 @@ public class DatabaseManager {
         return -1;
     }
 
-    // overload
-    public int getCount(String tableName, String columnName, String value) {
-        String queryText = SELECT + COUNT + columnName + ") FROM " + tableName + WHERE + columnName + VAR + SEMICOLON;
-        try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
-            preparedStatement.setString(1, value);
-            try (final ResultSet result = preparedStatement.executeQuery()) {
-                if (result.next()) {
-                    return result.getInt(COUNT + columnName + ")");
-                }
-            }
-        } catch (SQLException e) {
-            BotLogger.error(LOGTAG, e.getMessage());
-        }
-        return -1;
-    }
-
-    // overload
-    public int getCount(String tableName, String columnName, Double value) {
-        String queryText = SELECT + COUNT + columnName + ") FROM " + tableName + WHERE + columnName + VAR + SEMICOLON;
-        try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
-            preparedStatement.setDouble(1, value);
-            try (final ResultSet result = preparedStatement.executeQuery()) {
-                if (result.next()) {
-                    return result.getInt(COUNT + columnName + ")");
-                }
-            }
-        } catch (SQLException e) {
-            BotLogger.error(LOGTAG, e.getMessage());
-        }
-        return -1;
-    }
-
     public List<String> getColumn(String tableName, String columnName) {
         List<String> column = new LinkedList<>();
         String queryText = SELECT + columnName + FROM + tableName + " order by rowid;";
@@ -1126,13 +1029,4 @@ public class DatabaseManager {
         return column;
     }
 
-    public void dropTeam(String id) {
-        String queryText = "DELETE FROM teams WHERE Id" + VAR + SEMICOLON;
-        try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
-            preparedStatement.setString(1, id);
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            BotLogger.error(LOGTAG, e.getMessage());
-        }
-    }
 }
