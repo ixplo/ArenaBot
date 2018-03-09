@@ -76,7 +76,7 @@ public class Round {
             } catch (InterruptedException e) {
                 //no-op
                 BotLogger.info(LOGTAG, "Получен заказ");
-                Thread.currentThread().interrupt();
+//                Thread.currentThread().interrupt();
             }
         }
     }

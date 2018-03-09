@@ -11,10 +11,12 @@ import java.lang.reflect.Field;
 import java.util.List;
 
 public class BattleTest extends BaseTest{
-    List<Team> teams = testHelper.getTestRound().getTeams();
-    Battle battle = new Battle(teams, (List<ArenaUser>)testHelper.getTestRound().getMembers());
+    private List<Team> teams = testHelper.getTestRound().getTeams();
+    private List<ArenaUser> members = (List<ArenaUser>) testHelper.getTestRound().getMembers();
+    private Battle battle;
     @Before
     public void setUp() {
+        battle = new Battle(teams, members);
     }
 
     @After
@@ -36,7 +38,11 @@ public class BattleTest extends BaseTest{
     }
 
     @Test
-    public void run() {
+    public void run() throws InterruptedException {
+        battle.getCurTeamsId().remove(0);
+        Round.getCurrent().stop();
+        battle.interrupt();
+        battle.join();
     }
 
     @Test

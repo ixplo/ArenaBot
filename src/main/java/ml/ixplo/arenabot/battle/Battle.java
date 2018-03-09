@@ -57,6 +57,10 @@ public class Battle extends Thread {
         return battleState.getTeams();
     }
 
+    public List<String> getCurTeamsId() {
+        return battleState.getCurTeamsId();
+    }
+
     private void calculateAndPrintResult() {
         List<ArenaUser> allMembers = battleState.getMembers();
         String winnerTeamId = battleState.getCurTeamsId().get(0);
