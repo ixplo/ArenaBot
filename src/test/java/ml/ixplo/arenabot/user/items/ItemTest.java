@@ -19,7 +19,7 @@ public class ItemTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(ItemTest.class);
 
     private TestHelper testHelper = new TestHelper();
-    private ArenaUser warrior = TestHelper.WARRIOR;
+    private ArenaUser warrior = testHelper.WARRIOR;
 
     @Before
     public void setUp() throws Exception {

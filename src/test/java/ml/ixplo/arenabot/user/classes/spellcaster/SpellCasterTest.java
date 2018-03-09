@@ -242,4 +242,13 @@ public class SpellCasterTest extends BaseTest {
         }
         Assert.assertTrue(check);
     }
+
+    @Test
+    public void getAllSpellsNameTest() {
+        Assert.assertTrue(Mage.getAllSpellsName().contains(Presets.MAGE_SPELL_NAME));
+        Assert.assertTrue(Mage.getAllSpellsName().contains(Presets.ARMOR_SPELL_NAME));
+        Assert.assertTrue(Mage.getAllSpellsName().contains(Presets.HEAL_SPELL_NAME));
+
+        Assert.assertFalse(Mage.getAllSpellsName().contains(Presets.BLESS_SPELL_NAME));
+    }
 }

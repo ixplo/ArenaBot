@@ -8,11 +8,11 @@ import ml.ixplo.arenabot.user.ArenaUser;
  * ixplo
  * 01.05.2017.
  */
-public abstract class Action implements Comparable<Action>{
-    public static final int FIRST = 1;
-    public static final int SECOND = 2;
-    public static final int THIRD = 3;
-    public static final int FOURTH = 4;
+public abstract class Action implements Comparable<Action> {
+    static final int FIRST = 1;
+    static final int SECOND = 2;
+    static final int THIRD = 3;
+    static final int FOURTH = 4;
     public static final String ATTACK = "a";
     public static final String PROTECT = "p";
     public static final String HEAL = "h";
@@ -30,7 +30,8 @@ public abstract class Action implements Comparable<Action>{
     /******* constructor **********
      * use Action create
      ******************************/
-    Action() {}
+    Action() {
+    }
 
     //todo сделать вариант, чтобы передавать не id, а сущность
     public static Action create(int userId, String actionId, int targetId, int percent) {
@@ -169,6 +170,7 @@ public abstract class Action implements Comparable<Action>{
     }
 
     public abstract void doAction();
+
     public abstract void unDo();
 
     public static void clearActions(int userId) {

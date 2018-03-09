@@ -23,7 +23,7 @@ public class ActionTest {
     private static final int EXPECTED = 100;
 
     private TestHelper testHelper = new TestHelper();
-    private ArenaUser warrior = TestHelper.WARRIOR;
+    private ArenaUser warrior = testHelper.WARRIOR;
 
     @Before
     public void setUp() throws Exception {

@@ -18,7 +18,7 @@ public class RegistrationTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(RegistrationTest.class);
 
     private TestHelper testHelper = new TestHelper();
-    private ArenaUser warrior = TestHelper.WARRIOR;
+    private ArenaUser warrior = testHelper.WARRIOR;
     private Registration registration;
 
     @Before

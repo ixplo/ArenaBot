@@ -42,9 +42,9 @@ public class MessagesTest {
     @Before
     public void setUp() throws Exception {
         Messages.setBot(bot);
-        warrior = TestHelper.WARRIOR;
-        mage = TestHelper.MAGE;
-        existUser = TestHelper.EXIST_USER;
+        warrior = testHelper.WARRIOR;
+        mage = testHelper.MAGE;
+        existUser = testHelper.EXIST_USER;
     }
 
     @After

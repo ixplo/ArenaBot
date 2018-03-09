@@ -11,8 +11,8 @@ import org.slf4j.LoggerFactory;
 public abstract class BaseTest {
     protected static final Logger LOGGER = LoggerFactory.getLogger(BaseTest.class);
     protected TestHelper testHelper = new TestHelper();
-    protected ArenaUser warrior = TestHelper.WARRIOR;
-    protected ArenaUser mage = TestHelper.MAGE;
+    protected ArenaUser warrior = testHelper.WARRIOR;
+    protected ArenaUser mage = testHelper.MAGE;
 
     @Before
     public void setUp() throws Exception {

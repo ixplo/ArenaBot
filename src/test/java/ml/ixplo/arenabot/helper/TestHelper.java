@@ -40,10 +40,11 @@ public class TestHelper {
 
     private PropertiesLoader propertiesLoader;
     private DatabaseManager db;
-    public static ArenaUser WARRIOR;
-    public static ArenaUser MAGE;
-    public static ArenaUser EXIST_USER;
-    private static Set<Integer> USERS_ID = new HashSet<>();
+    public ArenaUser WARRIOR;
+    public ArenaUser MAGE;
+    public ArenaUser ARCHER;
+    public ArenaUser EXIST_USER;
+    private Set<Integer> USERS_ID = new HashSet<>();
 
     public TestHelper() {
         initPropertiesLoader();
@@ -117,6 +118,7 @@ public class TestHelper {
     private void fillSetOfUsersId() {
         USERS_ID.add(Presets.WARRIOR_ID);
         USERS_ID.add(Presets.MAGE_ID);
+        USERS_ID.add(Presets.ARCHER_ID);
         USERS_ID.add(Presets.EXIST_USER_ID);
         USERS_ID.add(Presets.NON_EXIST_USER_ID);
     }
@@ -125,8 +127,10 @@ public class TestHelper {
         generateExistUser();
         generateWarrior();
         generateMage();
+        generateArcher();
         fillSetOfUsersId();
     }
+
 
     private void generateExistUser() {
         db.addUser(Presets.EXIST_USER_ID, Presets.EXIST_USER_NAME);
@@ -153,6 +157,16 @@ public class TestHelper {
                 Presets.WARRIOR_RACE);
         WARRIOR.setTeamId(Presets.TEST_TEAM);
         db.updateUser(WARRIOR);
+    }
+
+    private void generateArcher() {
+        ARCHER = ArenaUser.create(
+                Presets.ARCHER_ID,
+                Presets.ARCHER_NAME,
+                UserClass.ARCHER,
+                Presets.ARCHER_RACE);
+        WARRIOR.setTeamId(Presets.TEST_TEAM);
+        db.updateUser(ARCHER);
     }
 
     private void clearData() {
@@ -196,8 +210,8 @@ public class TestHelper {
         List<String> curTeamsId;
         List<ArenaUser> members;
         List<Team> teams;
-        ArenaUser warrior = TestHelper.WARRIOR;
-        ArenaUser mage = TestHelper.MAGE;
+        ArenaUser warrior = WARRIOR;
+        ArenaUser mage = MAGE;
 
         curMembersId = new ArrayList<>();
         curMembersId.add(warrior.getUserId());

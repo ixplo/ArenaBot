@@ -16,8 +16,8 @@ import org.junit.Test;
 public class SpellTest {
 
     private TestHelper testHelper = new TestHelper();
-    private ArenaUser warrior = TestHelper.WARRIOR;
-    private Mage mage = (Mage) TestHelper.MAGE;
+    private ArenaUser warrior = testHelper.WARRIOR;
+    private Mage mage = (Mage) testHelper.MAGE;
 
     @After
     public void tearDown() {

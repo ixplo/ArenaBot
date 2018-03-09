@@ -29,8 +29,8 @@ import static org.junit.Assert.assertTrue;
  */
 public class ArenaUserTest {
     private TestHelper testHelper = new TestHelper();
-    private ArenaUser warrior = TestHelper.WARRIOR;
-    private ArenaUser mage = TestHelper.MAGE;
+    private ArenaUser warrior = testHelper.WARRIOR;
+    private ArenaUser mage = testHelper.MAGE;
 
     @Before
     public void setUp() throws Exception {

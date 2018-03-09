@@ -26,6 +26,9 @@ public class Presets {
     public static final int MAGE_ID = -2;
     public static final String MAGE_NAME = "test_mage";
     public static final String MAGE_RACE = "e";
+    public static final Integer ARCHER_ID = -3;
+    public static final String ARCHER_NAME = "Леголас";
+    public static final String ARCHER_RACE = "e";
     public static final String FLAMBERG = "wba";
     public static final String ITEM_SHIRT = "aaa";
     public static final CharSequence FLAMBERG_NAME = "Фламберг";
@@ -42,6 +45,9 @@ public class Presets {
     public static final String HEAL_SPELL_ID = "1cm";
     public static final String PRIEST_SPELL_ID = "1ap";
     public static final String MAGE_SPELL_NAME = "Магическая стрела";
+    public static final String BLESS_SPELL_NAME = "Благословение";
+    public static final String HEAL_SPELL_NAME = "Слабое лечение";
+    public static final String ARMOR_SPELL_NAME = "Магический доспех";
     public static final int SPELL_GRADE_ONE = 1;
     public static final int SPELL_GRADE_TWO = 2;
     public static final int SPELL_GRADE_THREE = 3;

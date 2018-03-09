@@ -33,8 +33,8 @@ public class RoundTest {
     private static final int PERCENT = 85;
 
     private TestHelper testHelper = new TestHelper();
-    private ArenaUser warrior = TestHelper.WARRIOR;
-    private ArenaUser mage = TestHelper.MAGE;
+    private ArenaUser warrior = testHelper.WARRIOR;
+    private ArenaUser mage = testHelper.MAGE;
     private Round round = testHelper.getTestRound();
 
     @Before
