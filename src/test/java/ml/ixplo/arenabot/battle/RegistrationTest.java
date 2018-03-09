@@ -42,6 +42,7 @@ public class RegistrationTest {
 
     @Test
     public void startBattleRegistrationIsOff() throws Exception {
+        Assert.assertNull(Battle.getBattle());
         registration.setIsOn(false);
         registration.startBattle();
         Assert.assertNull(Battle.getBattle());
