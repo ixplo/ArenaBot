@@ -39,10 +39,12 @@ public class BattleTest extends BaseTest{
 
     @Test
     public void runTest() throws InterruptedException {
+        StringBuilder log = testHelper.initLogger();
         battle.getCurTeamsId().remove(0);
         Round.getCurrent().stop();
         battle.interrupt();
         battle.join();
+        Assert.assertTrue(log.toString().contains("Битва окончена"));
     }
 
     @Test
