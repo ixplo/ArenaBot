@@ -1,9 +1,9 @@
 package ml.ixplo.arenabot.battle;
 
-import ml.ixplo.arenabot.battle.actions.Action;
-
 import java.util.ArrayList;
+
 import java.util.List;
+import ml.ixplo.arenabot.battle.actions.Action;
 
 /**
  * ixplo
@@ -31,7 +31,7 @@ public class Order {
     }
 
     void addAction(Action action) {
-        if (commonPercent == 0){
+        if (commonPercent == 0) {
             return;
         }
         if (commonPercent - action.getPercent() < 0) {
@@ -50,7 +50,7 @@ public class Order {
         StringBuilder txt = new StringBuilder();
         txt.append("user=").append(userId).append("round=").append(round);
         txt.append(", commonPercent=").append(commonPercent);
-        for (Action action:actions){
+        for (Action action : actions) {
             txt.append(" [").append(action.getActionId()).append(action.getPercent()).append("]");
         }
         return txt.toString();

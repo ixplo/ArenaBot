@@ -7,10 +7,8 @@ import ml.ixplo.arenabot.user.IUser;
 
 /**
  * Class for member of registration/battle
- *
  */
-public class Member implements IUser{
-    //todo переделать все на геттеры в ArenaUser и сделать поля приватными
+public class Member implements IUser {
     protected static DatabaseManager db;
     protected Integer userId;
     protected String name;
@@ -18,6 +16,12 @@ public class Member implements IUser{
     private String teamRank;
 
     public Member() {
+    }
+
+    public Member(int userId, String teamId) {
+        this.userId = userId;
+        name = ArenaUser.getUserName(userId);
+        this.teamId = teamId;
     }
 
     public static DatabaseManager getDb() {
@@ -68,12 +72,6 @@ public class Member implements IUser{
 
     public int getStatus() {
         return getStatus(userId);
-    }
-
-    public Member(int userId, String teamId) {
-        this.userId = userId;
-        name = ArenaUser.getUserName(userId);
-        this.teamId = teamId;
     }
 
     public String getName() {
