@@ -33,12 +33,12 @@ public class BattleTest extends BaseTest{
     }
 
     @Test
-    public void getBattle() {
+    public void getBattleTest() {
         Assert.assertEquals(battle, Battle.getBattle());
     }
 
     @Test
-    public void run() throws InterruptedException {
+    public void runTest() throws InterruptedException {
         battle.getCurTeamsId().remove(0);
         Round.getCurrent().stop();
         battle.interrupt();
@@ -46,7 +46,7 @@ public class BattleTest extends BaseTest{
     }
 
     @Test
-    public void getTeams() {
+    public void getTeamsTest() {
         Assert.assertEquals(teams, battle.getTeams());
     }
 
