@@ -110,7 +110,7 @@ public class Archer extends SkillCaster {
         getDb().setIntTo(Config.USERS, getUserId(), "max_target", maxTarget);
     }
 
-    private int getMaxTarget() {
+    public int getMaxTarget() {
         return maxTarget;
     }
 
