@@ -3,12 +3,14 @@ package ml.ixplo.arenabot.user.classes;
 import ml.ixplo.arenabot.BaseTest;
 import ml.ixplo.arenabot.config.Config;
 import ml.ixplo.arenabot.helper.Presets;
+import ml.ixplo.arenabot.messages.Messages;
 import ml.ixplo.arenabot.user.ArenaUser;
 import ml.ixplo.arenabot.user.params.Hark;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.telegram.telegrambots.api.methods.send.SendMessage;
 
 import java.math.BigDecimal;
 
@@ -35,5 +37,11 @@ public class ArcherTest extends BaseTest{
         Archer user = (Archer) ArenaUser.getUser(Presets.ARCHER_ID);
         user.addHark(Hark.NATIVE_WIS, 4);
         Assert.assertEquals(2, user.getMaxTarget());
+    }
+
+    @Test
+    public void getXstatTest() throws Exception {
+        SendMessage userXStatMsg = Messages.getUserXStatMsg(Presets.ARCHER_ID);
+        Assert.assertTrue(userXStatMsg.toString().contains("Кол. целей:"));
     }
 }
