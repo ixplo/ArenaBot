@@ -50,6 +50,7 @@ public class ArcherTest extends BaseTest{
         archer.addItem(Presets.RAINBOW_BRACELET);
         archer.putOn(Presets.NEW_ITEM_INDEX);
         Assert.assertEquals(2, archer.getMaxTarget());
+
         archer.putOff(Presets.NEW_ITEM_INDEX);
         Assert.assertEquals(1, archer.getMaxTarget());
     }

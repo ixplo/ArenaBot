@@ -5,8 +5,7 @@ import ml.ixplo.arenabot.database.DatabaseManager;
 import ml.ixplo.arenabot.user.ArenaUser;
 
 /**
- * ixplo
- * 01.05.2017.
+ * Parent class for actions: Attack, Heal and so on
  */
 public abstract class Action implements Comparable<Action> {
     static final int FIRST = 1;
