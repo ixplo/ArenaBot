@@ -35,7 +35,7 @@ public class ArcherTest extends BaseTest{
     @Test
     public void getClassFeaturesTest() throws Exception {
         Archer user = (Archer) ArenaUser.getUser(Presets.ARCHER_ID);
-        user.addHark(Hark.NATIVE_WIS, 4);
+        user.addHark(Hark.NATIVE_WIS, 2);
         Assert.assertEquals(2, user.getMaxTarget());
     }
 
@@ -43,5 +43,14 @@ public class ArcherTest extends BaseTest{
     public void getXstatTest() throws Exception {
         SendMessage userXStatMsg = Messages.getUserXStatMsg(Presets.ARCHER_ID);
         Assert.assertTrue(userXStatMsg.toString().contains("Кол. целей:"));
+    }
+
+    @Test
+    public void putOnFeatures() throws Exception {
+        archer.addItem(Presets.RAINBOW_BRACELET);
+        archer.putOn(Presets.NEW_ITEM_INDEX);
+        Assert.assertEquals(2, archer.getMaxTarget());
+        archer.putOff(Presets.NEW_ITEM_INDEX);
+        Assert.assertEquals(1, archer.getMaxTarget());
     }
 }
