@@ -4,6 +4,7 @@ import ml.ixplo.arenabot.Bot;
 import ml.ixplo.arenabot.battle.Registration;
 import ml.ixplo.arenabot.battle.Round;
 import ml.ixplo.arenabot.battle.Team;
+import ml.ixplo.arenabot.battle.actions.Action;
 import ml.ixplo.arenabot.config.Config;
 import ml.ixplo.arenabot.exception.ArenaUserException;
 import ml.ixplo.arenabot.user.ArenaUser;
@@ -181,23 +182,6 @@ public final class Messages {
 
         try {
             bot.sendMessage(message);
-        } catch (TelegramApiException e) {
-            BotLogger.error(LOGTAG, e);
-        }
-    }
-
-    static void deleteMessage(CallbackQuery callbackQuery) {
-
-        EditMessageReplyMarkup edit = new EditMessageReplyMarkup();
-        edit.setChatId((long) callbackQuery.getFrom().getId());
-        edit.setMessageId(callbackQuery.getMessage().getMessageId());
-        EditMessageText editText = new EditMessageText();
-        editText.setChatId((long) callbackQuery.getFrom().getId());
-        editText.setMessageId(callbackQuery.getMessage().getMessageId());
-        editText.setText("");
-        try {
-            bot.editMessageReplyMarkup(edit);
-            bot.editMessageText(editText);
         } catch (TelegramApiException e) {
             BotLogger.error(LOGTAG, e);
         }
@@ -408,7 +392,7 @@ public final class Messages {
     /*todo переделать все под один универсальный метод, а текст сообщения хранить в xml
     конкретный результат определять по коду
     getAnswerCallbackQuery(String code, Map<String, Object> inParams)
-    вынести callbackquery в отдельный класс*/
+    вынести callbackQuery в отдельный класс*/
     public static AnswerCallbackQuery getAnswerCallbackQuery(String queryId, String queryText) {
         if (queryText == null) {
             return new AnswerCallbackQuery().setCallbackQueryId(queryId);
@@ -554,16 +538,16 @@ public final class Messages {
         msg.enableHtml(true);
         StringBuilder out = new StringBuilder();
         switch (action) { //todo from db
-            case "a": //todo msg from class
+            case Action.ATTACK:
                 out.append("Атаковать игрока ");
                 break;
-            case "p":
+            case Action.PROTECT:
                 out.append("Защищать игрока ");
                 break;
-            case "h":
+            case Action.HEAL:
                 out.append("Лечить игрока ");
                 break;
-            case "m":
+            case Action.MAGIC:
                 out.append("Вы пробуете творить заклинание на игрока ");
                 break;
             default:
