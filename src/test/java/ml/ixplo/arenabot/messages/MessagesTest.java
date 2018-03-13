@@ -393,7 +393,11 @@ public class MessagesTest {
     }
 
     @Test
-    public void deleteMessage() throws Exception {
+    public void sendMessage() {
+        StringBuilder log = testHelper.initLogger();
+        String messageText = "For sale: baby shoes, never used";
+        Messages.sendMessage(testHelper.getTestBot(log), Presets.CHANNEL_ID, messageText);
+        Assert.assertEquals(messageText, log.toString());
     }
 
 }
