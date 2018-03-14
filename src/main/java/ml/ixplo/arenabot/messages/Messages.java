@@ -41,6 +41,7 @@ public final class Messages {
 
     public static final String LOGTAG = "MESSAGES";
     public static final String END_OF_ROUND_REMINDER = "<b>Осталось 15 секунд до конца раунда!</b>";
+    private static final String SENDING_MESSAGE_ERROR = "Sending message error";
 
     /***** no getInstance for this class *****/
     private Messages() {
@@ -102,7 +103,7 @@ public final class Messages {
             return bot.sendMessage(msg).getMessageId();
         } catch (TelegramApiException e) {
             BotLogger.error(LOGTAG, e);
-            throw new ArenaUserException("Error when sending a message");
+            throw new ArenaUserException(SENDING_MESSAGE_ERROR);
         }
     }
 
@@ -116,7 +117,7 @@ public final class Messages {
             bot.editMessageText(editText);
         } catch (TelegramApiException e) {
             BotLogger.error(LOGTAG, e);
-            throw new ArenaUserException("Error when sending a message");
+            throw new ArenaUserException(SENDING_MESSAGE_ERROR);
         }
     }
 
@@ -131,7 +132,7 @@ public final class Messages {
             }
         } catch (TelegramApiException e) {
             BotLogger.error(LOGTAG, e);
-            throw new ArenaUserException("Error when sending a message");
+            throw new ArenaUserException(SENDING_MESSAGE_ERROR);
         }
     }
 
@@ -153,7 +154,7 @@ public final class Messages {
             }
         } catch (TelegramApiException e) {
             BotLogger.error(LOGTAG, e);
-            throw new ArenaUserException("Sending message error", e);
+            throw new ArenaUserException(SENDING_MESSAGE_ERROR, e);
         }
     }
 
@@ -167,7 +168,7 @@ public final class Messages {
             absSender.sendMessage(msg);
         } catch (TelegramApiException e) {
             BotLogger.error(LOGTAG, e);
-            throw new ArenaUserException("Sending message error", e);
+            throw new ArenaUserException(SENDING_MESSAGE_ERROR, e);
         }
     }
 
@@ -181,7 +182,7 @@ public final class Messages {
             bot.sendMessage(msg);
         } catch (TelegramApiException e) {
             BotLogger.error(LOGTAG, e);
-            throw new ArenaUserException("Sending message error", e);
+            throw new ArenaUserException(SENDING_MESSAGE_ERROR, e);
         }
     }
 
@@ -191,7 +192,7 @@ public final class Messages {
             bot.sendMessage(message);
         } catch (TelegramApiException e) {
             BotLogger.error(LOGTAG, e);
-            throw new ArenaUserException("Sending message error", e);
+            throw new ArenaUserException(SENDING_MESSAGE_ERROR, e);
         }
     }
 
