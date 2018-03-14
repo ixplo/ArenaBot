@@ -247,14 +247,6 @@ public class MessagesTest {
     }
 
     @Test
-    public void sendChannelMsg() throws Exception {
-    }
-
-    @Test
-    public void sendChannelMsgReturnId() throws Exception {
-    }
-
-    @Test
     public void editChannelMsg() throws Exception {
     }
 
@@ -428,14 +420,14 @@ public class MessagesTest {
     @Test(expected = ArenaUserException.class)
     public void sendToAllNullText() {
         Messages.setBot(new Bot());
-        String nullText = null;
+        final String nullText = null;
         Messages.sendToAll(Collections.singletonList(warrior), nullText);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void sendToAllNullSendMessage() {
         Messages.setBot(new Bot());
-        SendMessage nullSendMessage = null;
+        final SendMessage nullSendMessage = null;
         Messages.sendToAll(Collections.singletonList(warrior), nullSendMessage);
     }
 
@@ -449,6 +441,13 @@ public class MessagesTest {
     public void sendInvalidMessage() {
         Messages.setBot(new Bot());
         Messages.sendMessage(new SendMessage());
+    }
+
+    @Test(expected = ArenaUserException.class)
+    public void sendInvalidChannelMessage() {
+        Messages.setBot(new Bot());
+        final String nullString = null;
+        Messages.sendChannelMsg(Presets.CHANNEL_ID, nullString);
     }
 
     @Test

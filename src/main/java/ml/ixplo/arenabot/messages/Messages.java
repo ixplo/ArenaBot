@@ -90,6 +90,7 @@ public final class Messages {
             bot.sendMessage(msg);
         } catch (TelegramApiException e) {
             BotLogger.error(LOGTAG, e);
+            throw new ArenaUserException(SENDING_MESSAGE_ERROR);
         }
     }
 
