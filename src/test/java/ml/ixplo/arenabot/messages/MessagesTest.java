@@ -28,6 +28,7 @@ import org.telegram.telegrambots.api.objects.replykeyboard.buttons.InlineKeyboar
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class MessagesTest {
@@ -410,6 +411,49 @@ public class MessagesTest {
     public void sendNullMessageDefaultBot() {
         Messages.setBot(new Bot());
         Messages.sendMessage(Presets.CHANNEL_ID, null);
+    }
+
+    @Test(expected = ArenaUserException.class)
+    public void sendNullMessageReturnIdDefaultBot() {
+        Messages.setBot(new Bot());
+        Messages.sendChannelMsgReturnId(Presets.CHANNEL_ID, null);
+    }
+
+    @Test(expected = ArenaUserException.class)
+    public void editMessageNullText() {
+        Messages.setBot(new Bot());
+        Messages.editChannelMsg(Presets.CHANNEL_ID, Presets.MESSAGE_ID, null);
+    }
+
+    @Test(expected = ArenaUserException.class)
+    public void sendToAllNullText() {
+        Messages.setBot(new Bot());
+        String nullText = null;
+        Messages.sendToAll(Collections.singletonList(warrior), nullText);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void sendToAllNullSendMessage() {
+        Messages.setBot(new Bot());
+        SendMessage nullSendMessage = null;
+        Messages.sendToAll(Collections.singletonList(warrior), nullSendMessage);
+    }
+
+    @Test(expected = ArenaUserException.class)
+    public void sendToAllSendMessageNullText() {
+        Messages.setBot(new Bot());
+        Messages.sendToAll(Collections.singletonList(warrior), new SendMessage());
+    }
+
+    @Test(expected = ArenaUserException.class)
+    public void sendInvalidMessage() {
+        Messages.setBot(new Bot());
+        Messages.sendMessage(new SendMessage());
+    }
+
+    @Test
+    public void fillWithSpacesTest() {
+        Assert.assertEquals("first second", Messages.fillWithSpaces("first", "second", 5));
     }
 
     //Шофёр закурил и нагнулся над бензобаком, посмотреть много ли осталось бензина. Покойнику было двадцать три года.

@@ -116,6 +116,7 @@ public final class Messages {
             bot.editMessageText(editText);
         } catch (TelegramApiException e) {
             BotLogger.error(LOGTAG, e);
+            throw new ArenaUserException("Error when sending a message");
         }
     }
 
@@ -130,6 +131,7 @@ public final class Messages {
             }
         } catch (TelegramApiException e) {
             BotLogger.error(LOGTAG, e);
+            throw new ArenaUserException("Error when sending a message");
         }
     }
 
@@ -141,7 +143,9 @@ public final class Messages {
     }
 
     public static void sendToAll(List<? extends IUser> members, SendMessage msg) {
-
+        if (msg == null) {
+            throw new IllegalArgumentException("SendMessage cant be null");
+        }
         try {
             for (IUser user : members) {
                 msg.setChatId((long) user.getUserId());
@@ -149,6 +153,7 @@ public final class Messages {
             }
         } catch (TelegramApiException e) {
             BotLogger.error(LOGTAG, e);
+            throw new ArenaUserException("Sending message error", e);
         }
     }
 
@@ -186,6 +191,7 @@ public final class Messages {
             bot.sendMessage(message);
         } catch (TelegramApiException e) {
             BotLogger.error(LOGTAG, e);
+            throw new ArenaUserException("Sending message error", e);
         }
     }
 
