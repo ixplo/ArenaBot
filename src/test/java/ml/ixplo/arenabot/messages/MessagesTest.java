@@ -92,7 +92,7 @@ public class MessagesTest {
     }
 
     @Test
-    public void getEqipMsgItemNotInSlot() throws Exception {
+    public void getEqipMsgItemNotInSlotNotBold() throws Exception {
         warrior.addItem(Presets.FLAMBERG);
         Assert.assertTrue(Messages.getEqipMsg(Presets.WARRIOR_ID).getText().contains("0.<b>Ладошка</b>, 1.Фламберг"));
     }
