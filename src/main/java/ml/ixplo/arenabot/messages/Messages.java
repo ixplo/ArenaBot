@@ -217,21 +217,18 @@ public final class Messages {
         for (int i = 0; i < size; i++) {
             out.append(i);
             // bold font for items in slot
-            if (Item.isItemInSlot(i, userId)) {
+            if (Item.isItemInSlot(userId, i)) {
                 out.append(".<b>").append(items.get(i).getName()).append("</b>, ");
             } else {
                 out.append(".").append(items.get(i).getName()).append(", ");
             }
         }
         out.append("\nОружие: <b>");
-        if (arenaUser.getCurWeaponIndex() < 0) {
-            out.append("без оружия</b>");
-        } else {
-            out.append(Item.getItem(Item.getItemId(arenaUser.getUserId(), arenaUser.getCurWeaponIndex())).getName());
-            out.append("</b>(");
-            out.append(Item.getItem(Item.getItemId(arenaUser.getUserId(), arenaUser.getCurWeaponIndex())).getPrice());
-            out.append(")");
-        }
+        out.append(Item.getItem(Item.getItemId(arenaUser.getUserId(), arenaUser.getCurWeaponIndex())).getName());
+        out.append("</b>(");
+        out.append(Item.getItem(Item.getItemId(arenaUser.getUserId(), arenaUser.getCurWeaponIndex())).getPrice());
+        out.append(")");
+
         SendMessage msg = new SendMessage();
         msg.setChatId((long) userId);
         msg.enableHtml(true);
@@ -394,8 +391,8 @@ public final class Messages {
     }
 
     public static SendMessage getAskActionMsg(int userId) {
-        return getInlineKeyboardMsg((long)userId, "Выберите действие:",
-                    ArenaUser.getUser(userId).getActionsName(), ArenaUser.getUser(userId).getActionsIdForInlineKeyboard());
+        return getInlineKeyboardMsg((long) userId, "Выберите действие:",
+                ArenaUser.getUser(userId).getActionsName(), ArenaUser.getUser(userId).getActionsIdForInlineKeyboard());
     }
 
 
@@ -438,15 +435,15 @@ public final class Messages {
     }
 
     public static EditMessageReplyMarkup getEditMessageReplyMarkup(int userId, Integer messageId) {
-        return new EditMessageReplyMarkup().setChatId((long)userId).setMessageId(messageId);
+        return new EditMessageReplyMarkup().setChatId((long) userId).setMessageId(messageId);
     }
 
     public static EditMessageText getAfterDeleteMessageText(int userId, Integer messageId) {
-        return new EditMessageText().setChatId((long)userId).setMessageId(messageId).setText("Персонаж удален");
+        return new EditMessageText().setChatId((long) userId).setMessageId(messageId).setText("Персонаж удален");
     }
 
     public static EditMessageText getActionTakenEditMsg(int userId, Integer messageId) {
-        return new EditMessageText().setChatId((long)userId).setMessageId(messageId).setText("Заказ принят:");
+        return new EditMessageText().setChatId((long) userId).setMessageId(messageId).setText("Заказ принят:");
     }
 
     public static void sendListToAll(List<Team> teams) {
@@ -582,7 +579,7 @@ public final class Messages {
     }
 
     public static SendMessage getRegMemberMsg(int userId, String teamName) {
-        return new SendMessage().setChatId((long)userId).enableHtml(true).setText("</b> ("
+        return new SendMessage().setChatId((long) userId).enableHtml(true).setText("</b> ("
                 + ArenaUser.getUserName(userId) + "/"
                 + ArenaUser.getUser(userId).getRaceName()
                 + " уровень:" + ArenaUser.getUser(userId).getLevel() + ")"

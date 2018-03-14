@@ -92,6 +92,12 @@ public class MessagesTest {
     }
 
     @Test
+    public void getEqipMsgItemNotInSlot() throws Exception {
+        warrior.addItem(Presets.FLAMBERG);
+        Assert.assertTrue(Messages.getEqipMsg(Presets.WARRIOR_ID).getText().contains("0.<b>Ладошка</b>, 1.Фламберг"));
+    }
+
+    @Test
     public void getUserStatMsg() throws Exception {
         SendMessage message = Messages.getUserStatMsg(Config.ADMIN_ID);
         Assert.assertEquals(Config.ADMIN_ID.toString(), message.getChatId());
@@ -122,6 +128,11 @@ public class MessagesTest {
         Assert.assertTrue(message.getText().contains("Защ. от магии"));
         Assert.assertTrue(message.getText().contains("Мана"));
         Assert.assertTrue(message.getText().contains("Магич. бонусы"));
+    }
+
+    @Test
+    public void getUserStatMsgNoGames() {
+        Assert.assertTrue(Messages.getUserStatMsg(Presets.WARRIOR_ID).getText().contains("Был в бою: еще нет"));
     }
 
     @Test
@@ -247,14 +258,6 @@ public class MessagesTest {
     }
 
     @Test
-    public void editChannelMsg() throws Exception {
-    }
-
-    @Test
-    public void sendListToAll() throws Exception {
-    }
-
-    @Test
     public void getRoundTeamsList() throws Exception {
         Team team = new Team(Presets.TEST_TEAM);
         team.addMember(warrior);
@@ -282,22 +285,6 @@ public class MessagesTest {
         Assert.assertTrue(text.contains(teamOne.getName()));
         Assert.assertTrue(text.contains(teamTwo.getName()));
         Assert.assertFalse(text.contains(existUser.getName()));
-    }
-
-    @Test
-    public void sendToAll() throws Exception {
-    }
-
-    @Test
-    public void sendToAll1() throws Exception {
-    }
-
-    @Test
-    public void sendToAllMembers() throws Exception {
-    }
-
-    @Test
-    public void sendDoMsg() throws Exception {
     }
 
     @Test
@@ -361,10 +348,6 @@ public class MessagesTest {
     }
 
     @Test
-    public void sendAskPercent() throws Exception {
-    }
-
-    @Test
     public void getActionTakenEditMsg() throws Exception {
         EditMessageText messageText = Messages.getActionTakenEditMsg(warrior.getUserId(), Presets.MESSAGE_ID);
         Assert.assertEquals(Presets.MESSAGE_ID, messageText.getMessageId());
@@ -376,14 +359,6 @@ public class MessagesTest {
         AnswerCallbackQuery query = Messages.getEmptyQuery(Presets.QUERY_ID);
         Assert.assertEquals(Presets.QUERY_ID, query.getCallbackQueryId());
         Assert.assertNull(query.getText());
-    }
-
-    @Test
-    public void sendAskSpell() throws Exception {
-    }
-
-    @Test
-    public void sendEmptyAnswerQuery() throws Exception {
     }
 
     @Test
