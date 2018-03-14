@@ -198,8 +198,11 @@ public class SpellCasterTest extends BaseTest {
 
     @Test
     public void armorEffectWithProtectTest() throws InterruptedException {
-        Action attack = Action.create(Presets.WARRIOR_ID, Action.ATTACK, Presets.WARRIOR_ID, 1);
-        testHelper.getTestRound().takeAction(attack);
+        Action attack1 = Action.create(Presets.WARRIOR_ID, Action.ATTACK, Presets.WARRIOR_ID, 1);
+        Action attack2 = Action.create(Presets.WARRIOR_ID, Action.ATTACK, Presets.WARRIOR_ID, 1);
+        Round testRound = testHelper.getTestRound();
+        testRound.takeAction(attack1);
+        testRound.takeAction(attack2);
 
         testMage.setSpell(Presets.ARMOR_SPELL_ID);
         testMage.doCast(warrior, 100, Presets.ARMOR_SPELL_ID);

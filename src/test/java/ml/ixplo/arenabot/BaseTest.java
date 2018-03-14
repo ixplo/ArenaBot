@@ -1,7 +1,6 @@
 package ml.ixplo.arenabot;
 
 import ml.ixplo.arenabot.helper.TestHelper;
-import ml.ixplo.arenabot.messages.Messages;
 import ml.ixplo.arenabot.user.ArenaUser;
 import org.junit.After;
 import org.junit.Before;

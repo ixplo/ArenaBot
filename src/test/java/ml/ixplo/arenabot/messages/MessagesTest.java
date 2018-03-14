@@ -4,6 +4,7 @@ import ml.ixplo.arenabot.Bot;
 import ml.ixplo.arenabot.battle.Registration;
 import ml.ixplo.arenabot.battle.Team;
 import ml.ixplo.arenabot.config.Config;
+import ml.ixplo.arenabot.exception.ArenaUserException;
 import ml.ixplo.arenabot.helper.Presets;
 import ml.ixplo.arenabot.helper.TestHelper;
 import ml.ixplo.arenabot.user.ArenaUser;
@@ -400,4 +401,17 @@ public class MessagesTest {
         Assert.assertEquals(messageText, log.toString());
     }
 
+    @Test(expected = ArenaUserException.class)
+    public void sendNullMessage() {
+        Messages.sendMessage(new Bot(), Presets.CHANNEL_ID, null);
+    }
+
+    @Test(expected = ArenaUserException.class)
+    public void sendNullMessageDefaultBot() {
+        Messages.setBot(new Bot());
+        Messages.sendMessage(Presets.CHANNEL_ID, null);
+    }
+
+    //Шофёр закурил и нагнулся над бензобаком, посмотреть много ли осталось бензина. Покойнику было двадцать три года.
+    //О, Боже, — воскликнула королева, — я беременна и не знаю от кого!
 }

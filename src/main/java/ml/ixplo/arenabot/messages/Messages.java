@@ -162,6 +162,7 @@ public final class Messages {
             absSender.sendMessage(msg);
         } catch (TelegramApiException e) {
             BotLogger.error(LOGTAG, e);
+            throw new ArenaUserException("Sending message error", e);
         }
     }
 
@@ -175,6 +176,7 @@ public final class Messages {
             bot.sendMessage(msg);
         } catch (TelegramApiException e) {
             BotLogger.error(LOGTAG, e);
+            throw new ArenaUserException("Sending message error", e);
         }
     }
 
