@@ -479,6 +479,7 @@ public final class Messages {
             }
         } catch (TelegramApiException e) {
             BotLogger.error(LOGTAG, e);
+            throw new ArenaUserException(SENDING_MESSAGE_ERROR, e);
         }
     }
 

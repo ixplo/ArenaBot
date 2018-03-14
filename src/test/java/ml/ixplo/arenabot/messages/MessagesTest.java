@@ -438,6 +438,12 @@ public class MessagesTest {
     }
 
     @Test(expected = ArenaUserException.class)
+    public void sendListToAllBadChannel() {
+        Messages.setBot(new Bot());
+        Messages.sendListToAll(testHelper.getTestRound().getTeams());
+    }
+
+    @Test(expected = ArenaUserException.class)
     public void sendInvalidMessage() {
         Messages.setBot(new Bot());
         Messages.sendMessage(new SendMessage());
