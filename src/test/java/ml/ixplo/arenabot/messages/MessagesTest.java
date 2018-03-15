@@ -3,6 +3,7 @@ package ml.ixplo.arenabot.messages;
 import ml.ixplo.arenabot.Bot;
 import ml.ixplo.arenabot.battle.Registration;
 import ml.ixplo.arenabot.battle.Team;
+import ml.ixplo.arenabot.battle.actions.Action;
 import ml.ixplo.arenabot.config.Config;
 import ml.ixplo.arenabot.exception.ArenaUserException;
 import ml.ixplo.arenabot.helper.Presets;
@@ -434,6 +435,58 @@ public class MessagesTest {
     @Test
     public void fillWithSpacesTest() {
         Assert.assertEquals("first second", Messages.fillWithSpaces("first", "second", 5));
+    }
+
+    @Test
+    public void sendDoAttackMsgTest() {
+        StringBuilder log = testHelper.initLogger();
+        testHelper.getTestRound();
+        Messages.sendDoMsg(testHelper.getTestBot(log), Presets.CHANNEL_ID, Action.ATTACK, Presets.TARGET_ID, Presets.FULL_PERCENT);
+        Assert.assertTrue(log.toString().contains("Атаковать игрока"));
+        Assert.assertTrue(log.toString().contains(String.valueOf(Presets.FULL_PERCENT)));
+    }
+
+    @Test
+    public void sendDoProtectkMsgTest() {
+        StringBuilder log = testHelper.initLogger();
+        testHelper.getTestRound();
+        Messages.sendDoMsg(testHelper.getTestBot(log), Presets.CHANNEL_ID, Action.PROTECT, Presets.TARGET_ID, Presets.FULL_PERCENT);
+        Assert.assertTrue(log.toString().contains("Защищать игрока"));
+        Assert.assertTrue(log.toString().contains(String.valueOf(Presets.FULL_PERCENT)));
+    }
+
+    @Test
+    public void sendDoHealMsgTest() {
+        StringBuilder log = testHelper.initLogger();
+        testHelper.getTestRound();
+        Messages.sendDoMsg(testHelper.getTestBot(log), Presets.CHANNEL_ID, Action.HEAL, Presets.TARGET_ID, Presets.FULL_PERCENT);
+        Assert.assertTrue(log.toString().contains("Лечить игрока"));
+        Assert.assertTrue(log.toString().contains(String.valueOf(Presets.FULL_PERCENT)));
+    }
+
+    @Test
+    public void sendDoMagicMsgTest() {
+        StringBuilder log = testHelper.initLogger();
+        testHelper.getTestRound();
+        Messages.sendDoMsg(testHelper.getTestBot(log), Presets.CHANNEL_ID, Action.MAGIC, Presets.TARGET_ID, Presets.FULL_PERCENT);
+        Assert.assertTrue(log.toString().contains("Вы пробуете творить заклинание на игрока"));
+        Assert.assertTrue(log.toString().contains(String.valueOf(Presets.FULL_PERCENT)));
+    }
+
+    @Test
+    public void sendDoWrongMsgTest() {
+        StringBuilder log = testHelper.initLogger();
+        testHelper.getTestRound();
+        Messages.sendDoMsg(testHelper.getTestBot(log), Presets.CHANNEL_ID, "wrong", Presets.TARGET_ID, Presets.FULL_PERCENT);
+        Assert.assertTrue(log.toString().contains("Нет пока такого действия"));
+        Assert.assertFalse(log.toString().contains(String.valueOf(Presets.FULL_PERCENT)));
+    }
+
+    @Test(expected = ArenaUserException.class)
+    public void sendDoMsgIllegalChatIdTest() {
+        testHelper.getTestRound();
+        Messages.sendDoMsg(new Bot(), 0L, "wrong", Presets.TARGET_ID, Presets.FULL_PERCENT);
+
     }
 
     //Шофёр закурил и нагнулся над бензобаком, посмотреть много ли осталось бензина. Покойнику было двадцать три года.

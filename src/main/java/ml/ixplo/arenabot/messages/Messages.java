@@ -561,20 +561,17 @@ public final class Messages {
             default:
                 out.append("Нет пока такого действия. Пожалуйтесь разработчикам!");
                 msg.setText(out.toString());
-                try {
-                    absSender.sendMessage(msg);
-                } catch (TelegramApiException e) {
-                    BotLogger.error(LOGTAG, e);
-                }
-                return;
         }
-        out.append("<b>").append(ArenaUser.getUserName(Round.getCurrent().getCurMembersId().get(target)))
-                .append("</b> на ").append(percent).append(" процентов");
-        msg.setText(out.toString());
+        if (msg.getText() == null) {
+            out.append("<b>").append(ArenaUser.getUserName(Round.getCurrent().getCurMembersId().get(target)))
+                    .append("</b> на ").append(percent).append(" процентов");
+            msg.setText(out.toString());
+        }
         try {
             absSender.sendMessage(msg);
         } catch (TelegramApiException e) {
             BotLogger.error(LOGTAG, e);
+            throw new ArenaUserException(SENDING_MESSAGE_ERROR, e);
         }
     }
 
