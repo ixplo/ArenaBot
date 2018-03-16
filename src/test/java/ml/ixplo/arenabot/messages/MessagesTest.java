@@ -2,6 +2,7 @@ package ml.ixplo.arenabot.messages;
 
 import ml.ixplo.arenabot.Bot;
 import ml.ixplo.arenabot.battle.Registration;
+import ml.ixplo.arenabot.battle.Round;
 import ml.ixplo.arenabot.battle.Team;
 import ml.ixplo.arenabot.battle.actions.Action;
 import ml.ixplo.arenabot.config.Config;
@@ -513,6 +514,13 @@ public class MessagesTest {
     public void sendAskSpellWrongChatIdTest() {
         Messages.setBot(new Bot());
         Messages.sendAskSpell(Presets.QUERY_ID, Presets.WARRIOR_ID, 0, Presets.MESSAGE_ID);
+    }
+
+    @Test(expected = ArenaUserException.class)
+    public void sendResultToAllWrongChatIdTest() {
+        Messages.setBot(new Bot());
+        Round testRound = testHelper.getTestRound();
+        Messages.sendResultToAll(testRound.getTeams(), (List<ArenaUser>) testRound.getMembers(), testRound.getCurMembersId());
     }
 
     //Шофёр закурил и нагнулся над бензобаком, посмотреть много ли осталось бензина. Покойнику было двадцать три года.
