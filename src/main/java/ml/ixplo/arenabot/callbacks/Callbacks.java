@@ -20,6 +20,7 @@ public class Callbacks {
     private static Integer messageId;
     private static String queryId;
     private static String callbackCommand;
+    private static Long chatId;
 
     /***** no getInstance for this class *****/
     private Callbacks() {
@@ -77,7 +78,7 @@ public class Callbacks {
 
     private static void handleAction() {
         Action.setActionIdFromCallback(userId, entry);
-        Messages.sendAskPercent(query, entry);
+        Messages.sendAskPercent(queryId, chatId, messageId, entry);
     }
 
     private static void handleSpell() {
@@ -87,7 +88,7 @@ public class Callbacks {
         }
         Action.setCastId(userId, entry);
         Action.setActionIdFromCallback(userId, "Магия");
-        Messages.sendAskPercent(query, "Магия");
+        Messages.sendAskPercent(queryId, chatId, messageId, "Магия");
     }
 
     private static void handleTarget() throws TelegramApiException {
@@ -151,5 +152,6 @@ public class Callbacks {
         userId = query.getFrom().getId();
         messageId = query.getMessage().getMessageId();
         queryId = query.getId();
+        chatId = query.getMessage().getChatId();
     }
 }

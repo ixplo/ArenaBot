@@ -583,16 +583,25 @@ public final class Messages {
                 + " вошел в команду " + teamName);
     }
 
-    public static void sendAskPercent(CallbackQuery callbackQuery, String actionName) {
+    public static void sendAskPercent(String queryId, long chatId, int messageId, String actionName) {
+        try {
+            bot.editMessageText(getEditMessageText(chatId, messageId));
+            bot.editMessageReplyMarkup(getEditMessageReplyMarkup(chatId, messageId));
+            bot.answerCallbackQuery(getAnswerCallbackQuery(queryId, "Вы выбрали: " + actionName));
+        } catch (TelegramApiException e) {
+            BotLogger.error(LOGTAG, e);
+        }
+    }
 
-        String queryId = callbackQuery.getId();
-        AnswerCallbackQuery query = new AnswerCallbackQuery();
-        query.setText("Вы выбрали: " + actionName)
-                .setCallbackQueryId(queryId);
+    private static EditMessageText getEditMessageText(long chatId, int messageId) {
         EditMessageText editText = new EditMessageText();
-        editText.setChatId(callbackQuery.getMessage().getChatId())
-                .setMessageId(callbackQuery.getMessage().getMessageId())
+        editText.setChatId(chatId)
+                .setMessageId(messageId)
                 .setText("Очки действия из 100:");
+        return editText;
+    }
+
+    private static EditMessageReplyMarkup getEditMessageReplyMarkup(long chatId, int messageId) {
         List<String> buttonText = new ArrayList<>();
         List<String> buttonData = new ArrayList<>();
         buttonText.add("100");
@@ -604,16 +613,10 @@ public final class Messages {
         buttonData.add("percent_50");
         buttonData.add("percent_30");
         EditMessageReplyMarkup markup = new EditMessageReplyMarkup();
-        markup.setChatId(callbackQuery.getMessage().getChatId())
-                .setMessageId(callbackQuery.getMessage().getMessageId())
+        markup.setChatId(chatId)
+                .setMessageId(messageId)
                 .setReplyMarkup(getInlineKeyboardMarkup(buttonText, buttonData));
-        try {
-            bot.editMessageText(editText);
-            bot.editMessageReplyMarkup(markup);
-            bot.answerCallbackQuery(query);
-        } catch (TelegramApiException e) {
-            BotLogger.error(LOGTAG, e);
-        }
+        return markup;
     }
 
     public static void sendAskSpell(CallbackQuery callbackQuery) {

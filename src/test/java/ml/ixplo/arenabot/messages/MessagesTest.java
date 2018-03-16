@@ -489,6 +489,13 @@ public class MessagesTest {
 
     }
 
+    @Test
+    public void sendAskPercentTest() {
+        StringBuilder log = testHelper.initLogger();
+        Messages.sendAskPercent(Presets.QUERY_ID, Presets.CHANNEL_ID, Presets.MESSAGE_ID, "Атака");
+        Assert.assertTrue(log.toString().contains("Очки действия"));
+    }
+
     //Шофёр закурил и нагнулся над бензобаком, посмотреть много ли осталось бензина. Покойнику было двадцать три года.
     //О, Боже, — воскликнула королева, — я беременна и не знаю от кого!
 }

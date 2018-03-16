@@ -173,7 +173,7 @@ public class SpellCasterTest extends BaseTest {
         testMage.setCurMana(0);
         StringBuilder log = new StringBuilder();
         for (int i = 0; i < 10; i++) {
-            String castMessage = testMage.doCast(warrior, 100, Presets.MAGIC_ARROW_SPELL_ID);
+            String castMessage = testMage.doCast(warrior, Presets.FULL_PERCENT, Presets.MAGIC_ARROW_SPELL_ID);
             log.append(castMessage);
         }
         Assert.assertTrue(log.toString().contains("не хватило маны"));
@@ -182,7 +182,10 @@ public class SpellCasterTest extends BaseTest {
     @Test
     public void healEffectTest() {
         testMage.setSpell(Presets.HEAL_SPELL_ID);
-        String castMessage = testMage.doCast(testMage, 100, Presets.HEAL_SPELL_ID);
+        String castMessage = testMage.doCast(testMage, Presets.FULL_PERCENT, Presets.HEAL_SPELL_ID);
+        while (!castMessage.contains("поднял здоровье")) {
+            castMessage = testMage.doCast(testMage, Presets.FULL_PERCENT, Presets.HEAL_SPELL_ID);
+        }
 
         Assert.assertTrue(castMessage.contains("поднял здоровье"));
     }
@@ -191,7 +194,7 @@ public class SpellCasterTest extends BaseTest {
     public void armorEffectTest() {
         testHelper.getTestRound();
         testMage.setSpell(Presets.ARMOR_SPELL_ID);
-        String castMessage = testMage.doCast(warrior, 100, Presets.ARMOR_SPELL_ID);
+        String castMessage = testMage.doCast(warrior, Presets.FULL_PERCENT, Presets.ARMOR_SPELL_ID);
 
         Assert.assertTrue(castMessage.contains("поднял защиту"));
     }
@@ -205,7 +208,7 @@ public class SpellCasterTest extends BaseTest {
         testRound.takeAction(attack2);
 
         testMage.setSpell(Presets.ARMOR_SPELL_ID);
-        testMage.doCast(warrior, 100, Presets.ARMOR_SPELL_ID);
+        testMage.doCast(warrior, Presets.FULL_PERCENT, Presets.ARMOR_SPELL_ID);
 
         boolean check = false;
         List<Order> orders = Round.getCurrent().getOrders();
@@ -225,12 +228,12 @@ public class SpellCasterTest extends BaseTest {
     public void armorEffectButPenetrationTest() throws InterruptedException {
         warrior.setAttack(BigDecimal.valueOf(12));
         testHelper.getDb().updateUser(warrior);
-        Action attack = Action.create(Presets.WARRIOR_ID, Action.ATTACK, Presets.WARRIOR_ID, 100);
+        Action attack = Action.create(Presets.WARRIOR_ID, Action.ATTACK, Presets.WARRIOR_ID, Presets.FULL_PERCENT);
         testHelper.getTestRound().takeAction(attack);
         attack.doAction();
 
         testMage.setSpell(Presets.ARMOR_SPELL_ID);
-        testMage.doCast(warrior, 100, Presets.ARMOR_SPELL_ID);
+        testMage.doCast(warrior, Presets.FULL_PERCENT, Presets.ARMOR_SPELL_ID);
 
         boolean check = false;
         List<Order> orders = Round.getCurrent().getOrders();
