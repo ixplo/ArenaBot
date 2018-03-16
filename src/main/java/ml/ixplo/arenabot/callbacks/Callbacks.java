@@ -83,7 +83,7 @@ public class Callbacks {
 
     private static void handleSpell() {
         if (entry.equals("spell")) {
-            Messages.sendAskSpell(query);
+            Messages.sendAskSpell(queryId, userId, chatId, messageId);
             return;
         }
         Action.setCastId(userId, entry);

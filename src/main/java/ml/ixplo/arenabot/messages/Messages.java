@@ -585,7 +585,7 @@ public final class Messages {
 
     public static void sendAskPercent(String queryId, long chatId, int messageId, String actionName) {
         try {
-            bot.editMessageText(getEditMessageText(chatId, messageId));
+            bot.editMessageText(getEditMessageText(chatId, messageId, "Очки действия из 100:"));
             bot.editMessageReplyMarkup(getEditMessageReplyMarkup(chatId, messageId));
             bot.answerCallbackQuery(getAnswerCallbackQuery(queryId, "Вы выбрали: " + actionName));
         } catch (TelegramApiException e) {
@@ -594,11 +594,11 @@ public final class Messages {
         }
     }
 
-    private static EditMessageText getEditMessageText(long chatId, int messageId) {
+    private static EditMessageText getEditMessageText(long chatId, int messageId, String text) {
         EditMessageText editText = new EditMessageText();
         editText.setChatId(chatId)
                 .setMessageId(messageId)
-                .setText("Очки действия из 100:");
+                .setText(text);
         return editText;
     }
 
@@ -620,28 +620,23 @@ public final class Messages {
         return markup;
     }
 
-    public static void sendAskSpell(CallbackQuery callbackQuery) {
-
-        String queryId = callbackQuery.getId();
-        int userId = callbackQuery.getFrom().getId();
-        AnswerCallbackQuery query = new AnswerCallbackQuery();
-        query.setText("Вы выбрали магию");
-        query.setCallbackQueryId(queryId);
-        EditMessageText editText = new EditMessageText();
-        editText.setChatId(callbackQuery.getMessage().getChatId());
-        editText.setMessageId(callbackQuery.getMessage().getMessageId());
-        editText.setText("Выберите заклинание:");
-        EditMessageReplyMarkup markup = new EditMessageReplyMarkup();
-        markup.setChatId(callbackQuery.getMessage().getChatId());
-        markup.setMessageId(callbackQuery.getMessage().getMessageId());
-        markup.setReplyMarkup(getInlineKeyboardMarkup(ArenaUser.getUser(userId).getCastsName(), ArenaUser.getUser(userId).getCastsIdForCallbacks()));
+    public static void sendAskSpell(String queryId, int userId, long chatId, int messageId) {
         try {
-            bot.editMessageText(editText);
-            bot.editMessageReplyMarkup(markup);
-            bot.answerCallbackQuery(query);
+            bot.editMessageText(getEditMessageText(chatId, messageId, "Выберите заклинание:"));
+            bot.editMessageReplyMarkup(getEditMessageReplyMarkup(userId, chatId, messageId));
+            bot.answerCallbackQuery(getAnswerCallbackQuery(queryId, "Вы выбрали магию"));
         } catch (TelegramApiException e) {
             BotLogger.error(LOGTAG, e);
+            throw new ArenaUserException(SENDING_MESSAGE_ERROR, e);
         }
+    }
+
+    private static EditMessageReplyMarkup getEditMessageReplyMarkup(int userId, Long chatId, Integer messageId) {
+        EditMessageReplyMarkup markup = new EditMessageReplyMarkup();
+        markup.setChatId(chatId);
+        markup.setMessageId(messageId);
+        markup.setReplyMarkup(getInlineKeyboardMarkup(ArenaUser.getUser(userId).getCastsName(), ArenaUser.getUser(userId).getCastsIdForCallbacks()));
+        return markup;
     }
 
     private static InlineKeyboardMarkup getInlineKeyboardMarkup(List<String> buttonsText, List<String> buttonsCallbackData) {

@@ -262,7 +262,7 @@ public class MessagesTest {
     public void getRoundTeamsList() throws Exception {
         Team team = new Team(Presets.TEST_TEAM);
         team.addMember(warrior);
-        SendMessage message = Messages.getRoundTeamsList((long)warrior.getUserId(), Arrays.asList(team));
+        SendMessage message = Messages.getRoundTeamsList((long) warrior.getUserId(), Arrays.asList(team));
         Assert.assertEquals(warrior.getUserId().toString(), message.getChatId());
         Assert.assertTrue(message.getText().contains(Presets.WARRIOR_NAME));
     }
@@ -502,6 +502,18 @@ public class MessagesTest {
         Messages.sendAskPercent(Presets.QUERY_ID, 0, Presets.MESSAGE_ID, "Атака");
     }
 
+    @Test
+    public void sendAskSpellTest() {
+        StringBuilder log = testHelper.initLogger();
+        Messages.sendAskSpell(Presets.QUERY_ID, Presets.WARRIOR_ID, Presets.CHANNEL_ID, Presets.MESSAGE_ID);
+        Assert.assertTrue(log.toString().contains("Выберите заклинание:"));
+    }
+
+    @Test(expected = ArenaUserException.class)
+    public void sendAskSpellWrongChatIdTest() {
+        Messages.setBot(new Bot());
+        Messages.sendAskSpell(Presets.QUERY_ID, Presets.WARRIOR_ID, 0, Presets.MESSAGE_ID);
+    }
 
     //Шофёр закурил и нагнулся над бензобаком, посмотреть много ли осталось бензина. Покойнику было двадцать три года.
     //О, Боже, — воскликнула королева, — я беременна и не знаю от кого!
