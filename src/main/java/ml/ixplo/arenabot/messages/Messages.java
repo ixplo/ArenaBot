@@ -590,6 +590,7 @@ public final class Messages {
             bot.answerCallbackQuery(getAnswerCallbackQuery(queryId, "Вы выбрали: " + actionName));
         } catch (TelegramApiException e) {
             BotLogger.error(LOGTAG, e);
+            throw new ArenaUserException(SENDING_MESSAGE_ERROR, e);
         }
     }
 

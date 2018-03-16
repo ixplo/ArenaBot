@@ -496,6 +496,13 @@ public class MessagesTest {
         Assert.assertTrue(log.toString().contains("Очки действия"));
     }
 
+    @Test(expected = ArenaUserException.class)
+    public void sendAskPercentWrongChatIdTest() {
+        Messages.setBot(new Bot());
+        Messages.sendAskPercent(Presets.QUERY_ID, 0, Presets.MESSAGE_ID, "Атака");
+    }
+
+
     //Шофёр закурил и нагнулся над бензобаком, посмотреть много ли осталось бензина. Покойнику было двадцать три года.
     //О, Боже, — воскликнула королева, — я беременна и не знаю от кого!
 }
