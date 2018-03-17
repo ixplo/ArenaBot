@@ -11,6 +11,8 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.lang.reflect.Field;
+
 public class DatabaseManagerTest {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ItemTest.class);
@@ -30,6 +32,16 @@ public class DatabaseManagerTest {
     @Test
     public void checkVersion() {
         Assert.assertEquals(Presets.TEST_DB_VERSION, DatabaseManager.getConnection().checkVersion());
+    }
+
+    @Test
+    public void getInstanceTest() throws Exception {
+        Class<DatabaseManager> databaseManagerClass = DatabaseManager.class;
+        Field instance = databaseManagerClass.getDeclaredField("instance");
+        instance.setAccessible(true);
+        instance.set(databaseManagerClass, null);
+
+        Assert.assertNotNull(DatabaseManager.getInstance());
     }
 
     @Test
