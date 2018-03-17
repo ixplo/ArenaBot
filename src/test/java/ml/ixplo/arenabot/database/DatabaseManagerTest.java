@@ -7,8 +7,10 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.sqlite.SQLiteException;
 
 public class DatabaseManagerTest {
 
@@ -34,6 +36,12 @@ public class DatabaseManagerTest {
     @Test
     public void doesUserExists() throws Exception {
         Assert.assertTrue(db.doesUserExists(Presets.EXIST_USER_ID));
+    }
+
+    @Test(expected = DbException.class)
+    public void doesUserExistException() throws Exception {
+        DatabaseManager.setConnection(new ConnectionDB());
+        db.doesUserExists(Presets.EXIST_USER_ID);
     }
 
     @Test

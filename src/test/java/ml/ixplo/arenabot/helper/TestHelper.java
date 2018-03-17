@@ -197,7 +197,9 @@ public class TestHelper {
 
 
     public void close() {
-        clearData();
+        if (DatabaseManager.getConnection().checkVersion() == Presets.TEST_DB_VERSION) {
+            clearData();
+        }
         DatabaseManager.getConnection().closeConnection();
     }
 
