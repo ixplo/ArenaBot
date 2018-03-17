@@ -155,6 +155,7 @@ public class DatabaseManager {
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             BotLogger.error(LOGTAG, e.getMessage());
+            throw new DbException(e.getMessage(), e);
         }
     }
 
@@ -509,6 +510,7 @@ public class DatabaseManager {
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             BotLogger.error(LOGTAG, e.getMessage());
+            throw new DbException(e.getMessage(), e);
         }
     }
 
@@ -526,6 +528,7 @@ public class DatabaseManager {
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             BotLogger.error(LOGTAG, e.getMessage());
+            throw new DbException(e.getMessage(), e);
         }
     }
 

@@ -1,5 +1,6 @@
 package ml.ixplo.arenabot.database;
 
+import ml.ixplo.arenabot.battle.actions.Action;
 import ml.ixplo.arenabot.helper.Presets;
 import ml.ixplo.arenabot.helper.TestHelper;
 import ml.ixplo.arenabot.user.items.ItemTest;
@@ -7,10 +8,8 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.sqlite.SQLiteException;
 
 public class DatabaseManagerTest {
 
@@ -63,9 +62,16 @@ public class DatabaseManagerTest {
     public void dropItem() throws Exception {
     }
 
-    @Test
-    public void dropActions() throws Exception {
+    @Test(expected = DbException.class)
+    public void dropActionsWrongConnection() throws Exception {
+        DatabaseManager.setConnection(new ConnectionDB());
+        db.dropActions();
+    }
 
+    @Test(expected = DbException.class)
+    public void dropTeamWrongConnection() throws Exception {
+        DatabaseManager.setConnection(new ConnectionDB());
+        db.dropTeam(Presets.TEST_TEAM);
     }
 
     @Test
@@ -103,6 +109,12 @@ public class DatabaseManagerTest {
     public void addSpell() throws Exception {
     }
 
+    @Test(expected = DbException.class)
+    public void saveActionWrongConnection() throws Exception {
+        DatabaseManager.setConnection(new ConnectionDB());
+        db.saveAction(Action.create(Presets.WARRIOR_ID, Action.ATTACK, Presets.WARRIOR_ID, Presets.FULL_PERCENT));
+    }
+
     @Test
     public void addAction() throws Exception {
     }
@@ -111,8 +123,10 @@ public class DatabaseManagerTest {
     public void addItem() throws Exception {
     }
 
-    @Test
-    public void getItems() throws Exception {
+    @Test(expected = DbException.class)
+    public void getItemsWrongConnection() throws Exception {
+        DatabaseManager.setConnection(new ConnectionDB());
+        db.getItems(Presets.WARRIOR_ID);
     }
 
     @Test
