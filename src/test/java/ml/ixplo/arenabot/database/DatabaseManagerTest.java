@@ -1,5 +1,6 @@
 package ml.ixplo.arenabot.database;
 
+import ml.ixplo.arenabot.battle.Team;
 import ml.ixplo.arenabot.battle.actions.Action;
 import ml.ixplo.arenabot.helper.Presets;
 import ml.ixplo.arenabot.helper.TestHelper;
@@ -66,12 +67,27 @@ public class DatabaseManagerTest {
         Assert.assertFalse(db.doesUserExists(Presets.EXIST_USER_ID));
     }
 
-    @Test
-    public void dropItems() throws Exception {
+    @Test(expected = DbException.class)
+    public void dropUserException() throws Exception {
+        DatabaseManager.setConnection(new ConnectionDB());
+        db.dropUser(Presets.EXIST_USER_ID);
     }
 
-    @Test
-    public void dropItem() throws Exception {
+    @Test(expected = DbException.class)
+    public void dropItemsException() throws Exception {
+        DatabaseManager.setConnection(new ConnectionDB());
+        db.dropItems(Presets.EXIST_USER_ID);
+    }
+
+    @Test(expected = DbException.class)
+    public void dropItemException() throws Exception {
+        DatabaseManager.setConnection(new ConnectionDB());
+        db.dropItem(Presets.WARRIOR_ID, Presets.ITEM_ID);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void dropNotExistsItem() throws Exception {
+        db.dropItem(Presets.WARRIOR_ID, Presets.FLAMBERG);
     }
 
     @Test(expected = DbException.class)
@@ -86,13 +102,15 @@ public class DatabaseManagerTest {
         db.dropTeam(Presets.TEST_TEAM);
     }
 
-    @Test
-    public void dropSpells() throws Exception {
-
+    @Test(expected = DbException.class)
+    public void dropSpellsException() throws Exception {
+        DatabaseManager.setConnection(new ConnectionDB());
+        db.dropSpells(Presets.WARRIOR_ID);
     }
 
     @Test
-    public void getUser() throws Exception {
+    public void getUserNotExists() throws Exception {
+        Assert.assertNull(db.getUser(Presets.NON_EXIST_USER_ID));
     }
 
     @Test
@@ -109,6 +127,24 @@ public class DatabaseManagerTest {
         Assert.assertTrue(db.doesUserExists(Presets.NON_EXIST_USER_ID));
     }
 
+    @Test(expected = DbException.class)
+    public void addUserExceptionTest() throws Exception {
+        DatabaseManager.setConnection(new ConnectionDB());
+        db.addUser(Presets.WARRIOR_ID, Presets.WARRIOR_NAME);
+    }
+
+    @Test(expected = DbException.class)
+    public void updateUserExceptionTest() throws Exception {
+        DatabaseManager.setConnection(new ConnectionDB());
+        db.updateUser(testHelper.ARCHER);
+    }
+
+    @Test(expected = DbException.class)
+    public void getSlotExceptionTest() throws Exception {
+        DatabaseManager.setConnection(new ConnectionDB());
+        db.getSlot(Presets.WARRIOR_ID, Presets.ITEM_INDEX);
+    }
+
     @Test
     public void addInt() throws Exception {
     }
@@ -117,8 +153,10 @@ public class DatabaseManagerTest {
     public void addString() throws Exception {
     }
 
-    @Test
-    public void addSpell() throws Exception {
+    @Test(expected = DbException.class)
+    public void addSpellExceptionTest() throws Exception {
+        DatabaseManager.setConnection(new ConnectionDB());
+        db.addSpell(Presets.WARRIOR_ID, Presets.MAGIC_ARROW_SPELL_ID, Presets.SPELL_GRADE_ONE);
     }
 
     @Test(expected = DbException.class)
@@ -127,12 +165,16 @@ public class DatabaseManagerTest {
         db.saveAction(Action.create(Presets.WARRIOR_ID, Action.ATTACK, Presets.WARRIOR_ID, Presets.FULL_PERCENT));
     }
 
-    @Test
-    public void addAction() throws Exception {
+    @Test(expected = DbException.class)
+    public void addActionExceptionTest() throws Exception {
+        DatabaseManager.setConnection(new ConnectionDB());
+        db.addAction(Presets.WARRIOR_ID);
     }
 
-    @Test
+    @Test(expected = DbException.class)
     public void addItem() throws Exception {
+        DatabaseManager.setConnection(new ConnectionDB());
+        db.addItem(Presets.WARRIOR_ID, Presets.FLAMBERG);
     }
 
     @Test(expected = DbException.class)
@@ -141,16 +183,34 @@ public class DatabaseManagerTest {
         db.getItems(Presets.WARRIOR_ID);
     }
 
-    @Test
-    public void getItem() throws Exception {
+    @Test(expected = DbException.class)
+    public void getItemExceptionTest() throws Exception {
+        DatabaseManager.setConnection(new ConnectionDB());
+        db.getItem(Presets.ITEM_ID);
+    }
+
+    @Test(expected = DbException.class)
+    public void setTeamExceptionTest() throws Exception {
+        DatabaseManager.setConnection(new ConnectionDB());
+        db.setTeam(new Team(Presets.TEST_TEAM));
     }
 
     @Test
-    public void setTeam() throws Exception {
+    public void setRegisteredTeam() throws Exception {
+        String blackguards = "blackguards";
+        Team team = new Team(blackguards);
+        team.setRegistered(true);
+        team.setPublic(true);
+        db.setTeam(team);
+        Assert.assertTrue(db.getTeam(blackguards).isPublic());
+        Assert.assertTrue(db.getTeam(blackguards).isRegistered());
+        db.dropTeam(blackguards);
     }
 
-    @Test
-    public void getTeam() throws Exception {
+    @Test(expected = DbException.class)
+    public void getTeamExceptionTest() throws Exception {
+        DatabaseManager.setConnection(new ConnectionDB());
+        db.getTeam(Presets.TEST_TEAM);
     }
 
     @Test
