@@ -2,6 +2,7 @@ package ml.ixplo.arenabot.database;
 
 import ml.ixplo.arenabot.battle.Team;
 import ml.ixplo.arenabot.battle.actions.Action;
+import ml.ixplo.arenabot.config.Config;
 import ml.ixplo.arenabot.helper.Presets;
 import ml.ixplo.arenabot.helper.TestHelper;
 import ml.ixplo.arenabot.user.items.ItemTest;
@@ -97,6 +98,12 @@ public class DatabaseManagerTest {
     }
 
     @Test(expected = DbException.class)
+    public void dropActionsForUserWrongConnection() throws Exception {
+        DatabaseManager.setConnection(new ConnectionDB());
+        db.dropActions(Presets.WARRIOR_ID);
+    }
+
+    @Test(expected = DbException.class)
     public void dropTeamWrongConnection() throws Exception {
         DatabaseManager.setConnection(new ConnectionDB());
         db.dropTeam(Presets.TEST_TEAM);
@@ -111,6 +118,12 @@ public class DatabaseManagerTest {
     @Test
     public void getUserNotExists() throws Exception {
         Assert.assertNull(db.getUser(Presets.NON_EXIST_USER_ID));
+    }
+
+    @Test(expected = DbException.class)
+    public void getUserWrongConnection() throws Exception {
+        DatabaseManager.setConnection(new ConnectionDB());
+        db.getUser(Presets.WARRIOR_ID);
     }
 
     @Test
@@ -172,9 +185,14 @@ public class DatabaseManagerTest {
     }
 
     @Test(expected = DbException.class)
-    public void addItem() throws Exception {
+    public void addItemException() throws Exception {
         DatabaseManager.setConnection(new ConnectionDB());
         db.addItem(Presets.WARRIOR_ID, Presets.FLAMBERG);
+    }
+
+    @Test(expected = DbException.class)
+    public void addItemNonExistsUserTest() throws Exception {
+        db.addItem(Presets.NON_EXIST_USER_ID, Presets.FLAMBERG);
     }
 
     @Test(expected = DbException.class)
@@ -213,16 +231,31 @@ public class DatabaseManagerTest {
         db.getTeam(Presets.TEST_TEAM);
     }
 
-    @Test
+    @Test(expected = DbException.class)
     public void getSpellsIdToLearn() throws Exception {
+        DatabaseManager.setConnection(new ConnectionDB());
+        db.getSpellsIdToLearn(Presets.MAGE_ID, 1);
+    }
+
+    @Test(expected = DbException.class)
+    public void getIntFromException() throws Exception {
+        DatabaseManager.setConnection(new ConnectionDB());
+        db.getIntFrom(Config.USERS, Presets.WARRIOR_ID, DatabaseManager.TEAM_COLUMN);
+    }
+
+    @Test(expected = DbException.class)
+    public void getIntFromNonExistsColumn() throws Exception {
+        db.getIntFrom(Config.USERS, Presets.WARRIOR_ID, "wrong");
     }
 
     @Test
-    public void getIntFrom() throws Exception {
+    public void getIntFromZeroResult() throws Exception {
+        Assert.assertEquals(0, db.getIntFrom(Config.USERS, Presets.WARRIOR_ID, DatabaseManager.CUR_MANA));
     }
 
     @Test
-    public void getIntFrom1() throws Exception {
+    public void getIntFromEmptyResult() throws Exception {
+        Assert.assertEquals(-1, db.getIntFrom(Config.USERS, Presets.NON_EXIST_USER_ID, DatabaseManager.CUR_MANA));
     }
 
     @Test

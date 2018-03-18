@@ -148,6 +148,7 @@ public class DatabaseManager {
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             BotLogger.error(LOGTAG, e.getMessage());
+            throw new DbException(e.getMessage(), e);
         }
     }
 
@@ -222,6 +223,7 @@ public class DatabaseManager {
             }
         } catch (SQLException e) {
             BotLogger.error(LOGTAG, e.getMessage());
+            throw new DbException(e.getMessage(), e);
         }
         return arenaUser;
     }
@@ -373,6 +375,9 @@ public class DatabaseManager {
     }
 
     public void addItem(Integer userId, String itemId) {
+        if (!doesUserExists(userId)) {
+            throw new DbException("user does not exists");
+        }
         // check if item non exist throw exception
         getItem(itemId);
 
@@ -387,6 +392,7 @@ public class DatabaseManager {
             preparedStatement.setInt(3, count);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
+            // непонятно, как проверить тестом
             BotLogger.error(LOGTAG, e.getMessage());
             throw new DbException(e.getMessage(), e);
         }
@@ -563,6 +569,7 @@ public class DatabaseManager {
             }
         } catch (SQLException e) {
             BotLogger.error(LOGTAG, e.getMessage());
+            throw new DbException(e.getMessage(), e);
         }
         return resultStringArr;
     }
@@ -579,6 +586,7 @@ public class DatabaseManager {
             }
         } catch (SQLException e) {
             BotLogger.error(LOGTAG, e.getMessage());
+            throw new DbException(e.getMessage(), e);
         }
         return resultInt;
     }
