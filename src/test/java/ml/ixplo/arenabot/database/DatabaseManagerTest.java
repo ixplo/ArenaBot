@@ -264,6 +264,17 @@ public class DatabaseManagerTest {
         Assert.assertEquals(-1, db.getIntFrom(Config.USERS, Presets.NON_EXIST_USER_ID, DatabaseManager.CUR_MANA));
     }
 
+    @Test(expected = DbException.class)
+    public void getLongFromException() throws Exception {
+        DatabaseManager.setConnection(new ConnectionDB());
+        db.getLongFrom(Config.USERS, Presets.WARRIOR_ID, DatabaseManager.CUR_MANA);
+    }
+
+    @Test
+    public void getLongNonExists() throws Exception {
+        Assert.assertEquals(-1, db.getLongFrom(Config.USERS, Presets.NON_EXIST_USER_ID, DatabaseManager.CUR_MANA));
+    }
+
     @Test
     public void getIntBy() throws Exception {
     }
