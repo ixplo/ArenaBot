@@ -244,6 +244,12 @@ public class DatabaseManagerTest {
     }
 
     @Test(expected = DbException.class)
+    public void getIntByStringFromException() throws Exception {
+        DatabaseManager.setConnection(new ConnectionDB());
+        db.getIntFrom(Config.INVENTORY, Presets.FLAMBERG, "in_slot");
+    }
+
+    @Test(expected = DbException.class)
     public void getIntFromNonExistsColumn() throws Exception {
         db.getIntFrom(Config.USERS, Presets.WARRIOR_ID, "wrong");
     }
