@@ -674,6 +674,7 @@ public class DatabaseManager {
             }
         } catch (SQLException e) {
             BotLogger.error(LOGTAG, e.getMessage());
+            throw new DbException(e.getMessage(), e);
         }
         return resultIntArr;
     }
@@ -690,11 +691,12 @@ public class DatabaseManager {
             }
         } catch (SQLException e) {
             BotLogger.error(LOGTAG, e.getMessage());
+            throw new DbException(e.getMessage(), e);
         }
         return resultString;
     }
 
-    public String getStringFrom(String tableName, Integer id, String columnName) {//overload
+    public String getStringFrom(String tableName, Integer id, String columnName) {
         String resultString = EMPTY;
         String queryText = SELECT + columnName + FROM + tableName + WHERE + ID + VAR + SEMICOLON;
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
@@ -706,6 +708,7 @@ public class DatabaseManager {
             }
         } catch (SQLException e) {
             BotLogger.error(LOGTAG, e.getMessage());
+            throw new DbException(e.getMessage(), e);
         }
         return resultString;
     }

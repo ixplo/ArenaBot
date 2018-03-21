@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Presets {
+    public static final String EMPTY = "";
     public static final String TEST_PROPERTIES = "src/test/resources/test.properties";
     public static final int NON_EXIST_USER_ID = 1;
     public static final int EXIST_USER_ID = -500;

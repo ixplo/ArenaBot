@@ -297,16 +297,27 @@ public class DatabaseManagerTest {
         Assert.assertEquals(-1, db.getDoubleFrom(Config.ITEMS, Presets.WRONG_ITEM_ID, Config.ATTACK), Presets.DELTA);
     }
 
-    @Test
-    public void getInts() throws Exception {
+    @Test(expected = DbException.class)
+    public void getIntsException() {
+        DatabaseManager.setConnection(new ConnectionDB());
+        db.getInts(Config.USERS, Config.ATTACK, Presets.WARRIOR_ID, Config.DESCR);
+    }
+
+    @Test(expected = DbException.class)
+    public void getStringFromException() {
+        DatabaseManager.setConnection(new ConnectionDB());
+        db.getStringFrom(Config.ITEMS, Presets.ITEM_ID, Config.ATTACK);
+    }
+
+    @Test(expected = DbException.class)
+    public void getStringFromByIntegerException() {
+        DatabaseManager.setConnection(new ConnectionDB());
+        db.getStringFrom(Config.USERS, Presets.WARRIOR_ID, Config.ATTACK);
     }
 
     @Test
-    public void getStringFrom() throws Exception {
-    }
-
-    @Test
-    public void getStringFrom1() throws Exception {
+    public void getStringFromByInteger() {
+        Assert.assertEquals(Presets.EMPTY, db.getStringFrom(Config.USERS, Presets.NON_EXIST_USER_ID, Config.ATTACK));
     }
 
     @Test
