@@ -10,9 +10,7 @@ public class Config {
     public static final String PRE_TAG = "<pre>";
     public static final String CLOSE_PRE_TAG = "</pre>";
     public static final String CLASS_COLUMN = "class";
-
-    private Config() {
-    }
+    public static final String ITEMS = "items";
     public static final String BOT_NAME = "ArenaBot";
     public static final String BOT_CHANNEL_NAME = "#Arena";
     public static final String PROPERTIES_FILE = "arena.properties";
@@ -72,5 +70,6 @@ public class Config {
     public static final int GOLD_FOR_MEMBER = 10;
     public static final int SCALE = 2;
     public static final int ROUNDED = BigDecimal.ROUND_DOWN;
-
+    private Config() {
+    }
 }

@@ -637,6 +637,7 @@ public class DatabaseManager {
             }
         } catch (SQLException e) {
             BotLogger.error(LOGTAG, e.getMessage());
+            throw new DbException(e.getMessage(), e);
         }
         return resultDouble;
     }
@@ -653,6 +654,7 @@ public class DatabaseManager {
             }
         } catch (SQLException e) {
             BotLogger.error(LOGTAG, e.getMessage());
+            throw new DbException(e.getMessage(), e);
         }
         return resultDouble;
     }

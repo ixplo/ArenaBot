@@ -275,16 +275,26 @@ public class DatabaseManagerTest {
         Assert.assertEquals(-1, db.getLongFrom(Config.USERS, Presets.NON_EXIST_USER_ID, DatabaseManager.CUR_MANA));
     }
 
-    @Test
-    public void getIntBy() throws Exception {
+    @Test(expected = DbException.class)
+    public void getDoubleFromException() throws Exception {
+        DatabaseManager.setConnection(new ConnectionDB());
+        db.getDoubleFrom(Config.USERS, Presets.WARRIOR_ID, Config.ATTACK);
     }
 
     @Test
-    public void getDoubleFrom() throws Exception {
+    public void getDoubleFromNonExistsUser() throws Exception {
+        Assert.assertEquals(-1, db.getDoubleFrom(Config.USERS, Presets.NON_EXIST_USER_ID, Config.ATTACK), Presets.DELTA);
+    }
+
+    @Test(expected = DbException.class)
+    public void getDoubleFromByStringIdException() throws Exception {
+        DatabaseManager.setConnection(new ConnectionDB());
+        db.getDoubleFrom(Config.ITEMS, Presets.ITEM_ID, Config.ATTACK);
     }
 
     @Test
-    public void getDoubleFrom1() throws Exception {
+    public void getDoubleFromByStringNonExistsItem() throws Exception {
+        Assert.assertEquals(-1, db.getDoubleFrom(Config.ITEMS, Presets.WRONG_ITEM_ID, Config.ATTACK), Presets.DELTA);
     }
 
     @Test
