@@ -320,8 +320,15 @@ public class DatabaseManagerTest {
         Assert.assertEquals(Presets.EMPTY, db.getStringFrom(Config.USERS, Presets.NON_EXIST_USER_ID, Config.ATTACK));
     }
 
+    @Test(expected = DbException.class)
+    public void getStringByException() throws Exception {
+        DatabaseManager.setConnection(new ConnectionDB());
+        db.getStringBy(Config.ITEMS, DatabaseManager.ID, Presets.ITEM_ID, Config.ATTACK);
+    }
+
     @Test
-    public void getStringBy() throws Exception {
+    public void getStringByWrongId() throws Exception {
+        Assert.assertEquals(Presets.EMPTY, db.getStringBy(Config.ITEMS, DatabaseManager.ID, Presets.WRONG_ITEM_ID, Config.ATTACK));
     }
 
     @Test
