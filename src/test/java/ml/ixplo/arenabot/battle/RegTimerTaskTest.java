@@ -18,6 +18,7 @@ public class RegTimerTaskTest {
     private TestHelper testHelper = new TestHelper();
     private Registration registration;
     private volatile StringBuilder log;
+
     @Before
     public void setUp() throws Exception {
         log = new StringBuilder();
@@ -49,7 +50,7 @@ public class RegTimerTaskTest {
     }
 
     @Test
-    @Ignore("Just look test. Unignore it if you want to see the log")
+    @Ignore("Test for just looking. Unignore it if you want to see the log")
     public void runWithLogger() throws Exception {
         Messages.setBot(testHelper.getTestBot());
         regTimer = new Timer();
