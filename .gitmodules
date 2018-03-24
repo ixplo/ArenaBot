@@ -1,0 +1,3 @@
+[submodule "arena-bot"]
+	path = arena-bot
+	url = https://github.com/ixplo/ArenaBot.git
