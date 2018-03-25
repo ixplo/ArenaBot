@@ -355,8 +355,27 @@ public class DatabaseManagerTest {
         Assert.assertTrue(Presets.WARRIOR_ID == userId);
     }
 
-    @Test
-    public void getIntByBy1() throws Exception {
+    @Test(expected = DbException.class)
+    public void getIntByByIntIdException() throws Exception {
+        DatabaseManager.setConnection(new ConnectionDB());
+        db.getIntByBy(
+                Config.USERS,
+                DatabaseManager.TEAM_COLUMN,
+                DatabaseManager.ID,
+                Presets.WARRIOR_ID,
+                Config.STATUS,
+                Config.UNREGISTERED_STATUS);
+    }
+
+    @Test(expected = DbException.class)
+    public void getIntByByIntIdNotFound() throws Exception {
+        int money = db.getIntByBy(
+                Config.USERS,
+                DatabaseManager.MONEY_COLUMN,
+                DatabaseManager.ID,
+                Presets.NON_EXIST_USER_ID,
+                Config.STATUS,
+                Config.UNREGISTERED_STATUS);
     }
 
     @Test

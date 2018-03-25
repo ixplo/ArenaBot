@@ -99,4 +99,5 @@ public class Presets {
     public static final int FULL_PERCENT = 100;
     public static final String RAINBOW_BRACELET = "bad";
     public static final int RAINBOW_BRACELET_WIS_BONUS = 2;
+    public static final int WARRIOR_MONEY = 110;
 }

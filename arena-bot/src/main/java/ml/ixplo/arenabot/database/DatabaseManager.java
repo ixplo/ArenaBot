@@ -39,6 +39,8 @@ public class DatabaseManager {
     private static final String GAMES_COLUMN = "games";
     private static final String EMPTY = "";
     private static final String COUNT = "count(";
+    public static final String ATTACK_COLUMN = "attack";
+    public static final String MONEY_COLUMN = "money";
 
     private static volatile DatabaseManager instance;
     private static volatile ConnectionDB connection;
@@ -200,7 +202,7 @@ public class DatabaseManager {
                     arenaUser.setNativeCon(result.getInt(Config.CONST));
                     arenaUser.setFreePoints(result.getInt("free_points"));
                     arenaUser.setMaxHitPoints(result.getDouble("hp"));
-                    arenaUser.setMoney(result.getInt("money"));
+                    arenaUser.setMoney(result.getInt(MONEY_COLUMN));
                     arenaUser.setExperience(result.getInt("exp"));
                     arenaUser.setLevel(result.getInt("level"));
                     arenaUser.setCurStr(result.getInt("cur_str"));
@@ -248,7 +250,7 @@ public class DatabaseManager {
                 "const" + VAR + "," +
                 "free_points" + VAR + "," +
                 "hp" + VAR + "," +
-                "money" + VAR + "," +
+                MONEY_COLUMN + VAR + "," +
                 "exp" + VAR + "," +
                 "level" + VAR + "," +
                 "cur_str" + VAR + "," +
@@ -258,7 +260,7 @@ public class DatabaseManager {
                 "cur_con" + VAR + "," +
                 "min_hit" + VAR + "," +
                 "max_hit" + VAR + "," +
-                "attack" + VAR + "," +
+                ATTACK_COLUMN + VAR + "," +
                 "protect" + VAR + "," +
                 "heal" + VAR + "," +
                 "m_protect" + VAR + "," +
@@ -771,11 +773,12 @@ public class DatabaseManager {
                 if (result.next()) {
                     resultInt = result.getInt(columnName);
                 } else {
-                    throw new ArenaUserException("No such int: " + queryText);
+                    throw new DbException("No such int: " + queryText);
                 }
             }
         } catch (SQLException e) {
             BotLogger.error(LOGTAG, e.getMessage());
+            throw new DbException(e.getMessage(), e);
         }
         return resultInt;
     }
