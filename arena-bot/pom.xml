@@ -14,42 +14,7 @@
     <packaging>jar</packaging>
     <name>ArenaBot</name>
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.build.testSourceEncoding>UTF-8</project.build.testSourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <telegrambots.version>2.4.4.5</telegrambots.version>
-        <sqlite-jdbc.version>3.20.1</sqlite-jdbc.version>
-        <slf4j.version>1.7.9</slf4j.version>
-        <junit.version>4.12</junit.version>
-        <compiler-plugin.version>3.7.0</compiler-plugin.version>
-        <exec-maven-plugin.version>1.6.0</exec-maven-plugin.version>
-        <maven-jar-plugin.version>3.0.2</maven-jar-plugin.version>
-        <maven-dependency-plugin.version>3.0.2</maven-dependency-plugin.version>
-        <maven-assembly-plugin.version>3.1.0</maven-assembly-plugin.version>
-        <surefire-plugin.version>2.20.1</surefire-plugin.version>
-        <jacoco-plugin.version>0.7.8</jacoco-plugin.version>
-        <sonar.dynamicAnalysis>reuseReports
-        </sonar.dynamicAnalysis>  <!-- Ensure you run mvn install before sonar:sonar -->
-        <sonar.java.codeCoveragePlugin>jacoco</sonar.java.codeCoveragePlugin>
-        <sonar.language>java</sonar.language>
-        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
-        <sonar.login>6f93aaf67759b8b3cc7f57036c872d78a9d5f551</sonar.login>
-        <sonar.organization>ixplo-github</sonar.organization>
-        <sonar.surefire.reportsPath>/target/surefire-reports</sonar.surefire.reportsPath>
-        <sonar.junit.reportPaths>
-            ${project.basedir}/target/jacoco.exec,
-            ${project.basedir}/target/jacoco-it.exec
-        </sonar.junit.reportPaths>
-        <sonar.coverage.exclusions>
-            **/*Exception.java,
-            **/Config.java,
-            **/Constants.java,
-            **/CheckResult.java,
-            **/src/test/**/*
-        </sonar.coverage.exclusions>
-        <jdk.version>1.8</jdk.version>
-        <mockito.version>2.15.0</mockito.version>
-        <powermock.version>1.7.3</powermock.version>
+
     </properties>
     <dependencies>
         <dependency>
