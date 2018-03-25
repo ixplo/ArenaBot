@@ -3,9 +3,6 @@ package ml.ixplo.arenabot.database;
 import ml.ixplo.arenabot.battle.Team;
 import ml.ixplo.arenabot.battle.actions.Action;
 import ml.ixplo.arenabot.config.Config;
-import ml.ixplo.arenabot.database.ConnectionDB;
-import ml.ixplo.arenabot.database.DatabaseManager;
-import ml.ixplo.arenabot.database.DbException;
 import ml.ixplo.arenabot.helper.Presets;
 import ml.ixplo.arenabot.helper.TestHelper;
 import ml.ixplo.arenabot.user.items.ItemTest;
@@ -334,8 +331,28 @@ public class DatabaseManagerTest {
         Assert.assertEquals(Presets.EMPTY, db.getStringBy(Config.ITEMS, DatabaseManager.ID, Presets.WRONG_ITEM_ID, Config.ATTACK));
     }
 
+    @Test(expected = DbException.class)
+    public void getIntByByExceptionTest() {
+        DatabaseManager.setConnection(new ConnectionDB());
+        db.getIntByBy(
+                Config.USERS,
+                DatabaseManager.ID,
+                DatabaseManager.TEAM_COLUMN,
+                Presets.TEST_TEAM,
+                Config.STATUS,
+                Config.UNREGISTERED_STATUS);
+    }
+
     @Test
-    public void getIntByBy() throws Exception {
+    public void getIntByBy() {
+        int userId = db.getIntByBy(
+                Config.USERS,
+                DatabaseManager.ID,
+                DatabaseManager.TEAM_COLUMN,
+                Presets.TEST_TEAM,
+                Config.STATUS,
+                Config.UNREGISTERED_STATUS);
+        Assert.assertTrue(Presets.WARRIOR_ID == userId);
     }
 
     @Test
