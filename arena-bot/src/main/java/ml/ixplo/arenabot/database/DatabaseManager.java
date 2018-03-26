@@ -41,6 +41,7 @@ public class DatabaseManager {
     public static final String ATTACK_COLUMN = "attack";
     public static final String MONEY_COLUMN = "money";
     public static final String LAST_GAME = "last_game";
+    public static final String NAME = "name";
 
     private static volatile DatabaseManager instance;
     private static volatile ConnectionDB connection;
@@ -185,7 +186,7 @@ public class DatabaseManager {
                     arenaUser = ArenaUser.create(UserClass.valueOf(result.getString(Config.CLASS_COLUMN)));
                     arenaUser.setUserId(result.getInt(ID));
                     arenaUser.setUserClass(result.getString(Config.CLASS_COLUMN));
-                    arenaUser.setName(result.getString("name"));
+                    arenaUser.setName(result.getString(NAME));
                     arenaUser.setUserTitle(result.getString("title"));
                     arenaUser.setUserPostTitle(result.getString("post_title"));
                     arenaUser.setTeamId(result.getString(TEAM_COLUMN));
@@ -232,7 +233,7 @@ public class DatabaseManager {
 
     public void updateUser(ArenaUser arenaUser) {
         String queryText = "UPDATE users SET " +
-                "name" + VAR + "," +
+                NAME + VAR + "," +
                 "title" + VAR + "," +
                 "post_Title" + VAR + "," +
                 TEAM_COLUMN + VAR + "," +
@@ -448,7 +449,7 @@ public class DatabaseManager {
 
     private void setItemProperties(Item item, ResultSet result) throws SQLException {
         item.setItemId(result.getString(ID));
-        item.setName(result.getString("name"));
+        item.setName(result.getString(NAME));
         item.setPrice(result.getInt("price"));
         item.setMinHit(result.getInt("hit_min"));
         item.setMaxHit(result.getInt("hit_max"));
@@ -506,7 +507,7 @@ public class DatabaseManager {
             try (final ResultSet result = preparedStatement.executeQuery()) {
                 if (result.next()) {
                     team = new Team(id);
-                    team.setName(result.getString("name"));
+                    team.setName(result.getString(NAME));
                     team.setRegistered(result.getInt("registered") > 0);
                     team.setPublic(result.getInt("is_public") > 0);
                     team.setGames(result.getInt(GAMES_COLUMN));

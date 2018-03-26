@@ -417,6 +417,18 @@ public class DatabaseManagerTest {
     }
 
     @Test(expected = DbException.class)
+    public void getStringsByIntIdException() throws Exception {
+        DatabaseManager.setConnection(new ConnectionDB());
+        db.getStringsBy(
+                Config.USERS,
+                DatabaseManager.ATTACK_COLUMN,
+                DatabaseManager.ID,
+                Presets.WARRIOR_ID,
+                DatabaseManager.MONEY_COLUMN,
+                Presets.MONEY);
+    }
+
+    @Test(expected = DbException.class)
     public void getIntsByException() throws Exception {
         DatabaseManager.setConnection(new ConnectionDB());
         db.getIntsBy(Config.USERS,
@@ -480,7 +492,7 @@ public class DatabaseManagerTest {
 
     @Test
     public void getCountNotExists() throws Exception {
-        Assert.assertTrue(0 == db.getCount(Presets.EMPTY, DatabaseManager.ID, Presets.NON_EXIST_USER_ID));
+        Assert.assertTrue(0 == db.getCount(Config.USERS, DatabaseManager.ID, Presets.NON_EXIST_USER_ID));
     }
 
     @Test(expected = DbException.class)
@@ -491,7 +503,7 @@ public class DatabaseManagerTest {
 
     @Test
     public void getCountDistinctNotExists() throws Exception {
-        Assert.assertTrue(0 == db.getCountDistinct(Presets.EMPTY, DatabaseManager.TEAM_COLUMN, Config.STATUS, Config.REGISTERED_STATUS));
+        Assert.assertTrue(0 == db.getCountDistinct(Config.USERS, DatabaseManager.TEAM_COLUMN, Config.STATUS, Config.REGISTERED_STATUS));
     }
 
     @Test(expected = DbException.class)
