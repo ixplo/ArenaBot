@@ -3,7 +3,6 @@ package ml.ixplo.arenabot.database;
 import ml.ixplo.arenabot.battle.Team;
 import ml.ixplo.arenabot.battle.actions.Action;
 import ml.ixplo.arenabot.config.Config;
-import ml.ixplo.arenabot.exception.ArenaUserException;
 import ml.ixplo.arenabot.user.ArenaUser;
 import ml.ixplo.arenabot.user.classes.UserClass;
 import ml.ixplo.arenabot.user.items.Item;
@@ -41,6 +40,7 @@ public class DatabaseManager {
     private static final String COUNT = "count(";
     public static final String ATTACK_COLUMN = "attack";
     public static final String MONEY_COLUMN = "money";
+    public static final String LAST_GAME = "last_game";
 
     private static volatile DatabaseManager instance;
     private static volatile ConnectionDB connection;
@@ -218,7 +218,7 @@ public class DatabaseManager {
                     arenaUser.setMagicProtect(result.getDouble("m_protect"));
                     arenaUser.setCurHitPoints(result.getDouble("cur_hp"));
                     arenaUser.setCurExp(result.getInt("cur_exp"));
-                    arenaUser.setLastGame(result.getLong("last_game"));
+                    arenaUser.setLastGame(result.getLong(LAST_GAME));
                     arenaUser.setCurWeapon(result.getInt("cur_weapon"));
                     arenaUser.setStatus(result.getInt(Config.STATUS));
                 }
@@ -266,7 +266,7 @@ public class DatabaseManager {
                 "m_protect" + VAR + "," +
                 "cur_hp" + VAR + "," +
                 "cur_exp" + VAR + "," +
-                "last_game" + VAR + "," +
+                LAST_GAME + VAR + "," +
                 "cur_weapon" + VAR + "," +
                 "status" + VAR + WHERE + ID + VAR + SEMICOLON;
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
@@ -804,6 +804,7 @@ public class DatabaseManager {
             }
         } catch (SQLException e) {
             BotLogger.error(LOGTAG, e.getMessage());
+            throw new DbException(e.getMessage(), e);
         }
         return resultString;
     }
@@ -820,6 +821,7 @@ public class DatabaseManager {
             }
         } catch (SQLException e) {
             BotLogger.error(LOGTAG, e.getMessage());
+            throw new DbException(e.getMessage(), e);
         }
         return resultStringArr;
     }
@@ -836,6 +838,7 @@ public class DatabaseManager {
             }
         } catch (SQLException e) {
             BotLogger.error(LOGTAG, e.getMessage());
+            throw new DbException(e.getMessage(), e);
         }
         return resultStringArr;
     }
@@ -860,6 +863,7 @@ public class DatabaseManager {
             }
         } catch (SQLException e) {
             BotLogger.error(LOGTAG, e.getMessage());
+            throw new DbException(e.getMessage(), e);
         }
         return resultStringArr;
     }
@@ -884,6 +888,7 @@ public class DatabaseManager {
             }
         } catch (SQLException e) {
             BotLogger.error(LOGTAG, e.getMessage());
+            throw new DbException(e.getMessage(), e);
         }
         return resultStringArr;
     }
@@ -908,6 +913,7 @@ public class DatabaseManager {
             }
         } catch (SQLException e) {
             BotLogger.error(LOGTAG, e.getMessage());
+            throw new DbException(e.getMessage(), e);
         }
         return resultStringArr;
     }
@@ -923,6 +929,7 @@ public class DatabaseManager {
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             BotLogger.error(LOGTAG, e.getMessage());
+            throw new DbException(e.getMessage(), e);
         }
     }
 
@@ -937,6 +944,7 @@ public class DatabaseManager {
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             BotLogger.error(LOGTAG, e.getMessage());
+            throw new DbException(e.getMessage(), e);
         }
     }
 
@@ -951,23 +959,23 @@ public class DatabaseManager {
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             BotLogger.error(LOGTAG, e.getMessage());
+            throw new DbException(e.getMessage(), e);
         }
     }
 
     /***
      * "UPDATE users SET ?=? WHERE id=?;"
      ***/
-    public boolean setIntTo(String tableName, Integer id, String recordColumn, Integer recordValue) {
-        int updatedRows = 0;
+    public void setIntTo(String tableName, Integer id, String recordColumn, Integer recordValue) {
         String queryText = UPDATE + tableName + SET + recordColumn + VAR + WHERE + ID + VAR + SEMICOLON;
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setInt(1, recordValue);
             preparedStatement.setInt(2, id);
-            updatedRows = preparedStatement.executeUpdate();
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             BotLogger.error(LOGTAG, e.getMessage());
+            throw new DbException(e.getMessage(), e);
         }
-        return updatedRows > 0;
     }
 
     /***
@@ -982,6 +990,7 @@ public class DatabaseManager {
             updatedRows = preparedStatement.executeUpdate();
         } catch (SQLException e) {
             BotLogger.error(LOGTAG, e.getMessage());
+            throw new DbException(e.getMessage(), e);
         }
         return updatedRows > 0;
     }
@@ -997,6 +1006,7 @@ public class DatabaseManager {
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             BotLogger.error(LOGTAG, e.getMessage());
+            throw new DbException(e.getMessage(), e);
         }
     }
 
@@ -1012,6 +1022,7 @@ public class DatabaseManager {
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             BotLogger.error(LOGTAG, e.getMessage());
+            throw new DbException(e.getMessage(), e);
         }
     }
 
@@ -1022,14 +1033,12 @@ public class DatabaseManager {
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setInt(1, value);
             try (final ResultSet result = preparedStatement.executeQuery()) {
-                if (result.next()) {
-                    return result.getInt("count(distinct " + columnOfCount + ")");
-                }
+                return result.getInt("count(distinct " + columnOfCount + ")");
             }
         } catch (SQLException e) {
             BotLogger.error(LOGTAG, e.getMessage());
+            throw new DbException(e.getMessage(), e);
         }
-        return -1;
     }
 
     public int getCount(String tableName, String columnName, Integer value) {
@@ -1039,14 +1048,12 @@ public class DatabaseManager {
         try (final PreparedStatement preparedStatement = connection.getPreparedStatement(queryText)) {
             preparedStatement.setInt(1, value);
             try (final ResultSet result = preparedStatement.executeQuery()) {
-                if (result.next()) {
-                    return result.getInt(COUNT + columnName + ")");
-                }
+                return result.getInt(COUNT + columnName + ")");
             }
         } catch (SQLException e) {
             BotLogger.error(LOGTAG, e.getMessage());
+            throw new DbException(e.getMessage(), e);
         }
-        return -1;
     }
 
     public List<String> getColumn(String tableName, String columnName) {
@@ -1059,6 +1066,7 @@ public class DatabaseManager {
             }
         } catch (SQLException e) {
             BotLogger.error(LOGTAG, e.getMessage());
+            throw new DbException(e.getMessage(), e);
         }
         return column;
     }

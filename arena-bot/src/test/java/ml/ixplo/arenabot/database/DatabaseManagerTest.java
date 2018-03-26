@@ -13,7 +13,9 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.xml.crypto.Data;
 import java.lang.reflect.Field;
+import java.math.BigDecimal;
 
 public class DatabaseManagerTest {
 
@@ -369,7 +371,7 @@ public class DatabaseManagerTest {
 
     @Test(expected = DbException.class)
     public void getIntByByIntIdNotFound() throws Exception {
-        int money = db.getIntByBy(
+        db.getIntByBy(
                 Config.USERS,
                 DatabaseManager.MONEY_COLUMN,
                 DatabaseManager.ID,
@@ -378,76 +380,124 @@ public class DatabaseManagerTest {
                 Config.UNREGISTERED_STATUS);
     }
 
-    @Test
-    public void getStringByBy() throws Exception {
+    @Test(expected = DbException.class)
+    public void getStringByByException() throws Exception {
+        DatabaseManager.setConnection(new ConnectionDB());
+        db.getStringByBy(
+                Config.USERS,
+                DatabaseManager.MONEY_COLUMN,
+                DatabaseManager.ID,
+                Presets.WARRIOR_ID,
+                Config.STATUS,
+                Config.UNREGISTERED_STATUS);
+    }
+
+    @Test(expected = DbException.class)
+    public void getStringsException() throws Exception {
+        DatabaseManager.setConnection(new ConnectionDB());
+        db.getStrings(Config.USERS, DatabaseManager.MONEY_COLUMN, Presets.MONEY, DatabaseManager.ATTACK_COLUMN);
+    }
+
+    @Test(expected = DbException.class)
+    public void getStringsByStringIdException() throws Exception {
+        DatabaseManager.setConnection(new ConnectionDB());
+        db.getStrings(Config.USERS, DatabaseManager.TEAM_COLUMN, Presets.TEST_TEAM, DatabaseManager.ATTACK_COLUMN);
+    }
+
+    @Test(expected = DbException.class)
+    public void getStringsByException() throws Exception {
+        DatabaseManager.setConnection(new ConnectionDB());
+        db.getStringsBy(
+                Config.USERS,
+                DatabaseManager.ATTACK_COLUMN,
+                DatabaseManager.TEAM_COLUMN,
+                Presets.TEST_TEAM,
+                DatabaseManager.ID,
+                Presets.WARRIOR_ID);
+    }
+
+    @Test(expected = DbException.class)
+    public void getIntsByException() throws Exception {
+        DatabaseManager.setConnection(new ConnectionDB());
+        db.getIntsBy(Config.USERS,
+                DatabaseManager.ATTACK_COLUMN,
+                DatabaseManager.TEAM_COLUMN,
+                Presets.TEST_TEAM,
+                DatabaseManager.ID,
+                Presets.WARRIOR_ID);
+    }
+
+    @Test(expected = DbException.class)
+    public void setLongToException() throws Exception {
+        DatabaseManager.setConnection(new ConnectionDB());
+        db.setLongTo(Config.USERS,
+                Presets.WARRIOR_ID,
+                DatabaseManager.LAST_GAME,
+                1L);
+    }
+
+    @Test(expected = DbException.class)
+    public void setDoubleToException() throws Exception {
+        DatabaseManager.setConnection(new ConnectionDB());
+        db.setDoubleTo(Config.USERS, Presets.WARRIOR_ID, DatabaseManager.ATTACK_COLUMN, 1d);
+    }
+
+    @Test(expected = DbException.class)
+    public void setBigDecimalToException() throws Exception {
+        DatabaseManager.setConnection(new ConnectionDB());
+        db.setBigDecimalTo(Config.USERS, Presets.WARRIOR_ID, DatabaseManager.ATTACK_COLUMN, BigDecimal.ONE);
+    }
+
+    @Test(expected = DbException.class)
+    public void setIntToException() throws Exception {
+        DatabaseManager.setConnection(new ConnectionDB());
+        db.setIntTo(Config.USERS, Presets.WARRIOR_ID, DatabaseManager.S_POINTS, 1);
+    }
+
+    @Test(expected = DbException.class)
+    public void setIntToByStringIdException() throws Exception {
+        DatabaseManager.setConnection(new ConnectionDB());
+        db.setIntTo(Config.ITEMS, Presets.ITEM_ID, DatabaseManager.ATTACK_COLUMN, 1);
+    }
+
+    @Test(expected = DbException.class)
+    public void setStringToException() throws Exception {
+        DatabaseManager.setConnection(new ConnectionDB());
+        db.setStringTo(Config.USERS, Presets.WARRIOR_ID, DatabaseManager.TEAM_COLUMN, Presets.TEAM_OF_MAGE);
+    }
+
+    @Test(expected = DbException.class)
+    public void setStringToByStringIdException() throws Exception {
+        DatabaseManager.setConnection(new ConnectionDB());
+        db.setStringTo(Config.USERS, Presets.WARRIOR_ID, Presets.ITEM_ID, DatabaseManager.TEAM_COLUMN, Presets.TEAM_OF_MAGE);
+    }
+
+    @Test(expected = DbException.class)
+    public void getCountException() throws Exception {
+        DatabaseManager.setConnection(new ConnectionDB());
+        db.getCount(Config.USERS, Config.STATUS, Config.REGISTERED_STATUS);
     }
 
     @Test
-    public void getStrings() throws Exception {
+    public void getCountNotExists() throws Exception {
+        Assert.assertTrue(0 == db.getCount(Presets.EMPTY, DatabaseManager.ID, Presets.NON_EXIST_USER_ID));
+    }
+
+    @Test(expected = DbException.class)
+    public void getCountDistinctException() throws Exception {
+        DatabaseManager.setConnection(new ConnectionDB());
+        db.getCountDistinct(Config.USERS, DatabaseManager.TEAM_COLUMN, Config.STATUS, Config.REGISTERED_STATUS);
     }
 
     @Test
-    public void getStrings1() throws Exception {
+    public void getCountDistinctNotExists() throws Exception {
+        Assert.assertTrue(0 == db.getCountDistinct(Presets.EMPTY, DatabaseManager.TEAM_COLUMN, Config.STATUS, Config.REGISTERED_STATUS));
     }
 
-    @Test
-    public void getStringsBy() throws Exception {
-    }
-
-    @Test
-    public void getStringsBy1() throws Exception {
-    }
-
-    @Test
-    public void getIntsBy() throws Exception {
-    }
-
-    @Test
-    public void setLongTo() throws Exception {
-    }
-
-    @Test
-    public void setDoubleTo() throws Exception {
-    }
-
-    @Test
-    public void setBigDecimalTo() throws Exception {
-    }
-
-    @Test
-    public void setIntTo() throws Exception {
-    }
-
-    @Test
-    public void setIntTo1() throws Exception {
-    }
-
-    @Test
-    public void setStringTo() throws Exception {
-    }
-
-    @Test
-    public void setStringTo1() throws Exception {
-    }
-
-    @Test
-    public void getCount() throws Exception {
-    }
-
-    @Test
-    public void getCountDistinct() throws Exception {
-    }
-
-    @Test
-    public void getCount1() throws Exception {
-    }
-
-    @Test
-    public void getCount2() throws Exception {
-    }
-
-    @Test
+    @Test(expected = DbException.class)
     public void getColumn() throws Exception {
+        DatabaseManager.setConnection(new ConnectionDB());
+        db.getColumn(Config.USERS, DatabaseManager.CUR_MANA);
     }
 
 }
