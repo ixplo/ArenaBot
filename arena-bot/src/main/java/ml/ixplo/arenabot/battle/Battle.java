@@ -17,10 +17,6 @@ public class Battle extends Thread {
     private BattleState battleState;
     private static Battle battle;
 
-    public static Battle getBattle() {
-        return battle;
-    }
-
     Battle(List<Team> teams, List<ArenaUser> members) {
         battleState = new BattleState();
         battleState.setMembers(members);
@@ -36,6 +32,10 @@ public class Battle extends Thread {
         }
         battle = this;
         start();
+    }
+
+    public static Battle getBattle() {
+        return battle;
     }
 
     @Override
