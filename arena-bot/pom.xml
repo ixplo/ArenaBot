@@ -80,7 +80,7 @@
                 <version>3.0.0</version>
                 <configuration>
                     <skip>true</skip>
-                    <configLocation>src/config/sun_checks.xml</configLocation>
+                    <configLocation>src/config/space_checks.xml</configLocation>
                     <consoleOutput>true</consoleOutput>
                     <failsOnError>true</failsOnError>
                 </configuration>

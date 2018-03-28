@@ -36,6 +36,15 @@ public abstract class Action implements Comparable<Action> {
         return create(userId, actionId, targetId, percent, null);
     }
 
+    /**
+     * Create Action instance instead constructor
+     * @param userId    - action owner id
+     * @param actionId  - action type
+     * @param targetId  - action target userId
+     * @param percent   - summary may be 100% in a round
+     * @param spellId   - may be absent if Action is not spell
+     * @return created Action
+     */
     public static Action create(int userId, String actionId, int targetId, int percent, String spellId) {
         if (actionId == null) {
             throw new IllegalArgumentException("actionId cant be null");
@@ -75,6 +84,11 @@ public abstract class Action implements Comparable<Action> {
         db.addAction(userId);
     }
 
+    /**
+     * Set target userId to database
+     * @param userId    - action owner id
+     * @param targetId  - action target userId
+     */
     public static void setTargetId(int userId, int targetId) {
         db.setIntTo(Config.ROUND_ACTIONS, userId, "target_id", targetId);
     }
@@ -83,6 +97,15 @@ public abstract class Action implements Comparable<Action> {
         db.setIntTo(Config.ROUND_ACTIONS, userId, "percent", percent);
     }
 
+    public void setPercent(int percent) {
+        this.percent = percent;
+    }
+
+    /**
+     * Set Action code to database. Identify by Callback message
+     * @param userId        - owner id
+     * @param actionType    - Callback message - type of Action
+     */
     public static void setActionIdFromCallback(int userId, String actionType) {
         if (actionType == null) {
             throw new IllegalArgumentException("actionId cant be null");
@@ -111,6 +134,16 @@ public abstract class Action implements Comparable<Action> {
         db.setStringTo(Config.ROUND_ACTIONS, userId, "cast_id", castId);
     }
 
+    public void setCastId(String castId) {
+        this.castId = castId;
+    }
+
+    /**
+     * Get code of Action
+     * @param userId    - owner id
+     * @param counter   - number in order
+     * @return String code of Action from database
+     */
     public static String getActionType(int userId, int counter) {
         return db.getStringByBy(Config.ROUND_ACTIONS,
                 "action_type",
@@ -118,6 +151,12 @@ public abstract class Action implements Comparable<Action> {
                 Config.COUNTER, counter);
     }
 
+    /**
+     * Get userId for target of Action
+     * @param userId    - owner id
+     * @param counter   - number in order
+     * @return target userId from database
+     */
     public static int getTargetId(int userId, int counter) {
         return db.getIntByBy(Config.ROUND_ACTIONS,
                 "target_id",
@@ -125,6 +164,12 @@ public abstract class Action implements Comparable<Action> {
                 Config.COUNTER, counter);
     }
 
+    /**
+     * Get percent points spent for this action
+     * @param userId    - owner id
+     * @param counter   - number in order
+     * @return number from 0 to 100 from database
+     */
     public static int getPercent(int userId, int counter) {
         return db.getIntByBy(Config.ROUND_ACTIONS,
                 "percent",
@@ -132,11 +177,25 @@ public abstract class Action implements Comparable<Action> {
                 Config.COUNTER, counter);
     }
 
+    public int getPercent() {
+        return percent;
+    }
+
+    /**
+     * Get Action castId like "1ma" for magic arrow spell
+     * @param userId    - owner id
+     * @param counter   - number in order
+     * @return String code of cast from database
+     */
     public static String getCastId(int userId, int counter) {
         return db.getStringByBy(Config.ROUND_ACTIONS,
                 "cast_id",
                 "id", userId,
                 Config.COUNTER, counter);
+    }
+
+    public String getCastId() {
+        return castId;
     }
 
     public String getName() {
@@ -155,14 +214,6 @@ public abstract class Action implements Comparable<Action> {
         return target;
     }
 
-    public int getPercent() {
-        return percent;
-    }
-
-    public void setPercent(int percent) {
-        this.percent = percent;
-    }
-
     public ArenaUser getUser() {
         return user;
     }
@@ -175,17 +226,8 @@ public abstract class Action implements Comparable<Action> {
         db.dropActions(userId);
     }
 
-
     protected void setPriority(int priority) {
         this.priority = priority;
-    }
-
-    public String getCastId() {
-        return castId;
-    }
-
-    public void setCastId(String castId) {
-        this.castId = castId;
     }
 
     public void setUser(ArenaUser user) {
@@ -214,16 +256,16 @@ public abstract class Action implements Comparable<Action> {
 
     @Override
     @SuppressWarnings("squid:S1210")
-    public int compareTo(Action o) {
-        return priority - o.priority;
+    public int compareTo(Action that) {
+        return priority - that.priority;
     }
 
     @Override
     public String toString() {
-        return "Action{" + percent + "% " +
-                getName() +
-                ", users:[" + user.getUserId() +
-                "->" + target.getUserId() +
-                "]}";
+        return "Action{" + percent + "% "
+                + getName()
+                + ", users:[" + user.getUserId()
+                + "->" + target.getUserId()
+                + "]}";
     }
 }
