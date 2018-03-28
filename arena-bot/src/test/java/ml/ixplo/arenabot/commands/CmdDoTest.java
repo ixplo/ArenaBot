@@ -44,6 +44,10 @@ public class CmdDoTest extends BaseTest {
     private void init() throws NoSuchFieldException, IllegalAccessException {
         warrior.setStatus(Config.IN_BATTLE_STATUS);
         testHelper.getTestRound();
+        initBattle();
+    }
+
+    private void initBattle() throws NoSuchFieldException, IllegalAccessException {
         Class<Battle> battleClass = Battle.class;
         Field battle = battleClass.getDeclaredField("battle");
         battle.setAccessible(true);
