@@ -1,10 +1,7 @@
 package ml.ixplo.arenabot.commands;
 
 import ml.ixplo.arenabot.BaseTest;
-import ml.ixplo.arenabot.Bot;
 import ml.ixplo.arenabot.battle.Battle;
-import ml.ixplo.arenabot.battle.Registration;
-import ml.ixplo.arenabot.battle.Round;
 import ml.ixplo.arenabot.config.Config;
 import ml.ixplo.arenabot.helper.Presets;
 import org.junit.Assert;
@@ -16,8 +13,6 @@ import org.telegram.telegrambots.api.objects.User;
 import org.telegram.telegrambots.bots.commands.BotCommand;
 
 import java.lang.reflect.Field;
-import java.util.Arrays;
-import java.util.Collections;
 
 public class CmdDoTest extends BaseTest {
 
@@ -43,7 +38,7 @@ public class CmdDoTest extends BaseTest {
         StringBuilder log = testHelper.initLogger();
 
         BotCommand command = new CmdDo();
-        command.execute(testHelper.getTestBot(log), getUser(), getChat(), new String[]{"a", "1", "100"});
+        command.execute(testHelper.getTestBot(log), getUser(Presets.WARRIOR_ID), getChat(), new String[]{"a", "1", "100"});
 
         Assert.assertEquals("Атаковать игрока <b>test_warrior</b> на 100 процентов", log.toString());
     }
@@ -54,7 +49,29 @@ public class CmdDoTest extends BaseTest {
         StringBuilder log = testHelper.initLogger();
 
         BotCommand command = new CmdDo();
-        command.execute(testHelper.getTestBot(log), getUser(), getChat(), new String[]{"a", "1", "100"});
+        command.execute(testHelper.getTestBot(log), getUser(Presets.WARRIOR_ID), getChat(), new String[]{"a", "1", "100"});
+
+        Assert.assertEquals(Presets.EMPTY, log.toString());
+    }
+
+    @Test
+    public void executeWrongUserTest() throws Exception {
+        warrior.setStatus(Config.REGISTERED_STATUS);
+        StringBuilder log = testHelper.initLogger();
+
+        BotCommand command = new CmdDo();
+        command.execute(testHelper.getTestBot(log), getUser(Presets.NON_EXIST_USER_ID), getChat(), new String[]{"a", "1", "100"});
+
+        Assert.assertEquals(Presets.EMPTY, log.toString());
+    }
+
+    @Test
+    public void executeWrongStringsTest() throws Exception {
+        warrior.setStatus(Config.REGISTERED_STATUS);
+        StringBuilder log = testHelper.initLogger();
+
+        BotCommand command = new CmdDo();
+        command.execute(testHelper.getTestBot(log), getUser(Presets.WARRIOR_ID), getChat(), new String[]{"a", "1", "101"});
 
         Assert.assertEquals(Presets.EMPTY, log.toString());
     }
@@ -72,11 +89,11 @@ public class CmdDoTest extends BaseTest {
         battle.set(battleClass, Mockito.mock(Battle.class));
     }
 
-    private User getUser() throws NoSuchFieldException, IllegalAccessException {
+    private User getUser(int userId) throws NoSuchFieldException, IllegalAccessException {
         User user = new User();
         Field id = user.getClass().getDeclaredField("id");
         id.setAccessible(true);
-        id.set(user, Presets.WARRIOR_ID);
+        id.set(user, userId);
         return user;
     }
 
