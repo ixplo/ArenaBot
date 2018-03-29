@@ -8,6 +8,7 @@ import ml.ixplo.arenabot.battle.Round;
 import ml.ixplo.arenabot.config.Config;
 import ml.ixplo.arenabot.helper.Presets;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.telegram.telegrambots.api.objects.Chat;
@@ -23,6 +24,13 @@ public class CmdDoTest extends BaseTest {
     private static final String IDENTIFIER = "do";
     private static final String USERCHATTYPE = "private";
 
+    @Override
+    @Before
+    public void setUp() throws Exception {
+        super.setUp();
+        init();
+    }
+
     @Test
     public void commandTest() throws Exception {
         BotCommand command = new CmdDo();
@@ -32,13 +40,23 @@ public class CmdDoTest extends BaseTest {
 
     @Test
     public void executeTest() throws Exception {
-        init();
         StringBuilder log = testHelper.initLogger();
 
         BotCommand command = new CmdDo();
         command.execute(testHelper.getTestBot(log), getUser(), getChat(), new String[]{"a", "1", "100"});
 
         Assert.assertEquals("Атаковать игрока <b>test_warrior</b> на 100 процентов", log.toString());
+    }
+
+    @Test
+    public void executeWrongStatusTest() throws Exception {
+        warrior.setStatus(Config.REGISTERED_STATUS);
+        StringBuilder log = testHelper.initLogger();
+
+        BotCommand command = new CmdDo();
+        command.execute(testHelper.getTestBot(log), getUser(), getChat(), new String[]{"a", "1", "100"});
+
+        Assert.assertEquals(Presets.EMPTY, log.toString());
     }
 
     private void init() throws NoSuchFieldException, IllegalAccessException {
