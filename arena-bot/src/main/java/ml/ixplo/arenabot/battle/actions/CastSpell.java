@@ -7,8 +7,11 @@ import ml.ixplo.arenabot.user.spells.Spell;
  * 08.05.2017.
  */
 public class CastSpell extends Action {
-    String spellId;
+    private String spellId;
 
+    /**
+     * @param spellId - String code of spell
+     */
     public CastSpell(String spellId) {
         setActionId(Action.MAGIC);
         setPriority(THIRD);
