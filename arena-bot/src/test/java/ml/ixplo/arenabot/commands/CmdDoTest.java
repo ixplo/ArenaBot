@@ -56,7 +56,6 @@ public class CmdDoTest extends BaseTest {
 
     @Test
     public void executeWrongUserTest() throws Exception {
-        warrior.setStatus(Config.REGISTERED_STATUS);
         StringBuilder log = testHelper.initLogger();
 
         BotCommand command = new CmdDo();
@@ -66,14 +65,23 @@ public class CmdDoTest extends BaseTest {
     }
 
     @Test
-    public void executeWrongStringsTest() throws Exception {
-        warrior.setStatus(Config.REGISTERED_STATUS);
+    public void executeWrongPercentTest() throws Exception {
         StringBuilder log = testHelper.initLogger();
 
         BotCommand command = new CmdDo();
         command.execute(testHelper.getTestBot(log), getUser(Presets.WARRIOR_ID), getChat(), new String[]{"a", "1", "101"});
 
-        Assert.assertEquals(Presets.EMPTY, log.toString());
+        Assert.assertTrue(log.toString().contains(CmdDo.PERCENT_ERROR));
+    }
+
+    @Test
+    public void executeWrongTargetIndexTest() throws Exception {
+        StringBuilder log = testHelper.initLogger();
+
+        BotCommand command = new CmdDo();
+        command.execute(testHelper.getTestBot(log), getUser(Presets.WARRIOR_ID), getChat(), new String[]{"a", Presets.NON_EXISTS_TARGET_INDEX});
+
+        Assert.assertTrue(log.toString().contains("Цель под номером " + Presets.NON_EXISTS_TARGET_INDEX + " не найдена"));
     }
 
     private void init() throws NoSuchFieldException, IllegalAccessException {
