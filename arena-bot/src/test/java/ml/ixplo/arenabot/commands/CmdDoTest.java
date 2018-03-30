@@ -1,18 +1,24 @@
 package ml.ixplo.arenabot.commands;
 
 import ml.ixplo.arenabot.BaseTest;
+import ml.ixplo.arenabot.Bot;
 import ml.ixplo.arenabot.battle.Battle;
 import ml.ixplo.arenabot.config.Config;
+import ml.ixplo.arenabot.exception.ArenaUserException;
 import ml.ixplo.arenabot.helper.Presets;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Chat;
 import org.telegram.telegrambots.api.objects.User;
 import org.telegram.telegrambots.bots.commands.BotCommand;
+import org.telegram.telegrambots.exceptions.TelegramApiException;
 
 import java.lang.reflect.Field;
+
+import static org.mockito.ArgumentMatchers.any;
 
 public class CmdDoTest extends BaseTest {
 
@@ -41,6 +47,29 @@ public class CmdDoTest extends BaseTest {
         command.execute(testHelper.getTestBot(log), getUser(Presets.WARRIOR_ID), getChat(), new String[]{"a", "1", "100"});
 
         Assert.assertEquals("Атаковать игрока <b>test_warrior</b> на 100 процентов", log.toString());
+    }
+
+    @Test
+    public void executeShortStringsTest() throws Exception {
+        StringBuilder log = testHelper.initLogger();
+
+        BotCommand command = new CmdDo();
+        command.execute(testHelper.getTestBot(log), getUser(Presets.WARRIOR_ID), getChat(), new String[]{"a", "1"});
+
+        Assert.assertEquals("Атаковать игрока <b>test_warrior</b> на 100 процентов", log.toString());
+    }
+
+    @Test(expected = ArenaUserException.class)
+    public void executeWrongBotTest() throws Exception {
+        Bot bad = getBadBot();
+        BotCommand command = new CmdDo();
+        command.execute(bad, getUser(Presets.WARRIOR_ID), getChat(), new String[]{"a", "1"});
+    }
+
+    private Bot getBadBot() throws TelegramApiException {
+        Bot mock = Mockito.mock(Bot.class);
+        Mockito.when(mock.sendMessage(any(SendMessage.class))).thenThrow(TelegramApiException.class);
+        return mock;
     }
 
     @Test

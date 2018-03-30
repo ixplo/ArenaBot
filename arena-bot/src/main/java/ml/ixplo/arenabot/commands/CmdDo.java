@@ -3,6 +3,7 @@ package ml.ixplo.arenabot.commands;
 import ml.ixplo.arenabot.battle.Round;
 import ml.ixplo.arenabot.battle.actions.Action;
 import ml.ixplo.arenabot.config.Config;
+import ml.ixplo.arenabot.exception.ArenaUserException;
 import ml.ixplo.arenabot.messages.Messages;
 import ml.ixplo.arenabot.user.ArenaUser;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
@@ -15,7 +16,7 @@ import org.telegram.telegrambots.logging.BotLogger;
 
 public class CmdDo extends BotCommand {
     public static final String LOGTAG = "DOCOMMAND";
-    public static final String PERCENT_ERROR = "Больше 100% быть не может. Инфа 146%!";
+    static final String PERCENT_ERROR = "Больше 100% быть не может. Инфа 146%!";
 
     private AbsSender sender;
     private int percent;
@@ -72,6 +73,7 @@ public class CmdDo extends BotCommand {
                 sender.sendMessage(msg);
             } catch (TelegramApiException e) {
                 BotLogger.error(LOGTAG, e);
+                throw new ArenaUserException(e.getMessage());
             }
         }
         return isBad;
