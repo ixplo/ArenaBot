@@ -17,6 +17,7 @@ import org.telegram.telegrambots.logging.BotLogger;
 public class CmdDo extends BotCommand {
     public static final String LOGTAG = "DOCOMMAND";
     static final String PERCENT_ERROR = "Больше 100% быть не может. Инфа 146%!";
+    static final String EMPTY_COMMAND_ERROR = "Формат: <i>/do a 1 100</i> - атаковать цель под номером 1 на 100%";
 
     private AbsSender sender;
     private int percent;
@@ -59,7 +60,7 @@ public class CmdDo extends BotCommand {
             isBad = true;
         }
         if (stringsCount == 0) {
-            msg.setText("Формат: <i>/do a 1 100</i> - атаковать цель под номером 1 на 100%");
+            msg.setText(EMPTY_COMMAND_ERROR);
             isBad = true;
         }
         int membersCount = Round.getCurrent().getCurMembersId().size();

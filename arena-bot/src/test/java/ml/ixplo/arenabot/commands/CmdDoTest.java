@@ -17,6 +17,7 @@ import org.telegram.telegrambots.bots.commands.BotCommand;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
 
 import java.lang.reflect.Field;
+import java.util.Arrays;
 
 import static org.mockito.ArgumentMatchers.any;
 
@@ -55,6 +56,16 @@ public class CmdDoTest extends BaseTest {
 
         BotCommand command = new CmdDo();
         command.execute(testHelper.getTestBot(log), getUser(Presets.WARRIOR_ID), getChat(), new String[]{"a", "1"});
+
+        Assert.assertEquals("Атаковать игрока <b>test_warrior</b> на 100 процентов", log.toString());
+    }
+
+    @Test
+    public void executeVeryShortStringsTest() throws Exception {
+        StringBuilder log = testHelper.initLogger();
+
+        BotCommand command = new CmdDo();
+        command.execute(testHelper.getTestBot(log), getUser(Presets.WARRIOR_ID), getChat(), new String[]{"a"});
 
         Assert.assertEquals("Атаковать игрока <b>test_warrior</b> на 100 процентов", log.toString());
     }
@@ -101,6 +112,16 @@ public class CmdDoTest extends BaseTest {
         command.execute(testHelper.getTestBot(log), getUser(Presets.WARRIOR_ID), getChat(), new String[]{"a", "1", "101"});
 
         Assert.assertTrue(log.toString().contains(CmdDo.PERCENT_ERROR));
+    }
+
+    @Test
+    public void executeEmptyCommandTest() throws Exception {
+        StringBuilder log = testHelper.initLogger();
+
+        BotCommand command = new CmdDo();
+        command.execute(testHelper.getTestBot(log), getUser(Presets.WARRIOR_ID), getChat(), new String[0]);
+
+        Assert.assertTrue(log.toString().contains(CmdDo.EMPTY_COMMAND_ERROR));
     }
 
     @Test
