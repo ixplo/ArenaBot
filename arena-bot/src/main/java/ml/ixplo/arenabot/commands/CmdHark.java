@@ -50,9 +50,7 @@ public class CmdHark extends BotCommand {
         }
         harkToUpId = getHarkId(strings[0]);
         if(harkToUpId.equals("")){
-            Messages.sendMessage(absSender, chat.getId(), "Формат: /hark названиеХарактеристики количествоОчков " +
-                    "\nнапример, /hark сила 2 \nПовышаются только основные характеристики: сила, ловкость, мудрость, интеллект, телосложение" +
-                    "\nРасширенные характеристики зависят от основных, а также могут быть улучшены с помощью надетых вещей.");
+            Messages.sendMessage(absSender, chat.getId(), EMPTY_ERROR);
             return;
         }
         harkName = getHarkName(harkToUpId);

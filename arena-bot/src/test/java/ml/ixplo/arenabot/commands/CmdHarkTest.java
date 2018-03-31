@@ -63,6 +63,14 @@ public class CmdHarkTest extends BaseTest {
     }
 
     @Test
+    public void executeWrongHarkTest() throws Exception {
+        StringBuilder logger = testHelper.initLogger();
+        command.execute(testHelper.getTestBot(logger), testHelper.getUser(Presets.WARRIOR_ID),
+                testHelper.getPrivate(), new String[]{"wrong", "4"});
+        Assert.assertEquals(CmdHark.EMPTY_ERROR, logger.toString());
+    }
+
+    @Test
     public void executeNotEnoughTest() throws Exception {
         StringBuilder logger = testHelper.initLogger();
         command.execute(testHelper.getTestBot(logger), testHelper.getUser(Presets.WARRIOR_ID),
