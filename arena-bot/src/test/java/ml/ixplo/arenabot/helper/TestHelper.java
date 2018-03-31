@@ -1,6 +1,7 @@
 package ml.ixplo.arenabot.helper;
 
 import ml.ixplo.arenabot.Bot;
+import ml.ixplo.arenabot.battle.Battle;
 import ml.ixplo.arenabot.battle.BattleState;
 import ml.ixplo.arenabot.battle.Registration;
 import ml.ixplo.arenabot.battle.Round;
@@ -20,7 +21,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.methods.updatingmessages.EditMessageText;
+import org.telegram.telegrambots.api.objects.Chat;
 import org.telegram.telegrambots.api.objects.Message;
+import org.telegram.telegrambots.api.objects.User;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
 
 import java.lang.reflect.Field;
@@ -30,9 +33,12 @@ import java.util.List;
 import java.util.Set;
 
 import static ml.ixplo.arenabot.config.Config.TEST_DB_LINK;
+import static org.mockito.ArgumentMatchers.any;
 
 public class TestHelper {
     private static final Logger LOGGER = LoggerFactory.getLogger(TestHelper.class);
+    private static final String USERCHATTYPE = "private";
+    private static final String CHANNELCHATTYPE = "channel";
 
     private PropertiesLoader propertiesLoader;
     private DatabaseManager db;
@@ -53,6 +59,12 @@ public class TestHelper {
 
     private void initPropertiesLoader() {
         propertiesLoader = new PropertiesLoader(Presets.TEST_PROPERTIES);
+    }
+
+    public Bot getBadBot() throws TelegramApiException {
+        Bot mock = Mockito.mock(Bot.class);
+        Mockito.when(mock.sendMessage(any(SendMessage.class))).thenThrow(TelegramApiException.class);
+        return mock;
     }
 
     public Bot getTestBot() {
@@ -104,6 +116,44 @@ public class TestHelper {
         Item.setDb(db);
         Action.setDb(db);
         Team.setDb(db);
+    }
+
+    public void initBattle() throws NoSuchFieldException, IllegalAccessException {
+        Class<Battle> battleClass = Battle.class;
+        Field battle = battleClass.getDeclaredField("battle");
+        battle.setAccessible(true);
+        battle.set(battleClass, Mockito.mock(Battle.class));
+    }
+
+    public Chat getChannel() throws NoSuchFieldException, IllegalAccessException {
+        return getTyped(chatWithId(), CHANNELCHATTYPE);
+    }
+
+    public Chat getPrivate() throws NoSuchFieldException, IllegalAccessException {
+        return getTyped(chatWithId(), USERCHATTYPE);
+    }
+
+    private Chat getTyped(Chat chat, String channelType) throws NoSuchFieldException, IllegalAccessException {
+        Field type = chat.getClass().getDeclaredField("type");
+        type.setAccessible(true);
+        type.set(chat, channelType);
+        return chat;
+    }
+
+    private Chat chatWithId() throws NoSuchFieldException, IllegalAccessException {
+        Chat chat = new Chat();
+        Field id = chat.getClass().getDeclaredField("id");
+        id.setAccessible(true);
+        id.set(chat, Presets.CHANNEL_ID);
+        return chat;
+    }
+
+    public User getUser(int userId) throws NoSuchFieldException, IllegalAccessException {
+        User user = new User();
+        Field id = user.getClass().getDeclaredField("id");
+        id.setAccessible(true);
+        id.set(user, userId);
+        return user;
     }
 
     public StringBuilder initLogger() {
@@ -199,11 +249,11 @@ public class TestHelper {
         DatabaseManager.getConnection().closeConnection();
     }
 
-    public DatabaseManager getDb() {
+    public DatabaseManager db() {
         return db;
     }
 
-    public Round getTestRound() {
+    public Round createTestRound() {
         List<Integer> curMembersId;
         List<String> curTeamsId;
         List<ArenaUser> members;

@@ -33,7 +33,7 @@ public class RoundTest {
     private TestHelper testHelper = new TestHelper();
     private ArenaUser warrior = testHelper.WARRIOR;
     private ArenaUser mage = testHelper.MAGE;
-    private Round round = testHelper.getTestRound();
+    private Round round = testHelper.createTestRound();
 
     @Before
     public void setUp() throws Exception {

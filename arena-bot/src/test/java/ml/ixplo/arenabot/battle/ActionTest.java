@@ -27,7 +27,7 @@ public class ActionTest {
 
     @Before
     public void setUp() throws Exception {
-        Action.setDb(testHelper.getDb());
+        Action.setDb(testHelper.db());
     }
 
     @After

@@ -7,7 +7,6 @@ import ml.ixplo.arenabot.battle.actions.Action;
 import ml.ixplo.arenabot.config.Config;
 import ml.ixplo.arenabot.helper.Presets;
 import ml.ixplo.arenabot.user.classes.Mage;
-import ml.ixplo.arenabot.user.classes.spellcaster.SpellCaster;
 import ml.ixplo.arenabot.user.params.Hark;
 import ml.ixplo.arenabot.user.spells.Spell;
 import org.junit.Assert;
@@ -193,7 +192,7 @@ public class SpellCasterTest extends BaseTest {
 
     @Test
     public void armorEffectTest() {
-        testHelper.getTestRound();
+        testHelper.createTestRound();
         testMage.setSpell(Presets.ARMOR_SPELL_ID);
         String castMessage = testMage.doCast(warrior, Presets.FULL_PERCENT, Presets.ARMOR_SPELL_ID);
 
@@ -205,7 +204,7 @@ public class SpellCasterTest extends BaseTest {
         Action attack1 = Action.create(Presets.WARRIOR_ID, Action.ATTACK, Presets.WARRIOR_ID, 1);
         Action attack2 = Action.create(Presets.WARRIOR_ID, Action.ATTACK, Presets.WARRIOR_ID, 1);
         Action attack3 = Action.create(Presets.WARRIOR_ID, Action.ATTACK, Presets.WARRIOR_ID, 1);
-        Round testRound = testHelper.getTestRound();
+        Round testRound = testHelper.createTestRound();
         testRound.takeAction(attack1);
         testRound.takeAction(attack2);
         testRound.takeAction(attack3);
@@ -230,9 +229,9 @@ public class SpellCasterTest extends BaseTest {
     @Test
     public void armorEffectButPenetrationTest() throws InterruptedException {
         warrior.setAttack(BigDecimal.valueOf(12));
-        testHelper.getDb().updateUser(warrior);
+        testHelper.db().updateUser(warrior);
         Action attack = Action.create(Presets.WARRIOR_ID, Action.ATTACK, Presets.WARRIOR_ID, Presets.FULL_PERCENT);
-        testHelper.getTestRound().takeAction(attack);
+        testHelper.createTestRound().takeAction(attack);
         attack.doAction();
 
         testMage.setSpell(Presets.ARMOR_SPELL_ID);

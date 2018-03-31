@@ -1,9 +1,6 @@
 package ml.ixplo.arenabot.battle;
 
 import ml.ixplo.arenabot.BaseTest;
-import ml.ixplo.arenabot.battle.Battle;
-import ml.ixplo.arenabot.battle.Round;
-import ml.ixplo.arenabot.battle.Team;
 import ml.ixplo.arenabot.user.ArenaUser;
 import org.junit.After;
 import org.junit.Assert;
@@ -14,8 +11,8 @@ import java.lang.reflect.Field;
 import java.util.List;
 
 public class BattleTest extends BaseTest{
-    private List<Team> teams = testHelper.getTestRound().getTeams();
-    private List<ArenaUser> members = (List<ArenaUser>) testHelper.getTestRound().getMembers();
+    private List<Team> teams = testHelper.createTestRound().getTeams();
+    private List<ArenaUser> members = (List<ArenaUser>) testHelper.createTestRound().getMembers();
     private Battle battle;
     @Before
     public void setUp() {

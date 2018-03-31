@@ -15,7 +15,7 @@ public class TeamTest {
 
     @Before
     public void setUp() {
-        Team.setDb(testHelper.getDb());
+        Team.setDb(testHelper.db());
     }
 
     @Test

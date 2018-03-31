@@ -30,7 +30,7 @@ public class HealTest extends BaseTest{
     private double decreasedHitPoints() {
         warrior.addCurHitPoints(-1);
         double beforeHitPoints = warrior.getCurHitPoints();
-        testHelper.getDb().updateUser(warrior);
+        testHelper.db().updateUser(warrior);
         return beforeHitPoints;
     }
 

@@ -13,7 +13,6 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.xml.crypto.Data;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 
@@ -25,7 +24,7 @@ public class DatabaseManagerTest {
 
     @Before
     public void setUp() throws Exception {
-        db = testHelper.getDb();
+        db = testHelper.db();
     }
 
     @After

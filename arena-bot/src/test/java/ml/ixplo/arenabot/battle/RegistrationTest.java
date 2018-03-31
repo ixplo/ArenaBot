@@ -1,8 +1,5 @@
 package ml.ixplo.arenabot.battle;
 
-import ml.ixplo.arenabot.battle.Battle;
-import ml.ixplo.arenabot.battle.Registration;
-import ml.ixplo.arenabot.battle.Team;
 import ml.ixplo.arenabot.config.Config;
 import ml.ixplo.arenabot.helper.Presets;
 import ml.ixplo.arenabot.helper.TestHelper;
@@ -26,7 +23,7 @@ public class RegistrationTest {
 
     @Before
     public void setUp() throws Exception {
-        Registration.setDb(testHelper.getDb());
+        Registration.setDb(testHelper.db());
         Messages.setBot(testHelper.getTestBot());
         registration = new Registration();
     }

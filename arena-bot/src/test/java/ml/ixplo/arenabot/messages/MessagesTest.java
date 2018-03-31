@@ -7,7 +7,6 @@ import ml.ixplo.arenabot.battle.Team;
 import ml.ixplo.arenabot.battle.actions.Action;
 import ml.ixplo.arenabot.config.Config;
 import ml.ixplo.arenabot.exception.ArenaUserException;
-import ml.ixplo.arenabot.messages.Messages;
 import ml.ixplo.arenabot.helper.Presets;
 import ml.ixplo.arenabot.helper.TestHelper;
 import ml.ixplo.arenabot.user.ArenaUser;
@@ -42,7 +41,7 @@ public class MessagesTest {
     private ArenaUser mage;
     private ArenaUser existUser;
     private TestHelper testHelper = new TestHelper();
-    private Bot bot = new Bot(testHelper.getDb());
+    private Bot bot = new Bot(testHelper.db());
 
     @Before
     public void setUp() throws Exception {
@@ -418,7 +417,7 @@ public class MessagesTest {
     @Test(expected = ArenaUserException.class)
     public void sendListToAllBadChannel() {
         Messages.setBot(new Bot());
-        Messages.sendListToAll(testHelper.getTestRound().getTeams());
+        Messages.sendListToAll(testHelper.createTestRound().getTeams());
     }
 
     @Test(expected = ArenaUserException.class)
@@ -442,7 +441,7 @@ public class MessagesTest {
     @Test
     public void sendDoAttackMsgTest() {
         StringBuilder log = testHelper.initLogger();
-        testHelper.getTestRound();
+        testHelper.createTestRound();
         Messages.sendDoMsg(testHelper.getTestBot(log), Presets.CHANNEL_ID, Action.ATTACK, Presets.TARGET_ID, Presets.FULL_PERCENT);
         Assert.assertTrue(log.toString().contains("Атаковать игрока"));
         Assert.assertTrue(log.toString().contains(String.valueOf(Presets.FULL_PERCENT)));
@@ -451,7 +450,7 @@ public class MessagesTest {
     @Test
     public void sendDoProtectkMsgTest() {
         StringBuilder log = testHelper.initLogger();
-        testHelper.getTestRound();
+        testHelper.createTestRound();
         Messages.sendDoMsg(testHelper.getTestBot(log), Presets.CHANNEL_ID, Action.PROTECT, Presets.TARGET_ID, Presets.FULL_PERCENT);
         Assert.assertTrue(log.toString().contains("Защищать игрока"));
         Assert.assertTrue(log.toString().contains(String.valueOf(Presets.FULL_PERCENT)));
@@ -460,7 +459,7 @@ public class MessagesTest {
     @Test
     public void sendDoHealMsgTest() {
         StringBuilder log = testHelper.initLogger();
-        testHelper.getTestRound();
+        testHelper.createTestRound();
         Messages.sendDoMsg(testHelper.getTestBot(log), Presets.CHANNEL_ID, Action.HEAL, Presets.TARGET_ID, Presets.FULL_PERCENT);
         Assert.assertTrue(log.toString().contains("Лечить игрока"));
         Assert.assertTrue(log.toString().contains(String.valueOf(Presets.FULL_PERCENT)));
@@ -469,7 +468,7 @@ public class MessagesTest {
     @Test
     public void sendDoMagicMsgTest() {
         StringBuilder log = testHelper.initLogger();
-        testHelper.getTestRound();
+        testHelper.createTestRound();
         Messages.sendDoMsg(testHelper.getTestBot(log), Presets.CHANNEL_ID, Action.MAGIC, Presets.TARGET_ID, Presets.FULL_PERCENT);
         Assert.assertTrue(log.toString().contains("Вы пробуете творить заклинание на игрока"));
         Assert.assertTrue(log.toString().contains(String.valueOf(Presets.FULL_PERCENT)));
@@ -478,7 +477,7 @@ public class MessagesTest {
     @Test
     public void sendDoWrongMsgTest() {
         StringBuilder log = testHelper.initLogger();
-        testHelper.getTestRound();
+        testHelper.createTestRound();
         Messages.sendDoMsg(testHelper.getTestBot(log), Presets.CHANNEL_ID, "wrong", Presets.TARGET_ID, Presets.FULL_PERCENT);
         Assert.assertTrue(log.toString().contains("Нет пока такого действия"));
         Assert.assertFalse(log.toString().contains(String.valueOf(Presets.FULL_PERCENT)));
@@ -486,7 +485,7 @@ public class MessagesTest {
 
     @Test(expected = ArenaUserException.class)
     public void sendDoMsgIllegalChatIdTest() {
-        testHelper.getTestRound();
+        testHelper.createTestRound();
         Messages.sendDoMsg(new Bot(), 0L, "wrong", Presets.TARGET_ID, Presets.FULL_PERCENT);
 
     }
@@ -520,7 +519,7 @@ public class MessagesTest {
     @Test(expected = ArenaUserException.class)
     public void sendResultToAllWrongChatIdTest() {
         Messages.setBot(new Bot());
-        Round testRound = testHelper.getTestRound();
+        Round testRound = testHelper.createTestRound();
         Messages.sendResultToAll(testRound.getTeams(), (List<ArenaUser>) testRound.getMembers(), testRound.getCurMembersId());
     }
 

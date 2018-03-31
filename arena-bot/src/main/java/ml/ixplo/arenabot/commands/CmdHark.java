@@ -18,6 +18,9 @@ import org.telegram.telegrambots.logging.BotLogger;
 public class CmdHark extends BotCommand {
 
     public static final String LOGTAG = "HARKCOMMAND";
+    static final String EMPTY_ERROR = "Формат: /hark [название Характеристики] [количество Очков] " +
+            "\nнапример, /hark сила 2 или /hark s 2 \nПовышаются только основные характеристики: сила, ловкость, мудрость, интеллект, телосложение" +
+            "\nРасширенные характеристики зависят от основных, а также могут быть улучшены с помощью надетых вещей.";
 
     public CmdHark() {
         super("hark", "Повысить характеристику");
@@ -34,9 +37,7 @@ public class CmdHark extends BotCommand {
             return;
         }
         if (strings.length < 2 || !isNumeric(strings[1])) {
-            Messages.sendMessage(absSender, chat.getId(), "Формат: /hark названиеХарактеристики количествоОчков " +
-                    "\nнапример, /hark сила 2 или /hark s 2 \nПовышаются только основные характеристики: сила, ловкость, мудрость, интеллект, телосложение" +
-                    "\nРасширенные характеристики зависят от основных, а также могут быть улучшены с помощью надетых вещей.");
+            Messages.sendMessage(absSender, chat.getId(), EMPTY_ERROR);
             return;
         }
         if (Integer.parseInt(strings[1]) > ArenaUser.getUser(user.getId()).getFreePoints()) {
