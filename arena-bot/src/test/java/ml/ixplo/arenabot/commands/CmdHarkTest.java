@@ -23,11 +23,51 @@ public class CmdHarkTest extends BaseTest {
     }
 
     @Test
-    public void executeTest() throws Exception {
+    public void executeStrengthTest() throws Exception {
         StringBuilder logger = testHelper.initLogger();
         command.execute(testHelper.getTestBot(logger), testHelper.getUser(Presets.WARRIOR_ID),
                 testHelper.getPrivate(), new String[]{"s", "2"});
         Assert.assertTrue(logger.toString().contains("Вы подняли Силу на: <b>2</b>"));
+    }
+
+    @Test
+    public void executeDexTest() throws Exception {
+        StringBuilder logger = testHelper.initLogger();
+        command.execute(testHelper.getTestBot(logger), testHelper.getUser(Presets.WARRIOR_ID),
+                testHelper.getPrivate(), new String[]{"d", "1"});
+        Assert.assertTrue(logger.toString().contains("Вы подняли Ловкость на: <b>1</b>"));
+    }
+
+    @Test
+    public void executeWisTest() throws Exception {
+        StringBuilder logger = testHelper.initLogger();
+        command.execute(testHelper.getTestBot(logger), testHelper.getUser(Presets.WARRIOR_ID),
+                testHelper.getPrivate(), new String[]{"w", "1"});
+        Assert.assertTrue(logger.toString().contains("Вы подняли Мудрость на: <b>1</b>"));
+    }
+
+    @Test
+    public void executeIntTest() throws Exception {
+        StringBuilder logger = testHelper.initLogger();
+        command.execute(testHelper.getTestBot(logger), testHelper.getUser(Presets.WARRIOR_ID),
+                testHelper.getPrivate(), new String[]{"i", "4"});
+        Assert.assertTrue(logger.toString().contains("Вы подняли Интеллект на: <b>4</b>"));
+    }
+
+    @Test
+    public void executeConTest() throws Exception {
+        StringBuilder logger = testHelper.initLogger();
+        command.execute(testHelper.getTestBot(logger), testHelper.getUser(Presets.WARRIOR_ID),
+                testHelper.getPrivate(), new String[]{"c", "4"});
+        Assert.assertTrue(logger.toString().contains("Вы подняли Телосложение на: <b>4</b>"));
+    }
+
+    @Test
+    public void executeNotEnoughTest() throws Exception {
+        StringBuilder logger = testHelper.initLogger();
+        command.execute(testHelper.getTestBot(logger), testHelper.getUser(Presets.WARRIOR_ID),
+                testHelper.getPrivate(), new String[]{"c", "5"});
+        Assert.assertTrue(logger.toString().contains("Недостаточно свободных очков"));
     }
 
     @Test
