@@ -8,8 +8,6 @@ import org.telegram.telegrambots.api.objects.Chat;
 import org.telegram.telegrambots.api.objects.User;
 import org.telegram.telegrambots.bots.AbsSender;
 import org.telegram.telegrambots.bots.commands.BotCommand;
-import org.telegram.telegrambots.exceptions.TelegramApiException;
-import org.telegram.telegrambots.logging.BotLogger;
 
 /**
  * ixplo
@@ -56,12 +54,7 @@ public class CmdHark extends BotCommand {
         harkName = getHarkName(harkToUpId);
         ArenaUser.getUser(user.getId()).addHark(harkToUpId, Integer.parseInt(strings[1]));
         Messages.sendMessage(absSender, chat.getId(), "Вы подняли " + harkName + " на: <b>" + strings[1] + "</b>");
-        try {
-            absSender.sendMessage(Messages.getUserStatMsg(user.getId()));
-        } catch (TelegramApiException e) {
-            BotLogger.error(LOGTAG, e);
-            throw new ArenaUserException("Sending error", e);
-        }
+        Messages.sendMessage(Messages.getUserStatMsg(user.getId()));
     }
 
     private String getHarkName(String harkToUpId) {
