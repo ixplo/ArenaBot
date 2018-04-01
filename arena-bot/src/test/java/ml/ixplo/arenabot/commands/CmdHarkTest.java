@@ -2,6 +2,7 @@ package ml.ixplo.arenabot.commands;
 
 import ml.ixplo.arenabot.BaseTest;
 import ml.ixplo.arenabot.config.Config;
+import ml.ixplo.arenabot.exception.ArenaUserException;
 import ml.ixplo.arenabot.helper.Presets;
 import org.junit.Assert;
 import org.junit.Before;
@@ -68,6 +69,44 @@ public class CmdHarkTest extends BaseTest {
         command.execute(testHelper.getTestBot(logger), testHelper.getUser(Presets.WARRIOR_ID),
                 testHelper.getPrivate(), new String[]{"wrong", "4"});
         Assert.assertEquals(CmdHark.EMPTY_ERROR, logger.toString());
+    }
+
+    @Test
+    public void executeWrongNumberTest() throws Exception {
+        StringBuilder logger = testHelper.initLogger();
+        command.execute(testHelper.getTestBot(logger), testHelper.getUser(Presets.WARRIOR_ID),
+                testHelper.getPrivate(), new String[]{"s", "wrong"});
+        Assert.assertEquals(CmdHark.EMPTY_ERROR, logger.toString());
+    }
+
+    @Test
+    public void executeNegativeNumberTest() throws Exception {
+        StringBuilder logger = testHelper.initLogger();
+        command.execute(testHelper.getTestBot(logger), testHelper.getUser(Presets.WARRIOR_ID),
+                testHelper.getPrivate(), new String[]{"s", "-1"});
+        Assert.assertTrue(logger.toString().contains("Что, правда уменьшить хотите?"));
+    }
+
+    @Test
+    public void executeWrongUserTest() throws Exception {
+        StringBuilder logger = testHelper.initLogger();
+        command.execute(testHelper.getTestBot(logger), testHelper.getUser(Presets.NON_EXIST_USER_ID),
+                testHelper.getPrivate(), new String[]{"s", "4"});
+        Assert.assertEquals(Presets.EMPTY, logger.toString());
+    }
+
+    @Test(expected = ArenaUserException.class)
+    public void executeWrongBotTest() throws Exception {
+        command.execute(testHelper.getBadBot(), testHelper.getUser(Presets.WARRIOR_ID),
+                testHelper.getPrivate(), new String[]{"s", "4"});
+    }
+
+    @Test
+    public void executeWrongChatTest() throws Exception {
+        StringBuilder logger = testHelper.initLogger();
+        command.execute(testHelper.getTestBot(logger), testHelper.getUser(Presets.WARRIOR_ID),
+                testHelper.getChannel(), new String[]{"s", "4"});
+        Assert.assertEquals(Presets.EMPTY, logger.toString());
     }
 
     @Test
