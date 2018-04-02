@@ -3,8 +3,8 @@ package ml.ixplo.arenabot.commands;
 import ml.ixplo.arenabot.BaseTest;
 import ml.ixplo.arenabot.Bot;
 import ml.ixplo.arenabot.config.Config;
+import ml.ixplo.arenabot.exception.ArenaUserException;
 import ml.ixplo.arenabot.helper.Presets;
-import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,13 +24,21 @@ public class CmdHelpTest extends BaseTest {
 
 
     @Test
-    public void execute() throws Exception {
+    public void executeTest() throws Exception {
         StringBuilder logger = testHelper.initLogger();
         Bot testBot = testHelper.getTestBot(logger);
         BotCommand command = new CmdHelp(testBot);
         command.execute(testBot, testHelper.getUser(Presets.WARRIOR_ID),
                 testHelper.getPrivate(), new String[0]);
         Assert.assertTrue(logger.toString().contains("Версия бота"));
+    }
+
+    @Test(expected = ArenaUserException.class)
+    public void executeWrongBotTest() throws Exception {
+        Bot testBot = testHelper.getBadBot();
+        BotCommand command = new CmdHelp(testBot);
+        command.execute(testBot, testHelper.getUser(Presets.WARRIOR_ID),
+                testHelper.getPrivate(), new String[0]);
     }
 
 }
