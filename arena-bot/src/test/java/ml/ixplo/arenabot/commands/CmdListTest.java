@@ -24,7 +24,6 @@ public class CmdListTest extends BaseTest {
     }
 
     @Test
-    @Ignore("починить мок")
     public void execute() throws Exception {
         BotCommand command = new CmdList();
         StringBuilder logger = testHelper.initLogger();
