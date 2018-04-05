@@ -92,7 +92,7 @@ public class TestHelper {
 
             when(mock.getRegisteredCommands()).thenReturn(getCommands());
 
-            when(mock.getRegistration()).thenReturn(getRegistration());
+            when(mock.getRegistration()).thenReturn(getTestRegistration());
         } catch (TelegramApiException e) {
             LOGGER.error("Send message error from test bot");
         }
@@ -125,18 +125,10 @@ public class TestHelper {
 
     public Registration getTestRegistration() {
         Registration mock = Mockito.mock(Registration.class);
-        when(mock.isOn()).thenReturn(Boolean.TRUE);
+        when(mock.isOn()).thenReturn(true);
         when(mock.getMembersCount()).thenReturn(2);
         when(mock.getListOfMembersToString()).thenReturn("1. TestTeam 2. SecondTeam");
         return mock;
-    }
-
-    private Registration getRegistration() {
-        Registration registration = new Registration();
-        Team.addMember(Presets.WARRIOR_ID, "TestTeam");
-        Registration.setDb(db);
-//        registration.regMember(Presets.WARRIOR_ID);
-        return registration;
     }
 
     public PropertiesLoader getTestPropertiesLoader() {

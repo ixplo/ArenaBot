@@ -50,7 +50,8 @@
         </sonar.coverage.exclusions>
         <jdk.version>1.8</jdk.version>
         <mockito.version>2.15.0</mockito.version>
-        <powermock.version>1.7.3</powermock.version>
+        <powermock.api.version>1.7.3</powermock.api.version>
+        <powermock.version>2.0.0-beta.5</powermock.version>
     </properties>
 
     <dependencyManagement>
@@ -58,7 +59,7 @@
             <dependency>
                 <groupId>org.powermock</groupId>
                 <artifactId>powermock-api-mockito</artifactId>
-                <version>${powermock.version}</version>
+                <version>${powermock.api.version}</version>
                 <scope>test</scope>
             </dependency>
             <dependency>

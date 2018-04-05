@@ -4,9 +4,9 @@ import ml.ixplo.arenabot.BaseTest;
 import ml.ixplo.arenabot.Bot;
 import ml.ixplo.arenabot.config.Config;
 import ml.ixplo.arenabot.helper.Presets;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.telegram.telegrambots.bots.commands.BotCommand;
 
@@ -15,6 +15,11 @@ public class CmdListTest extends BaseTest {
     @Before
     public void setUp() throws Exception {
         init();
+    }
+
+    @After
+    public void tearDown() {
+        testHelper.close();
     }
 
     private void init() throws NoSuchFieldException, IllegalAccessException {
