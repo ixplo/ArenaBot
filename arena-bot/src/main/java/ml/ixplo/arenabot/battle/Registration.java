@@ -15,10 +15,12 @@ import java.util.List;
  * Register members and start Battle
  */
 public class Registration {
+    private static final int SECOND = 1000;
     private static DatabaseManager db;
     private boolean isOn;
     private Timer regTimer;
     private RegTimerTask regTimerTask;
+
     public static void setDb(DatabaseManager dbManager) {
         db = dbManager;
     }
@@ -39,6 +41,9 @@ public class Registration {
         db.dropStatus();
     }
 
+    /**
+     * start battle and stop registration
+     */
     public void startBattle() {
         if (!isOn) {
             return;
@@ -47,6 +52,11 @@ public class Registration {
         isOn = false;
     }
 
+    /**
+     * Get all current teams
+     *
+     * @return List of teams
+     */
     public List<Team> getTeams() {
         List<Team> teams = new ArrayList<>();
         List<String> teamsId = getTeamsId();
@@ -92,7 +102,7 @@ public class Registration {
             }
             regTimer = new Timer();
             regTimerTask = new RegTimerTask(this, regTimer, Config.DELAY_IN_SECONDS);
-            regTimer.schedule(regTimerTask, 0, 1000);
+            regTimer.schedule(regTimerTask, 0, SECOND);
         }
     }
 
@@ -110,10 +120,11 @@ public class Registration {
 
     private String addNextUnregistered() {
         String nextId;
-        int i = 0;
+        int counter = 0;
         do {
-            nextId = "ком." + (getTeamsCount() + ++i);
-        } while (getTeamsId().contains(nextId));
+            nextId = "ком." + (getTeamsCount() + ++counter);
+        }
+        while (getTeamsId().contains(nextId));
         Team.addTeam(nextId);
         return nextId;
     }
@@ -126,6 +137,11 @@ public class Registration {
         return db.getStrings(Config.USERS, Config.STATUS, Config.REGISTERED_STATUS, DatabaseManager.TEAM_COLUMN);
     }
 
+    /**
+     * Get all members
+     *
+     * @return List of members
+     */
     public List<Member> getMembers() {
         List<Member> membersList = new ArrayList<>();
         List<Integer> membersId = getRegisteredMembersId();
@@ -139,6 +155,11 @@ public class Registration {
         return db.getCountDistinct(Config.USERS, DatabaseManager.ID, Config.STATUS, Config.REGISTERED_STATUS);
     }
 
+    /**
+     * 1.[Team1] 2.[Team2]
+     *
+     * @return String for List Message
+     */
     public String getListOfMembersToString() {
         StringBuilder msgText = new StringBuilder();
         int teamsCount = getTeamsCount();
