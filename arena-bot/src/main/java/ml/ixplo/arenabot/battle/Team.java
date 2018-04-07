@@ -52,8 +52,8 @@ public class Team {
         return isPublic;
     }
 
-    public void setPublic(boolean aPublic) {
-        isPublic = aPublic;
+    public void setPublic(boolean isPublic) {
+        this.isPublic = isPublic;
     }
 
     public int getGames() {
@@ -117,6 +117,17 @@ public class Team {
         member.setTeamId(id);
     }
 
+    public static void addMember(int userId, String teamId) {
+        db.setIntTo(Config.USERS, userId, Config.STATUS, Config.REGISTERED_STATUS);
+        db.setStringTo(Config.USERS, userId, DatabaseManager.TEAM_COLUMN, teamId);
+    }
+
+    /**
+     * Get Set of teams. Get from members
+     * @param allMembers - all members from battle begin
+     * @param curMembersId - current live members
+     * @return - Set of Strings - ids
+     */
     public static Set<String> getTeamsId(List<? extends IUser> allMembers, List<Integer> curMembersId) {
         Set<String> teamsId = new HashSet<>();
         for (IUser member : allMembers) {
@@ -127,10 +138,29 @@ public class Team {
         return teamsId;
     }
 
+    static void addTeam(String id) {
+        Team team = new Team(id);
+        db.setTeam(team);
+    }
+
+    /**
+     * Get info from db: 0 - unregistered
+     *                   1 - registered
+     * @return true if registered
+     */
     public boolean isRegisteredTeam() {
         return db.getIntFrom(Config.TEAMS, id, "registered") > 0;
     }
 
+    public static boolean isRegisteredTeam(String teamId) {
+        return db.getIntFrom(Config.TEAMS, teamId, "registered") > 0;
+    }
+
+    /**
+     * Get Team from db
+     * @param id - team id
+     * @return Team with param id
+     */
     public static Team getTeam(String id) {
         Team team = db.getTeam(id);
         if (team == null) {
@@ -140,20 +170,10 @@ public class Team {
         return team;
     }
 
-    static void addTeam(String id) {
-        Team team = new Team(id);
-        db.setTeam(team);
-    }
-
-    public static boolean isRegisteredTeam(String teamId) {
-        return db.getIntFrom(Config.TEAMS, teamId, "registered") > 0;
-    }
-
-    public static void addMember(int userId, String teamId) {
-        db.setIntTo(Config.USERS, userId, Config.STATUS, Config.REGISTERED_STATUS);
-        db.setStringTo(Config.USERS, userId, DatabaseManager.TEAM_COLUMN, teamId);
-    }
-
+    /**
+     * Set unregistered status to user with userId and set user team column to null
+     * @param userId - id of removed user
+     */
     public static void removeMember(int userId) {
         db.setIntTo(Config.USERS, userId, Config.STATUS, Config.UNREGISTERED_STATUS);
         if (Team.getTeam(getMember(userId).getTeamId()).isRegisteredTeam()) {
