@@ -91,8 +91,8 @@ public class TestHelper {
             }).when(mock).editMessageText(ArgumentMatchers.any(EditMessageText.class));
 
             when(mock.getRegisteredCommands()).thenReturn(getCommands());
-
-            when(mock.getRegistration()).thenReturn(getTestRegistration());
+            Registration testRegistration = getTestRegistration();
+            when(mock.getRegistration()).thenReturn(testRegistration);
         } catch (TelegramApiException e) {
             LOGGER.error("Send message error from test bot");
         }
