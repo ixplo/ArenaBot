@@ -10,6 +10,7 @@ import ml.ixplo.arenabot.battle.actions.Action;
  * 04.05.2017.
  */
 public class Order {
+    private static final int FULL_PERCENT = 100;
     Integer userId;
     private List<Action> actions;
     private Round round;
@@ -27,7 +28,7 @@ public class Order {
         this.userId = userId;
         actions = new ArrayList<>();
         this.round = round;
-        commonPercent = 100;
+        commonPercent = FULL_PERCENT;
     }
 
     void addAction(Action action) {

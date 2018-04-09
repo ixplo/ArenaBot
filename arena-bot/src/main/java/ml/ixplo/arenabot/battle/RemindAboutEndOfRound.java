@@ -6,6 +6,7 @@ import java.util.TimerTask;
 
 public class RemindAboutEndOfRound extends TimerTask {
     private Round round;
+
     RemindAboutEndOfRound(Round round) {
         this.round = round;
     }

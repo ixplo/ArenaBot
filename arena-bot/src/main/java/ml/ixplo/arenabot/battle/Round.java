@@ -40,6 +40,11 @@ public class Round {
     }
 
     //todo members, curMembers, teamsId - не нужны. А нужны просто Teams (и в них можно хранить начальное состояние)
+
+    /**
+     * Create new Round
+     * @param battleState - setup to Round
+     */
     public Round(BattleState battleState) {
         this.members = new ArrayList<>(battleState.getMembers());
         this.teams = new ArrayList<>(battleState.getTeams());
@@ -103,6 +108,9 @@ public class Round {
         }
     }
 
+    /**
+     * Set all orders done
+     */
     public void stop() {
         for (Order order : orders) {
             order.setZeroCommonPercent();
@@ -111,12 +119,12 @@ public class Round {
 
     private void takeOutCorpses() {
         for (IUser member : members) {
-                ArenaUser arenaUser = ArenaUser.getUser(member.getUserId());
-                if (arenaUser.getCurHitPoints() <= 0) {
-                    Messages.sendToAll(members, "<b>" + arenaUser.getName() + "</b> потерял возможность продолжать бой.");
-                    curMembersId.remove(getIndex(curMembersId, arenaUser.getUserId()));
-                    curTeamsId = Team.getTeamsId(members, curMembersId);
-                }
+            ArenaUser arenaUser = ArenaUser.getUser(member.getUserId());
+            if (arenaUser.getCurHitPoints() <= 0) {
+                Messages.sendToAll(members, "<b>" + arenaUser.getName() + "</b> потерял возможность продолжать бой.");
+                curMembersId.remove(getIndex(curMembersId, arenaUser.getUserId()));
+                curTeamsId = Team.getTeamsId(members, curMembersId);
+            }
         }
     }
 
@@ -154,6 +162,11 @@ public class Round {
         throw new ArenaUserException(Config.INVALID_USER_ID + userId);
     }
 
+    /**
+     * Get member number in list of users
+     * @param userId - selected user id
+     * @return       - number in order
+     */
     public int getIndex(int userId) {
         int size = members.size();
         for (int i = 0; i < size; i++) {
@@ -164,6 +177,11 @@ public class Round {
         throw new ArenaUserException(Config.INVALID_USER_ID + userId);
     }
 
+    /**
+     * Get member by id
+     * @param userId - selected user id
+     * @return       - IUser with userId
+     */
     public IUser getMember(Integer userId) {
         for (IUser member : members) {
             if (member.getUserId().equals(userId)) {
@@ -173,6 +191,11 @@ public class Round {
         throw new ArenaUserException(Config.INVALID_USER_ID + userId);
     }
 
+    /**
+     * Get List of Actions with selected target
+     * @param targetId - target user id
+     * @return         - List of Actions
+     */
     public List<Action> getActionsByTarget(int targetId) {
         List<Action> result = new ArrayList<>();
         for (Order order : orders) {
@@ -185,11 +208,16 @@ public class Round {
         return result;
     }
 
-    public List<Action> getAttackOnTargetList(int targetId){
+    /**
+     * Get List of attacks on target with targetId
+     * @param targetId - target user id
+     * @return         - List of Actions (Attack)
+     */
+    public List<Action> getAttackOnTargetList(int targetId) {
         List<Action> attackOnTarget = new ArrayList<>();
         List<Action> onTargetList = getActionsByTarget(targetId);
         for (Action action : onTargetList) {
-            if(action.getActionId().equals(Action.ATTACK)){
+            if (action.getActionId().equals(Action.ATTACK)) {
                 attackOnTarget.add(action);
             }
         }
@@ -212,6 +240,11 @@ public class Round {
         return teams;
     }
 
+    /**
+     * Get current battle info
+     *
+     * @return current BattleState
+     */
     public BattleState getBattleState() {
         BattleState battleState = new BattleState();
         battleState.setMembers((List<ArenaUser>) members);
@@ -223,10 +256,10 @@ public class Round {
 
     @Override
     public String toString() {
-        return "Round{" +
-                "curMembersId=" + curMembersId +
-                ", curTeamsId=" + curTeamsId +
-                '}';
+        return "Round{"
+                + "curMembersId=" + curMembersId
+                + ", curTeamsId=" + curTeamsId
+                + '}';
     }
 
 }

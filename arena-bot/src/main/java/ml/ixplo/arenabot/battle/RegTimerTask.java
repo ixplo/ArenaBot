@@ -23,6 +23,12 @@ public class RegTimerTask extends TimerTask {
     private int messageId;
     private String msgText;
 
+    /**
+     * Constructor set variables
+     * @param registration - current Registration
+     * @param regTimer     - current timer
+     * @param delay        - count time to battle begin
+     */
     public RegTimerTask(Registration registration, Timer regTimer, int delay) {
         this.registration = registration;
         this.regTimer = regTimer;

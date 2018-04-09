@@ -4,6 +4,7 @@ import java.util.TimerTask;
 
 public class EndRound extends TimerTask {
     private Round round;
+
     EndRound(Round round) {
         this.round = round;
     }

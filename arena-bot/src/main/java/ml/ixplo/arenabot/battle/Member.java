@@ -18,6 +18,11 @@ public class Member implements IUser {
     public Member() {
     }
 
+    /**
+     * Construct member
+     * @param userId - user id to set
+     * @param teamId - team id to set
+     */
     public Member(int userId, String teamId) {
         this.userId = userId;
         name = ArenaUser.getUserName(userId);
@@ -48,6 +53,10 @@ public class Member implements IUser {
         return db.getIntFrom(Config.USERS, userId, Config.STATUS);
     }
 
+    public int getStatus() {
+        return getStatus(userId);
+    }
+
     public void setStatus(int status) {
         db.setIntTo(Config.USERS, userId, Config.STATUS, status);
     }
@@ -68,10 +77,6 @@ public class Member implements IUser {
     public void setTeamId(String teamId) {
         this.teamId = teamId;
         db.setStringTo(Config.USERS, userId, DatabaseManager.TEAM_COLUMN, teamId);
-    }
-
-    public int getStatus() {
-        return getStatus(userId);
     }
 
     public String getName() {
