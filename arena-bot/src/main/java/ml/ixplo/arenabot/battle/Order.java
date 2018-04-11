@@ -10,7 +10,7 @@ import ml.ixplo.arenabot.battle.actions.Action;
  * 04.05.2017.
  */
 public class Order {
-    private static final int FULL_PERCENT = 100;
+    public static final int FULL_PERCENT = 100;
     Integer userId;
     private List<Action> actions;
     private Round round;

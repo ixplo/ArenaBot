@@ -1,5 +1,6 @@
 package ml.ixplo.arenabot.commands;
 
+import ml.ixplo.arenabot.battle.Order;
 import ml.ixplo.arenabot.battle.Round;
 import ml.ixplo.arenabot.battle.actions.Action;
 import ml.ixplo.arenabot.config.Config;
@@ -18,6 +19,9 @@ public class CmdDo extends BotCommand {
     public static final String LOGTAG = "DOCOMMAND";
     static final String PERCENT_ERROR = "Больше 100% быть не может. Инфа 146%!";
     static final String EMPTY_COMMAND_ERROR = "Формат: <i>/do a 1 100</i> - атаковать цель под номером 1 на 100%";
+    private static final int NO_SPELL_COUNT = 4;
+    private static final int NO_PERCENT_COUNT = 3;
+    private static final int NO_TARGET_COUNT = 2;
 
     private AbsSender sender;
     private int percent;
@@ -55,7 +59,7 @@ public class CmdDo extends BotCommand {
     private boolean badStrings() {
         boolean isBad = false;
         SendMessage msg = getSendMessage();
-        if (percent > 100) {
+        if (percent > Order.FULL_PERCENT) {
             msg.setText(PERCENT_ERROR);
             isBad = true;
         }
@@ -65,8 +69,8 @@ public class CmdDo extends BotCommand {
         }
         int membersCount = Round.getCurrent().getCurMembersId().size();
         if (target > membersCount - 1) {
-            msg.setText("Цель под номером " + targetIndex +
-                    " не найдена. Всего есть целей: " + membersCount);
+            msg.setText("Цель под номером " + targetIndex
+                    + " не найдена. Всего есть целей: " + membersCount);
             isBad = true;
         }
         if (isBad) {
@@ -89,17 +93,17 @@ public class CmdDo extends BotCommand {
 
     private void parse(String[] strings) {
         stringsCount = strings.length;
-        if (stringsCount < 4) {
+        if (stringsCount < NO_SPELL_COUNT) {
             spellId = "";
         } else {
-            spellId = strings[3];
+            spellId = strings[NO_PERCENT_COUNT];
         }
-        if (stringsCount < 3) {
-            percent = 100;
+        if (stringsCount < NO_PERCENT_COUNT) {
+            percent = Order.FULL_PERCENT;
         } else {
-            percent = Integer.parseInt(strings[2]);
+            percent = Integer.parseInt(strings[NO_TARGET_COUNT]);
         }
-        if (stringsCount < 2) {
+        if (stringsCount < NO_TARGET_COUNT) {
             target = Round.getCurrent().getIndex(userId);
         } else {
             targetIndex = Integer.parseInt(strings[1]);
