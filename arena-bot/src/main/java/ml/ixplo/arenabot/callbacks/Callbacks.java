@@ -27,6 +27,12 @@ public class Callbacks {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * Switcher for callbacks
+     * @param callbackQuery         - callback to handle
+     * @param bot                   - bot to send callbacks and messages
+     * @throws TelegramApiException - answer or sendMessage can throws
+     */
     public static void handleCallbackCommand(CallbackQuery callbackQuery, Bot bot) throws TelegramApiException {
         initStaticVariables(callbackQuery, bot);
         switch (callbackCommand) {
@@ -126,8 +132,8 @@ public class Callbacks {
     }
 
     private static void handleNewRaceIs() throws TelegramApiException {
-        String userName = query.getFrom().getFirstName() == null ?
-                query.getFrom().getLastName() :
+        String userName = query.getFrom().getFirstName() == null
+                ? query.getFrom().getLastName() :
                 query.getFrom().getFirstName();
         String userRace = entry.substring(0, 1);
         String userClass = entry.substring(1);
