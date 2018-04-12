@@ -24,7 +24,7 @@ public class DummyTest {
     public void simpleDummyTest() throws Exception {
         Bot bot = new Bot();
         Update update = getUpdate();
-        bot.processNonCommandUpdate(update);
+//        bot.processNonCommandUpdate(update);
 
     }
 
