@@ -22,8 +22,7 @@ public class Main {
         BotLogger.registerLogger(new ConsoleHandler());
         try {
             BotLogger.registerLogger(new BotsFileHandler());
-        } catch (
-                IOException e) {
+        } catch (IOException e) {
             BotLogger.severe(LOGTAG, e);
         }
     }
@@ -33,8 +32,8 @@ public class Main {
             ApiContextInitializer.init();
             TelegramBotsApi telegramBotsApi = new TelegramBotsApi();
             telegramBotsApi.registerBot(new Bot());
-            } catch (Exception e) {
-                BotLogger.error(LOGTAG, e);
-            }
+        } catch (Exception e) {
+            BotLogger.error(LOGTAG, e);
+        }
     }
 }

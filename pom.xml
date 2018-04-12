@@ -12,8 +12,10 @@
 
     <modules>
         <module>arena-bot</module>
+        <module>arena-bot-ai</module>
     </modules>
     <properties>
+        <arena.version>${project.version}</arena.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.build.testSourceEncoding>UTF-8</project.build.testSourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
