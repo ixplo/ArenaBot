@@ -3,7 +3,6 @@ package ml.ixplo.arenabot.callbacks;
 import ml.ixplo.arenabot.BaseTest;
 import ml.ixplo.arenabot.Bot;
 import ml.ixplo.arenabot.helper.Presets;
-import ml.ixplo.arenabot.messages.Messages;
 import org.junit.Before;
 import org.junit.Test;
 import org.telegram.telegrambots.api.objects.CallbackQuery;
