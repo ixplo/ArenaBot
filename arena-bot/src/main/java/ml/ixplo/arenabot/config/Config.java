@@ -70,6 +70,7 @@ public class Config {
     public static final int GOLD_FOR_MEMBER = 10;
     public static final int SCALE = 2;
     public static final int ROUNDED = BigDecimal.ROUND_DOWN;
+
     private Config() {
     }
 }
