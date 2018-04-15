@@ -47,6 +47,10 @@ public class Bot extends TelegramLongPollingCommandBot {
         this(DatabaseManager.getInstance());
     }
 
+    /**
+     * Construct new bot with selected database
+     * @param db - database to use
+     */
     public Bot(DatabaseManager db) {
 
         registerCommands();
@@ -85,6 +89,10 @@ public class Bot extends TelegramLongPollingCommandBot {
         register(new CmdHelp(this));
     }
 
+    /**
+     * Set database to bot
+     * @param db - database to use
+     */
     public void setDb(DatabaseManager db) {
         Registration.setDb(db);
         ArenaUser.setDb(db);
