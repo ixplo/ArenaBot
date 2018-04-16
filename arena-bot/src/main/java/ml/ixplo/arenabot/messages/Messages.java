@@ -41,6 +41,10 @@ public final class Messages {
     public static final String LOGTAG = "MESSAGES";
     public static final String END_OF_ROUND_REMINDER = "<b>Осталось 15 секунд до конца раунда!</b>";
     private static final String SENDING_MESSAGE_ERROR = "Sending message error";
+    private static final int BUTTONS_COUNT = 4;
+    private static final String WELCOME_MESSAGE = "Добро пожаловать, %s!\n"
+            + "<b>#arena</b> - ролевая чат игра, где вы можете сразиться с другими игроками.\n"
+            + "Нажмите кнопку для начала.";
 
     /***** no getInstance for this class *****/
     private Messages() {
@@ -136,13 +140,6 @@ public final class Messages {
         }
     }
 
-    public static SendMessage getSendToAllMessage(String msgText) {
-        SendMessage msg = new SendMessage();
-        msg.enableHtml(true);
-        msg.setText(msgText);
-        return msg;
-    }
-
     public static void sendToAll(List<? extends IUser> members, SendMessage msg) {
         if (msg == null) {
             throw new IllegalArgumentException("SendMessage cant be null");
@@ -156,6 +153,13 @@ public final class Messages {
             BotLogger.error(LOGTAG, e);
             throw new ArenaUserException(SENDING_MESSAGE_ERROR, e);
         }
+    }
+
+    public static SendMessage getSendToAllMessage(String msgText) {
+        SendMessage msg = new SendMessage();
+        msg.enableHtml(true);
+        msg.setText(msgText);
+        return msg;
     }
 
     public static void sendMessage(AbsSender absSender, Long chatId, String messageText) {
@@ -208,7 +212,6 @@ public final class Messages {
 
     public static SendMessage getEqipMsg(final int userId) {
 
-        ArenaUser arenaUser = ArenaUser.getUser(userId);
         List<Item> items = Item.getItems(userId);
         StringBuilder out = new StringBuilder();
         out.append("Ваш инвентарь: \n");
@@ -223,6 +226,7 @@ public final class Messages {
             }
         }
         out.append("\nОружие: <b>");
+        ArenaUser arenaUser = ArenaUser.getUser(userId);
         out.append(Item.getItem(Item.getItemId(arenaUser.getUserId(), arenaUser.getCurWeaponIndex())).getName());
         out.append("</b>(");
         out.append(Item.getItem(Item.getItemId(arenaUser.getUserId(), arenaUser.getCurWeaponIndex())).getPrice());
@@ -369,23 +373,20 @@ public final class Messages {
     }
 
     public static SendMessage getOpenPrivateWithBotMsg(int userId, String userName) {
-        SendMessage answer = new SendMessage();
-        String messageText = "Добро пожаловать, " + userName + "!\n" +
-                "<b>#arena</b> - ролевая чат игра, где вы можете сразиться с другими игроками.\n" +
-                "Нажмите кнопку для начала.";
-        InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
-        List<List<InlineKeyboardButton>> rows = new ArrayList<>();
         List<InlineKeyboardButton> row = new ArrayList<>();
         InlineKeyboardButton startButton = new InlineKeyboardButton();
         startButton.setText("Начать игру");
         startButton.setUrl(Config.BOT_LINK);
         row.add(startButton);
+        List<List<InlineKeyboardButton>> rows = new ArrayList<>();
         rows.add(row);
+        InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
         markup.setKeyboard(rows);
+        SendMessage answer = new SendMessage();
         answer.enableHtml(true);
         answer.setReplyMarkup(markup);
         answer.setChatId((long) userId);
-        answer.setText(messageText);
+        answer.setText(String.format(WELCOME_MESSAGE, userName));
         return answer;
     }
 
@@ -431,10 +432,6 @@ public final class Messages {
 
     public static AnswerCallbackQuery getAfterDeleteQuery(String queryId) {
         return new AnswerCallbackQuery().setText("Персонаж удален").setCallbackQueryId(queryId);
-    }
-
-    public static EditMessageReplyMarkup getEditMessageReplyMarkup(int userId, Integer messageId) {
-        return new EditMessageReplyMarkup().setChatId((long) userId).setMessageId(messageId);
     }
 
     public static EditMessageText getAfterDeleteMessageText(int userId, Integer messageId) {
@@ -602,13 +599,17 @@ public final class Messages {
         return editText;
     }
 
+    public static EditMessageReplyMarkup getEditMessageReplyMarkup(int userId, Integer messageId) {
+        return new EditMessageReplyMarkup().setChatId((long) userId).setMessageId(messageId);
+    }
+
     private static EditMessageReplyMarkup getEditMessageReplyMarkup(long chatId, int messageId) {
         List<String> buttonText = new ArrayList<>();
-        List<String> buttonData = new ArrayList<>();
         buttonText.add("100");
         buttonText.add("70");
         buttonText.add("50");
         buttonText.add("30");
+        List<String> buttonData = new ArrayList<>();
         buttonData.add("percent_100");
         buttonData.add("percent_70");
         buttonData.add("percent_50");
@@ -620,6 +621,21 @@ public final class Messages {
         return markup;
     }
 
+    private static EditMessageReplyMarkup getEditMessageReplyMarkup(int userId, Long chatId, Integer messageId) {
+        EditMessageReplyMarkup markup = new EditMessageReplyMarkup();
+        markup.setChatId(chatId);
+        markup.setMessageId(messageId);
+        markup.setReplyMarkup(getInlineKeyboardMarkup(ArenaUser.getUser(userId).getCastsName(), ArenaUser.getUser(userId).getCastsIdForCallbacks()));
+        return markup;
+    }
+
+    /**
+     * Send Message and Answer CallbackQuery
+     * @param queryId   - id for CallbackQuery
+     * @param userId    - user id to send
+     * @param chatId    - chat id to send
+     * @param messageId - Message id to send
+     */
     public static void sendAskSpell(String queryId, int userId, long chatId, int messageId) {
         try {
             bot.editMessageText(getEditMessageText(chatId, messageId, "Выберите заклинание:"));
@@ -631,25 +647,19 @@ public final class Messages {
         }
     }
 
-    private static EditMessageReplyMarkup getEditMessageReplyMarkup(int userId, Long chatId, Integer messageId) {
-        EditMessageReplyMarkup markup = new EditMessageReplyMarkup();
-        markup.setChatId(chatId);
-        markup.setMessageId(messageId);
-        markup.setReplyMarkup(getInlineKeyboardMarkup(ArenaUser.getUser(userId).getCastsName(), ArenaUser.getUser(userId).getCastsIdForCallbacks()));
-        return markup;
-    }
-
     private static InlineKeyboardMarkup getInlineKeyboardMarkup(List<String> buttonsText, List<String> buttonsCallbackData) {
 
         InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rows = new ArrayList<>();
         int buttonsAmount = buttonsText.size();
-        int rowsAmount = buttonsAmount / 4 + (buttonsAmount % 4 == 0 ? 0 : 1);
+        int rowsAmount = buttonsAmount / BUTTONS_COUNT + (buttonsAmount % BUTTONS_COUNT == 0 ? 0 : 1);
         int buttonsCounter = 0;
         for (int i = 0; i < rowsAmount; i++) {
             List<InlineKeyboardButton> row = new ArrayList<>();
-            for (int j = 0; j < 4; j++) {
-                if (buttonsCounter >= buttonsAmount) break;
+            for (int j = 0; j < BUTTONS_COUNT; j++) {
+                if (buttonsCounter >= buttonsAmount) {
+                    break;
+                }
                 InlineKeyboardButton button = new InlineKeyboardButton();
                 button.setText(buttonsText.get(buttonsCounter));
                 button.setCallbackData(buttonsCallbackData.get(buttonsCounter));
