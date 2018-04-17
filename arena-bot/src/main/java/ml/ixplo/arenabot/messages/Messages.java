@@ -572,6 +572,12 @@ public final class Messages {
         }
     }
 
+    /**
+     * Get registration message
+     * @param userId    - user id
+     * @param teamName  - to Team
+     * @return  SendMessage
+     */
     public static SendMessage getRegMemberMsg(int userId, String teamName) {
         return new SendMessage().setChatId((long) userId).enableHtml(true).setText("</b> ("
                 + ArenaUser.getUserName(userId) + "/"
