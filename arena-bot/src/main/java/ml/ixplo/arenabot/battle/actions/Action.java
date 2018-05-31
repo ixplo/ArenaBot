@@ -8,6 +8,7 @@ import ml.ixplo.arenabot.user.ArenaUser;
  * Parent class for actions: Attack, Heal and so on
  */
 public abstract class Action implements Comparable<Action> {
+    //todo private int id;
     static final int FIRST = 1;
     static final int SECOND = 2;
     static final int THIRD = 3;

@@ -573,7 +573,7 @@ public final class Messages {
     }
 
     /**
-     * Get registration message
+     * Get message when user register to team
      * @param userId    - user id
      * @param teamName  - to Team
      * @return  SendMessage

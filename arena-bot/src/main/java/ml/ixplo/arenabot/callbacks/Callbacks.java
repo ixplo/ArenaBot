@@ -1,6 +1,7 @@
 package ml.ixplo.arenabot.callbacks;
 
 import ml.ixplo.arenabot.Bot;
+import ml.ixplo.arenabot.arena.Arena;
 import ml.ixplo.arenabot.battle.Battle;
 import ml.ixplo.arenabot.battle.Round;
 import ml.ixplo.arenabot.battle.Team;
@@ -70,13 +71,14 @@ public class Callbacks {
 
     private static void handlePercent() throws TelegramApiException {
         Action.setPercent(userId, Integer.parseInt(entry));
+        //todo Arena.getInstance().getActionById(entryId)
         Battle.getBattle().interrupt();
         Action action = Action.create(userId,
                 Action.getActionType(userId, 1),
                 Action.getTargetId(userId, 1),
                 Action.getPercent(userId, 1),
                 Action.getCastId(userId, 1));
-        Round.getCurrent().takeAction(action);
+        Arena.getInstance().getAction(action);
         bot.answerCallbackQuery(Messages.getEmptyQuery(queryId));
         bot.editMessageText(Messages.getActionTakenEditMsg(userId, messageId));
         Action.clearActions(userId);
